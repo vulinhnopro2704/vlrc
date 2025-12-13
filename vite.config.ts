@@ -196,6 +196,10 @@ export default defineConfig({
           ]
         },
         {
+          zustand: ['create'],
+          'zustand/middleware': ['persist', ['devtools', 'zustandDevtools'], 'immer']
+        },
+        {
           from: 'react-hook-form',
           imports: [
             'FieldErrors',
