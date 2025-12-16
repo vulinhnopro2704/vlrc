@@ -17,16 +17,20 @@ declare global {
   const ArrowLeftIcon: typeof import('lucide-react').ArrowLeftIcon
   const ArrowUpDown: typeof import('lucide-react').ArrowUpDown
   const ArrowUpDownIcon: typeof import('lucide-react').ArrowUpDownIcon
+  const Badge: typeof import('../components/ui/badge').Badge
   const BarChart3: typeof import('lucide-react').BarChart3
   const BarChart3Icon: typeof import('lucide-react').BarChart3Icon
   const Bell: typeof import('lucide-react').Bell
   const BellIcon: typeof import('lucide-react').BellIcon
   const Boxes: typeof import('lucide-react').Boxes
   const BoxesIcon: typeof import('lucide-react').BoxesIcon
+  const Button: typeof import('../components/ui/button').Button
   const Calculator: typeof import('lucide-react').Calculator
   const CalculatorIcon: typeof import('lucide-react').CalculatorIcon
+  const Calendar: typeof import('../components/ui/calendar').Calendar
   const CalendarCheck: typeof import('lucide-react').CalendarCheck
   const CalendarCheckIcon: typeof import('lucide-react').CalendarCheckIcon
+  const CalendarDayButton: typeof import('../components/ui/calendar').CalendarDayButton
   const CalendarIcon: typeof import('lucide-react').CalendarIcon
   const CalendarMinus: typeof import('lucide-react').CalendarMinus
   const CalendarMinusIcon: typeof import('lucide-react').CalendarMinusIcon
@@ -42,6 +46,7 @@ declare global {
   const CheckCircle: typeof import('lucide-react').CheckCircle
   const CheckCircleIcon: typeof import('lucide-react').CheckCircleIcon
   const CheckIcon: typeof import('lucide-react').CheckIcon
+  const Checkbox: typeof import('../components/ui/checkbox').Checkbox
   const ChevronDown: typeof import('lucide-react').ChevronDown
   const ChevronDownIcon: typeof import('lucide-react').ChevronDownIcon
   const ChevronLeft: typeof import('lucide-react').ChevronLeft
@@ -50,6 +55,7 @@ declare global {
   const ChevronRightIcon: typeof import('lucide-react').ChevronRightIcon
   const ChevronUp: typeof import('lucide-react').ChevronUp
   const ChevronUpIcon: typeof import('lucide-react').ChevronUpIcon
+  const Clear: typeof import('../components/ui/file-upload').Clear
   const Clock: typeof import('lucide-react').Clock
   const ClockIcon: typeof import('lucide-react').ClockIcon
   const Copy: typeof import('lucide-react').Copy
@@ -60,6 +66,22 @@ declare global {
   const DollarSignIcon: typeof import('lucide-react').DollarSignIcon
   const Download: typeof import('lucide-react').Download
   const DownloadIcon: typeof import('lucide-react').DownloadIcon
+  const DropdownMenu: typeof import('../components/ui/dropdown-menu').DropdownMenu
+  const DropdownMenuCheckboxItem: typeof import('../components/ui/dropdown-menu').DropdownMenuCheckboxItem
+  const DropdownMenuContent: typeof import('../components/ui/dropdown-menu').DropdownMenuContent
+  const DropdownMenuGroup: typeof import('../components/ui/dropdown-menu').DropdownMenuGroup
+  const DropdownMenuItem: typeof import('../components/ui/dropdown-menu').DropdownMenuItem
+  const DropdownMenuLabel: typeof import('../components/ui/dropdown-menu').DropdownMenuLabel
+  const DropdownMenuPortal: typeof import('../components/ui/dropdown-menu').DropdownMenuPortal
+  const DropdownMenuRadioGroup: typeof import('../components/ui/dropdown-menu').DropdownMenuRadioGroup
+  const DropdownMenuRadioItem: typeof import('../components/ui/dropdown-menu').DropdownMenuRadioItem
+  const DropdownMenuSeparator: typeof import('../components/ui/dropdown-menu').DropdownMenuSeparator
+  const DropdownMenuShortcut: typeof import('../components/ui/dropdown-menu').DropdownMenuShortcut
+  const DropdownMenuSub: typeof import('../components/ui/dropdown-menu').DropdownMenuSub
+  const DropdownMenuSubContent: typeof import('../components/ui/dropdown-menu').DropdownMenuSubContent
+  const DropdownMenuSubTrigger: typeof import('../components/ui/dropdown-menu').DropdownMenuSubTrigger
+  const DropdownMenuTrigger: typeof import('../components/ui/dropdown-menu').DropdownMenuTrigger
+  const Dropzone: typeof import('../components/ui/file-upload').Dropzone
   const Edit: typeof import('lucide-react').Edit
   const Edit3: typeof import('lucide-react').Edit3
   const Edit3Icon: typeof import('lucide-react').Edit3Icon
@@ -78,8 +100,25 @@ declare global {
   const FilePlusIcon: typeof import('lucide-react').FilePlusIcon
   const FileText: typeof import('lucide-react').FileText
   const FileTextIcon: typeof import('lucide-react').FileTextIcon
+  const FileUpload: typeof import('../components/ui/file-upload').FileUpload
+  const FileUploadClear: typeof import('../components/ui/file-upload').FileUploadClear
+  const FileUploadDropzone: typeof import('../components/ui/file-upload').FileUploadDropzone
+  const FileUploadItem: typeof import('../components/ui/file-upload').FileUploadItem
+  const FileUploadItemDelete: typeof import('../components/ui/file-upload').FileUploadItemDelete
+  const FileUploadItemMetadata: typeof import('../components/ui/file-upload').FileUploadItemMetadata
+  const FileUploadItemPreview: typeof import('../components/ui/file-upload').FileUploadItemPreview
+  const FileUploadItemProgress: typeof import('../components/ui/file-upload').FileUploadItemProgress
+  const FileUploadList: typeof import('../components/ui/file-upload').FileUploadList
+  const FileUploadTrigger: typeof import('../components/ui/file-upload').FileUploadTrigger
   const Filter: typeof import('lucide-react').Filter
   const FilterIcon: typeof import('lucide-react').FilterIcon
+  const Form: typeof import('../components/ui/form').Form
+  const FormControl: typeof import('../components/ui/form').FormControl
+  const FormDescription: typeof import('../components/ui/form').FormDescription
+  const FormField: typeof import('../components/ui/form').FormField
+  const FormItem: typeof import('../components/ui/form').FormItem
+  const FormLabel: typeof import('../components/ui/form').FormLabel
+  const FormMessage: typeof import('../components/ui/form').FormMessage
   const FormProvider: typeof import('react-hook-form').FormProvider
   const Fragment: typeof import('react').Fragment
   const Gift: typeof import('lucide-react').Gift
@@ -91,12 +130,20 @@ declare global {
   const Hydrate: typeof import('@tanstack/react-query').Hydrate
   const Info: typeof import('lucide-react').Info
   const InfoIcon: typeof import('lucide-react').InfoIcon
+  const Input: typeof import('../components/ui/input').Input
   const Instagram: typeof import('lucide-react').Instagram
   const InstagramIcon: typeof import('lucide-react').InstagramIcon
+  const Item: typeof import('../components/ui/file-upload').Item
+  const ItemDelete: typeof import('../components/ui/file-upload').ItemDelete
+  const ItemMetadata: typeof import('../components/ui/file-upload').ItemMetadata
+  const ItemPreview: typeof import('../components/ui/file-upload').ItemPreview
+  const ItemProgress: typeof import('../components/ui/file-upload').ItemProgress
   const KeyIcon: typeof import('lucide-react').KeyIcon
   const LCalendar: typeof import('lucide-react').Calendar
+  const Label: typeof import('../components/ui/label').Label
   const Linkedin: typeof import('lucide-react').Linkedin
   const LinkedinIcon: typeof import('lucide-react').LinkedinIcon
+  const List: typeof import('../components/ui/file-upload').List
   const Loader2: typeof import('lucide-react').Loader2
   const Lock: typeof import('lucide-react').Lock
   const LockIcon: typeof import('lucide-react').LockIcon
@@ -130,6 +177,10 @@ declare global {
   const PlusCircle: typeof import('lucide-react').PlusCircle
   const PlusCircleIcon: typeof import('lucide-react').PlusCircleIcon
   const PlusIcon: typeof import('lucide-react').PlusIcon
+  const Popover: typeof import('../components/ui/popover').Popover
+  const PopoverAnchor: typeof import('../components/ui/popover').PopoverAnchor
+  const PopoverContent: typeof import('../components/ui/popover').PopoverContent
+  const PopoverTrigger: typeof import('../components/ui/popover').PopoverTrigger
   const QueryClient: typeof import('@tanstack/react-query').QueryClient
   const QueryClientProvider: typeof import('@tanstack/react-query').QueryClientProvider
   const RefreshCcw: typeof import('lucide-react').RefreshCcw
@@ -140,6 +191,8 @@ declare global {
   const RepeatIcon: typeof import('lucide-react').RepeatIcon
   const Save: typeof import('lucide-react').Save
   const SaveIcon: typeof import('lucide-react').SaveIcon
+  const ScrollArea: typeof import('../components/ui/scroll-area').ScrollArea
+  const ScrollBar: typeof import('../components/ui/scroll-area').ScrollBar
   const Search: typeof import('lucide-react').Search
   const SearchIcon: typeof import('lucide-react').SearchIcon
   const Settings: typeof import('lucide-react').Settings
@@ -154,6 +207,19 @@ declare global {
   const StarOffIcon: typeof import('lucide-react').StarOffIcon
   const StrictMode: typeof import('react').StrictMode
   const Suspense: typeof import('react').Suspense
+  const Table: typeof import('../components/ui/table').Table
+  const TableBody: typeof import('../components/ui/table').TableBody
+  const TableCaption: typeof import('../components/ui/table').TableCaption
+  const TableCell: typeof import('../components/ui/table').TableCell
+  const TableFooter: typeof import('../components/ui/table').TableFooter
+  const TableHead: typeof import('../components/ui/table').TableHead
+  const TableHeader: typeof import('../components/ui/table').TableHeader
+  const TableRow: typeof import('../components/ui/table').TableRow
+  const Textarea: typeof import('../components/ui/textarea').Textarea
+  const Tooltip: typeof import('../components/ui/tooltip').Tooltip
+  const TooltipContent: typeof import('../components/ui/tooltip').TooltipContent
+  const TooltipProvider: typeof import('../components/ui/tooltip').TooltipProvider
+  const TooltipTrigger: typeof import('../components/ui/tooltip').TooltipTrigger
   const Trash: typeof import('lucide-react').Trash
   const Trash2: typeof import('lucide-react').Trash2
   const Trash2Icon: typeof import('lucide-react').Trash2Icon
@@ -162,6 +228,7 @@ declare global {
   const TrendingDownIcon: typeof import('lucide-react').TrendingDownIcon
   const TrendingUp: typeof import('lucide-react').TrendingUp
   const TrendingUpIcon: typeof import('lucide-react').TrendingUpIcon
+  const Trigger: typeof import('../components/ui/file-upload').Trigger
   const Truck: typeof import('lucide-react').Truck
   const TruckIcon: typeof import('lucide-react').TruckIcon
   const Twitter: typeof import('lucide-react').Twitter
@@ -182,6 +249,8 @@ declare global {
   const XIcon: typeof import('lucide-react').XIcon
   const Zap: typeof import('lucide-react').Zap
   const ZapIcon: typeof import('lucide-react').ZapIcon
+  const badgeVariants: typeof import('../components/ui/badge').badgeVariants
+  const buttonVariants: typeof import('../components/ui/button').buttonVariants
   const cache: typeof import('react').cache
   const cacheSignal: typeof import('react').cacheSignal
   const chain: typeof import('lodash-es').chain
@@ -247,6 +316,7 @@ declare global {
   const useFieldArray: typeof import('react-hook-form').useFieldArray
   const useForm: typeof import('react-hook-form').useForm
   const useFormContext: typeof import('react-hook-form').useFormContext
+  const useFormField: typeof import('../components/ui/form').useFormField
   const useFormState: typeof import('react-hook-form').useFormState
   const useHydrate: typeof import('@tanstack/react-query').useHydrate
   const useId: typeof import('react').useId

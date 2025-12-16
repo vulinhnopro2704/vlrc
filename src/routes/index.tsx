@@ -1,13 +1,16 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router';
+
+import { DataTableShowcaseDemo } from '@/components/DataTable';
 
 export const Route = createFileRoute('/')({
-  component: Index,
-})
+  component: Index
+});
 
 function Index() {
   return (
-    <div className="p-2">
-      <h3>Welcome Home!</h3>
+    <div className='space-y-4 p-4'>
+      <h3 className='text-lg font-semibold'>DataTable Showcase</h3>
+      <DataTableShowcaseDemo />
     </div>
-  )
+  );
 }
