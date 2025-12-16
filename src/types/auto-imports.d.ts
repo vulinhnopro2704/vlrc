@@ -187,6 +187,7 @@ declare global {
   const chain: typeof import('lodash-es').chain
   const cloneElement: typeof import('react').cloneElement
   const compact: typeof import('lodash-es').compact
+  const create: typeof import('zustand').create
   const createContext: typeof import('react').createContext
   const createRef: typeof import('react').createRef
   const createSyncStoragePersister: typeof import('@tanstack/react-query').createSyncStoragePersister
@@ -202,6 +203,7 @@ declare global {
   const get: typeof import('lodash-es').get
   const groupBy: typeof import('lodash-es').groupBy
   const head: typeof import('lodash-es').head
+  const immer: typeof import('zustand/middleware').immer
   const includes: typeof import('lodash-es').includes
   const indexOf: typeof import('lodash-es').indexOf
   const isEmpty: typeof import('lodash-es').isEmpty
@@ -219,6 +221,7 @@ declare global {
   const omitBy: typeof import('lodash-es').omitBy
   const onlineManager: typeof import('@tanstack/react-query').onlineManager
   const orderBy: typeof import('lodash-es').orderBy
+  const persist: typeof import('zustand/middleware').persist
   const persistQueryClient: typeof import('@tanstack/react-query').persistQueryClient
   const pick: typeof import('lodash-es').pick
   const pickBy: typeof import('lodash-es').pickBy
@@ -273,6 +276,7 @@ declare global {
   const useTransition: typeof import('react').useTransition
   const useWatch: typeof import('react-hook-form').useWatch
   const values: typeof import('lodash-es').values
+  const zustandDevtools: typeof import('zustand/middleware').devtools
 }
 // for type re-export
 declare global {

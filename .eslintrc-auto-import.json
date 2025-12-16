@@ -123,6 +123,7 @@
     "chain": true,
     "cloneElement": true,
     "compact": true,
+    "create": true,
     "createContext": true,
     "createRef": true,
     "createSyncStoragePersister": true,
@@ -138,6 +139,7 @@
     "get": true,
     "groupBy": true,
     "head": true,
+    "immer": true,
     "includes": true,
     "indexOf": true,
     "isEmpty": true,
@@ -155,6 +157,7 @@
     "omitBy": true,
     "onlineManager": true,
     "orderBy": true,
+    "persist": true,
     "persistQueryClient": true,
     "pick": true,
     "pickBy": true,
@@ -208,6 +211,7 @@
     "useSyncExternalStore": true,
     "useTransition": true,
     "useWatch": true,
-    "values": true
+    "values": true,
+    "zustandDevtools": true
   }
 }

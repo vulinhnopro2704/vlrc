@@ -2,6 +2,9 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import AutoImport from 'unplugin-auto-import/vite';
 import { tanstackRouter } from '@tanstack/router-plugin/vite';
+import tailwindcss from '@tailwindcss/vite';
+import { resolve } from 'path';
+import { fileURLToPath } from 'url';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -15,6 +18,7 @@ export default defineConfig({
         plugins: [['babel-plugin-react-compiler']]
       }
     }),
+    tailwindcss(),
     AutoImport({
       eslintrc: {
         enabled: true
@@ -241,5 +245,19 @@ export default defineConfig({
       dirs: ['src/components/ui'],
       dts: 'src/types/auto-imports.d.ts'
     })
-  ]
+  ],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src'),
+      '@components': resolve(__dirname, './src/components'),
+      '@assets': resolve(__dirname, './src/assets'),
+      '@hooks': resolve(__dirname, './src/hooks'),
+      '@lib': resolve(__dirname, './src/lib'),
+      '@routes': resolve(__dirname, './src/routes'),
+      '@types': resolve(__dirname, './src/types'),
+      '@store': resolve(__dirname, './src/store'),
+      '@api': resolve(__dirname, './src/api'),
+      '@shared': resolve(__dirname, './src/shared')
+    }
+  }
 });
