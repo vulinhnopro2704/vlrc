@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import { DataTableShowcaseDemo } from '@/components/DataTable';
+import { DataTableShowcaseDemo } from '@/components/TanstackDataTable';
 
 export const Route = createFileRoute('/')({
   component: Index

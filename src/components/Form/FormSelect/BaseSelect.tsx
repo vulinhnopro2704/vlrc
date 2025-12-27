@@ -2,7 +2,7 @@ import React, { useMemo, useRef, useState } from 'react';
 import { isNil } from 'lodash-es';
 import { CheckIcon, ChevronDownIcon, SearchIcon, XIcon } from 'lucide-react';
 
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
 import { MultiSelectTags } from './MultiSelectTags';
 import type {
   BaseMultiSelectProps,

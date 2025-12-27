@@ -1,4 +1,3 @@
-import React from 'react';
 import type { FieldPath, FieldValues } from 'react-hook-form';
 
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';

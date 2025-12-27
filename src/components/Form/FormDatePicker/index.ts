@@ -1,4 +1,4 @@
-export { default as FormDatePicker } from './FormDatePicker';
+export { default } from './FormDatePicker';
 export {
   useFormDatePicker,
   formatDateValue,
