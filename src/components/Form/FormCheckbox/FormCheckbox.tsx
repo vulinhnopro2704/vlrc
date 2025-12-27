@@ -24,7 +24,7 @@ export interface FormCheckboxProps<TFieldValues extends FieldValues> {
   className?: string;
 }
 
-export function FormCheckbox<TFieldValues extends FieldValues>({
+export default function FormCheckbox<TFieldValues extends FieldValues>({
   name,
   control,
   value,
