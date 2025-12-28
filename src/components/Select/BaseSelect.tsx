@@ -10,7 +10,7 @@ import type {
   BaseSelectProps,
   BaseSingleSelectProps,
   SelectValue
-} from './types';
+} from './type';
 
 function isMultiProps<T extends SelectValue>(
   props: BaseSelectProps<T>
@@ -55,7 +55,6 @@ export function BaseSelect<T extends SelectValue = SelectValue>(
   const allOptions = useMemo(() => {
     const map = new Map<T, BaseSelectOption<T>>();
 
-    // injectOptions trước để ưu tiên label từ BE (edit mode)
     for (const opt of injectOptions) {
       map.set(opt.value, opt);
     }

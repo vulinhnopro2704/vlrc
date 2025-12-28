@@ -2,8 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { XIcon } from 'lucide-react';
-
-import type { BaseSelectOption, SelectValue } from './types';
+import type { BaseSelectOption, SelectValue } from '@/components/Select';
 
 /**
  * Component to render tags for multi-select with responsive behavior

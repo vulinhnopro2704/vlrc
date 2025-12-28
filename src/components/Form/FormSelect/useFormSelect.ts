@@ -1,12 +1,9 @@
 import { get, isNil } from 'lodash-es';
 import type { ControllerRenderProps, FieldPath, FieldValues } from 'react-hook-form';
 
-import type {
-  BaseSelectPassThroughProps,
-  FormMultiSelectProps,
-  FormSelectProps,
-  SelectValue
-} from './types';
+import type { FormMultiSelectProps, FormSelectProps } from './types';
+import type { SelectValue } from '@/components/Select';
+import type { BaseSelectPassThroughProps } from '@/components/Select/type';
 
 function isFormMultiSelectProps<TFieldValues extends FieldValues, T extends SelectValue>(
   props: FormSelectProps<TFieldValues, T>
