@@ -1,28 +1,27 @@
-import type { FieldValues } from 'react-hook-form';
+import type { FieldPath, FieldValues } from 'react-hook-form';
 import { NumericFormat } from 'react-number-format';
 
+import { FormBase } from '../Form';
 import { StepperControls } from './StepperControls';
 import type { FormNumberInputProps } from './types';
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { useFormNumberInput } from './useFormNumberInput';
+import { cn } from '@/lib/utils';
 
-export function FormNumberInput<TFieldValues extends FieldValues>({
+export function FormNumberInput<
+  TFieldValues extends FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues
+>({
   control,
   name,
   label,
   stepper = 1,
+  min = '0',
+  max = '100',
+  minValue = Number.NEGATIVE_INFINITY,
+  maxValue = Number.POSITIVE_INFINITY,
   thousandSeparator,
   placeholder,
-  min = -Infinity,
-  max = Infinity,
   fixedDecimalScale = false,
   decimalScale = 0,
   suffix,
@@ -31,27 +30,31 @@ export function FormNumberInput<TFieldValues extends FieldValues>({
   onChange,
   rules,
   description,
+  horizontal,
+  controlFirst,
   ...props
-}: FormNumberInputProps<TFieldValues>) {
-  const { enhancedRules, numericClass, getHandlers } = useFormNumberInput({
+}: FormNumberInputProps<TFieldValues, TName, TTransformedValues>) {
+  const { enhancedRules, numericClass, getHandlers } = useFormNumberInput<TFieldValues, TName>({
+    min: minValue,
+    max: maxValue,
     rules,
     inputClassName,
     stepper,
-    min,
-    max,
     onChange,
     passthroughProps: props
   });
 
   return (
-    <FormField
+    <FormBase
       control={control}
       name={name}
+      label={label}
+      description={description}
       rules={enhancedRules}
-      render={({ field, fieldState }) => {
+      horizontal={horizontal}
+      controlFirst={controlFirst}>
+      {({ id, 'aria-invalid': ariaInvalid, ...field }) => {
         const currentValue = field.value as number | undefined;
-        const error = fieldState.error;
-
         const {
           handleIncrement,
           handleDecrement,
@@ -60,52 +63,39 @@ export function FormNumberInput<TFieldValues extends FieldValues>({
           numericOnValueChange
         } = getHandlers({ currentValue, field });
 
-        const isRequired = !!rules?.required;
-
         return (
-          <FormItem>
-            {label && (
-              <FormLabel>
-                {label}
-                {isRequired && <span className='text-red-500 ml-1'>*</span>}
-              </FormLabel>
-            )}
-            <FormControl>
-              <div className='flex items-center'>
-                <NumericFormat
-                  value={currentValue ?? ''}
-                  onValueChange={numericOnValueChange}
-                  thousandSeparator={thousandSeparator}
-                  decimalScale={decimalScale}
-                  fixedDecimalScale={fixedDecimalScale}
-                  allowNegative={min < 0}
-                  valueIsNumericString={false}
-                  onBlur={handleBlur}
-                  max={max}
-                  min={min}
-                  suffix={suffix}
-                  prefix={prefix}
-                  customInput={Input}
-                  placeholder={placeholder}
-                  className={numericClass}
-                  getInputRef={field.ref}
-                  onKeyDown={handleKeyDown}
-                  name={field.name}
-                  {...(props as any)}
-                />
-                <StepperControls
-                  onIncrement={handleIncrement}
-                  onDecrement={handleDecrement}
-                  disableIncrement={currentValue !== undefined && currentValue >= max}
-                  disableDecrement={currentValue !== undefined && currentValue <= min}
-                />
-              </div>
-            </FormControl>
-            {description && !error && <FormDescription>{description}</FormDescription>}
-            <FormMessage />
-          </FormItem>
+          <div className='flex items-center'>
+            <NumericFormat
+              min={min}
+              max={max}
+              aria-invalid={ariaInvalid}
+              value={currentValue ?? ''}
+              onValueChange={numericOnValueChange}
+              thousandSeparator={thousandSeparator}
+              decimalScale={decimalScale}
+              fixedDecimalScale={fixedDecimalScale}
+              allowNegative={minValue < 0}
+              valueIsNumericString={false}
+              onBlur={handleBlur}
+              suffix={suffix}
+              prefix={prefix}
+              placeholder={placeholder || '0'}
+              getInputRef={field.ref}
+              onKeyDown={handleKeyDown}
+              name={field.name}
+              {...props}
+              id={id}
+              className={cn(numericClass, props.className)}
+            />
+            <StepperControls
+              onIncrement={handleIncrement}
+              onDecrement={handleDecrement}
+              disableIncrement={currentValue !== undefined && currentValue >= maxValue}
+              disableDecrement={currentValue !== undefined && currentValue <= minValue}
+            />
+          </div>
         );
       }}
-    />
+    </FormBase>
   );
 }

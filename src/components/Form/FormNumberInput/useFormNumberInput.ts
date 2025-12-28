@@ -24,13 +24,16 @@ type PassthroughProps = Partial<
   >
 >;
 
-type HandlerArgs<TFieldValues extends FieldValues> = {
+type HandlerArgs<TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>> = {
   currentValue: number | undefined;
-  field: ControllerRenderProps<TFieldValues, FieldPath<TFieldValues>>;
+  field: ControllerRenderProps<TFieldValues, TName>;
 };
 
-type UseFormNumberInputParams<TFieldValues extends FieldValues> = {
-  rules?: RegisterOptions<TFieldValues, FieldPath<TFieldValues>>;
+type UseFormNumberInputParams<
+  TFieldValues extends FieldValues,
+  TName extends FieldPath<TFieldValues>
+> = {
+  rules?: RegisterOptions<TFieldValues, TName>;
   inputClassName?: string;
   stepper: number;
   min: number;
@@ -39,7 +42,10 @@ type UseFormNumberInputParams<TFieldValues extends FieldValues> = {
   passthroughProps: PassthroughProps;
 };
 
-export function useFormNumberInput<TFieldValues extends FieldValues>({
+export function useFormNumberInput<
+  TFieldValues extends FieldValues,
+  TName extends FieldPath<TFieldValues>
+>({
   rules,
   inputClassName,
   stepper,
@@ -47,7 +53,7 @@ export function useFormNumberInput<TFieldValues extends FieldValues>({
   max,
   onChange,
   passthroughProps
-}: UseFormNumberInputParams<TFieldValues>) {
+}: UseFormNumberInputParams<TFieldValues, TName>) {
   const isRequired = rules?.required !== undefined && rules.required !== false;
 
   const enhancedRules = (() => {
@@ -71,7 +77,7 @@ export function useFormNumberInput<TFieldValues extends FieldValues>({
 
   const numericClass = cn(numericInputBaseClass, inputClassName);
 
-  const getHandlers = ({ currentValue, field }: HandlerArgs<TFieldValues>) => {
+  const getHandlers = ({ currentValue, field }: HandlerArgs<TFieldValues, TName>) => {
     const handleIncrement = () => {
       const base = currentValue ?? 0;
       const next = Math.min(base + stepper, max);
