@@ -42,6 +42,13 @@ declare global {
   const CameraIcon: typeof import('lucide-react').CameraIcon
   const Car: typeof import('lucide-react').Car
   const CarIcon: typeof import('lucide-react').CarIcon
+  const Card: typeof import('../components/ui/card').Card
+  const CardAction: typeof import('../components/ui/card').CardAction
+  const CardContent: typeof import('../components/ui/card').CardContent
+  const CardDescription: typeof import('../components/ui/card').CardDescription
+  const CardFooter: typeof import('../components/ui/card').CardFooter
+  const CardHeader: typeof import('../components/ui/card').CardHeader
+  const CardTitle: typeof import('../components/ui/card').CardTitle
   const Check: typeof import('lucide-react').Check
   const CheckCircle: typeof import('lucide-react').CheckCircle
   const CheckCircleIcon: typeof import('lucide-react').CheckCircleIcon
@@ -58,10 +65,29 @@ declare global {
   const Clear: typeof import('../components/ui/file-upload').Clear
   const Clock: typeof import('lucide-react').Clock
   const ClockIcon: typeof import('lucide-react').ClockIcon
+  const Command: typeof import('../components/ui/command').Command
+  const CommandDialog: typeof import('../components/ui/command').CommandDialog
+  const CommandEmpty: typeof import('../components/ui/command').CommandEmpty
+  const CommandGroup: typeof import('../components/ui/command').CommandGroup
+  const CommandInput: typeof import('../components/ui/command').CommandInput
+  const CommandItem: typeof import('../components/ui/command').CommandItem
+  const CommandList: typeof import('../components/ui/command').CommandList
+  const CommandSeparator: typeof import('../components/ui/command').CommandSeparator
+  const CommandShortcut: typeof import('../components/ui/command').CommandShortcut
   const Copy: typeof import('lucide-react').Copy
   const CopyIcon: typeof import('lucide-react').CopyIcon
   const CreditCard: typeof import('lucide-react').CreditCard
   const CreditCardIcon: typeof import('lucide-react').CreditCardIcon
+  const Dialog: typeof import('../components/ui/dialog').Dialog
+  const DialogClose: typeof import('../components/ui/dialog').DialogClose
+  const DialogContent: typeof import('../components/ui/dialog').DialogContent
+  const DialogDescription: typeof import('../components/ui/dialog').DialogDescription
+  const DialogFooter: typeof import('../components/ui/dialog').DialogFooter
+  const DialogHeader: typeof import('../components/ui/dialog').DialogHeader
+  const DialogOverlay: typeof import('../components/ui/dialog').DialogOverlay
+  const DialogPortal: typeof import('../components/ui/dialog').DialogPortal
+  const DialogTitle: typeof import('../components/ui/dialog').DialogTitle
+  const DialogTrigger: typeof import('../components/ui/dialog').DialogTrigger
   const DollarSign: typeof import('lucide-react').DollarSign
   const DollarSignIcon: typeof import('lucide-react').DollarSignIcon
   const Download: typeof import('lucide-react').Download
@@ -92,6 +118,16 @@ declare global {
   const EyeOffIcon: typeof import('lucide-react').EyeOffIcon
   const Facebook: typeof import('lucide-react').Facebook
   const FacebookIcon: typeof import('lucide-react').FacebookIcon
+  const Field: typeof import('../components/ui/field').Field
+  const FieldContent: typeof import('../components/ui/field').FieldContent
+  const FieldDescription: typeof import('../components/ui/field').FieldDescription
+  const FieldError: typeof import('../components/ui/field').FieldError
+  const FieldGroup: typeof import('../components/ui/field').FieldGroup
+  const FieldLabel: typeof import('../components/ui/field').FieldLabel
+  const FieldLegend: typeof import('../components/ui/field').FieldLegend
+  const FieldSeparator: typeof import('../components/ui/field').FieldSeparator
+  const FieldSet: typeof import('../components/ui/field').FieldSet
+  const FieldTitle: typeof import('../components/ui/field').FieldTitle
   const File: typeof import('lucide-react').File
   const FileIcon: typeof import('lucide-react').FileIcon
   const FileMinus: typeof import('lucide-react').FileMinus
@@ -133,11 +169,20 @@ declare global {
   const Input: typeof import('../components/ui/input').Input
   const Instagram: typeof import('lucide-react').Instagram
   const InstagramIcon: typeof import('lucide-react').InstagramIcon
-  const Item: typeof import('../components/ui/file-upload').Item
+  const Item: typeof import('../components/ui/item').Item
+  const ItemActions: typeof import('../components/ui/item').ItemActions
+  const ItemContent: typeof import('../components/ui/item').ItemContent
   const ItemDelete: typeof import('../components/ui/file-upload').ItemDelete
+  const ItemDescription: typeof import('../components/ui/item').ItemDescription
+  const ItemFooter: typeof import('../components/ui/item').ItemFooter
+  const ItemGroup: typeof import('../components/ui/item').ItemGroup
+  const ItemHeader: typeof import('../components/ui/item').ItemHeader
+  const ItemMedia: typeof import('../components/ui/item').ItemMedia
   const ItemMetadata: typeof import('../components/ui/file-upload').ItemMetadata
   const ItemPreview: typeof import('../components/ui/file-upload').ItemPreview
   const ItemProgress: typeof import('../components/ui/file-upload').ItemProgress
+  const ItemSeparator: typeof import('../components/ui/item').ItemSeparator
+  const ItemTitle: typeof import('../components/ui/item').ItemTitle
   const KeyIcon: typeof import('lucide-react').KeyIcon
   const LCalendar: typeof import('lucide-react').Calendar
   const Label: typeof import('../components/ui/label').Label
@@ -183,6 +228,8 @@ declare global {
   const PopoverTrigger: typeof import('../components/ui/popover').PopoverTrigger
   const QueryClient: typeof import('@tanstack/react-query').QueryClient
   const QueryClientProvider: typeof import('@tanstack/react-query').QueryClientProvider
+  const RadioGroup: typeof import('../components/ui/radio-group').RadioGroup
+  const RadioGroupItem: typeof import('../components/ui/radio-group').RadioGroupItem
   const RefreshCcw: typeof import('lucide-react').RefreshCcw
   const RefreshCcwIcon: typeof import('lucide-react').RefreshCcwIcon
   const RefreshCw: typeof import('lucide-react').RefreshCw
@@ -195,6 +242,17 @@ declare global {
   const ScrollBar: typeof import('../components/ui/scroll-area').ScrollBar
   const Search: typeof import('lucide-react').Search
   const SearchIcon: typeof import('lucide-react').SearchIcon
+  const Select: typeof import('../components/ui/select').Select
+  const SelectContent: typeof import('../components/ui/select').SelectContent
+  const SelectGroup: typeof import('../components/ui/select').SelectGroup
+  const SelectItem: typeof import('../components/ui/select').SelectItem
+  const SelectLabel: typeof import('../components/ui/select').SelectLabel
+  const SelectScrollDownButton: typeof import('../components/ui/select').SelectScrollDownButton
+  const SelectScrollUpButton: typeof import('../components/ui/select').SelectScrollUpButton
+  const SelectSeparator: typeof import('../components/ui/select').SelectSeparator
+  const SelectTrigger: typeof import('../components/ui/select').SelectTrigger
+  const SelectValue: typeof import('../components/ui/select').SelectValue
+  const Separator: typeof import('../components/ui/separator').Separator
   const Settings: typeof import('lucide-react').Settings
   const SettingsIcon: typeof import('lucide-react').SettingsIcon
   const Shield: typeof import('lucide-react').Shield
@@ -216,6 +274,7 @@ declare global {
   const TableHeader: typeof import('../components/ui/table').TableHeader
   const TableRow: typeof import('../components/ui/table').TableRow
   const Textarea: typeof import('../components/ui/textarea').Textarea
+  const Toaster: typeof import('../components/ui/sonner').Toaster
   const Tooltip: typeof import('../components/ui/tooltip').Tooltip
   const TooltipContent: typeof import('../components/ui/tooltip').TooltipContent
   const TooltipProvider: typeof import('../components/ui/tooltip').TooltipProvider

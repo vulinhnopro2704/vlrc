@@ -6,6 +6,7 @@ import {
   FieldError,
   FieldLabel
 } from '@components/ui/field';
+import FilePondUploader from '@components/FilePondUploader';
 import { Select, SelectContent, SelectTrigger, SelectValue } from '@components/ui/select';
 import type { FormBaseProps, FormControlFunc } from './types';
 import type { FieldPath } from 'react-hook-form';
@@ -164,4 +165,8 @@ export const FormCheckbox: FormControlFunc = props => {
       )}
     </FormBase>
   );
+};
+
+export const FormFileUpload: FormControlFunc = props => {
+  return <FormBase {...props}>{field => <FilePondUploader {...field} />}</FormBase>;
 };
