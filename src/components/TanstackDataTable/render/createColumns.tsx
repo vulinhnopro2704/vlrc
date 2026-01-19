@@ -32,28 +32,31 @@ export const createSelectionColumn = <TData,>(): ColumnDef<TData, DataTableValue
 
 export const createExpanderColumn = <TData,>(): ColumnDef<TData, DataTableValue> => ({
   id: 'expand',
-  header: () => null,
-  cell: ({ row }) => <ExpanderCell row={row} />,
   enableSorting: false,
-  enableHiding: false
+  enableHiding: false,
+  header: () => null,
+  cell: ({ row }) => <ExpanderCell row={row} />
 });
 
 const ExpanderCell = <TData,>({ row }: { row: Row<TData> }) => {
-  if (row.getCanExpand() === false) {
-    return null;
+  if (row.getCanExpand()) {
+    return (
+      <Button
+        variant='ghost'
+        size='sm'
+        className='h-8 w-8 p-0'
+        onClick={() => row.toggleExpanded()}>
+        <span className='sr-only'>Toggle</span>
+        {row.getIsExpanded() ? <ChevronDown /> : <ChevronRight />}
+      </Button>
+    );
   }
-
-  return (
-    <Button variant='ghost' size='sm' className='h-8 w-8 p-0' onClick={() => row.toggleExpanded()}>
-      <span className='sr-only'>Toggle</span>
-      {row.getIsExpanded() ? <ChevronDown /> : <ChevronRight />}
-    </Button>
-  );
+  return null;
 };
 
 export const createRowActionsColumn = <TData,>(): ColumnDef<TData, DataTableValue> => ({
   id: 'actions',
-  header: () => null,
   enableHiding: false,
+  header: () => null,
   cell: ({ row, table }) => <DataTableRowActions row={row} table={table} />
 });

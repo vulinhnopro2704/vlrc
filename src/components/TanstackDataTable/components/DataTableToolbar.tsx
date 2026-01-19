@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { debounce, isEmpty } from 'lodash-es';
 import type { Table } from '@tanstack/react-table';
 
@@ -13,18 +12,18 @@ export const DataTableToolbar = <TData,>({
   table: Table<TData>;
   placeholder: string;
   debounceMs: number;
-  right: React.ReactNode;
+  right: ReactNode;
 }) => {
   const current = table.getState().globalFilter;
   const currentValue = typeof current === 'string' ? current : '';
 
-  const debouncedSetRef = React.useRef(
+  const debouncedSetRef = useRef(
     debounce((value: string) => {
       table.setGlobalFilter(value);
     }, debounceMs)
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     debouncedSetRef.current = debounce((value: string) => {
       table.setGlobalFilter(value);
     }, debounceMs);
@@ -33,7 +32,7 @@ export const DataTableToolbar = <TData,>({
     };
   }, [table, debounceMs]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     return () => {
       debouncedSetRef.current.cancel();
     };

@@ -314,6 +314,7 @@ declare global {
   const cacheSignal: typeof import('react').cacheSignal
   const chain: typeof import('lodash-es').chain
   const cloneElement: typeof import('react').cloneElement
+  const cn: typeof import('../lib/utils').cn
   const compact: typeof import('lodash-es').compact
   const create: typeof import('zustand').create
   const createContext: typeof import('react').createContext
@@ -403,6 +404,7 @@ declare global {
   const useState: typeof import('react').useState
   const useSyncExternalStore: typeof import('react').useSyncExternalStore
   const useTransition: typeof import('react').useTransition
+  const useUpdateEffect: typeof import('ahook').useUpdateEffect
   const useWatch: typeof import('react-hook-form').useWatch
   const values: typeof import('lodash-es').values
   const zustandDevtools: typeof import('zustand/middleware').devtools

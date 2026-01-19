@@ -72,29 +72,12 @@ export type DataTableInitialState = {
   pagination: PaginationState;
   expanded: ExpandedState;
 };
-
-export type DataTableContextValue<TData> = {
-  tableId: string;
-  table: Table<TData>;
-  columnsCount: number;
-  emptyConfig: DataTableEmptyConfig;
-  actionsConfig: DataTableActionsConfig<TData>;
-  paginationConfig: DataTablePaginationConfig;
-  searchConfig: DataTableSearchConfig;
-  apiConfig: DataTableApiConfig;
-  infiniteScrollConfig: DataTableInfiniteScrollConfig;
-  expandConfig: DataTableExpandConfig<TData>;
-};
-
 export type DataTableValue = string | number | boolean | null | undefined | Date | object;
 
 export type DataTableProps<TData> = {
-  tableId: string;
   data: TData[];
   columns: ColumnDef<TData, DataTableValue>[];
-
   initialState?: DataTableInitialState;
-
   empty?: DataTableEmptyConfig;
   search?: DataTableSearchConfig;
   pagination?: DataTablePaginationConfig;
@@ -102,11 +85,8 @@ export type DataTableProps<TData> = {
   api?: DataTableApiConfig;
   infiniteScroll?: DataTableInfiniteScrollConfig;
   expand?: DataTableExpandConfig<TData>;
-
   className?: string;
   containerClassName?: string;
-
   getRowId?: (originalRow: TData, index: number, parent: Row<TData> | null) => string;
-
   renderToolbarRight?: (table: Table<TData>) => React.ReactNode;
 };

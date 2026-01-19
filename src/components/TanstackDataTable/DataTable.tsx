@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { clamp, debounce, size } from 'lodash-es';
+import { clamp, debounce } from 'lodash-es';
 import {
   functionalUpdate,
   getCoreRowModel,
@@ -11,9 +10,6 @@ import {
   type ColumnDef,
   type Row
 } from '@tanstack/react-table';
-
-import { cn } from '@/lib/utils';
-
 import { DataTablePagination } from './components/DataTablePagination';
 import { DataTableTable } from './components/DataTableTable';
 import { DataTableToolbar } from './components/DataTableToolbar';
@@ -62,7 +58,6 @@ const DEFAULT_GET_ROW_ID = <TData,>(_originalRow: TData, index: number) => {
 };
 
 export const DataTable = <TData,>({
-  tableId,
   data,
   columns,
   initialState,
@@ -80,7 +75,7 @@ export const DataTable = <TData,>({
 }: DataTableProps<TData> & {
   columns: ColumnDef<TData, DataTableValue>[];
 }) => {
-  const resolvedInitialState: DataTableInitialState =
+  const initialConfig: DataTableInitialState =
     initialState === undefined ? DEFAULT_INITIAL_STATE : initialState;
   const resolvedEmpty: DataTableEmptyConfig = empty === undefined ? DEFAULT_EMPTY : empty;
   const resolvedSearch: DataTableSearchConfig = search === undefined ? DEFAULT_SEARCH : search;
@@ -96,25 +91,13 @@ export const DataTable = <TData,>({
   const resolvedRenderToolbarRight =
     renderToolbarRight === undefined ? DEFAULT_RENDER_TOOLBAR_RIGHT : renderToolbarRight;
 
-  const [sorting, setSorting] = React.useState(resolvedInitialState.sorting);
-  const [columnFilters, setColumnFilters] = React.useState(resolvedInitialState.columnFilters);
-  const [globalFilter, setGlobalFilter] = React.useState(resolvedInitialState.globalFilter);
-  const [columnVisibility, setColumnVisibility] = React.useState(
-    resolvedInitialState.columnVisibility
-  );
-  const [rowSelection, setRowSelection] = React.useState(resolvedInitialState.rowSelection);
-  const [paginationState, setPaginationState] = React.useState(resolvedInitialState.pagination);
-  const [expanded, setExpanded] = React.useState(resolvedInitialState.expanded);
-
-  React.useEffect(() => {
-    setSorting(resolvedInitialState.sorting);
-    setColumnFilters(resolvedInitialState.columnFilters);
-    setGlobalFilter(resolvedInitialState.globalFilter);
-    setColumnVisibility(resolvedInitialState.columnVisibility);
-    setRowSelection(resolvedInitialState.rowSelection);
-    setPaginationState(resolvedInitialState.pagination);
-    setExpanded(resolvedInitialState.expanded);
-  }, [tableId]);
+  const [sorting, setSorting] = useState(initialConfig.sorting);
+  const [columnFilters, setColumnFilters] = useState(initialConfig.columnFilters);
+  const [globalFilter, setGlobalFilter] = useState(initialConfig.globalFilter);
+  const [columnVisibility, setColumnVisibility] = useState(initialConfig.columnVisibility);
+  const [rowSelection, setRowSelection] = useState(initialConfig.rowSelection);
+  const [paginationState, setPaginationState] = useState(initialConfig.pagination);
+  const [expanded, setExpanded] = useState(initialConfig.expanded);
 
   const manualMode = resolvedApi.mode === 'server';
   const pageCount =
@@ -134,6 +117,14 @@ export const DataTable = <TData,>({
       pagination: paginationState,
       expanded
     },
+    manualSorting: manualMode,
+    manualFiltering: manualMode,
+    manualPagination: manualMode,
+    pageCount,
+    meta: {
+      getRowActions: resolvedActions.getRowActions
+    },
+    enableRowSelection: true,
     getRowId: (originalRow, index, parent) =>
       resolvedGetRowId(originalRow, index, parent === undefined ? null : (parent as Row<TData>)),
     onSortingChange: updater => setSorting(current => functionalUpdate(updater, current)),
@@ -151,16 +142,8 @@ export const DataTable = <TData,>({
     getFilteredRowModel: manualMode ? undefined : getFilteredRowModel(),
     getPaginationRowModel: manualMode ? undefined : getPaginationRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
-    manualSorting: manualMode,
-    manualFiltering: manualMode,
-    manualPagination: manualMode,
-    pageCount,
-    enableRowSelection: true,
     getSubRows: resolvedExpand.enabled ? resolvedExpand.getSubRows : undefined,
-    getRowCanExpand: () => resolvedExpand.enabled,
-    meta: {
-      getRowActions: resolvedActions.getRowActions
-    }
+    getRowCanExpand: () => resolvedExpand.enabled
   });
 
   const query: DataTableQuery = {
@@ -170,14 +153,14 @@ export const DataTable = <TData,>({
     pagination: paginationState
   };
 
-  React.useEffect(() => {
+  useUpdateEffect(() => {
     if (manualMode) {
       return;
     }
     setPaginationState(current => ({ ...current, pageIndex: 0 }));
   }, [manualMode, globalFilter, columnFilters, sorting]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (manualMode) {
       return;
     }
@@ -193,13 +176,13 @@ export const DataTable = <TData,>({
     }));
   }, [manualMode, paginationState.pageSize, table]);
 
-  const debouncedNotifyRef = React.useRef(
+  const debouncedNotifyRef = useRef(
     debounce((next: DataTableQuery) => {
       resolvedApi.onQueryChange(next);
     }, resolvedSearch.debounceMs)
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     debouncedNotifyRef.current = debounce((next: DataTableQuery) => {
       resolvedApi.onQueryChange(next);
     }, resolvedSearch.debounceMs);
@@ -208,7 +191,7 @@ export const DataTable = <TData,>({
     };
   }, [resolvedApi, resolvedSearch.debounceMs]);
 
-  React.useEffect(() => {
+  useUpdateEffect(() => {
     if (resolvedApi.mode !== 'server') {
       return;
     }
@@ -218,9 +201,9 @@ export const DataTable = <TData,>({
     };
   }, [query, resolvedApi]);
 
-  const [scrollEl, setScrollEl] = React.useState<HTMLDivElement | null>(null);
+  const [scrollEl, setScrollEl] = useState<HTMLDivElement | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (resolvedInfinite.enabled === false) {
       return undefined;
     }

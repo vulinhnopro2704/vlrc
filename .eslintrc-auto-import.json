@@ -253,6 +253,7 @@
     "cacheSignal": true,
     "chain": true,
     "cloneElement": true,
+    "cn": true,
     "compact": true,
     "create": true,
     "createContext": true,
@@ -342,6 +343,7 @@
     "useState": true,
     "useSyncExternalStore": true,
     "useTransition": true,
+    "useUpdateEffect": true,
     "useWatch": true,
     "values": true,
     "zustandDevtools": true

@@ -8,7 +8,3 @@ export {
   createRowActionsColumn,
   createExpanderColumn
 } from './render/createColumns';
-
-export { PaymentTableDemo } from './demo/PaymentTableDemo';
-
-export { DataTableShowcaseDemo } from './demo/DataTableShowcaseDemo';

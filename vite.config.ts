@@ -58,6 +58,9 @@ export default defineConfig({
           ]
         },
         {
+          ahook: ['useUpdateEffect']
+        },
+        {
           'react-hook-form': [
             'useForm',
             'useController',
@@ -241,7 +244,7 @@ export default defineConfig({
           type: true
         }
       ],
-      dirs: ['src/components/ui'],
+      dirs: ['src/components/ui', 'src/lib'],
       dts: 'src/types/auto-imports.d.ts'
     })
   ],
