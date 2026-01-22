@@ -30,7 +30,7 @@ export default function FilePondUploader({
   filePondProps
 }: {
   value?: File[];
-  onChange?: (files: FilePondFile[]) => void;
+  onChange?: (files: File[]) => void;
   maxFiles?: number;
   acceptedFileTypes?: string[];
   disabled?: boolean;
@@ -52,7 +52,10 @@ export default function FilePondUploader({
       allowMultiple
       allowImageEditor
       imageEditor={filePondProps?.imageEditor ?? defaultImageEditor}
-      onupdatefiles={onChange}
+      onupdatefiles={(files: FilePondFile[]) => {
+        const mapped = files.map(f => f.file).filter(Boolean) as File[];
+        onChange?.(mapped);
+      }}
       {...filePondProps}
     />
   );
