@@ -10,6 +10,7 @@ import FilePondUploader from '@components/FilePondUploader';
 import { Select, SelectContent, SelectTrigger, SelectValue } from '@components/ui/select';
 import type { FormBaseProps, FormControlFunc } from './types';
 import type { FieldPath } from 'react-hook-form';
+import type { FilePond } from 'filepond';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_PATTERN = /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/;
@@ -167,6 +168,28 @@ export const FormCheckbox: FormControlFunc = props => {
   );
 };
 
-export const FormFileUpload: FormControlFunc = props => {
-  return <FormBase {...props}>{field => <FilePondUploader {...field} />}</FormBase>;
+export const FormFileUpload: FormControlFunc<{
+  maxFiles?: number;
+  acceptedFileTypes?: string[];
+  server?: FilePond['server'];
+  instantUpload?: boolean;
+  filePondProps?: Omit<
+    FilePond,
+    'files' | 'onupdatefiles' | 'allowMultiple' | 'maxFiles' | 'acceptedFileTypes' | 'disabled'
+  >;
+}> = ({ maxFiles, acceptedFileTypes, server, instantUpload, filePondProps, ...props }) => {
+  return (
+    <FormBase {...props}>
+      {field => (
+        <FilePondUploader
+          {...field}
+          maxFiles={maxFiles}
+          acceptedFileTypes={acceptedFileTypes}
+          server={server}
+          instantUpload={instantUpload}
+          filePondProps={filePondProps}
+        />
+      )}
+    </FormBase>
+  );
 };

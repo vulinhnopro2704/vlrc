@@ -1,49 +1,59 @@
 import { FilePond } from 'react-filepond';
-import { useFileUpload } from '@/hook/useFileUpload';
-import type { FilePondFile } from 'filepond';
-import type { UploadedFile } from './type';
+import {
+  createDefaultImageReader,
+  createDefaultImageWriter,
+  openDefaultEditor,
+  processDefaultImage
+} from '@pqina/pintura';
+import pinturaLocale from '@pqina/pintura/locale/en_GB';
+import type { FilePondFile, FilePondOptions } from 'filepond';
+
+const defaultImageEditor = {
+  createEditor: openDefaultEditor,
+  imageReader: [createDefaultImageReader, {}],
+  imageWriter: [createDefaultImageWriter, {}],
+  imageProcessor: processDefaultImage,
+  editorOptions: {
+    locale: pinturaLocale
+  },
+  imageState: {}
+};
 
 export default function FilePondUploader({
   value = [],
   onChange,
   maxFiles = 5,
   acceptedFileTypes = ['image/*'],
-  disabled
+  disabled,
+  server,
+  instantUpload = false,
+  filePondProps
 }: {
-  value?: UploadedFile[];
-  onChange?: (files: UploadedFile[]) => void;
+  value?: File[];
+  onChange?: (files: FilePondFile[]) => void;
   maxFiles?: number;
   acceptedFileTypes?: string[];
   disabled?: boolean;
+  server?: FilePondOptions['server'];
+  instantUpload?: boolean;
+  filePondProps?: Omit<
+    FilePondOptions,
+    'files' | 'onupdatefiles' | 'allowMultiple' | 'maxFiles' | 'acceptedFileTypes' | 'disabled'
+  >;
 }) {
-  const { process } = useFileUpload();
-
   return (
     <FilePond
-      files={value.map(f => ({
-        source: f.id,
-        options: { type: 'local' }
-      }))}
-      allowMultiple
+      files={value}
       maxFiles={maxFiles}
       acceptedFileTypes={acceptedFileTypes}
       disabled={disabled}
-      server={{
-        process
-      }}
-      onupdatefiles={(files: FilePondFile[]) => {
-        const mapped: UploadedFile[] = files
-          .filter(f => f.serverId)
-          .map(f => ({
-            id: String(f.serverId),
-            name: f.filename,
-            size: f.fileSize,
-            type: f.fileType ?? '',
-            url: ''
-          }));
-
-        onChange?.(mapped);
-      }}
+      instantUpload={instantUpload}
+      server={server}
+      allowMultiple
+      allowImageEditor
+      imageEditor={filePondProps?.imageEditor ?? defaultImageEditor}
+      onupdatefiles={onChange}
+      {...filePondProps}
     />
   );
 }

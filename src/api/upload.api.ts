@@ -1,7 +1,6 @@
-import type { ActualFileObject } from 'filepond';
-import type { UploadedFile } from '../components/Form/FormFileUpload/types';
+import type { UploadedFile } from '@/components/FilePondUploader/type';
 
-export const uploadFile = async (file: ActualFileObject): Promise<UploadedFile> => {
+export const uploadFile = async (file: File): Promise<UploadedFile> => {
   const formData = new FormData();
   formData.append('file', file, file.name);
 

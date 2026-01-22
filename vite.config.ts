@@ -4,7 +4,6 @@ import AutoImport from 'unplugin-auto-import/vite';
 import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { resolve } from 'path';
-import { fileURLToPath } from 'url';
 
 export default defineConfig({
   plugins: [

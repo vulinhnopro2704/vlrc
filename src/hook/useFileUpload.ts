@@ -1,5 +1,5 @@
 import type { ProcessServerConfigFunction } from 'filepond';
-import { uploadFile } from '../api/upload.api';
+import { uploadFile } from '@/api/upload.api';
 
 export const useFileUpload = () => {
   const process: ProcessServerConfigFunction = (

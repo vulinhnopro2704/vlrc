@@ -42,7 +42,7 @@ export function Modal({
   return (
     <Dialog open={open} onOpenChange={val => !val && onCancel()}>
       <DialogContent
-        className={cn('flex max-h-[calc(100vh-150px)] flex-col gap-0 p-0 sm:max-w-[700px]')}
+        className={cn('flex max-h-[calc(100vh-150px)] flex-col gap-0 p-0 sm:max-w-175')}
         style={{ maxWidth: width }}>
         <DialogHeader className='px-6 py-4 border-b'>
           <DialogTitle>{title}</DialogTitle>
