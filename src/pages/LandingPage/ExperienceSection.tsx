@@ -52,15 +52,14 @@ export const ExperienceSection = () => {
       <div className="container mx-auto px-4">
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <h2 className="mb-4 text-3xl font-bold text-foreground md:text-4xl">
-            {t('experience.title')}
+            {t('experience_title')}
           </h2>
           <p className="text-lg text-muted-foreground">
-            {t('experience.subtitle')}
+            {t('experience_subtitle')}
           </p>
         </div>
 
         <div className="mx-auto max-w-4xl">
-          {/* Tabs */}
           <div className="mb-8 flex justify-center">
             <div className="inline-flex rounded-xl bg-muted p-1 dark:bg-muted/50 dark:backdrop-blur-sm">
               {(['listening', 'reading', 'writing'] as const).map((tab) => {
@@ -76,14 +75,13 @@ export const ExperienceSection = () => {
                     }`}
                   >
                     <Icon className="h-4 w-4" />
-                    {t(`experience.tabs.${tab}`)}
+                    {t(tab)}
                   </button>
                 );
               })}
             </div>
           </div>
 
-          {/* Content */}
           <Card ref={cardRef} className="border-0 shadow-xl dark:bg-card/60 dark:backdrop-blur-md dark:border dark:border-white/10">
             <CardContent className="p-8">
               <TabContent tab={activeTab} />
@@ -97,22 +95,39 @@ export const ExperienceSection = () => {
 
 const TabContent = ({ tab }: { tab: TabType }) => {
   const { t } = useTranslation();
-  const features = t(`experience.${tab}.features`, { returnObjects: true }) as string[];
+  
+  const featuresMap: Record<TabType, string[]> = {
+    listening: ['listening_feature1', 'listening_feature2', 'listening_feature3', 'listening_feature4'],
+    reading: ['reading_feature1', 'reading_feature2', 'reading_feature3', 'reading_feature4'],
+    writing: ['writing_feature1', 'writing_feature2', 'writing_feature3', 'writing_feature4']
+  };
+
+  const titleKeyMap: Record<TabType, string> = {
+    listening: 'listening_tab_title',
+    reading: 'reading_tab_title',
+    writing: 'writing_tab_title'
+  };
+
+  const descKeyMap: Record<TabType, string> = {
+    listening: 'listening_tab_description',
+    reading: 'reading_tab_description',
+    writing: 'writing_tab_description'
+  };
 
   return (
     <div className="grid items-center gap-8 md:grid-cols-2">
       <div>
         <h3 className="mb-4 text-2xl font-bold text-foreground">
-          {t(`experience.${tab}.title`)}
+          {t(titleKeyMap[tab])}
         </h3>
         <p className="mb-6 text-muted-foreground leading-relaxed">
-          {t(`experience.${tab}.description`)}
+          {t(descKeyMap[tab])}
         </p>
         <ul className="space-y-3">
-          {features.map((feature, i) => (
+          {featuresMap[tab].map((featureKey, i) => (
             <li key={i} className="flex items-center gap-3 text-foreground">
               <CheckCircle2 className="h-5 w-5 text-primary" />
-              {feature}
+              {t(featureKey)}
             </li>
           ))}
         </ul>
@@ -129,7 +144,7 @@ const TabPreview = ({ tab }: { tab: TabType }) => {
     return (
       <div className="rounded-xl bg-gradient-to-br from-accent/10 to-accent/5 p-6 dark:from-accent/20 dark:to-accent/10">
         <div className="mb-4 flex items-center justify-between">
-          <span className="text-sm font-medium text-muted-foreground">{t('hero.dictation')}</span>
+          <span className="text-sm font-medium text-muted-foreground">{t('dictation')}</span>
           <span className="text-xs text-accent">00:45</span>
         </div>
         <div className="mb-4 flex items-center justify-center gap-1">

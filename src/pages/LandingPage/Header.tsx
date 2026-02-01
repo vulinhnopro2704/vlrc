@@ -52,14 +52,11 @@ export const Header = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
           <a href="/" className="text-2xl font-bold text-primary">
             VLRC
           </a>
 
-          {/* Actions */}
           <div className="flex items-center gap-2">
-            {/* Language Switcher */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="h-9 w-9">
@@ -69,15 +66,14 @@ export const Header = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="dark:bg-card/90 dark:backdrop-blur-lg dark:border-white/10">
                 <DropdownMenuItem onClick={() => changeLanguage('vi')}>
-                  Tiếng Việt
+                  {t('vietnamese')}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => changeLanguage('en')}>
-                  English
+                  {t('english')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Theme Toggle */}
             <Button 
               variant="ghost" 
               size="icon" 
@@ -92,9 +88,8 @@ export const Header = () => {
               <span className="sr-only">Toggle theme</span>
             </Button>
 
-            {/* CTA Button */}
             <Button className="bg-accent hover:bg-accent/90 text-accent-foreground ml-2">
-              {t('common.startFree')}
+              {t('start_free')}
             </Button>
           </div>
         </div>

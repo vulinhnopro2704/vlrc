@@ -52,27 +52,27 @@ export const ScienceSection = () => {
           <div ref={contentRef}>
             <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary dark:bg-primary/20 dark:backdrop-blur-sm">
               <Brain className="h-4 w-4" />
-              <span>{t('science.badge')}</span>
+              <span>{t('science_badge')}</span>
             </div>
             <h2 className="mb-6 text-3xl font-bold text-foreground md:text-4xl text-balance">
-              {t('science.title')}
+              {t('science_title')}
             </h2>
             <div className="space-y-6 text-muted-foreground">
               <p className="text-lg leading-relaxed">
-                <strong className="text-foreground">{t('science.spacedRepetition.title')}</strong> {t('science.spacedRepetition.description')}
+                <strong className="text-foreground">{t('spaced_repetition_title')}</strong> {t('spaced_repetition_description')}
               </p>
               <p className="text-lg leading-relaxed">
-                <strong className="text-foreground">{t('science.fsrs.title')}</strong> {t('science.fsrs.description')}
+                <strong className="text-foreground">{t('fsrs_algo_title')}</strong> {t('fsrs_algo_description')}
               </p>
               <p className="text-lg leading-relaxed">
-                <strong className="text-foreground">{t('science.ml.title')}</strong> {t('science.ml.description')}
+                <strong className="text-foreground">{t('ml_algo_title')}</strong> {t('ml_algo_description')}
               </p>
             </div>
             
             <div className="mt-8 grid grid-cols-3 gap-6">
-              <StatBox value="90%" label={t('science.stats.timeSaved')} />
-              <StatBox value="1.5x" label={t('science.stats.accurate')} />
-              <StatBox value="85%" label={t('science.stats.retention')} />
+              <StatBox value="90%" label={t('time_saved')} />
+              <StatBox value="1.5x" label={t('more_accurate')} />
+              <StatBox value="85%" label={t('long_term_retention')} />
             </div>
           </div>
           
@@ -99,18 +99,15 @@ const ForgettingCurveChart = () => {
   
   return (
     <div className="rounded-xl bg-card p-6 shadow-lg dark:bg-card/60 dark:backdrop-blur-md dark:border dark:border-white/10">
-      <h4 className="mb-4 font-semibold text-foreground">{t('science.chart.title')}</h4>
+      <h4 className="mb-4 font-semibold text-foreground">{t('chart_title')}</h4>
       <div className="relative h-48">
-        {/* Y axis */}
         <div className="absolute left-0 top-0 flex h-full flex-col justify-between text-xs text-muted-foreground">
           <span>100%</span>
           <span>50%</span>
           <span>0%</span>
         </div>
-        {/* Chart area */}
         <div className="ml-8 h-full">
           <svg viewBox="0 0 300 150" className="h-full w-full">
-            {/* Forgetting curve without review */}
             <path
               d="M0,10 Q50,30 100,80 T200,120 T300,140"
               fill="none"
@@ -118,14 +115,12 @@ const ForgettingCurveChart = () => {
               strokeWidth="2"
               strokeDasharray="5,5"
             />
-            {/* With spaced repetition */}
             <path
               d="M0,10 Q20,20 40,10 Q60,20 80,10 Q100,20 120,10 Q160,25 200,15 Q260,30 300,20"
               fill="none"
               stroke="hsl(175, 70%, 45%)"
               strokeWidth="3"
             />
-            {/* Review points */}
             {[40, 80, 120, 200].map((x, i) => (
               <circle key={i} cx={x} cy={10} r="5" fill="hsl(30, 90%, 55%)" />
             ))}
@@ -135,15 +130,15 @@ const ForgettingCurveChart = () => {
       <div className="mt-4 flex items-center justify-center gap-6 text-sm">
         <div className="flex items-center gap-2">
           <div className="h-0.5 w-6 border-t-2 border-dashed border-red-500" />
-          <span className="text-muted-foreground">{t('science.chart.noReview')}</span>
+          <span className="text-muted-foreground">{t('no_review')}</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="h-0.5 w-6 bg-primary" />
-          <span className="text-muted-foreground">{t('science.chart.withReview')}</span>
+          <span className="text-muted-foreground">{t('with_review')}</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="h-3 w-3 rounded-full bg-accent" />
-          <span className="text-muted-foreground">{t('science.chart.reviewPoint')}</span>
+          <span className="text-muted-foreground">{t('review_point')}</span>
         </div>
       </div>
     </div>

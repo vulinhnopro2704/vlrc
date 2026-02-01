@@ -16,29 +16,29 @@ export const ValuePropsSection = () => {
   const features = [
     {
       icon: Brain,
-      titleKey: 'valueProps.fsrs.title',
-      descKey: 'valueProps.fsrs.description',
+      titleKey: 'fsrs_title',
+      descKey: 'fsrs_description',
       color: 'text-primary',
       bgColor: 'bg-primary/10 dark:bg-primary/20'
     },
     {
       icon: Sparkles,
-      titleKey: 'valueProps.ml.title',
-      descKey: 'valueProps.ml.description',
+      titleKey: 'ml_title',
+      descKey: 'ml_description',
       color: 'text-accent',
       bgColor: 'bg-accent/10 dark:bg-accent/20'
     },
     {
       icon: Headphones,
-      titleKey: 'valueProps.listening.title',
-      descKey: 'valueProps.listening.description',
+      titleKey: 'listening_title',
+      descKey: 'listening_description',
       color: 'text-green-600 dark:text-green-400',
       bgColor: 'bg-green-500/10 dark:bg-green-500/20'
     },
     {
       icon: PenTool,
-      titleKey: 'valueProps.writing.title',
-      descKey: 'valueProps.writing.description',
+      titleKey: 'writing_title',
+      descKey: 'writing_description',
       color: 'text-blue-600 dark:text-blue-400',
       bgColor: 'bg-blue-500/10 dark:bg-blue-500/20'
     }
@@ -70,10 +70,10 @@ export const ValuePropsSection = () => {
       <div className="container mx-auto px-4">
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <h2 className="mb-4 text-3xl font-bold text-foreground md:text-4xl text-balance">
-            {t('valueProps.title')}
+            {t('value_prop_title')}
           </h2>
           <p className="text-lg text-muted-foreground">
-            {t('valueProps.subtitle')}
+            {t('value_prop_subtitle')}
           </p>
         </div>
 

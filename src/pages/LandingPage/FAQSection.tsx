@@ -8,8 +8,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 interface FAQItem {
-  question: string;
-  answer: string;
+  questionKey: string;
+  answerKey: string;
 }
 
 export const FAQSection = () => {
@@ -17,7 +17,12 @@ export const FAQSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const accordionRef = useRef<HTMLDivElement>(null);
 
-  const questions = t('faq.questions', { returnObjects: true }) as FAQItem[];
+  const questions: FAQItem[] = [
+    { questionKey: 'faq1_question', answerKey: 'faq1_answer' },
+    { questionKey: 'faq2_question', answerKey: 'faq2_answer' },
+    { questionKey: 'faq3_question', answerKey: 'faq3_answer' },
+    { questionKey: 'faq4_question', answerKey: 'faq4_answer' }
+  ];
 
   useGSAP(() => {
     gsap.fromTo(accordionRef.current,
@@ -41,10 +46,10 @@ export const FAQSection = () => {
       <div className="container mx-auto px-4">
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <h2 className="mb-4 text-3xl font-bold text-foreground md:text-4xl">
-            {t('faq.title')}
+            {t('faq_title')}
           </h2>
           <p className="text-lg text-muted-foreground">
-            {t('faq.subtitle')}
+            {t('faq_subtitle')}
           </p>
         </div>
 
@@ -57,10 +62,10 @@ export const FAQSection = () => {
                 className="rounded-xl border-0 bg-card px-6 shadow-md dark:bg-card/60 dark:backdrop-blur-md dark:border dark:border-white/10"
               >
                 <AccordionTrigger className="text-left text-lg font-semibold hover:no-underline">
-                  {item.question}
+                  {t(item.questionKey)}
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground leading-relaxed">
-                  {item.answer}
+                  {t(item.answerKey)}
                 </AccordionContent>
               </AccordionItem>
             ))}

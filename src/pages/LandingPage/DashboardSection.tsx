@@ -40,10 +40,10 @@ export const DashboardSection = () => {
       <div className="container mx-auto px-4">
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <h2 className="mb-4 text-3xl font-bold text-foreground md:text-4xl">
-            {t('dashboard.title')}
+            {t('dashboard_title')}
           </h2>
           <p className="text-lg text-muted-foreground">
-            {t('dashboard.subtitle')}
+            {t('dashboard_subtitle')}
           </p>
         </div>
 
@@ -69,12 +69,11 @@ const MemoryStrengthCard = () => {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20">
             <Zap className="h-4 w-4 text-primary" />
           </div>
-          {t('dashboard.memoryStrength')}
+          {t('memory_strength')}
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="relative pt-4">
-          {/* Circular progress */}
           <div className="mx-auto h-32 w-32">
             <svg className="h-full w-full -rotate-90" viewBox="0 0 100 100">
               <circle cx="50" cy="50" r="40" fill="none" strokeWidth="8" className="stroke-muted" />
@@ -89,7 +88,7 @@ const MemoryStrengthCard = () => {
             </div>
           </div>
           <p className="mt-4 text-center text-sm text-muted-foreground">
-            {t('dashboard.avgRetention')}
+            {t('avg_retention')}
           </p>
         </div>
       </CardContent>
@@ -107,13 +106,13 @@ const StreakCard = () => {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 dark:bg-accent/20">
             <Calendar className="h-4 w-4 text-accent" />
           </div>
-          {t('dashboard.currentStreak')}
+          {t('current_streak')}
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="pt-4 text-center">
           <div className="text-5xl font-bold text-foreground">15</div>
-          <div className="mt-1 text-lg text-muted-foreground">{t('dashboard.days')}</div>
+          <div className="mt-1 text-lg text-muted-foreground">{t('days')}</div>
           <div className="mt-4 flex justify-center gap-1">
             {[1, 1, 1, 1, 1, 0, 1].map((active, i) => (
               <div
@@ -125,7 +124,7 @@ const StreakCard = () => {
             ))}
           </div>
           <p className="mt-3 text-sm text-muted-foreground">
-            {t('dashboard.longestStreak', { days: 21 })}
+            {t('longest_streak', { days: 21 })}
           </p>
         </div>
       </CardContent>
@@ -141,7 +140,7 @@ const WeeklyProgressCard = () => {
   return (
     <Card className="dashboard-card border-0 shadow-lg dark:bg-card/60 dark:backdrop-blur-md dark:border dark:border-white/10">
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg">{t('dashboard.weeklyProgress')}</CardTitle>
+        <CardTitle className="text-lg">{t('weekly_progress')}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex h-32 items-end justify-between gap-2">
@@ -152,14 +151,14 @@ const WeeklyProgressCard = () => {
                 style={{ height: `${(value / 62) * 100}%` }}
               />
               <span className="text-xs text-muted-foreground">
-                {t(`dashboard.daysOfWeek.${days[i]}`)}
+                {t(days[i])}
               </span>
             </div>
           ))}
         </div>
         <div className="mt-4 text-center">
           <span className="text-2xl font-bold text-foreground">321</span>
-          <span className="ml-2 text-muted-foreground">{t('dashboard.wordsLearned')}</span>
+          <span className="ml-2 text-muted-foreground">{t('words_learned')}</span>
         </div>
       </CardContent>
     </Card>

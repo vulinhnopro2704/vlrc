@@ -13,10 +13,10 @@ export const HowItWorksSection = () => {
   const stepsRef = useRef<HTMLDivElement>(null);
 
   const steps = [
-    { step: 1, icon: Target, titleKey: 'howItWorks.step1.title', descKey: 'howItWorks.step1.description' },
-    { step: 2, icon: Sparkles, titleKey: 'howItWorks.step2.title', descKey: 'howItWorks.step2.description' },
-    { step: 3, icon: BookOpen, titleKey: 'howItWorks.step3.title', descKey: 'howItWorks.step3.description' },
-    { step: 4, icon: BarChart3, titleKey: 'howItWorks.step4.title', descKey: 'howItWorks.step4.description' }
+    { step: 1, icon: Target, titleKey: 'step1_title', descKey: 'step1_description' },
+    { step: 2, icon: Sparkles, titleKey: 'step2_title', descKey: 'step2_description' },
+    { step: 3, icon: BookOpen, titleKey: 'step3_title', descKey: 'step3_description' },
+    { step: 4, icon: BarChart3, titleKey: 'step4_title', descKey: 'step4_description' }
   ];
 
   useGSAP(() => {
@@ -46,10 +46,10 @@ export const HowItWorksSection = () => {
       <div className="container mx-auto px-4">
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <h2 className="mb-4 text-3xl font-bold text-foreground md:text-4xl">
-            {t('howItWorks.title')}
+            {t('how_it_works_title')}
           </h2>
           <p className="text-lg text-muted-foreground">
-            {t('howItWorks.subtitle')}
+            {t('how_it_works_subtitle')}
           </p>
         </div>
 

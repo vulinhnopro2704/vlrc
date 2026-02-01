@@ -9,9 +9,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 interface Review {
-  name: string;
-  role: string;
-  content: string;
+  nameKey: string;
+  roleKey: string;
+  contentKey: string;
   rating: number;
 }
 
@@ -21,7 +21,11 @@ export const TestimonialsSection = () => {
   const reviewsRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
 
-  const reviews = t('testimonials.reviews', { returnObjects: true }) as Review[];
+  const reviews: Review[] = [
+    { nameKey: 'review1_name', roleKey: 'review1_role', contentKey: 'review1_content', rating: 5 },
+    { nameKey: 'review2_name', roleKey: 'review2_role', contentKey: 'review2_content', rating: 5 },
+    { nameKey: 'review3_name', roleKey: 'review3_role', contentKey: 'review3_content', rating: 5 }
+  ];
 
   useGSAP(() => {
     const reviewCards = reviewsRef.current?.querySelectorAll('.review-card');
@@ -68,23 +72,21 @@ export const TestimonialsSection = () => {
       <div className="container mx-auto px-4">
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <h2 className="mb-4 text-3xl font-bold text-foreground md:text-4xl">
-            {t('testimonials.title')}
+            {t('testimonials_title')}
           </h2>
           <p className="text-lg text-muted-foreground">
-            {t('testimonials.subtitle')}
+            {t('testimonials_subtitle')}
           </p>
         </div>
 
-        {/* Stats */}
         <div ref={statsRef} className="mx-auto mb-16 max-w-3xl">
           <div className="grid grid-cols-3 gap-8">
-            <StatItem icon={Users} value="10,000+" label={t('testimonials.stats.users')} />
-            <StatItem icon={BookOpen} value="2M+" label={t('testimonials.stats.wordsLearned')} />
-            <StatItem icon={Award} value="98%" label={t('testimonials.stats.satisfaction')} />
+            <StatItem icon={Users} value="10,000+" label={t('users')} />
+            <StatItem icon={BookOpen} value="2M+" label={t('words_learned_stat')} />
+            <StatItem icon={Award} value="98%" label={t('satisfaction')} />
           </div>
         </div>
 
-        {/* Reviews */}
         <div ref={reviewsRef} className="mx-auto max-w-5xl">
           <div className="grid gap-6 md:grid-cols-3">
             {reviews.map((review, index) => (
@@ -107,28 +109,33 @@ const StatItem = ({ icon: Icon, value, label }: { icon: typeof Users; value: str
   </div>
 );
 
-const ReviewCard = ({ review }: { review: Review }) => (
-  <Card className="review-card border-0 shadow-lg dark:bg-card/60 dark:backdrop-blur-md dark:border dark:border-white/10">
-    <CardContent className="p-6">
-      <div className="mb-4 flex gap-1">
-        {Array.from({ length: review.rating }).map((_, i) => (
-          <Star key={i} className="h-4 w-4 fill-accent text-accent" />
-        ))}
-      </div>
-      <p className="mb-4 text-muted-foreground leading-relaxed">
-        {`"${review.content}"`}
-      </p>
-      <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary dark:bg-primary/20">
-          {review.name.charAt(0)}
+const ReviewCard = ({ review }: { review: Review }) => {
+  const { t } = useTranslation();
+  const name = t(review.nameKey);
+  
+  return (
+    <Card className="review-card border-0 shadow-lg dark:bg-card/60 dark:backdrop-blur-md dark:border dark:border-white/10">
+      <CardContent className="p-6">
+        <div className="mb-4 flex gap-1">
+          {Array.from({ length: review.rating }).map((_, i) => (
+            <Star key={i} className="h-4 w-4 fill-accent text-accent" />
+          ))}
         </div>
-        <div>
-          <div className="font-semibold text-foreground">{review.name}</div>
-          <div className="text-sm text-muted-foreground">{review.role}</div>
+        <p className="mb-4 text-muted-foreground leading-relaxed">
+          {`"${t(review.contentKey)}"`}
+        </p>
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary dark:bg-primary/20">
+            {name.charAt(0)}
+          </div>
+          <div>
+            <div className="font-semibold text-foreground">{name}</div>
+            <div className="text-sm text-muted-foreground">{t(review.roleKey)}</div>
+          </div>
         </div>
-      </div>
-    </CardContent>
-  </Card>
-);
+      </CardContent>
+    </Card>
+  );
+};
 
 export default TestimonialsSection;
