@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Moon, Sun, Globe } from 'lucide-react';
+import Icons from '@/components/Icons';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import {
@@ -18,7 +18,7 @@ export const Header = () => {
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const shouldBeDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
-    
+
     setIsDark(shouldBeDark);
     document.documentElement.classList.toggle('dark', shouldBeDark);
   }, []);
@@ -43,28 +43,29 @@ export const Header = () => {
   };
 
   return (
-    <header 
+    <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled 
-          ? 'bg-background/80 backdrop-blur-lg border-b shadow-sm dark:bg-background/60 dark:border-white/10' 
+        isScrolled
+          ? 'bg-background/80 backdrop-blur-lg border-b shadow-sm dark:bg-background/60 dark:border-white/10'
           : 'bg-transparent'
-      }`}
-    >
-      <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
-          <a href="/" className="text-2xl font-bold text-primary">
+      }`}>
+      <div className='container mx-auto px-4'>
+        <div className='flex h-16 items-center justify-between'>
+          <a href='/' className='text-2xl font-bold text-primary'>
             VLRC
           </a>
 
-          <div className="flex items-center gap-2">
+          <div className='flex items-center gap-2'>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-9 w-9">
-                  <Globe className="h-4 w-4" />
-                  <span className="sr-only">Change language</span>
+                <Button variant='ghost' size='icon' className='h-9 w-9'>
+                  <Icons.Globe className='h-4 w-4' />
+                  <span className='sr-only'>Change language</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="dark:bg-card/90 dark:backdrop-blur-lg dark:border-white/10">
+              <DropdownMenuContent
+                align='end'
+                className='dark:bg-card/90 dark:backdrop-blur-lg dark:border-white/10'>
                 <DropdownMenuItem onClick={() => changeLanguage('vi')}>
                   {t('vietnamese')}
                 </DropdownMenuItem>
@@ -74,21 +75,12 @@ export const Header = () => {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={toggleTheme}
-              className="h-9 w-9"
-            >
-              {isDark ? (
-                <Sun className="h-4 w-4" />
-              ) : (
-                <Moon className="h-4 w-4" />
-              )}
-              <span className="sr-only">Toggle theme</span>
+            <Button variant='ghost' size='icon' onClick={toggleTheme} className='h-9 w-9'>
+              {isDark ? <Icons.Sun className='h-4 w-4' /> : <Icons.Moon className='h-4 w-4' />}
+              <span className='sr-only'>Toggle theme</span>
             </Button>
 
-            <Button className="bg-accent hover:bg-accent/90 text-accent-foreground ml-2">
+            <Button className='bg-accent hover:bg-accent/90 text-accent-foreground ml-2'>
               {t('start_free')}
             </Button>
           </div>
