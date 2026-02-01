@@ -1,207 +1,140 @@
 {
-  "common": {
-    "startFree": "Bắt đầu miễn phí",
-    "watchHow": "Xem cách hoạt động",
-    "noCreditCard": "Không cần thẻ tín dụng - Hủy bất cứ lúc nào",
-    "learnMore": "Tìm hiểu thêm"
-  },
-  "hero": {
-    "badge": "Ứng dụng FSRS + Machine Learning",
-    "titleLine1": "Nhớ lâu hơn,",
-    "titleLine2": "Học thông minh hơn",
-    "description": "Hệ thống học tiếng Anh dựa trên thuật toán FSRS và AI cá nhân hóa. Ôn tập đúng thời điểm, ghi nhớ lâu dài - không cần học quá nhiều.",
-    "flashcard": "Thẻ ghi nhớ",
-    "due": "Đến hạn",
-    "meaning": "Sự kiên trì, bền bỉ",
-    "forgot": "Quên",
-    "hard": "Khó",
-    "good": "Tốt",
-    "easy": "Dễ",
-    "dictation": "Nghe - Chép chính tả",
-    "todayProgress": "Tiến độ hôm nay",
-    "vocabulary": "Từ vựng",
-    "listening": "Nghe",
-    "writing": "Viết"
-  },
-  "valueProps": {
-    "title": "Tại sao chọn chúng tôi?",
-    "subtitle": "Kết hợp khoa học nhận thức và công nghệ AI để mang lại hiệu quả học tập tốt nhất",
-    "fsrs": {
-      "title": "FSRS & Spaced Repetition",
-      "description": "Thuật toán FSRS tính toán thời điểm ôn tập tối ưu, giúp bạn nhớ lâu mà không cần học quá nhiều."
-    },
-    "ml": {
-      "title": "Machine Learning cá nhân hóa",
-      "description": "AI học từ hành vi của bạn để điều chỉnh lịch ôn tập, độ khó phù hợp với từng người."
-    },
-    "listening": {
-      "title": "Listening & Reading thực tế",
-      "description": "Nghe chép chính tả, đọc hiểu bài viết thật - rèn luyện kỹ năng thực chiến hàng ngày."
-    },
-    "writing": {
-      "title": "Writing có nhận xét chi tiết",
-      "description": "Viết bài theo chủ đề, nhận góp ý từ AI về ngữ pháp, từ vựng và cách diễn đạt."
-    }
-  },
-  "howItWorks": {
-    "title": "Cách hoạt động",
-    "subtitle": "Chỉ 4 bước đơn giản để bắt đầu hành trình học tiếng Anh hiệu quả",
-    "step1": {
-      "title": "Kiểm tra trình độ & mục tiêu",
-      "description": "Làm bài test nhanh để hệ thống hiểu trình độ và mục tiêu học của bạn."
-    },
-    "step2": {
-      "title": "AI tạo bộ từ & lịch ôn cá nhân",
-      "description": "Thuật toán FSRS tạo lịch ôn tập tối ưu, phù hợp với khả năng ghi nhớ của bạn."
-    },
-    "step3": {
-      "title": "Học qua flashcard, nghe, đọc, viết",
-      "description": "Đa dạng phương pháp học: flashcard, nghe chép, đọc dịch, viết bài có AI chấm."
-    },
-    "step4": {
-      "title": "Theo dõi tiến độ & đề xuất tiếp theo",
-      "description": "Dashboard trực quan hiển thị tiến bộ, AI đề xuất bước tiếp theo phù hợp."
-    }
-  },
-  "science": {
-    "badge": "Khoa học đằng sau",
-    "title": "FSRS - Thuật toán ôn tập thông minh nhất hiện nay",
-    "spacedRepetition": {
-      "title": "Spaced Repetition",
-      "description": "là phương pháp ôn tập dựa trên \"đường cong quên\" - bạn chỉ ôn lại khi sắp quên, giúp tiết kiệm thời gian tới 90%."
-    },
-    "fsrs": {
-      "title": "FSRS (Free Spaced Repetition Scheduler)",
-      "description": "là thuật toán thế hệ mới, chính xác hơn Anki gấp 1.5 lần trong việc dự đoán thời điểm bạn sắp quên."
-    },
-    "ml": {
-      "title": "Machine Learning",
-      "description": "trong hệ thống của chúng tôi học từ hành vi của bạn - thời gian trả lời, độ chính xác, thời điểm học - để điều chỉnh thuật toán phù hợp với riêng bạn."
-    },
-    "stats": {
-      "timeSaved": "Tiết kiệm thời gian",
-      "accurate": "Chính xác hơn Anki",
-      "retention": "Tỷ lệ nhớ dài hạn"
-    },
-    "chart": {
-      "title": "Đường cong quên & Spaced Repetition",
-      "noReview": "Không ôn tập",
-      "withReview": "Có ôn tập",
-      "reviewPoint": "Ôn tập"
-    }
-  },
-  "experience": {
-    "title": "Trải nghiệm học đa chiều",
-    "subtitle": "Không chỉ học từ vựng - rèn luyện đồng thời Nghe, Đọc, Viết để thành thạo tiếng Anh",
-    "tabs": {
-      "listening": "Nghe",
-      "reading": "Đọc",
-      "writing": "Viết"
-    },
-    "listening": {
-      "title": "Nghe - Chép chính tả",
-      "description": "Nghe audio thật và chép lại. Hệ thống tự động kiểm tra lỗi sai, giúp bạn nhận ra điểm yếu về phát âm và từ vựng.",
-      "features": ["Audio từ người bản xứ", "Kiểm tra chính tả tự động", "Phân tích lỗi thường gặp", "Theo dõi tiến bộ nghe"]
-    },
-    "reading": {
-      "title": "Đọc - Dịch từng câu",
-      "description": "Đọc bài viết và dịch từng câu. Hiểu sâu ngữ pháp, cấu trúc câu và cách dùng từ trong ngữ cảnh thật.",
-      "features": ["Bài đọc theo trình độ", "Dịch từng câu có giải thích", "Học từ vựng trong ngữ cảnh", "Bài tập đọc hiểu"]
-    },
-    "writing": {
-      "title": "Viết - Nhận xét chi tiết",
-      "description": "Viết bài theo chủ đề, nhận góp ý từ AI về ngữ pháp, từ vựng, cấu trúc và phong cách viết.",
-      "features": ["Chủ đề đa dạng", "AI chấm bài chi tiết", "Gợi ý cải thiện cụ thể", "So sánh với bài mẫu"]
-    }
-  },
-  "dashboard": {
-    "title": "Theo dõi tiến bộ trực quan",
-    "subtitle": "Dashboard thông minh giúp bạn biết chính xác mình đang ở đâu và cần làm gì tiếp theo",
-    "memoryStrength": "Độ bền trí nhớ",
-    "avgRetention": "Tỷ lệ nhớ trung bình",
-    "currentStreak": "Chuỗi ngày học",
-    "days": "ngày",
-    "longestStreak": "Kỷ lục: {{days}} ngày",
-    "weeklyProgress": "Tiến độ 7 ngày qua",
-    "wordsLearned": "từ đã học",
-    "daysOfWeek": {
-      "mon": "T2",
-      "tue": "T3",
-      "wed": "T4",
-      "thu": "T5",
-      "fri": "T6",
-      "sat": "T7",
-      "sun": "CN"
-    }
-  },
-  "testimonials": {
-    "title": "Người dùng nói gì?",
-    "subtitle": "Hơn 10,000 người đã cải thiện tiếng Anh với phương pháp của chúng tôi",
-    "stats": {
-      "users": "Người dùng",
-      "wordsLearned": "Từ vựng đã học",
-      "satisfaction": "Hài lòng"
-    },
-    "reviews": [
-      {
-        "name": "Minh Anh",
-        "role": "Sinh viên năm 3",
-        "content": "Mình đã thử nhiều app học tiếng Anh nhưng đây là app duy nhất giúp mình thực sự nhớ được từ vựng. Sau 3 tháng, vốn từ của mình tăng gấp đôi!",
-        "rating": 5
-      },
-      {
-        "name": "Hoàng Nam",
-        "role": "Nhân viên văn phòng",
-        "content": "Tính năng nghe chép chính tả giúp mình cải thiện listening rõ rệt. Giờ mình có thể nghe podcast tiếng Anh mà không cần subtitle.",
-        "rating": 5
-      },
-      {
-        "name": "Thu Hà",
-        "role": "Giáo viên IELTS",
-        "content": "Tôi recommend app này cho tất cả học viên của mình. Thuật toán FSRS thực sự hiệu quả, học sinh tiến bộ nhanh hơn rõ rệt.",
-        "rating": 5
-      }
-    ]
-  },
-  "faq": {
-    "title": "Câu hỏi thường gặp",
-    "subtitle": "Giải đáp những thắc mắc phổ biến về phương pháp và ứng dụng",
-    "questions": [
-      {
-        "question": "FSRS là gì và khác gì so với Anki?",
-        "answer": "FSRS (Free Spaced Repetition Scheduler) là thuật toán thế hệ mới được phát triển bởi cộng đồng open-source. Nghiên cứu cho thấy FSRS chính xác hơn thuật toán SM-2 của Anki khoảng 1.5 lần trong việc dự đoán thời điểm bạn sẽ quên một thông tin."
-      },
-      {
-        "question": "Mỗi ngày cần học bao lâu?",
-        "answer": "Chỉ cần 15-30 phút mỗi ngày là đủ. Điều quan trọng là học đều đặn hàng ngày, không phải học nhiều một lúc. Hệ thống sẽ tự động điều chỉnh lượng bài phù hợp với thời gian của bạn."
-      },
-      {
-        "question": "App có phù hợp với người mới bắt đầu không?",
-        "answer": "Hoàn toàn phù hợp! Hệ thống sẽ đánh giá trình độ của bạn qua bài test đầu vào và tạo lộ trình học phù hợp. Dù bạn là beginner hay advanced, AI sẽ cá nhân hóa nội dung cho bạn."
-      },
-      {
-        "question": "Dữ liệu học tập của tôi có được bảo mật không?",
-        "answer": "Chắc chắn! Chúng tôi sử dụng mã hóa end-to-end và không chia sẻ dữ liệu cá nhân với bên thứ ba. Bạn có toàn quyền kiểm soát và có thể xóa dữ liệu bất cứ lúc nào."
-      }
-    ]
-  },
-  "cta": {
-    "title": "Sẵn sàng học tiếng Anh hiệu quả hơn?",
-    "subtitle": "Tham gia cùng hơn 10,000 người dùng đã cải thiện tiếng Anh với phương pháp khoa học",
-    "button": "Bắt đầu hành trình ngay",
-    "note": "Miễn phí 14 ngày - Không cần thẻ tín dụng"
-  },
-  "footer": {
-    "description": "Học tiếng Anh thông minh với FSRS và AI",
-    "product": "Sản phẩm",
-    "features": "Tính năng",
-    "pricing": "Bảng giá",
-    "resources": "Tài nguyên",
-    "blog": "Blog",
-    "guides": "Hướng dẫn",
-    "company": "Công ty",
-    "about": "Về chúng tôi",
-    "contact": "Liên hệ",
-    "copyright": "© 2024 VLRC. Đã đăng ký bản quyền."
-  }
+  "startFree": "Bắt đầu miễn phí",
+  "watchHow": "Xem cách hoạt động",
+  "noCreditCard": "Không cần thẻ tín dụng - Hủy bất cứ lúc nào",
+  "learnMore": "Tìm hiểu thêm",
+  "heroBadge": "Ứng dụng FSRS + Machine Learning",
+  "heroTitleLine1": "Nhớ lâu hơn,",
+  "heroTitleLine2": "Học thông minh hơn",
+  "heroDescription": "Hệ thống học tiếng Anh dựa trên thuật toán FSRS và AI cá nhân hóa. Ôn tập đúng thời điểm, ghi nhớ lâu dài - không cần học quá nhiều.",
+  "flashcard": "Thẻ ghi nhớ",
+  "due": "Đến hạn",
+  "meaning": "Sự kiên trì, bền bỉ",
+  "forgot": "Quên",
+  "hard": "Khó",
+  "good": "Tốt",
+  "easy": "Dễ",
+  "dictation": "Nghe - Chép chính tả",
+  "todayProgress": "Tiến độ hôm nay",
+  "vocabulary": "Từ vựng",
+  "listening": "Nghe",
+  "writing": "Viết",
+  "reading": "Đọc",
+  "valuePropTitle": "Tại sao chọn chúng tôi?",
+  "valuePropSubtitle": "Kết hợp khoa học nhận thức và công nghệ AI để mang lại hiệu quả học tập tốt nhất",
+  "fsrsTitle": "FSRS & Spaced Repetition",
+  "fsrsDescription": "Thuật toán FSRS tính toán thời điểm ôn tập tối ưu, giúp bạn nhớ lâu mà không cần học quá nhiều.",
+  "mlTitle": "Machine Learning cá nhân hóa",
+  "mlDescription": "AI học từ hành vi của bạn để điều chỉnh lịch ôn tập, độ khó phù hợp với từng người.",
+  "listeningTitle": "Listening & Reading thực tế",
+  "listeningDescription": "Nghe chép chính tả, đọc hiểu bài viết thật - rèn luyện kỹ năng thực chiến hàng ngày.",
+  "writingTitle": "Writing có nhận xét chi tiết",
+  "writingDescription": "Viết bài theo chủ đề, nhận góp ý từ AI về ngữ pháp, từ vựng và cách diễn đạt.",
+  "howItWorksTitle": "Cách hoạt động",
+  "howItWorksSubtitle": "Chỉ 4 bước đơn giản để bắt đầu hành trình học tiếng Anh hiệu quả",
+  "step1Title": "Kiểm tra trình độ & mục tiêu",
+  "step1Description": "Làm bài test nhanh để hệ thống hiểu trình độ và mục tiêu học của bạn.",
+  "step2Title": "AI tạo bộ từ & lịch ôn cá nhân",
+  "step2Description": "Thuật toán FSRS tạo lịch ôn tập tối ưu, phù hợp với khả năng ghi nhớ của bạn.",
+  "step3Title": "Học qua flashcard, nghe, đọc, viết",
+  "step3Description": "Đa dạng phương pháp học: flashcard, nghe chép, đọc dịch, viết bài có AI chấm.",
+  "step4Title": "Theo dõi tiến độ & đề xuất tiếp theo",
+  "step4Description": "Dashboard trực quan hiển thị tiến bộ, AI đề xuất bước tiếp theo phù hợp.",
+  "scienceBadge": "Khoa học đằng sau",
+  "scienceTitle": "FSRS - Thuật toán ôn tập thông minh nhất hiện nay",
+  "spacedRepetitionTitle": "Spaced Repetition",
+  "spacedRepetitionDescription": "là phương pháp ôn tập dựa trên \"đường cong quên\" - bạn chỉ ôn lại khi sắp quên, giúp tiết kiệm thời gian tới 90%.",
+  "fsrsAlgoTitle": "FSRS (Free Spaced Repetition Scheduler)",
+  "fsrsAlgoDescription": "là thuật toán thế hệ mới, chính xác hơn Anki gấp 1.5 lần trong việc dự đoán thời điểm bạn sắp quên.",
+  "mlAlgoTitle": "Machine Learning",
+  "mlAlgoDescription": "trong hệ thống của chúng tôi học từ hành vi của bạn - thời gian trả lời, độ chính xác, thời điểm học - để điều chỉnh thuật toán phù hợp với riêng bạn.",
+  "timeSaved": "Tiết kiệm thời gian",
+  "moreAccurate": "Chính xác hơn Anki",
+  "longTermRetention": "Tỷ lệ nhớ dài hạn",
+  "chartTitle": "Đường cong quên & Spaced Repetition",
+  "noReview": "Không ôn tập",
+  "withReview": "Có ôn tập",
+  "reviewPoint": "Ôn tập",
+  "experienceTitle": "Trải nghiệm học đa chiều",
+  "experienceSubtitle": "Không chỉ học từ vựng - rèn luyện đồng thời Nghe, Đọc, Viết để thành thạo tiếng Anh",
+  "listeningTabTitle": "Nghe - Chép chính tả",
+  "listeningTabDescription": "Nghe audio thật và chép lại. Hệ thống tự động kiểm tra lỗi sai, giúp bạn nhận ra điểm yếu về phát âm và từ vựng.",
+  "listeningFeature1": "Audio từ người bản xứ",
+  "listeningFeature2": "Kiểm tra chính tả tự động",
+  "listeningFeature3": "Phân tích lỗi thường gặp",
+  "listeningFeature4": "Theo dõi tiến bộ nghe",
+  "readingTabTitle": "Đọc - Dịch từng câu",
+  "readingTabDescription": "Đọc bài viết và dịch từng câu. Hiểu sâu ngữ pháp, cấu trúc câu và cách dùng từ trong ngữ cảnh thật.",
+  "readingFeature1": "Bài đọc theo trình độ",
+  "readingFeature2": "Dịch từng câu có giải thích",
+  "readingFeature3": "Học từ vựng trong ngữ cảnh",
+  "readingFeature4": "Bài tập đọc hiểu",
+  "writingTabTitle": "Viết - Nhận xét chi tiết",
+  "writingTabDescription": "Viết bài theo chủ đề, nhận góp ý từ AI về ngữ pháp, từ vựng, cấu trúc và phong cách viết.",
+  "writingFeature1": "Chủ đề đa dạng",
+  "writingFeature2": "AI chấm bài chi tiết",
+  "writingFeature3": "Gợi ý cải thiện cụ thể",
+  "writingFeature4": "So sánh với bài mẫu",
+  "dashboardTitle": "Theo dõi tiến bộ trực quan",
+  "dashboardSubtitle": "Dashboard thông minh giúp bạn biết chính xác mình đang ở đâu và cần làm gì tiếp theo",
+  "memoryStrength": "Độ bền trí nhớ",
+  "avgRetention": "Tỷ lệ nhớ trung bình",
+  "currentStreak": "Chuỗi ngày học",
+  "days": "ngày",
+  "longestStreak": "Kỷ lục: {{days}} ngày",
+  "weeklyProgress": "Tiến độ 7 ngày qua",
+  "wordsLearned": "từ đã học",
+  "mon": "T2",
+  "tue": "T3",
+  "wed": "T4",
+  "thu": "T5",
+  "fri": "T6",
+  "sat": "T7",
+  "sun": "CN",
+  "testimonialsTitle": "Người dùng nói gì?",
+  "testimonialsSubtitle": "Hơn 10,000 người đã cải thiện tiếng Anh với phương pháp của chúng tôi",
+  "users": "Người dùng",
+  "wordsLearnedStat": "Từ vựng đã học",
+  "satisfaction": "Hài lòng",
+  "review1Name": "Minh Anh",
+  "review1Role": "Sinh viên năm 3",
+  "review1Content": "Mình đã thử nhiều app học tiếng Anh nhưng đây là app duy nhất giúp mình thực sự nhớ được từ vựng. Sau 3 tháng, vốn từ của mình tăng gấp đôi!",
+  "review2Name": "Hoàng Nam",
+  "review2Role": "Nhân viên văn phòng",
+  "review2Content": "Tính năng nghe chép chính tả giúp mình cải thiện listening rõ rệt. Giờ mình có thể nghe podcast tiếng Anh mà không cần subtitle.",
+  "review3Name": "Thu Hà",
+  "review3Role": "Giáo viên IELTS",
+  "review3Content": "Tôi recommend app này cho tất cả học viên của mình. Thuật toán FSRS thực sự hiệu quả, học sinh tiến bộ nhanh hơn rõ rệt.",
+  "faqTitle": "Câu hỏi thường gặp",
+  "faqSubtitle": "Giải đáp những thắc mắc phổ biến về phương pháp và ứng dụng",
+  "faq1Question": "FSRS là gì và khác gì so với Anki?",
+  "faq1Answer": "FSRS (Free Spaced Repetition Scheduler) là thuật toán thế hệ mới được phát triển bởi cộng đồng open-source. Nghiên cứu cho thấy FSRS chính xác hơn thuật toán SM-2 của Anki khoảng 1.5 lần trong việc dự đoán thời điểm bạn sẽ quên một thông tin.",
+  "faq2Question": "Mỗi ngày cần học bao lâu?",
+  "faq2Answer": "Chỉ cần 15-30 phút mỗi ngày là đủ. Điều quan trọng là học đều đặn hàng ngày, không phải học nhiều một lúc. Hệ thống sẽ tự động điều chỉnh lượng bài phù hợp với thời gian của bạn.",
+  "faq3Question": "App có phù hợp với người mới bắt đầu không?",
+  "faq3Answer": "Hoàn toàn phù hợp! Hệ thống sẽ đánh giá trình độ của bạn qua bài test đầu vào và tạo lộ trình học phù hợp. Dù bạn là beginner hay advanced, AI sẽ cá nhân hóa nội dung cho bạn.",
+  "faq4Question": "Dữ liệu học tập của tôi có được bảo mật không?",
+  "faq4Answer": "Chắc chắn! Chúng tôi sử dụng mã hóa end-to-end và không chia sẻ dữ liệu cá nhân với bên thứ ba. Bạn có toàn quyền kiểm soát và có thể xóa dữ liệu bất cứ lúc nào.",
+  "ctaTitle": "Sẵn sàng học tiếng Anh hiệu quả hơn?",
+  "ctaSubtitle": "Tham gia cùng hơn 10,000 người dùng đã cải thiện tiếng Anh với phương pháp khoa học",
+  "ctaButton": "Bắt đầu hành trình ngay",
+  "ctaNote": "Miễn phí 14 ngày - Không cần thẻ tín dụng",
+  "footerDescription": "Học tiếng Anh thông minh với FSRS và AI",
+  "product": "Sản phẩm",
+  "features": "Tính năng",
+  "pricing": "Bảng giá",
+  "resources": "Tài nguyên",
+  "blog": "Blog",
+  "guides": "Hướng dẫn",
+  "company": "Công ty",
+  "about": "Về chúng tôi",
+  "contact": "Liên hệ",
+  "copyright": "© 2024 VLRC. Đã đăng ký bản quyền.",
+  "headerHome": "Trang chủ",
+  "headerFeatures": "Tính năng",
+  "headerPricing": "Bảng giá",
+  "headerBlog": "Blog",
+  "login": "Đăng nhập",
+  "vietnamese": "Tiếng Việt",
+  "english": "English"
 }
