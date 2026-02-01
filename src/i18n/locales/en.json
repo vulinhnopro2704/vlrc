@@ -1,0 +1,207 @@
+{
+  "common": {
+    "startFree": "Start for free",
+    "watchHow": "Watch how it works",
+    "noCreditCard": "No credit card required - Cancel anytime",
+    "learnMore": "Learn more"
+  },
+  "hero": {
+    "badge": "FSRS + Machine Learning App",
+    "titleLine1": "Remember longer,",
+    "titleLine2": "Learn smarter",
+    "description": "An English learning system based on FSRS algorithm and personalized AI. Review at the right time, remember long-term - no need to study too much.",
+    "flashcard": "Flashcard",
+    "due": "Due",
+    "meaning": "Persistence, perseverance",
+    "forgot": "Forgot",
+    "hard": "Hard",
+    "good": "Good",
+    "easy": "Easy",
+    "dictation": "Listening - Dictation",
+    "todayProgress": "Today's Progress",
+    "vocabulary": "Vocabulary",
+    "listening": "Listening",
+    "writing": "Writing"
+  },
+  "valueProps": {
+    "title": "Why choose us?",
+    "subtitle": "Combining cognitive science and AI technology for the best learning efficiency",
+    "fsrs": {
+      "title": "FSRS & Spaced Repetition",
+      "description": "FSRS algorithm calculates optimal review timing, helping you remember without over-studying."
+    },
+    "ml": {
+      "title": "Personalized Machine Learning",
+      "description": "AI learns from your behavior to adjust review schedules and difficulty suitable for each person."
+    },
+    "listening": {
+      "title": "Real Listening & Reading",
+      "description": "Dictation practice, reading comprehension - train practical skills daily."
+    },
+    "writing": {
+      "title": "Writing with detailed feedback",
+      "description": "Write on topics, receive AI feedback on grammar, vocabulary, and expression."
+    }
+  },
+  "howItWorks": {
+    "title": "How it works",
+    "subtitle": "Just 4 simple steps to start your effective English learning journey",
+    "step1": {
+      "title": "Test your level & goals",
+      "description": "Take a quick test so the system understands your level and learning goals."
+    },
+    "step2": {
+      "title": "AI creates personal word set & schedule",
+      "description": "FSRS algorithm creates optimal review schedule suited to your memory capacity."
+    },
+    "step3": {
+      "title": "Learn via flashcard, listening, reading, writing",
+      "description": "Diverse learning methods: flashcards, dictation, reading translation, AI-graded writing."
+    },
+    "step4": {
+      "title": "Track progress & get recommendations",
+      "description": "Visual dashboard shows progress, AI suggests appropriate next steps."
+    }
+  },
+  "science": {
+    "badge": "The science behind",
+    "title": "FSRS - The smartest review algorithm today",
+    "spacedRepetition": {
+      "title": "Spaced Repetition",
+      "description": "is a review method based on the \"forgetting curve\" - you only review when about to forget, saving up to 90% of time."
+    },
+    "fsrs": {
+      "title": "FSRS (Free Spaced Repetition Scheduler)",
+      "description": "is a next-generation algorithm, 1.5x more accurate than Anki in predicting when you're about to forget."
+    },
+    "ml": {
+      "title": "Machine Learning",
+      "description": "in our system learns from your behavior - response time, accuracy, study time - to adjust the algorithm specifically for you."
+    },
+    "stats": {
+      "timeSaved": "Time saved",
+      "accurate": "More accurate than Anki",
+      "retention": "Long-term retention rate"
+    },
+    "chart": {
+      "title": "Forgetting Curve & Spaced Repetition",
+      "noReview": "Without review",
+      "withReview": "With review",
+      "reviewPoint": "Review"
+    }
+  },
+  "experience": {
+    "title": "Multi-dimensional learning experience",
+    "subtitle": "Not just vocabulary - simultaneously train Listening, Reading, Writing to master English",
+    "tabs": {
+      "listening": "Listening",
+      "reading": "Reading",
+      "writing": "Writing"
+    },
+    "listening": {
+      "title": "Listening - Dictation",
+      "description": "Listen to real audio and transcribe. The system automatically checks errors, helping you identify weaknesses in pronunciation and vocabulary.",
+      "features": ["Native speaker audio", "Automatic spelling check", "Common error analysis", "Track listening progress"]
+    },
+    "reading": {
+      "title": "Reading - Sentence translation",
+      "description": "Read articles and translate sentence by sentence. Deeply understand grammar, sentence structure, and word usage in real context.",
+      "features": ["Level-appropriate readings", "Sentence translation with explanations", "Learn vocabulary in context", "Reading comprehension exercises"]
+    },
+    "writing": {
+      "title": "Writing - Detailed feedback",
+      "description": "Write on topics, receive AI feedback on grammar, vocabulary, structure, and writing style.",
+      "features": ["Diverse topics", "Detailed AI grading", "Specific improvement suggestions", "Compare with sample essays"]
+    }
+  },
+  "dashboard": {
+    "title": "Visual progress tracking",
+    "subtitle": "Smart dashboard helps you know exactly where you are and what to do next",
+    "memoryStrength": "Memory Strength",
+    "avgRetention": "Average retention rate",
+    "currentStreak": "Learning Streak",
+    "days": "days",
+    "longestStreak": "Record: {{days}} days",
+    "weeklyProgress": "Last 7 days progress",
+    "wordsLearned": "words learned",
+    "daysOfWeek": {
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat",
+      "sun": "Sun"
+    }
+  },
+  "testimonials": {
+    "title": "What users say?",
+    "subtitle": "Over 10,000 people have improved their English with our method",
+    "stats": {
+      "users": "Users",
+      "wordsLearned": "Words learned",
+      "satisfaction": "Satisfaction"
+    },
+    "reviews": [
+      {
+        "name": "Minh Anh",
+        "role": "3rd year student",
+        "content": "I've tried many English learning apps but this is the only one that helps me actually remember vocabulary. After 3 months, my vocabulary doubled!",
+        "rating": 5
+      },
+      {
+        "name": "Hoang Nam",
+        "role": "Office worker",
+        "content": "The dictation feature helped me improve my listening significantly. Now I can listen to English podcasts without subtitles.",
+        "rating": 5
+      },
+      {
+        "name": "Thu Ha",
+        "role": "IELTS Teacher",
+        "content": "I recommend this app to all my students. The FSRS algorithm is really effective, students progress noticeably faster.",
+        "rating": 5
+      }
+    ]
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Answers to common questions about our method and application",
+    "questions": [
+      {
+        "question": "What is FSRS and how is it different from Anki?",
+        "answer": "FSRS (Free Spaced Repetition Scheduler) is a next-generation algorithm developed by the open-source community. Research shows FSRS is about 1.5x more accurate than Anki's SM-2 algorithm in predicting when you'll forget information."
+      },
+      {
+        "question": "How long do I need to study each day?",
+        "answer": "Just 15-30 minutes per day is enough. The key is consistent daily practice, not cramming. The system will automatically adjust the workload to fit your available time."
+      },
+      {
+        "question": "Is the app suitable for beginners?",
+        "answer": "Absolutely! The system will assess your level through an initial test and create a suitable learning path. Whether you're a beginner or advanced, AI will personalize content for you."
+      },
+      {
+        "question": "Is my learning data secure?",
+        "answer": "Definitely! We use end-to-end encryption and don't share personal data with third parties. You have full control and can delete your data at any time."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Ready to learn English more effectively?",
+    "subtitle": "Join over 10,000 users who have improved their English with our scientific method",
+    "button": "Start your journey now",
+    "note": "Free 14-day trial - No credit card required"
+  },
+  "footer": {
+    "description": "Learn English smartly with FSRS and AI",
+    "product": "Product",
+    "features": "Features",
+    "pricing": "Pricing",
+    "resources": "Resources",
+    "blog": "Blog",
+    "guides": "Guides",
+    "company": "Company",
+    "about": "About us",
+    "contact": "Contact",
+    "copyright": "© 2024 VLRC. All rights reserved."
+  }
+}

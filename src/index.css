@@ -94,37 +94,70 @@
 }
 
 .dark {
-  --background: oklch(0.15 0.02 220);
+  /* Deep space background with subtle teal undertone */
+  --background: oklch(0.12 0.025 220);
   --foreground: oklch(0.95 0.01 200);
-  --card: oklch(0.2 0.02 220);
+  /* Glassmorphism cards - semi-transparent with glow */
+  --card: oklch(0.18 0.03 220 / 80%);
   --card-foreground: oklch(0.95 0.01 200);
-  --popover: oklch(0.2 0.02 220);
+  --popover: oklch(0.18 0.03 220 / 90%);
   --popover-foreground: oklch(0.95 0.01 200);
-  --primary: oklch(0.65 0.15 195);
-  --primary-foreground: oklch(0.15 0.02 220);
-  --secondary: oklch(0.25 0.03 220);
+  /* Vibrant teal primary */
+  --primary: oklch(0.7 0.18 185);
+  --primary-foreground: oklch(0.1 0.02 220);
+  /* Subtle secondary with liquid feel */
+  --secondary: oklch(0.22 0.04 220 / 60%);
   --secondary-foreground: oklch(0.9 0.02 200);
-  --muted: oklch(0.25 0.02 220);
+  --muted: oklch(0.22 0.03 220 / 50%);
   --muted-foreground: oklch(0.7 0.02 200);
-  --accent: oklch(0.75 0.18 55);
-  --accent-foreground: oklch(0.15 0.02 220);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 12%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.65 0.15 195);
-  --chart-1: oklch(0.65 0.15 195);
-  --chart-2: oklch(0.75 0.18 55);
-  --chart-3: oklch(0.7 0.12 160);
-  --chart-4: oklch(0.75 0.15 280);
-  --chart-5: oklch(0.65 0.2 30);
-  --sidebar: oklch(0.2 0.02 220);
+  /* Bright orange accent */
+  --accent: oklch(0.78 0.2 50);
+  --accent-foreground: oklch(0.1 0.02 220);
+  --destructive: oklch(0.65 0.22 25);
+  /* Glowing borders */
+  --border: oklch(0.7 0.12 195 / 15%);
+  --input: oklch(0.7 0.12 195 / 20%);
+  --ring: oklch(0.7 0.18 185);
+  /* Vibrant chart colors */
+  --chart-1: oklch(0.7 0.18 185);
+  --chart-2: oklch(0.78 0.2 50);
+  --chart-3: oklch(0.72 0.15 150);
+  --chart-4: oklch(0.7 0.18 280);
+  --chart-5: oklch(0.68 0.22 25);
+  /* Sidebar glassmorphism */
+  --sidebar: oklch(0.15 0.025 220 / 85%);
   --sidebar-foreground: oklch(0.95 0.01 200);
-  --sidebar-primary: oklch(0.65 0.15 195);
+  --sidebar-primary: oklch(0.7 0.18 185);
   --sidebar-primary-foreground: oklch(0.95 0.01 200);
-  --sidebar-accent: oklch(0.25 0.03 220);
+  --sidebar-accent: oklch(0.22 0.04 220 / 60%);
   --sidebar-accent-foreground: oklch(0.9 0.02 200);
-  --sidebar-border: oklch(1 0 0 / 12%);
-  --sidebar-ring: oklch(0.65 0.15 195);
+  --sidebar-border: oklch(0.7 0.12 195 / 15%);
+  --sidebar-ring: oklch(0.7 0.18 185);
+}
+
+/* Glassmorphism utilities for dark mode */
+.dark .glass {
+  background: oklch(0.18 0.03 220 / 60%);
+  backdrop-filter: blur(20px);
+  border: 1px solid oklch(0.7 0.12 195 / 20%);
+}
+
+.dark .glass-card {
+  background: oklch(0.18 0.03 220 / 70%);
+  backdrop-filter: blur(16px);
+  border: 1px solid oklch(0.7 0.12 195 / 15%);
+  box-shadow: 
+    0 8px 32px oklch(0 0 0 / 30%),
+    inset 0 1px 0 oklch(1 0 0 / 5%);
+}
+
+/* Liquid glow effects */
+.dark .glow-primary {
+  box-shadow: 0 0 40px oklch(0.7 0.18 185 / 30%);
+}
+
+.dark .glow-accent {
+  box-shadow: 0 0 40px oklch(0.78 0.2 50 / 30%);
 }
 
 @layer base {
