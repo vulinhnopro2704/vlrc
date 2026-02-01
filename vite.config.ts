@@ -256,7 +256,7 @@ export default defineConfig({
       '@lib': resolve(__dirname, './src/lib'),
       '@routes': resolve(__dirname, './src/routes'),
       '@types': resolve(__dirname, './src/types'),
-      '@store': resolve(__dirname, './src/store'),
+      '@stores': resolve(__dirname, './src/stores'),
       '@api': resolve(__dirname, './src/api'),
       '@shared': resolve(__dirname, './src/shared')
     }
