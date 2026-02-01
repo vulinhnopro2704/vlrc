@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { XIcon } from 'lucide-react';
+import Icons from '@/components/Icons';
 import type { BaseSelectOption, SelectValue } from '@/components/Select';
 
 /**
@@ -69,7 +69,7 @@ export function MultiSelectTags<T extends SelectValue = SelectValue>({
       {option.icon && <span className='text-xs'>{option.icon}</span>}
       <span className='truncate max-w-[100px]'>{option.label}</span>
       {!disabled && (
-        <XIcon
+        <Icons.XIcon
           className='w-3 h-3 cursor-pointer hover:text-destructive'
           onClick={e => {
             e.stopPropagation();

@@ -1,5 +1,5 @@
 import React from 'react';
-import { CalendarIcon } from 'lucide-react';
+import Icons from '@/components/Icons';
 import { vi } from 'date-fns/locale';
 
 import { Button } from '@/components/ui/button';
@@ -111,7 +111,7 @@ export function RangeDatePicker({
                 ×
               </span>
             )}
-            {suffixIcon || <CalendarIcon className='h-4 w-4 opacity-50' />}
+            {suffixIcon || <Icons.CalendarIcon className='h-4 w-4 opacity-50' />}
           </div>
         </Button>
       </PopoverTrigger>

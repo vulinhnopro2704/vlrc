@@ -7,7 +7,7 @@ import {
   FileUploadItemPreview,
   FileUploadList
 } from '@/components/ui/file-upload';
-import { CloudUpload } from 'lucide-react';
+import Icons from '@/components/Icons';
 
 interface ShadcnFileUploaderProps {
   value?: File[];
@@ -38,7 +38,7 @@ export default function ShadcnFileUploader({
       accept={acceptString}
       disabled={disabled}>
       <FileUploadDropzone className='p-10 pointer-events-auto'>
-        <CloudUpload className='h-10 w-10 text-gray-500 mb-2' />
+        <Icons.CloudUpload className='h-10 w-10 text-gray-500 mb-2' />
         <p className='text-sm text-gray-500'>Drag and drop files here or click to upload</p>
       </FileUploadDropzone>
       <FileUploadList>

@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { isNil } from 'lodash-es';
-import { CheckIcon, ChevronDownIcon, SearchIcon, XIcon } from 'lucide-react';
+import Icons from '@/components/Icons';
 
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
 import { MultiSelectTags } from './MultiSelectTags';
@@ -196,18 +196,18 @@ export function BaseSelect<T extends SelectValue = SelectValue>(
             </span>
           )}
           {isClearable && selectedValues.length > 0 && !disabled && (
-            <XIcon
+            <Icons.XIcon
               className='w-3.5 h-3.5 ml-2 text-muted-foreground hover:text-destructive flex-shrink-0'
               onClick={handleClear}
             />
           )}
-          <ChevronDownIcon className='w-3.5 h-3.5 ml-2 text-muted-foreground flex-shrink-0' />
+          <Icons.ChevronDownIcon className='w-3.5 h-3.5 ml-2 text-muted-foreground flex-shrink-0' />
         </button>
       </PopoverTrigger>
       <PopoverContent className='p-0 w-60' align='start'>
         {isSearchable && !disabled && (
           <div className='flex items-center px-2 py-1.5 border-b'>
-            <SearchIcon className='w-4 h-4 mr-2 text-muted-foreground' />
+            <Icons.SearchIcon className='w-4 h-4 mr-2 text-muted-foreground' />
             <input
               ref={inputRef}
               className='w-full outline-none bg-transparent text-xs'
@@ -252,11 +252,13 @@ export function BaseSelect<T extends SelectValue = SelectValue>(
                       className={`ml-2 w-4 h-4 border rounded flex items-center justify-center ${
                         selectedValues.includes(opt.value) ? 'bg-primary text-white' : 'bg-white'
                       }`}>
-                      {selectedValues.includes(opt.value) && <CheckIcon className='w-3 h-3' />}
+                      {selectedValues.includes(opt.value) && (
+                        <Icons.CheckIcon className='w-3 h-3' />
+                      )}
                     </span>
                   )}
                   {!isMulti && selectedValues.includes(opt.value) && (
-                    <CheckIcon className='w-3.5 h-3.5 ml-2 text-primary' />
+                    <Icons.CheckIcon className='w-3.5 h-3.5 ml-2 text-primary' />
                   )}
                 </div>
               ))}

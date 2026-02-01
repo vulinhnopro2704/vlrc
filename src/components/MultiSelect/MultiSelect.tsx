@@ -1,4 +1,4 @@
-import { WandSparkles } from 'lucide-react';
+import Icons from '@/components/Icons';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -191,7 +191,7 @@ const MultiSelect: FunctionComponent<
           />
         </PopoverContent>
         {animation > 0 && selectedValues.length > 0 && (
-          <WandSparkles
+          <Icons.WandSparkles
             className={cn(
               'cursor-pointer my-2 text-foreground bg-background w-3 h-3',
               isAnimating ? '' : 'text-muted-foreground'
