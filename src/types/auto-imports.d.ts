@@ -257,6 +257,7 @@ declare global {
   const SettingsIcon: typeof import('lucide-react').SettingsIcon
   const Shield: typeof import('lucide-react').Shield
   const ShieldIcon: typeof import('lucide-react').ShieldIcon
+  const Spinner: typeof import('../components/ui/spinner').Spinner
   const Star: typeof import('lucide-react').Star
   const StarHalf: typeof import('lucide-react').StarHalf
   const StarHalfIcon: typeof import('lucide-react').StarHalfIcon

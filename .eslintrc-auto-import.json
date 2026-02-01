@@ -208,6 +208,7 @@
     "SetStateAction": true,
     "SettingsIcon": true,
     "ShieldIcon": true,
+    "Spinner": true,
     "StarHalfIcon": true,
     "StarIcon": true,
     "StarOffIcon": true,

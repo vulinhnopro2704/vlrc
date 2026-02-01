@@ -1,8 +1,9 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
+import { useGSAP } from '@gsap/react';
+import { gsap } from 'gsap';
 import type React from 'react';
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export interface ConfirmationDialogProps {
   isOpen: boolean;
@@ -27,29 +28,34 @@ export default function ConfirmationDialog({
   type = 'warning',
   isLoading = false
 }: ConfirmationDialogProps) {
+  const [isRendered, setIsRendered] = useState(isOpen);
+  const containerRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
+  const backdropRef = useRef<HTMLDivElement>(null);
 
-  // Memoize handlers to prevent re-renders
-  const handleClose = useCallback(() => {
+  useEffect(() => {
+    if (isOpen) {
+      setIsRendered(true);
+    }
+  }, [isOpen]);
+
+  const handleClose = () => {
     if (!isLoading) {
       onClose();
     }
-  }, [onClose, isLoading]);
+  };
 
-  const handleConfirm = useCallback(() => {
+  const handleConfirm = () => {
     if (!isLoading) {
       onConfirm();
     }
-  }, [onConfirm, isLoading]);
+  };
 
-  const handleBackdropClick = useCallback(
-    (e: React.MouseEvent) => {
-      if (e.target === e.currentTarget && !isLoading) {
-        onClose();
-      }
-    },
-    [onClose, isLoading]
-  );
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget && !isLoading) {
+      onClose();
+    }
+  };
 
   // Close on escape key
   useEffect(() => {
@@ -148,100 +154,120 @@ export default function ConfirmationDialog({
     }
   };
 
-  // Don't render anything if not open
-  if (!isOpen) return null;
+  useGSAP(
+    () => {
+      if (!isRendered) return;
+
+      if (isOpen) {
+        gsap.set(backdropRef.current, { opacity: 0 });
+        gsap.set(dialogRef.current, { opacity: 0, scale: 0.95, y: 20 });
+        gsap.to(backdropRef.current, { opacity: 1, duration: 0.2, ease: 'power2.out' });
+        gsap.to(dialogRef.current, {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 0.2,
+          ease: 'power2.out'
+        });
+      } else {
+        gsap.to(dialogRef.current, {
+          opacity: 0,
+          scale: 0.95,
+          y: 20,
+          duration: 0.2,
+          ease: 'power2.in'
+        });
+        gsap.to(backdropRef.current, {
+          opacity: 0,
+          duration: 0.2,
+          ease: 'power2.in',
+          onComplete: () => setIsRendered(false)
+        });
+      }
+    },
+    { dependencies: [isOpen, isRendered], scope: containerRef }
+  );
+
+  if (!isRendered) return null;
 
   return (
-    <AnimatePresence mode='wait'>
-      <div className='fixed inset-0 z-10000 flex items-center justify-center'>
-        {/* Backdrop */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className='absolute inset-0 bg-black/50'
-          onClick={handleBackdropClick}
-        />
+    <div ref={containerRef} className='fixed inset-0 z-10000 flex items-center justify-center'>
+      {/* Backdrop */}
+      <div
+        ref={backdropRef}
+        className='absolute inset-0 bg-black/50'
+        onClick={handleBackdropClick}
+      />
 
-        {/* Dialog */}
-        <motion.div
-          ref={dialogRef}
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          transition={{
-            type: 'spring',
-            damping: 25,
-            stiffness: 300,
-            duration: 0.2
-          }}
-          className='relative z-10000 w-full max-w-md rounded-lg bg-white p-6 shadow-xl mx-4'
-          onClick={e => e.stopPropagation()}>
-          {/* Close button */}
+      {/* Dialog */}
+      <div
+        ref={dialogRef}
+        className='relative z-10000 w-full max-w-md rounded-lg bg-white p-6 shadow-xl mx-4'
+        onClick={e => e.stopPropagation()}>
+        {/* Close button */}
+        <button
+          type='button'
+          onClick={handleClose}
+          disabled={isLoading}
+          className='absolute right-4 top-4 rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed'
+          aria-label='Đóng'>
+          <XIcon className='h-5 w-5' />
+        </button>
+
+        {/* Content */}
+        <div className='flex items-start space-x-4 pr-8'>
+          <div className='flex-shrink-0 mt-1'>{getIconByType()}</div>
+          <div className='flex-1 min-w-0'>
+            <h3 className='text-lg font-medium text-gray-900 mb-2'>{title}</h3>
+            <p className='text-sm text-gray-500 leading-relaxed'>{message}</p>
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className='mt-6 flex justify-end space-x-3'>
           <button
             type='button'
             onClick={handleClose}
             disabled={isLoading}
-            className='absolute right-4 top-4 rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed'
-            aria-label='Đóng'>
-            <XIcon className='h-5 w-5' />
+            className='rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'>
+            {cancelText}
           </button>
-
-          {/* Content */}
-          <div className='flex items-start space-x-4 pr-8'>
-            <div className='flex-shrink-0 mt-1'>{getIconByType()}</div>
-            <div className='flex-1 min-w-0'>
-              <h3 className='text-lg font-medium text-gray-900 mb-2'>{title}</h3>
-              <p className='text-sm text-gray-500 leading-relaxed'>{message}</p>
-            </div>
-          </div>
-
-          {/* Actions */}
-          <div className='mt-6 flex justify-end space-x-3'>
-            <button
-              type='button'
-              onClick={handleClose}
-              disabled={isLoading}
-              className='rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'>
-              {cancelText}
-            </button>
-            <button
-              type='button'
-              onClick={handleConfirm}
-              disabled={isLoading}
-              className={`rounded-md px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${getButtonColorByType()}`}>
-              {isLoading ? (
-                <span className='flex items-center'>
-                  <svg
-                    className='animate-spin -ml-1 mr-2 h-4 w-4 text-white'
-                    xmlns='http://www.w3.org/2000/svg'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    aria-label='Loading'>
-                    <title>Loading</title>
-                    <circle
-                      className='opacity-25'
-                      cx='12'
-                      cy='12'
-                      r='10'
-                      stroke='currentColor'
-                      strokeWidth='4'
-                    />
-                    <path
-                      className='opacity-75'
-                      fill='currentColor'
-                      d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
-                    />
-                  </svg>
-                  Đang xử lý...
-                </span>
-              ) : (
-                confirmText
-              )}
-            </button>
-          </div>
-        </motion.div>
+          <button
+            type='button'
+            onClick={handleConfirm}
+            disabled={isLoading}
+            className={`rounded-md px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${getButtonColorByType()}`}>
+            {isLoading ? (
+              <span className='flex items-center'>
+                <svg
+                  className='animate-spin -ml-1 mr-2 h-4 w-4 text-white'
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  aria-label='Loading'>
+                  <title>Loading</title>
+                  <circle
+                    className='opacity-25'
+                    cx='12'
+                    cy='12'
+                    r='10'
+                    stroke='currentColor'
+                    strokeWidth='4'
+                  />
+                  <path
+                    className='opacity-75'
+                    fill='currentColor'
+                    d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+                  />
+                </svg>
+                Đang xử lý...
+              </span>
+            ) : (
+              confirmText
+            )}
+          </button>
+        </div>
       </div>
-    </AnimatePresence>
+    </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type ModalState = { load: boolean; open: boolean };
 
@@ -40,7 +40,7 @@ export function useModalState<const T extends ReadonlyArray<string>>(
     });
   }, [JSON.stringify(keyList)]);
 
-  const openModal = useCallback((name: Key) => {
+  const openModal = (name: Key) => {
     setModal(prev => {
       if (!(name in prev)) {
         return prev;
@@ -55,45 +55,42 @@ export function useModalState<const T extends ReadonlyArray<string>>(
         [name]: { ...prev[name], open: true, load: true }
       };
     });
-  }, []);
+  };
 
-  const closeModal = useCallback(
-    (name: Key) => {
+  const closeModal = (name: Key) => {
+    setModal(prev => {
+      if (!(name in prev)) {
+        return prev;
+      }
+      return {
+        ...prev,
+        [name]: { ...prev[name], open: false }
+      };
+    });
+
+    if (destroyDelay <= 0) {
       setModal(prev => {
-        if (!(name in prev)) {
-          return prev;
-        }
-        return {
-          ...prev,
-          [name]: { ...prev[name], open: false }
-        };
+        if (!(name in prev)) return prev;
+        return { ...prev, [name]: { ...prev[name], load: false } };
       });
+      return;
+    }
 
-      if (destroyDelay <= 0) {
-        setModal(prev => {
-          if (!(name in prev)) return prev;
-          return { ...prev, [name]: { ...prev[name], load: false } };
-        });
-        return;
-      }
-
-      const keyStr = String(name);
-      const existing = timersRef.current.get(keyStr);
-      if (existing) {
-        clearTimeout(existing);
-        timersRef.current.delete(keyStr);
-      }
-      const t = setTimeout(() => {
-        setModal(prev => {
-          if (!(name in prev)) return prev;
-          return { ...prev, [name]: { ...prev[name], load: false } };
-        });
-        timersRef.current.delete(keyStr);
-      }, destroyDelay);
-      timersRef.current.set(keyStr, t);
-    },
-    [destroyDelay]
-  );
+    const keyStr = String(name);
+    const existing = timersRef.current.get(keyStr);
+    if (existing) {
+      clearTimeout(existing);
+      timersRef.current.delete(keyStr);
+    }
+    const t = setTimeout(() => {
+      setModal(prev => {
+        if (!(name in prev)) return prev;
+        return { ...prev, [name]: { ...prev[name], load: false } };
+      });
+      timersRef.current.delete(keyStr);
+    }, destroyDelay);
+    timersRef.current.set(keyStr, t);
+  };
 
   useEffect(() => {
     return () => {
