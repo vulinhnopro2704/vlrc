@@ -125,7 +125,7 @@ const ReviewCard = ({ review }: { review: Review }) => {
   const name = t(review.nameKey);
 
   return (
-    <Card className='review-card border-0 shadow-lg dark:bg-card/60 dark:backdrop-blur-md dark:border dark:border-white/10'>
+    <Card variant='elevated-glass' className='review-card'>
       <CardContent className='p-6'>
         <div className='mb-4 flex gap-1'>
           {Array.from({ length: review.rating }).map((_, i) => (

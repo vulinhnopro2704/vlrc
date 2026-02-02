@@ -81,9 +81,7 @@ export const ValuePropsSection = () => {
 
         <div ref={cardsRef} className='grid gap-6 md:grid-cols-2 lg:grid-cols-4'>
           {features.map((feature, index) => (
-            <Card
-              key={index}
-              className='feature-card group border-0 bg-card shadow-lg transition-all hover:-translate-y-2 hover:shadow-xl dark:bg-card/60 dark:backdrop-blur-md dark:border dark:border-white/10'>
+            <Card key={index} variant='elevated-glass' className='feature-card group'>
               <CardHeader>
                 <div
                   className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl ${feature.bgColor}`}>

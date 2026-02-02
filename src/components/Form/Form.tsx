@@ -8,9 +8,11 @@ import {
 } from '@components/ui/field';
 import FilePondUploader from '@components/FilePondUploader';
 import { Select, SelectContent, SelectTrigger, SelectValue } from '@components/ui/select';
-import type { FormBaseProps, FormControlFunc } from './types';
+import type { FormBaseProps, FormControlFunc, FormInputExtraProps } from './types';
 import type { FieldPath } from 'react-hook-form';
 import type { FilePond } from 'filepond';
+import Icons from '../Icons';
+import { cn } from '@/lib/utils';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_PATTERN = /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/;
@@ -28,7 +30,8 @@ export function FormBase<
   description,
   controlFirst,
   horizontal,
-  rules
+  rules,
+  className
 }: FormBaseProps<TFieldValues, TName, TTransformedValues>) {
   const processedRules = (() => {
     const autoRules: RegisterOptions<TFieldValues, TName> = { ...rules };
@@ -89,6 +92,7 @@ export function FormBase<
 
         return (
           <Field
+            className={className}
             data-invalid={fieldState.invalid}
             orientation={horizontal ? 'horizontal' : undefined}>
             {controlFirst ? (
@@ -113,22 +117,56 @@ export function FormBase<
   );
 }
 
-export const FormInput: FormControlFunc = props => {
+export const FormInput: FormControlFunc<FormInputExtraProps> = ({
+  placeholder,
+  inputClassName,
+  leftIcon,
+  rightIcon,
+  disabled,
+  ...props
+}) => {
   const [showPassword, setShowPassword] = useState(false);
+  const isPassword = props.htmlType === 'password';
 
   return (
     <FormBase {...props}>
       {field => (
         <div className='relative'>
-          <Input {...field} type={showPassword ? 'text' : props.htmlType} />
-          {props.htmlType === 'password' && (
+          {leftIcon && (
+            <div className='absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none'>
+              {leftIcon}
+            </div>
+          )}
+          <Input
+            {...field}
+            type={isPassword && showPassword ? 'text' : props.htmlType}
+            placeholder={placeholder}
+            disabled={disabled}
+            className={cn(
+              leftIcon && 'pl-10',
+              (isPassword || rightIcon) && 'pr-10',
+              inputClassName
+            )}
+          />
+          {isPassword && (
             <Button
               type='button'
+              variant='ghost'
+              size='icon-sm'
               onClick={() => setShowPassword(v => !v)}
-              className='absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors'
+              className='absolute right-1 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground'
               tabIndex={-1}>
-              {showPassword ? <EyeOff className='h-4 w-4' /> : <Eye className='h-4 w-4' />}
+              {showPassword ? (
+                <Icons.EyeOff className='h-4 w-4' />
+              ) : (
+                <Icons.Eye className='h-4 w-4' />
+              )}
             </Button>
+          )}
+          {!isPassword && rightIcon && (
+            <div className='absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none'>
+              {rightIcon}
+            </div>
           )}
         </div>
       )}

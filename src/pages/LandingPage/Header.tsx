@@ -80,7 +80,7 @@ export const Header = () => {
               <span className='sr-only'>Toggle theme</span>
             </Button>
 
-            <Button className='bg-accent hover:bg-accent/90 text-accent-foreground ml-2'>
+            <Button variant='accent' className='ml-2'>
               {t('start_free')}
             </Button>
           </div>

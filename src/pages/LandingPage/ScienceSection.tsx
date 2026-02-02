@@ -85,7 +85,7 @@ export const ScienceSection = () => {
           </div>
 
           <div ref={chartRef} className='relative'>
-            <div className='rounded-2xl bg-gradient-to-br from-primary/5 via-secondary to-accent/5 p-8 dark:from-primary/10 dark:via-secondary/20 dark:to-accent/10 dark:backdrop-blur-sm'>
+            <div className='rounded-2xl bg-linear-to-r from-primary/5 via-secondary to-accent/5 p-8 dark:from-primary/10 dark:via-secondary/20 dark:to-accent/10 dark:backdrop-blur-sm'>
               <ForgettingCurveChart />
             </div>
           </div>

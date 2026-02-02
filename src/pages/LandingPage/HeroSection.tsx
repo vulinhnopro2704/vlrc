@@ -65,16 +65,11 @@ export const HeroSection = () => {
           </p>
 
           <div ref={ctaRef} className='flex flex-col items-center justify-center gap-4 sm:flex-row'>
-            <Button
-              size='lg'
-              className='bg-accent hover:bg-accent/90 text-accent-foreground px-8 py-6 text-lg font-semibold shadow-lg shadow-accent/25 transition-all hover:shadow-xl hover:shadow-accent/30 hover:scale-105'>
+            <Button variant='accent-cta' size='2xl' className='font-semibold'>
               {t('start_free')}
               <Icons.ChevronRight className='ml-2 h-5 w-5' />
             </Button>
-            <Button
-              variant='outline'
-              size='lg'
-              className='px-8 py-6 text-lg dark:bg-card/50 dark:backdrop-blur-sm'>
+            <Button variant='outline' size='2xl' className='dark:bg-card/50 dark:backdrop-blur-sm'>
               <Icons.Play className='mr-2 h-5 w-5' />
               {t('watch_how')}
             </Button>
@@ -101,7 +96,7 @@ const FlashcardPreview = () => {
   const { t } = useTranslation();
 
   return (
-    <div className='rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 p-6 dark:from-primary/20 dark:to-primary/10 dark:backdrop-blur-sm'>
+    <div className='rounded-xl bg-linear-to-r from-primary/10 to-primary/5 p-6 dark:from-primary/20 dark:to-primary/10 dark:backdrop-blur-sm'>
       <div className='mb-4 flex items-center justify-between'>
         <span className='text-sm font-medium text-muted-foreground'>{t('flashcard')}</span>
         <span className='rounded-full bg-primary/20 px-2 py-1 text-xs font-medium text-primary'>
@@ -132,7 +127,7 @@ const AudioPreview = () => {
   const { t } = useTranslation();
 
   return (
-    <div className='rounded-xl bg-gradient-to-br from-accent/10 to-accent/5 p-6 dark:from-accent/20 dark:to-accent/10 dark:backdrop-blur-sm'>
+    <div className='rounded-xl bg-linear-to-r from-accent/10 to-accent/5 p-6 dark:from-accent/20 dark:to-accent/10 dark:backdrop-blur-sm'>
       <div className='mb-4 flex items-center justify-between'>
         <span className='text-sm font-medium text-muted-foreground'>{t('dictation')}</span>
         <Icons.Headphones className='h-4 w-4 text-accent' />

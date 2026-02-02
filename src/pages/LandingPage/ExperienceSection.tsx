@@ -146,7 +146,7 @@ const TabPreview = ({ tab }: { tab: TabType }) => {
 
   if (tab === 'listening') {
     return (
-      <div className='rounded-xl bg-gradient-to-br from-accent/10 to-accent/5 p-6 dark:from-accent/20 dark:to-accent/10'>
+      <div className='rounded-xl bg-linear-to-r from-accent/10 to-accent/5 p-6 dark:from-accent/20 dark:to-accent/10'>
         <div className='mb-4 flex items-center justify-between'>
           <span className='text-sm font-medium text-muted-foreground'>{t('dictation')}</span>
           <span className='text-xs text-accent'>00:45</span>
@@ -171,7 +171,7 @@ const TabPreview = ({ tab }: { tab: TabType }) => {
 
   if (tab === 'reading') {
     return (
-      <div className='rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 p-6 dark:from-primary/20 dark:to-primary/10'>
+      <div className='rounded-xl bg-linear-to-r from-primary/10 to-primary/5 p-6 dark:from-primary/20 dark:to-primary/10'>
         <div className='space-y-4'>
           <p className='text-foreground leading-relaxed'>
             {'Climate change is one of the most pressing issues of our time.'}
@@ -188,7 +188,7 @@ const TabPreview = ({ tab }: { tab: TabType }) => {
   }
 
   return (
-    <div className='rounded-xl bg-gradient-to-br from-blue-500/10 to-blue-500/5 p-6 dark:from-blue-500/20 dark:to-blue-500/10'>
+    <div className='rounded-xl bg-linear-to-r from-blue-500/10 to-blue-500/5 p-6 dark:from-blue-500/20 dark:to-blue-500/10'>
       <div className='mb-4'>
         <span className='text-sm font-medium text-muted-foreground'>
           Topic: Benefits of learning English

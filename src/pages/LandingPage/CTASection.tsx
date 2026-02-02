@@ -40,16 +40,14 @@ export const CTASection = () => {
       <div className='container mx-auto px-4'>
         <div
           ref={contentRef}
-          className='mx-auto max-w-4xl rounded-3xl bg-gradient-to-br from-primary to-primary/80 p-12 text-center shadow-2xl dark:from-primary/90 dark:to-primary/70 dark:backdrop-blur-sm'>
+          className='mx-auto max-w-4xl rounded-3xl bg-linear-to-r from-primary to-primary/80 p-12 text-center shadow-2xl dark:from-primary/90 dark:to-primary/70 dark:backdrop-blur-sm'>
           <h2 className='mb-4 text-3xl font-bold text-primary-foreground md:text-4xl text-balance'>
             {t('cta_title')}
           </h2>
           <p className='mx-auto mb-8 max-w-2xl text-lg text-primary-foreground/80'>
             {t('cta_subtitle')}
           </p>
-          <Button
-            size='lg'
-            className='bg-accent hover:bg-accent/90 text-accent-foreground px-10 py-7 text-lg font-semibold shadow-lg shadow-accent/30 transition-all hover:shadow-xl hover:shadow-accent/40 hover:scale-105'>
+          <Button variant='accent-cta' size='2xl' className='font-semibold'>
             {t('cta_button')}
             <Icons.ChevronRight className='ml-2 h-5 w-5' />
           </Button>

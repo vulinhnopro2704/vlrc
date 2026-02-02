@@ -6,6 +6,10 @@
 // biome-ignore lint: disable
 export {}
 declare global {
+  const Accordion: typeof import('../components/ui/accordion').Accordion
+  const AccordionContent: typeof import('../components/ui/accordion').AccordionContent
+  const AccordionItem: typeof import('../components/ui/accordion').AccordionItem
+  const AccordionTrigger: typeof import('../components/ui/accordion').AccordionTrigger
   const Activity: typeof import('react').Activity
   const AlertCircle: typeof import('lucide-react').AlertCircle
   const AlertCircleIcon: typeof import('lucide-react').AlertCircleIcon
@@ -313,6 +317,7 @@ declare global {
   const buttonVariants: typeof import('../components/ui/button').buttonVariants
   const cache: typeof import('react').cache
   const cacheSignal: typeof import('react').cacheSignal
+  const cardVariants: typeof import('../components/ui/card').cardVariants
   const chain: typeof import('lodash-es').chain
   const cloneElement: typeof import('react').cloneElement
   const cn: typeof import('../lib/utils').cn
