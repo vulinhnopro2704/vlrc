@@ -5,6 +5,7 @@ import { type Config } from 'prettier';
 const config: Config = {
   trailingComma: 'none',
   tabWidth: 2,
+  indentWidth: 2,
   singleQuote: true,
   jsxSingleQuote: true,
   semi: true,
