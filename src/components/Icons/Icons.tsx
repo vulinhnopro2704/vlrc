@@ -72,7 +72,11 @@ import {
   FileIcon,
   FileTextIcon,
   FileVideoIcon,
-  SearchIcon
+  SearchIcon,
+  Trophy,
+  Flame,
+  Undo2,
+  Plus
 } from 'lucide-react';
 
 export const Icons = {
@@ -149,6 +153,10 @@ export const Icons = {
   FileIcon: FileIcon,
   FileTextIcon: FileTextIcon,
   FileVideoIcon: FileVideoIcon,
+  Trophy: Trophy,
+  Flame: Flame,
+  Undo2: Undo2,
+  Plus: Plus,
   GitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden='true'
