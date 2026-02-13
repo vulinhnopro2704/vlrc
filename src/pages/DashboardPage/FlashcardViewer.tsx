@@ -122,20 +122,20 @@ export const FlashcardViewer: React.FC<FlashcardViewerProps> = ({ words, lessonT
           disabled={currentIndex === 0}
           className="rounded-lg"
         >
-          <Icons.chevronLeft className="h-5 w-5" />
+          <Icons.ChevronLeft className="h-5 w-5" />
         </Button>
 
         <div className="flex-1 flex gap-2">
           <Button variant="ghost" className="flex-1 rounded-lg">
-            <Icons.undo2 className="h-4 w-4 mr-2" />
+            <Icons.Undo2 className="h-4 w-4 mr-2" />
             Forgot
           </Button>
           <Button variant="ghost" className="flex-1 rounded-lg">
-            <Icons.clock className="h-4 w-4 mr-2" />
+            <Icons.Clock className="h-4 w-4 mr-2" />
             Hard
           </Button>
           <Button variant="default" className="flex-1 rounded-lg">
-            <Icons.checkCircle2 className="h-4 w-4 mr-2" />
+            <Icons.CheckCircle2 className="h-4 w-4 mr-2" />
             Good
           </Button>
         </div>
@@ -146,7 +146,7 @@ export const FlashcardViewer: React.FC<FlashcardViewerProps> = ({ words, lessonT
           disabled={currentIndex === words.length - 1}
           className="rounded-lg"
         >
-          <Icons.chevronRight className="h-5 w-5" />
+          <Icons.ChevronRight className="h-5 w-5" />
         </Button>
       </div>
     </div>
