@@ -125,9 +125,18 @@ const mockLeaderboard = [
 const DashboardPage = () => {
   const { t } = useTranslation();
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(mockCourses[0]);
-  const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(mockCourses[0].lessons[0]);
+  const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const dashboardRef = useRef<HTMLDivElement>(null);
   const mainContentRef = useRef<HTMLDivElement>(null);
+
+  const handleSelectCourse = (course: Course) => {
+    setSelectedCourse(course);
+    setSelectedLesson(null);
+  };
+
+  const handleSelectLesson = (lesson: Lesson) => {
+    setSelectedLesson(lesson);
+  };
 
   useGSAP(() => {
     // Animate stats cards on load
@@ -165,7 +174,7 @@ const DashboardPage = () => {
         <Sidebar
           courses={mockCourses}
           selectedCourse={selectedCourse}
-          onSelectCourse={setSelectedCourse}
+          onSelectCourse={handleSelectCourse}
         />
 
         {/* Main Content */}
@@ -212,16 +221,31 @@ const DashboardPage = () => {
           {/* Content Area */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 content-section">
             <div className="lg:col-span-2 space-y-6">
+              {/* Breadcrumb Navigation */}
+              {selectedLesson && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+                  <button
+                    onClick={() => setSelectedLesson(null)}
+                    className="text-primary hover:underline font-medium flex items-center gap-1"
+                  >
+                    <Icons.ChevronLeft className="h-4 w-4" />
+                    {selectedCourse?.title}
+                  </button>
+                  <span>/</span>
+                  <span className="font-medium text-foreground">{selectedLesson.title}</span>
+                </div>
+              )}
+
               {selectedLesson ? (
                 <FlashcardViewer
                   words={selectedLesson.words}
                   lessonTitle={selectedLesson.title}
                 />
               ) : (
-                <CourseGrid
-                  course={selectedCourse}
-                  onSelectLesson={setSelectedLesson}
-                />
+            <CourseGrid
+              course={selectedCourse}
+              onSelectLesson={handleSelectLesson}
+            />
               )}
             </div>
 
