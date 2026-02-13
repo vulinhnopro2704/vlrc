@@ -173,27 +173,47 @@ const DashboardPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 content-section">
             <div className="stats-card">
               <StatsCard
-              icon={<Icons.brain className="h-5 w-5" />}
+              icon={<Icons.Brain className="h-5 w-5" />}
               label={t('learning_memory_strength')}
               value="78"
               unit="%"
               color="primary"
             />
             <StatsCard
-              icon={<Icons.flame className="h-5 w-5" />}
+              icon={<Icons.Flame className="h-5 w-5" />}
               label={t('learning_streak')}
               value="12"
               unit={t('days')}
               color="accent"
             />
             <StatsCard
-              icon={<Icons.checkCircle2 className="h-5 w-5" />}
+              icon={<Icons.Brain className="h-5 w-5" />}
+              label={t('learning_avg_retention')}
+              value="87%"
+              color="primary"
+            />
+            <StatsCard
+              icon={<Icons.Flame className="h-5 w-5" />}
+              label={t('learning_streak')}
+              value="12"
+              unit={t('days')}
+              color="accent"
+            />
+            <StatsCard
+              icon={<Icons.CheckCircle2 className="h-5 w-5" />}
               label="Words Learned"
               value="284"
               color="success"
             />
             <StatsCard
-              icon={<Icons.barChart3 className="h-5 w-5" />}
+              icon={<Icons.BarChart3 className="h-5 w-5" />}
+              label={t('learning_today')}
+              value="28"
+              unit="cards"
+              color="primary"
+            />
+            <StatsCard
+              icon={<Icons.BarChart3 className="h-5 w-5" />}
               label={t('learning_today')}
               value="28"
               unit="cards"
