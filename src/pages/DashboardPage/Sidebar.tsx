@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import Icons from '@/components/Icons';
@@ -43,7 +42,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ courses, selectedCourse, onSel
     >
       <div className="p-6 border-b border-border">
         <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
-          <Icons.bookOpen className="h-5 w-5 text-primary" />
+          <Icons.BookOpen className="h-5 w-5 text-primary" />
           {t('learning_my_courses')}
         </h2>
       </div>
@@ -75,7 +74,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ courses, selectedCourse, onSel
 
       <div className="p-4 border-t border-border">
         <Button className="w-full rounded-lg gap-2" variant="outline">
-          <Icons.plus className="h-4 w-4" />
+          <Icons.Plus className="h-4 w-4" />
           Add Course
         </Button>
       </div>
