@@ -43,7 +43,7 @@ export const CourseGrid: React.FC<CourseGridProps> = ({ course, onSelectLesson }
     return (
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
-          <Icons.bookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+          <Icons.BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
           <p className="text-muted-foreground">{t('learning_select_course')}</p>
         </div>
       </div>
@@ -71,12 +71,12 @@ export const CourseGrid: React.FC<CourseGridProps> = ({ course, onSelectLesson }
                     {lesson.title}
                   </h3>
                   <p className="text-sm text-muted-foreground flex items-center gap-1">
-                    <Icons.brain className="h-4 w-4" />
+                    <Icons.Brain className="h-4 w-4" />
                     {lesson.wordCount} words
                   </p>
                 </div>
                 {lesson.completed && (
-                  <Icons.checkCircle2 className="h-6 w-6 text-primary" />
+                  <Icons.CheckCircle2 className="h-6 w-6 text-primary" />
                 )}
               </div>
 
@@ -94,7 +94,7 @@ export const CourseGrid: React.FC<CourseGridProps> = ({ course, onSelectLesson }
                 className="w-full rounded-lg gap-2"
                 variant={lesson.completed ? 'outline' : 'default'}
               >
-                <Icons.play className="h-4 w-4" />
+                <Icons.Play className="h-4 w-4" />
                 {lesson.completed ? t('learning_continue') : 'Start'}
               </Button>
             </Card>
