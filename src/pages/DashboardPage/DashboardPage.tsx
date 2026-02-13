@@ -1,13 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 import { Sidebar } from './Sidebar';
 import { CourseGrid } from './CourseGrid';
 import { FlashcardViewer } from './FlashcardViewer';
 import { StatsCard } from './StatsCard';
 import { Leaderboard } from './Leaderboard';
 import Icons from '@/components/Icons';
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 interface Word {
   id: string;
@@ -120,9 +125,40 @@ const DashboardPage = () => {
   const { t } = useTranslation();
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(mockCourses[0]);
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(mockCourses[0].lessons[0]);
+  const dashboardRef = useRef<HTMLDivElement>(null);
+  const mainContentRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    // Animate stats cards on load
+    const statsCards = mainContentRef.current?.querySelectorAll('[class*="stats-card"]');
+    statsCards?.forEach((card, index) => {
+      gsap.fromTo(card,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.5, delay: index * 0.1 }
+      );
+    });
+
+    // Animate main content sections on scroll
+    const sections = dashboardRef.current?.querySelectorAll('[class*="content-section"]');
+    sections?.forEach((section) => {
+      gsap.fromTo(section,
+        { opacity: 0.8 },
+        {
+          opacity: 1,
+          duration: 0.4,
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 85%',
+            end: 'top 50%',
+            scrub: 0.5
+          }
+        }
+      );
+    });
+  }, { scope: dashboardRef });
 
   return (
-    <div className="min-h-screen bg-background">
+    <div ref={dashboardRef} className="min-h-screen bg-background">
       <div className="flex gap-6 p-6">
         {/* Sidebar */}
         <Sidebar
@@ -132,10 +168,11 @@ const DashboardPage = () => {
         />
 
         {/* Main Content */}
-        <div className="flex-1 space-y-6">
+        <div ref={mainContentRef} className="flex-1 space-y-6">
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <StatsCard
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 content-section">
+            <div className="stats-card">
+              <StatsCard
               icon={<Icons.brain className="h-5 w-5" />}
               label={t('learning_memory_strength')}
               value="78"
@@ -162,10 +199,11 @@ const DashboardPage = () => {
               unit="cards"
               color="primary"
             />
+            </div>
           </div>
 
           {/* Content Area */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 content-section">
             <div className="lg:col-span-2 space-y-6">
               {selectedLesson ? (
                 <FlashcardViewer
