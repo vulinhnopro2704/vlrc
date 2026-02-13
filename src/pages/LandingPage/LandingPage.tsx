@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-import { Header } from './Header';
+import { AppLayout } from '@/components/shared';
 import { HeroSection } from './HeroSection';
 import { ValuePropsSection } from './ValuePropsSection';
 import { HowItWorksSection } from './HowItWorksSection';
@@ -13,7 +13,6 @@ import { DashboardSection } from './DashboardSection';
 import { TestimonialsSection } from './TestimonialsSection';
 import { FAQSection } from './FAQSection';
 import { CTASection } from './CTASection';
-import { Footer } from './Footer';
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -41,21 +40,19 @@ const LandingPage = () => {
   }, { scope: mainRef });
 
   return (
-    <>
-      <Header />
-      <main ref={mainRef} className="min-h-screen bg-background pt-16">
+    <AppLayout>
+      <div ref={mainRef} className="min-h-screen bg-background">
         <HeroSection />
-      <ValuePropsSection />
-      <HowItWorksSection />
-      <ScienceSection />
-      <ExperienceSection />
-      <DashboardSection />
-      <TestimonialsSection />
-      <FAQSection />
-      <CTASection />
-        <Footer />
-      </main>
-    </>
+        <ValuePropsSection />
+        <HowItWorksSection />
+        <ScienceSection />
+        <ExperienceSection />
+        <DashboardSection />
+        <TestimonialsSection />
+        <FAQSection />
+        <CTASection />
+      </div>
+    </AppLayout>
   );
 };
 

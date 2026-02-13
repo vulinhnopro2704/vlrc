@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import { AppLayout } from '@/components/shared';
 import { Sidebar } from './Sidebar';
 import { CourseGrid } from './CourseGrid';
 import { FlashcardViewer } from './FlashcardViewer';
@@ -158,8 +159,8 @@ const DashboardPage = () => {
   }, { scope: dashboardRef });
 
   return (
-    <div ref={dashboardRef} className="min-h-screen bg-background">
-      <div className="flex gap-6 p-6">
+    <AppLayout>
+      <div ref={dashboardRef} className="flex gap-6 p-6 max-w-7xl mx-auto">
         {/* Sidebar */}
         <Sidebar
           courses={mockCourses}
@@ -173,52 +174,38 @@ const DashboardPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 content-section">
             <div className="stats-card">
               <StatsCard
-              icon={<Icons.Brain className="h-5 w-5" />}
-              label={t('learning_memory_strength')}
-              value="78"
-              unit="%"
-              color="primary"
-            />
-            <StatsCard
-              icon={<Icons.Flame className="h-5 w-5" />}
-              label={t('learning_streak')}
-              value="12"
-              unit={t('days')}
-              color="accent"
-            />
-            <StatsCard
-              icon={<Icons.Brain className="h-5 w-5" />}
-              label={t('learning_avg_retention')}
-              value="87%"
-              color="primary"
-            />
-            <StatsCard
-              icon={<Icons.Flame className="h-5 w-5" />}
-              label={t('learning_streak')}
-              value="12"
-              unit={t('days')}
-              color="accent"
-            />
-            <StatsCard
-              icon={<Icons.CheckCircle2 className="h-5 w-5" />}
-              label="Words Learned"
-              value="284"
-              color="success"
-            />
-            <StatsCard
-              icon={<Icons.BarChart3 className="h-5 w-5" />}
-              label={t('learning_today')}
-              value="28"
-              unit="cards"
-              color="primary"
-            />
-            <StatsCard
-              icon={<Icons.BarChart3 className="h-5 w-5" />}
-              label={t('learning_today')}
-              value="28"
-              unit="cards"
-              color="primary"
-            />
+                icon={<Icons.Brain className="h-5 w-5" />}
+                label={t('learning_memory_strength')}
+                value="78"
+                unit="%"
+                color="primary"
+              />
+            </div>
+            <div className="stats-card">
+              <StatsCard
+                icon={<Icons.Flame className="h-5 w-5" />}
+                label={t('learning_streak')}
+                value="12"
+                unit={t('days')}
+                color="accent"
+              />
+            </div>
+            <div className="stats-card">
+              <StatsCard
+                icon={<Icons.CheckCircle2 className="h-5 w-5" />}
+                label="Words Learned"
+                value="284"
+                color="success"
+              />
+            </div>
+            <div className="stats-card">
+              <StatsCard
+                icon={<Icons.BarChart3 className="h-5 w-5" />}
+                label={t('learning_today')}
+                value="28"
+                unit="cards"
+                color="primary"
+              />
             </div>
           </div>
 
@@ -243,7 +230,7 @@ const DashboardPage = () => {
           </div>
         </div>
       </div>
-    </div>
+    </AppLayout>
   );
 };
 
