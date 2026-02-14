@@ -158,7 +158,7 @@ export interface MultiSelectProps
    * Custom empty state message when no options match search.
    * Optional, defaults to "No results found."
    */
-  emptyIndicator?: React.ReactNode;
+  emptyIndicator?: ReactNode;
 
   /**
    * If true, allows the component to grow and shrink with its content.

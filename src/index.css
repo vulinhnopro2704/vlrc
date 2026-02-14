@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -14,38 +14,42 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --radius: 0.75rem;
+  /* Teal/Cyan primary for learning & trust */
+  --background: oklch(0.99 0.005 200);
+  --foreground: oklch(0.2 0.02 220);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.2 0.02 220);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.2 0.02 220);
+  /* Teal primary */
+  --primary: oklch(0.55 0.15 195);
+  --primary-foreground: oklch(0.99 0 0);
+  /* Light teal secondary */
+  --secondary: oklch(0.95 0.03 195);
+  --secondary-foreground: oklch(0.35 0.1 195);
+  --muted: oklch(0.96 0.01 200);
+  --muted-foreground: oklch(0.5 0.02 220);
+  /* Orange accent for CTAs */
+  --accent: oklch(0.72 0.18 55);
+  --accent-foreground: oklch(0.99 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  --border: oklch(0.92 0.02 200);
+  --input: oklch(0.92 0.02 200);
+  --ring: oklch(0.55 0.15 195);
+  --chart-1: oklch(0.55 0.15 195);
+  --chart-2: oklch(0.72 0.18 55);
+  --chart-3: oklch(0.65 0.12 160);
+  --chart-4: oklch(0.7 0.15 280);
+  --chart-5: oklch(0.6 0.2 30);
   --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.2 0.02 220);
+  --sidebar-primary: oklch(0.55 0.15 195);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar-accent: oklch(0.95 0.03 195);
+  --sidebar-accent-foreground: oklch(0.35 0.1 195);
+  --sidebar-border: oklch(0.92 0.02 200);
+  --sidebar-ring: oklch(0.55 0.15 195);
 }
 
 @theme inline {
@@ -90,37 +94,70 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* Deep space background with subtle teal undertone */
+  --background: oklch(0.12 0.025 220);
+  --foreground: oklch(0.95 0.01 200);
+  /* Glassmorphism cards - semi-transparent with glow */
+  --card: oklch(0.18 0.03 220 / 80%);
+  --card-foreground: oklch(0.95 0.01 200);
+  --popover: oklch(0.18 0.03 220 / 90%);
+  --popover-foreground: oklch(0.95 0.01 200);
+  /* Vibrant teal primary */
+  --primary: oklch(0.7 0.18 185);
+  --primary-foreground: oklch(0.1 0.02 220);
+  /* Subtle secondary with liquid feel */
+  --secondary: oklch(0.22 0.04 220 / 60%);
+  --secondary-foreground: oklch(0.9 0.02 200);
+  --muted: oklch(0.22 0.03 220 / 50%);
+  --muted-foreground: oklch(0.7 0.02 200);
+  /* Bright orange accent */
+  --accent: oklch(0.78 0.2 50);
+  --accent-foreground: oklch(0.1 0.02 220);
+  --destructive: oklch(0.65 0.22 25);
+  /* Glowing borders */
+  --border: oklch(0.7 0.12 195 / 15%);
+  --input: oklch(0.7 0.12 195 / 20%);
+  --ring: oklch(0.7 0.18 185);
+  /* Vibrant chart colors */
+  --chart-1: oklch(0.7 0.18 185);
+  --chart-2: oklch(0.78 0.2 50);
+  --chart-3: oklch(0.72 0.15 150);
+  --chart-4: oklch(0.7 0.18 280);
+  --chart-5: oklch(0.68 0.22 25);
+  /* Sidebar glassmorphism */
+  --sidebar: oklch(0.15 0.025 220 / 85%);
+  --sidebar-foreground: oklch(0.95 0.01 200);
+  --sidebar-primary: oklch(0.7 0.18 185);
+  --sidebar-primary-foreground: oklch(0.95 0.01 200);
+  --sidebar-accent: oklch(0.22 0.04 220 / 60%);
+  --sidebar-accent-foreground: oklch(0.9 0.02 200);
+  --sidebar-border: oklch(0.7 0.12 195 / 15%);
+  --sidebar-ring: oklch(0.7 0.18 185);
+}
+
+/* Glassmorphism utilities for dark mode */
+.dark .glass {
+  background: oklch(0.18 0.03 220 / 60%);
+  backdrop-filter: blur(20px);
+  border: 1px solid oklch(0.7 0.12 195 / 20%);
+}
+
+.dark .glass-card {
+  background: oklch(0.18 0.03 220 / 70%);
+  backdrop-filter: blur(16px);
+  border: 1px solid oklch(0.7 0.12 195 / 15%);
+  box-shadow: 
+    0 8px 32px oklch(0 0 0 / 30%),
+    inset 0 1px 0 oklch(1 0 0 / 5%);
+}
+
+/* Liquid glow effects */
+.dark .glow-primary {
+  box-shadow: 0 0 40px oklch(0.7 0.18 185 / 30%);
+}
+
+.dark .glow-accent {
+  box-shadow: 0 0 40px oklch(0.78 0.2 50 / 30%);
 }
 
 @layer base {

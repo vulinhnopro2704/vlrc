@@ -11,6 +11,15 @@ export type FormControlProps<
   control: ControllerProps<TFieldValues, TName, TTransformedValues>['control'];
 };
 
+export type FormInputExtraProps = {
+  placeholder?: string;
+  className?: string;
+  inputClassName?: string;
+  leftIcon?: ReactNode;
+  rightIcon?: ReactNode;
+  disabled?: boolean;
+};
+
 export type FormBaseProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
@@ -18,6 +27,7 @@ export type FormBaseProps<
 > = FormControlProps<TFieldValues, TName, TTransformedValues> & {
   horizontal?: boolean;
   controlFirst?: boolean;
+  className?: string;
   children: (
     field: Parameters<
       ControllerProps<TFieldValues, TName, TTransformedValues>['render']
@@ -39,5 +49,6 @@ export type FormControlFunc<ExtraProps extends Record<string, unknown> = Record<
     ExtraProps & {
       rules?: ControllerProps<TFieldValues, TName, TTransformedValues>['rules'];
       htmlType?: string;
+      className?: string;
     }
 ) => ReactNode;

@@ -6,6 +6,10 @@
 // biome-ignore lint: disable
 export {}
 declare global {
+  const Accordion: typeof import('../components/ui/accordion').Accordion
+  const AccordionContent: typeof import('../components/ui/accordion').AccordionContent
+  const AccordionItem: typeof import('../components/ui/accordion').AccordionItem
+  const AccordionTrigger: typeof import('../components/ui/accordion').AccordionTrigger
   const Activity: typeof import('react').Activity
   const AlertCircle: typeof import('lucide-react').AlertCircle
   const AlertCircleIcon: typeof import('lucide-react').AlertCircleIcon
@@ -240,6 +244,7 @@ declare global {
   const SaveIcon: typeof import('lucide-react').SaveIcon
   const ScrollArea: typeof import('../components/ui/scroll-area').ScrollArea
   const ScrollBar: typeof import('../components/ui/scroll-area').ScrollBar
+  const ScrollTrigger: typeof import('gsap/ScrollTrigger').ScrollTrigger
   const Search: typeof import('lucide-react').Search
   const SearchIcon: typeof import('lucide-react').SearchIcon
   const Select: typeof import('../components/ui/select').Select
@@ -280,6 +285,7 @@ declare global {
   const TooltipContent: typeof import('../components/ui/tooltip').TooltipContent
   const TooltipProvider: typeof import('../components/ui/tooltip').TooltipProvider
   const TooltipTrigger: typeof import('../components/ui/tooltip').TooltipTrigger
+  const Trans: typeof import('react-i18next').Trans
   const Trash: typeof import('lucide-react').Trash
   const Trash2: typeof import('lucide-react').Trash2
   const Trash2Icon: typeof import('lucide-react').Trash2Icon
@@ -313,6 +319,7 @@ declare global {
   const buttonVariants: typeof import('../components/ui/button').buttonVariants
   const cache: typeof import('react').cache
   const cacheSignal: typeof import('react').cacheSignal
+  const cardVariants: typeof import('../components/ui/card').cardVariants
   const chain: typeof import('lodash-es').chain
   const cloneElement: typeof import('react').cloneElement
   const cn: typeof import('../lib/utils').cn
@@ -332,6 +339,7 @@ declare global {
   const fromPairs: typeof import('lodash-es').fromPairs
   const get: typeof import('lodash-es').get
   const groupBy: typeof import('lodash-es').groupBy
+  const gsap: typeof import('gsap').gsap
   const head: typeof import('lodash-es').head
   const immer: typeof import('zustand/middleware').immer
   const includes: typeof import('lodash-es').includes
@@ -379,6 +387,7 @@ declare global {
   const useFormContext: typeof import('react-hook-form').useFormContext
   const useFormField: typeof import('../components/ui/form').useFormField
   const useFormState: typeof import('react-hook-form').useFormState
+  const useGSAP: typeof import('@gsap/react').useGSAP
   const useHydrate: typeof import('@tanstack/react-query').useHydrate
   const useId: typeof import('react').useId
   const useImperativeHandle: typeof import('react').useImperativeHandle
@@ -405,6 +414,7 @@ declare global {
   const useState: typeof import('react').useState
   const useSyncExternalStore: typeof import('react').useSyncExternalStore
   const useTransition: typeof import('react').useTransition
+  const useTranslation: typeof import('react-i18next').useTranslation
   const useUpdateEffect: typeof import('ahook').useUpdateEffect
   const useWatch: typeof import('react-hook-form').useWatch
   const values: typeof import('lodash-es').values

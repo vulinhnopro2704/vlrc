@@ -21,7 +21,7 @@ interface RangeDatePickerProps {
   disabled?: boolean;
   allowClear?: boolean;
   hideValue?: boolean;
-  suffixIcon?: React.ReactNode;
+  suffixIcon?: ReactNode;
   className?: string;
   disabledDate?: (date: Date) => boolean;
 }

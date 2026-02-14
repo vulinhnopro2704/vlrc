@@ -27,6 +27,18 @@ export default defineConfig({
           react: ['cloneElement', 'createContext', 'StrictMode', 'Suspense', 'isValidElement']
         },
         {
+          'react-i18next': ['useTranslation', 'Trans']
+        },
+        {
+          '@gsap/react': ['useGSAP']
+        },
+        {
+          gsap: ['gsap']
+        },
+        {
+          'gsap/ScrollTrigger': ['ScrollTrigger']
+        },
+        {
           '@tanstack/react-router': [
             'useNavigate',
             'useMatch',

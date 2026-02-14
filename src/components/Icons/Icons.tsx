@@ -49,6 +49,7 @@ import {
   ChevronDown,
   ChevronDownIcon,
   ChevronRight,
+  ChevronLeft,
   Sparkles,
   WandSparkles as WandSparklesIcon,
   Play,
@@ -71,7 +72,11 @@ import {
   FileIcon,
   FileTextIcon,
   FileVideoIcon,
-  SearchIcon
+  SearchIcon,
+  Trophy,
+  Flame,
+  Undo2,
+  Plus
 } from 'lucide-react';
 
 export const Icons = {
@@ -125,6 +130,7 @@ export const Icons = {
   ChevronDown: ChevronDown,
   ChevronDownIcon: ChevronDownIcon,
   ChevronRight: ChevronRight,
+  ChevronLeft: ChevronLeft,
   Sparkles: Sparkles,
   WandSparklesIcon: WandSparklesIcon,
   Play: Play,
@@ -147,6 +153,10 @@ export const Icons = {
   FileIcon: FileIcon,
   FileTextIcon: FileTextIcon,
   FileVideoIcon: FileVideoIcon,
+  Trophy: Trophy,
+  Flame: Flame,
+  Undo2: Undo2,
+  Plus: Plus,
   GitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden='true'

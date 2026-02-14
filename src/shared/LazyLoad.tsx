@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react';
 
 export default function lazyLoad<T extends React.ComponentType<any>>(
   factory: () => Promise<{ default: T }>,
-  Fallback: React.ReactNode = null
+  Fallback: ReactNode = null
 ) {
   const Component = lazy(factory);
 
