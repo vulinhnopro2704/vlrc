@@ -1,12 +1,14 @@
 declare namespace App {
+  type ID = number | string;
+
   interface ModalProps<T = void> {
-    id?: string;
+    id?: ID;
     onCancel: () => void;
     onSuccess: T extends void ? () => void : (data: T) => void;
   }
 
   interface Base {
-    id?: string;
+    id?: ID;
     createdAt?: Date;
     updatedAt?: Date;
   }

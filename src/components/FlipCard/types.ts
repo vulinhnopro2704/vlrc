@@ -17,6 +17,8 @@ export type AnimationConfig = {
   easing?: string; // CSS easing function
 };
 
+export type FlipCardSize = number | string;
+
 // ClassNames for customization
 export type FlipCardRootClassNames = {
   /** Scene container (outer wrapper with perspective) */
@@ -50,6 +52,9 @@ export type FlipCardRootProps = {
   // Animation
   direction?: FlipDirection;
   animation?: AnimationConfig;
+
+  width?: FlipCardSize;
+  height?: FlipCardSize;
 } & Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'className'>;
 
 export type FlipCardFaceProps = {

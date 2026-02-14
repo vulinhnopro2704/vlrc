@@ -284,6 +284,7 @@ declare global {
   const TooltipContent: typeof import('../components/ui/tooltip').TooltipContent
   const TooltipProvider: typeof import('../components/ui/tooltip').TooltipProvider
   const TooltipTrigger: typeof import('../components/ui/tooltip').TooltipTrigger
+  const Trans: typeof import('react-i18next').Trans
   const Trash: typeof import('lucide-react').Trash
   const Trash2: typeof import('lucide-react').Trash2
   const Trash2Icon: typeof import('lucide-react').Trash2Icon
@@ -337,6 +338,7 @@ declare global {
   const fromPairs: typeof import('lodash-es').fromPairs
   const get: typeof import('lodash-es').get
   const groupBy: typeof import('lodash-es').groupBy
+  const gsap: typeof import('gsap').gsap
   const head: typeof import('lodash-es').head
   const immer: typeof import('zustand/middleware').immer
   const includes: typeof import('lodash-es').includes
@@ -384,6 +386,7 @@ declare global {
   const useFormContext: typeof import('react-hook-form').useFormContext
   const useFormField: typeof import('../components/ui/form').useFormField
   const useFormState: typeof import('react-hook-form').useFormState
+  const useGSAP: typeof import('@gsap/react').useGSAP
   const useHydrate: typeof import('@tanstack/react-query').useHydrate
   const useId: typeof import('react').useId
   const useImperativeHandle: typeof import('react').useImperativeHandle
@@ -410,6 +413,7 @@ declare global {
   const useState: typeof import('react').useState
   const useSyncExternalStore: typeof import('react').useSyncExternalStore
   const useTransition: typeof import('react').useTransition
+  const useTranslation: typeof import('react-i18next').useTranslation
   const useUpdateEffect: typeof import('ahook').useUpdateEffect
   const useWatch: typeof import('react-hook-form').useWatch
   const values: typeof import('lodash-es').values

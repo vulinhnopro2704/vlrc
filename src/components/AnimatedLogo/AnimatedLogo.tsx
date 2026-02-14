@@ -1,7 +1,3 @@
-import { useGSAP } from '@gsap/react';
-import gsap from 'gsap';
-import { useRef } from 'react';
-
 const AnimatedLogo = ({ className }: { className?: string }) => {
   const logoRef = useRef<HTMLDivElement>(null);
 

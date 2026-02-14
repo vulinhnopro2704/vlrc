@@ -40,6 +40,9 @@ function Root({
   className,
   classNames,
   ref,
+  width,
+  height,
+  style,
   // Controlled mode
   isFlipped: controlledFlipped,
   defaultFlipped = false,
@@ -107,6 +110,12 @@ function Root({
     '--flip-duration': `${animation.duration}ms`,
     '--flip-easing': animation.easing
   } as React.CSSProperties;
+  const sceneStyle = {
+    ...animationStyle,
+    ...style,
+    ...(width !== undefined ? { width } : {}),
+    ...(height !== undefined ? { height } : {})
+  } as React.CSSProperties;
 
   const rotationClass =
     direction === 'horizontal'
@@ -144,7 +153,7 @@ function Root({
       <div
         ref={ref}
         className={sceneClassName}
-        style={animationStyle}
+        style={sceneStyle}
         data-flipped={isFlipped}
         data-disabled={disabled}
         aria-labelledby={`flip-card-${id}`}

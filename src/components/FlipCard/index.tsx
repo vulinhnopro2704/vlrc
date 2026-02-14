@@ -13,6 +13,7 @@ export type {
   FlipCardContextValue,
   FlipDirection,
   AnimationConfig,
+  FlipCardSize,
   FlipCardRootClassNames,
   FlipCardFaceClassNames,
   FlipCardRootProps,
