@@ -1,4 +1,3 @@
-import type * as React from 'react';
 import type {
   ColumnDef,
   ColumnFiltersState,
@@ -21,7 +20,7 @@ export type DataTableQuery = {
 };
 
 export type DataTableEmptyConfig = {
-  render: () => React.ReactNode;
+  render: () => ReactNode;
 };
 
 export type DataTableActionItem<TData> = {
@@ -59,7 +58,7 @@ export type DataTableApiConfig = {
 
 export type DataTableExpandConfig<TData> = {
   enabled: boolean;
-  renderSubComponent: (row: Row<TData>) => React.ReactNode;
+  renderSubComponent: (row: Row<TData>) => ReactNode;
   getSubRows: (row: TData) => TData[];
 };
 
@@ -88,5 +87,5 @@ export type DataTableProps<TData> = {
   className?: string;
   containerClassName?: string;
   getRowId?: (originalRow: TData, index: number, parent: Row<TData> | null) => string;
-  renderToolbarRight?: (table: Table<TData>) => React.ReactNode;
+  renderToolbarRight?: (table: Table<TData>) => ReactNode;
 };

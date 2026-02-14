@@ -36,7 +36,7 @@ interface SingleDatePickerProps {
   disabled?: boolean;
   allowClear?: boolean;
   hideValue?: boolean;
-  suffixIcon?: React.ReactNode;
+  suffixIcon?: ReactNode;
   className?: string;
   disabledDate?: (date: Date) => boolean;
   disabledTime?: DisabledTime | ((date: Date) => DisabledTime);

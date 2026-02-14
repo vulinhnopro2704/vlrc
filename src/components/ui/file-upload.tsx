@@ -1018,7 +1018,7 @@ function getFileIcon(file: File) {
 }
 
 interface FileUploadItemPreviewProps extends React.ComponentProps<'div'> {
-  render?: (file: File, fallback: () => React.ReactNode) => React.ReactNode;
+  render?: (file: File, fallback: () => ReactNode) => ReactNode;
   asChild?: boolean;
 }
 

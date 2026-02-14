@@ -9,7 +9,7 @@ export type SelectValue = string | number;
 export interface BaseSelectOption<T extends SelectValue = SelectValue> {
   value: T;
   label: string;
-  icon?: React.ReactNode;
+  icon?: ReactNode;
 }
 
 /**
@@ -29,7 +29,7 @@ export interface BaseSelectCommonProps<T extends SelectValue = SelectValue> {
   isFetchingNextPage?: boolean;
   fetchNextPage?: () => void;
   maxTagCount?: number | 'responsive';
-  tagRender?: (option: BaseSelectOption<T>, onRemove: () => void) => React.ReactNode;
+  tagRender?: (option: BaseSelectOption<T>, onRemove: () => void) => ReactNode;
   showSelectAll?: boolean;
   allowClear?: boolean;
 }

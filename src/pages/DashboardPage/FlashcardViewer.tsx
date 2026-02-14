@@ -1,7 +1,7 @@
 'use client';
 
-import VocabCard from '@/components/VocabCard';
 import Icons from '@/components/Icons';
+import VocabCard from '@/components/VocabCard';
 
 export const FlashcardViewer = ({
   words,

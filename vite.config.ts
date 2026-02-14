@@ -36,6 +36,9 @@ export default defineConfig({
           gsap: ['gsap']
         },
         {
+          'gsap/ScrollTrigger': ['ScrollTrigger']
+        },
+        {
           '@tanstack/react-router': [
             'useNavigate',
             'useMatch',

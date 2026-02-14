@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import Icons from '@/components/Icons';
@@ -18,7 +18,7 @@ export function MultiSelectTags<T extends SelectValue = SelectValue>({
   maxTagCount?: number | 'responsive';
   onRemove: (value: T) => void;
   disabled?: boolean;
-  tagRender?: (option: BaseSelectOption<T>, onRemove: () => void) => React.ReactNode;
+  tagRender?: (option: BaseSelectOption<T>, onRemove: () => void) => ReactNode;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [visibleCount, setVisibleCount] = useState<number>(selectedOptions.length);

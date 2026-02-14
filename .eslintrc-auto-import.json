@@ -197,6 +197,7 @@
     "SaveIcon": true,
     "ScrollArea": true,
     "ScrollBar": true,
+    "ScrollTrigger": true,
     "SearchIcon": true,
     "Select": true,
     "SelectContent": true,

@@ -244,6 +244,7 @@ declare global {
   const SaveIcon: typeof import('lucide-react').SaveIcon
   const ScrollArea: typeof import('../components/ui/scroll-area').ScrollArea
   const ScrollBar: typeof import('../components/ui/scroll-area').ScrollBar
+  const ScrollTrigger: typeof import('gsap/ScrollTrigger').ScrollTrigger
   const Search: typeof import('lucide-react').Search
   const SearchIcon: typeof import('lucide-react').SearchIcon
   const Select: typeof import('../components/ui/select').Select

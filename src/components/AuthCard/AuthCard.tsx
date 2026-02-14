@@ -6,8 +6,8 @@ const AuthCard = ({
   ref,
   ...props
 }: React.HTMLAttributes<HTMLDivElement> & {
-  children: React.ReactNode;
-  ref?: React.Ref<HTMLDivElement>;
+  children: ReactNode;
+  ref?: Ref<HTMLDivElement>;
 }) => {
   return (
     <Card ref={ref} variant='auth' className={className} {...props}>

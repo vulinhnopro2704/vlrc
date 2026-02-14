@@ -1,6 +1,3 @@
-import React from 'react';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { cn } from '@/lib/utils';
 import type { DisabledTime, TimeConfig } from './types';
 
 interface TimePickerProps {
@@ -48,7 +45,7 @@ export function TimePicker({ value, onChange, timeConfig, disabledTime }: TimePi
     }
 
     return (
-      <ScrollArea className='h-[240px] w-16'>
+      <ScrollArea className='h-60 w-16'>
         <div className='flex flex-col'>
           {values.map(val => {
             const isDisabled = disabledValues.includes(val);

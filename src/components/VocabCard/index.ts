@@ -1,1 +1,1 @@
-export { default as VocabCard } from './VocabCard';
+export { default } from './VocabCard';

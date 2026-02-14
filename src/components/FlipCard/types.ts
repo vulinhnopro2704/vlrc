@@ -37,7 +37,7 @@ export type FlipCardRootProps = {
   children: ReactNode;
   className?: string;
   classNames?: FlipCardRootClassNames;
-  ref?: React.Ref<HTMLDivElement>;
+  ref?: Ref<HTMLDivElement>;
 
   // Controlled mode
   isFlipped?: boolean;
@@ -61,12 +61,12 @@ export type FlipCardFaceProps = {
   children: ReactNode;
   className?: string;
   classNames?: FlipCardFaceClassNames;
-  ref?: React.Ref<HTMLDivElement>;
+  ref?: Ref<HTMLDivElement>;
 } & Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'className'>;
 
 export type FlipCardTriggerProps = {
   children: ReactNode;
   className?: string;
   asChild?: boolean;
-  ref?: React.Ref<HTMLButtonElement>;
+  ref?: Ref<HTMLButtonElement>;
 } & Omit<HTMLAttributes<HTMLButtonElement>, 'children' | 'className'>;

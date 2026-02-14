@@ -10,15 +10,14 @@ import {
   DialogTitle
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
-import type React from 'react';
 
 interface ModalProps {
   open?: boolean;
   onCancel: () => void;
   title: string;
   description?: string;
-  children: React.ReactNode;
-  footer?: React.ReactNode;
+  children: ReactNode;
+  footer?: ReactNode;
   width?: number | string;
   confirmText?: string;
   cancelText?: string;
