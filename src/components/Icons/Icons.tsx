@@ -76,7 +76,8 @@ import {
   Trophy,
   Flame,
   Undo2,
-  Plus
+  Plus,
+  Volume2
 } from 'lucide-react';
 
 export const Icons = {
@@ -156,6 +157,7 @@ export const Icons = {
   Trophy: Trophy,
   Flame: Flame,
   Undo2: Undo2,
+  Volume2: Volume2,
   Plus: Plus,
   GitHub: ({ ...props }: LucideProps) => (
     <svg

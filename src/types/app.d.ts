@@ -9,22 +9,22 @@ declare namespace App {
 
   interface Base {
     id?: ID;
-    createdAt?: Date;
-    updatedAt?: Date;
+    createdAt?: string;
+    updatedAt?: string;
   }
 
-  interface QueryParams {
-    q?: string;
-    page?: number;
-    size?: number;
-    sort?: string;
+  // ── Pagination (cursor-based) ──
+
+  type SortOrder = 'asc' | 'desc';
+
+  interface CursorPaginationParams {
+    cursor?: number;
+    take?: number;
   }
 
-  interface PaginationResponse<T> {
-    content: T[];
-    totalElements: number;
-    totalPages: number;
-    page: number;
-    size: number;
+  interface CursorPaginationResponse<T> {
+    data: T[];
+    nextCursor: number | null;
+    hasMore: boolean;
   }
 }

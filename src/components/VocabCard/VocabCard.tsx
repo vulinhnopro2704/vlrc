@@ -3,6 +3,7 @@
 import type { ReactNode } from 'react';
 import { FlipCard } from '@/components/FlipCard';
 import type { AnimationConfig, FlipCardSize, FlipDirection } from '@/components/FlipCard';
+import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
 type VocabCardLabels = {
@@ -22,8 +23,8 @@ const defaultLabels: VocabCardLabels = {
 const VocabCard = ({
   vocabulary,
   className,
-  width = 'min(90vw, 32rem)',
-  height = '20rem',
+  width,
+  height,
   direction = 'horizontal',
   animation = { duration: 700, easing: 'ease' },
   flipOnHover = true,
@@ -110,13 +111,9 @@ const VocabCard = ({
 
           {showLevel && vocabulary.cefr && (
             <div className='flex gap-2 items-center'>
-              <span
-                className={cn(
-                  'text-xs px-3 py-1 rounded-full bg-accent-foreground/20 text-accent-foreground font-semibold',
-                  levelBadgeClassName
-                )}>
+              <Badge variant='secondary' className={cn(levelBadgeClassName)}>
                 {vocabulary.cefr}
-              </span>
+              </Badge>
             </div>
           )}
         </div>

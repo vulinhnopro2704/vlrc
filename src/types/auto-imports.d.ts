@@ -351,6 +351,7 @@ declare global {
   const join: typeof import('lodash-es').join
   const last: typeof import('lodash-es').last
   const lazy: typeof import('react').lazy
+  const lazyLoad: typeof import('../lib/utils').lazyLoad
   const map: typeof import('lodash-es').map
   const mapValues: typeof import('lodash-es').mapValues
   const mean: typeof import('lodash-es').mean
