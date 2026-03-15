@@ -2,18 +2,25 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
+import { HTTPError } from 'ky';
+import { Link, useNavigate } from '@tanstack/react-router';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Button } from '@/components/ui/button';
 import { FormInput, FormCheckbox } from '@/components/Form';
 import Icons from '@/components/Icons';
 import LiquidBackground from '@/components/LiquidBackground';
 import AuthCard from '@/components/AuthCard';
 import ThemeToggle from '@/components/ThemeToggle';
 import AnimatedLogo from '@/components/AnimatedLogo';
-import { Link } from '@tanstack/react-router';
+import { login } from '@/api/auth-management';
+import { toast } from '@/shared';
+import { AUTH_ME_QUERY_KEY } from '@/hooks/useAuthSession';
 
 const LoginPage = () => {
   const { t } = useTranslation();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const formRef = useRef<HTMLFormElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
@@ -21,7 +28,7 @@ const LoginPage = () => {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
 
-  const { control, handleSubmit } = useForm<Auth.LoginFormData>({
+  const { control, handleSubmit, setError } = useForm<Auth.LoginFormData>({
     defaultValues: {
       email: '',
       password: '',
@@ -51,9 +58,40 @@ const LoginPage = () => {
     { scope: formRef }
   );
 
-  const onSubmit = async (data: Auth.LoginFormData) => {
-    setIsSubmitting(true);
+  const parseErrorMessage = async (error: unknown) => {
+    if (error instanceof HTTPError) {
+      try {
+        const payload = await error.response.json<{ message?: string }>();
+        return payload?.message || 'Login failed. Please try again.';
+      } catch (parseError) {
+        console.error('Failed to parse login error response:', parseError);
+      }
+    }
 
+    if (error instanceof Error) {
+      return error.message;
+    }
+
+    return 'Login failed. Please try again.';
+  };
+
+  const loginMutation = useMutation({
+    mutationFn: (payload: Auth.LoginPayload) => login(payload),
+    onSuccess: response => {
+      queryClient.setQueryData(AUTH_ME_QUERY_KEY, response.user);
+      toast.success('Login successful');
+      navigate({ to: '/dashboard' });
+    },
+    onError: async error => {
+      const message = await parseErrorMessage(error);
+
+      setError('email', { type: 'server', message });
+      setError('password', { type: 'server', message });
+      toast.error(message);
+    }
+  });
+
+  const onSubmit = async (data: Auth.LoginFormData) => {
     if (buttonRef.current) {
       gsap.to(buttonRef.current, {
         scale: 0.98,
@@ -63,11 +101,11 @@ const LoginPage = () => {
       });
     }
 
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    console.log('Login data:', data);
-    setIsSubmitting(false);
+    const { rememberMe: _rememberMe, ...payload } = data;
+    await loginMutation.mutateAsync(payload);
   };
+
+  const isSubmitting = loginMutation.isPending;
 
   return (
     <div className='min-h-screen flex items-center justify-center p-4'>

@@ -19,8 +19,8 @@ declare namespace Auth {
   type RegisterPayload = Omit<RegisterFormData, 'confirmPassword'>;
 
   interface AuthTokens {
-    accessToken: string;
-    refreshToken: string;
+    accessToken?: string;
+    refreshToken?: string;
   }
 
   interface AuthResponse extends AuthTokens {

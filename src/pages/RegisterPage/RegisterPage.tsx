@@ -2,18 +2,25 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
+import { HTTPError } from 'ky';
+import { Link, useNavigate } from '@tanstack/react-router';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Button } from '@/components/ui/button';
 import { FormInput } from '@/components/Form';
 import Icons from '@/components/Icons';
 import LiquidBackground from '@/components/LiquidBackground';
 import AuthCard from '@/components/AuthCard';
 import ThemeToggle from '@/components/ThemeToggle';
 import AnimatedLogo from '@/components/AnimatedLogo';
-import { Link } from '@tanstack/react-router';
+import { register as registerApi } from '@/api/auth-management';
+import { toast } from '@/shared';
+import { AUTH_ME_QUERY_KEY } from '@/hooks/useAuthSession';
 
 const RegisterPage = () => {
   const { t } = useTranslation();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const formRef = useRef<HTMLFormElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
@@ -21,7 +28,7 @@ const RegisterPage = () => {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
 
-  const { control, handleSubmit, watch } = useForm<Auth.RegisterFormData>({
+  const { control, handleSubmit, watch, setError } = useForm<Auth.RegisterFormData>({
     defaultValues: {
       name: '',
       email: '',
@@ -54,9 +61,40 @@ const RegisterPage = () => {
     { scope: formRef }
   );
 
-  const onSubmit = async (data: Auth.RegisterFormData) => {
-    setIsSubmitting(true);
+  const parseErrorMessage = async (error: unknown) => {
+    if (error instanceof HTTPError) {
+      try {
+        const payload = await error.response.json<{ message?: string }>();
+        return payload?.message || 'Registration failed. Please try again.';
+      } catch (parseError) {
+        console.error('Failed to parse register error response:', parseError);
+      }
+    }
 
+    if (error instanceof Error) {
+      return error.message;
+    }
+
+    return 'Registration failed. Please try again.';
+  };
+
+  const registerMutation = useMutation({
+    mutationFn: (payload: Auth.RegisterPayload) => registerApi(payload),
+    onSuccess: response => {
+      queryClient.setQueryData(AUTH_ME_QUERY_KEY, response.user);
+      toast.success('Registration successful');
+      navigate({ to: '/dashboard' });
+    },
+    onError: async error => {
+      const message = await parseErrorMessage(error);
+
+      setError('email', { type: 'server', message });
+      setError('password', { type: 'server', message });
+      toast.error(message);
+    }
+  });
+
+  const onSubmit = async (data: Auth.RegisterFormData) => {
     if (buttonRef.current) {
       gsap.to(buttonRef.current, {
         scale: 0.98,
@@ -66,11 +104,11 @@ const RegisterPage = () => {
       });
     }
 
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    console.log('Register data:', data);
-    setIsSubmitting(false);
+    const { confirmPassword: _confirmPassword, ...payload } = data;
+    await registerMutation.mutateAsync(payload);
   };
+
+  const isSubmitting = registerMutation.isPending;
 
   return (
     <div className='min-h-screen flex items-center justify-center p-4'>
