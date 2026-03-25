@@ -11,13 +11,19 @@ This document describes the extensible architecture for vocabulary learning feat
 Extended types supporting various activity types and comprehensive vocabulary data:
 
 ```typescript
-type ActivityType = 'flip' | 'listen-fill' | 'fill-blank' | 'meaning-lookup' | 'multiple-choice' | 'pronunciation';
+type ActivityType =
+  | 'flip'
+  | 'listen-fill'
+  | 'fill-blank'
+  | 'meaning-lookup'
+  | 'multiple-choice'
+  | 'pronunciation';
 
 interface Word extends App.Base {
   word: string;
   pronunciation: string;
   meaning: string;
-  meaning_vi?: string;
+  meaningVi?: string;
   example?: string;
   exampleVi?: string;
   audio?: string;
@@ -49,6 +55,7 @@ interface ActivityResult {
 ### 2. Seed Data (`src/data/vocabularies.ts`)
 
 Comprehensive vocabulary dataset with:
+
 - English word
 - Pronunciation (IPA format)
 - English meaning
@@ -60,6 +67,7 @@ Comprehensive vocabulary dataset with:
 - Difficulty rating
 
 **Adding new vocabularies:**
+
 ```typescript
 export const commonVerbsData: LearningManagement.Word[] = [
   {
@@ -67,9 +75,9 @@ export const commonVerbsData: LearningManagement.Word[] = [
     word: 'persevere',
     pronunciation: 'pɜːsɪˈvɪə(r)',
     meaning: 'to continue doing something despite difficulty',
-    meaning_vi: 'kiên trì, bền bỉ',
+    meaningVi: 'kiên trì, bền bỉ',
     example: '...',
-    cefr: 'C1',
+    cefr: 'C1'
     // ... other properties
   }
 ];
@@ -94,6 +102,7 @@ speak('word');
 ```
 
 **Features:**
+
 - Text-to-speech playback
 - Pause/resume support
 - Error handling
@@ -104,7 +113,8 @@ speak('word');
 Manages vocabulary learning progress and proficiency tracking:
 
 ```typescript
-const { progress, metrics, recordActivity, getProgressForWord, updateMetrics } = useVocabularyProgress();
+const { progress, metrics, recordActivity, getProgressForWord, updateMetrics } =
+  useVocabularyProgress();
 
 recordActivity({
   wordId: 1,
@@ -117,6 +127,7 @@ recordActivity({
 ```
 
 **Features:**
+
 - Proficiency level calculation (1-5 scale)
 - Mastery score (0-100)
 - Spaced repetition scheduling
@@ -137,6 +148,7 @@ interface ActivityCardProps {
 ```
 
 #### VocabCard (Flip Card)
+
 **File:** `src/components/VocabCard/VocabCard.tsx`
 
 Interactive flashcard with front (word/pronunciation) and back (meaning/example) sides. Supports hover and click flip animations.
@@ -152,9 +164,11 @@ Interactive flashcard with front (word/pronunciation) and back (meaning/example)
 ```
 
 #### ListenAndFillCard
+
 **File:** `src/components/VocabCard/ListenAndFillCard.tsx`
 
 Listen-and-fill exercise using Web Speech API:
+
 1. User clicks to hear pronunciation
 2. User types the word
 3. System validates input with feedback
@@ -167,9 +181,11 @@ Listen-and-fill exercise using Web Speech API:
 ```
 
 #### FillBlankCard
+
 **File:** `src/components/VocabCard/FillBlankCard.tsx`
 
 Fill-in-the-blank exercise:
+
 1. Shows example sentence with missing word
 2. User types the missing word
 3. Enter key or button to submit
@@ -179,9 +195,11 @@ Fill-in-the-blank exercise:
 ```
 
 #### MeaningLookupCard
+
 **File:** `src/components/VocabCard/MeaningLookupCard.tsx`
 
 Multiple-choice meaning identification:
+
 1. Shows word and pronunciation
 2. User selects correct meaning from options
 3. Displays feedback with correct answer
@@ -205,6 +223,7 @@ Factory pattern for rendering appropriate card component based on activity type:
 ```
 
 Automatically cycles through activity types or uses lesson-specific activities:
+
 - flip → listen-fill → fill-blank → meaning-lookup → flip
 
 ### 6. ActivityManager Utility
@@ -233,6 +252,7 @@ const nextActivityType = activityManager.getRecommendedNextActivityType(1);
 ```
 
 **Features:**
+
 - Activity sequencing
 - Success rate calculation
 - Time tracking
@@ -242,20 +262,28 @@ const nextActivityType = activityManager.getRecommendedNextActivityType(1);
 ## Adding New Activity Types
 
 ### Step 1: Update Types
+
 ```typescript
 // src/types/learning-management.d.ts
 type ActivityType = '...' | 'new-activity-type';
 ```
 
 ### Step 2: Create Component
+
 ```typescript
 // src/components/VocabCard/NewActivityCard.tsx
-export const NewActivityCard = ({ vocabulary, onCorrect, onIncorrect, disabled }: ActivityCardProps) => {
+export const NewActivityCard = ({
+  vocabulary,
+  onCorrect,
+  onIncorrect,
+  disabled
+}: ActivityCardProps) => {
   // Implementation
 };
 ```
 
 ### Step 3: Register in Factory
+
 ```typescript
 // src/components/VocabCard/VocabCardFactory.tsx
 case 'new-activity-type':
@@ -263,6 +291,7 @@ case 'new-activity-type':
 ```
 
 ### Step 4: Add to Activity Sequence (Optional)
+
 ```typescript
 // src/utils/activityManager.ts
 const activitySequence = [..., 'new-activity-type'];
@@ -286,7 +315,7 @@ export const LessonLearning = ({ lesson }: { lesson: LearningManagement.Lesson }
   const handleActivityComplete = (result: LearningManagement.ActivityResult) => {
     recordActivity(result);
     activityManager.recordActivity(result);
-    
+
     if (currentWordIndex < lesson.words.length - 1) {
       setCurrentWordIndex(prev => prev + 1);
     }

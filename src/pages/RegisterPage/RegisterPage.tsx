@@ -1,12 +1,4 @@
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { useGSAP } from '@gsap/react';
-import gsap from 'gsap';
-import { useRef } from 'react';
 import { HTTPError } from 'ky';
-import { Link, useNavigate } from '@tanstack/react-router';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Button } from '@/components/ui/button';
 import { FormInput } from '@/components/Form';
 import Icons from '@/components/Icons';
 import LiquidBackground from '@/components/LiquidBackground';

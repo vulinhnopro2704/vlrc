@@ -1,9 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Icons from '@/components/Icons';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 
 export default function MeaningLookupExercise({
   vocabulary,
@@ -68,7 +65,7 @@ export default function MeaningLookupExercise({
               key={option.id}
               variant='outline'
               onClick={() => handleSelect(option.id)}
-              disabled={feedback !== 'idle'}
+              disabled={feedback === 'correct'}
               className={cn(
                 'h-auto p-4 justify-between text-left font-medium',
                 selected === option.id &&

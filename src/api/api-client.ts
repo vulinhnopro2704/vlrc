@@ -12,16 +12,6 @@ const apiClient = ky.create({
   },
   retry: 0,
   hooks: {
-    beforeRequest: [
-      request => {
-        console.log('API Request:', {
-          url: request.url,
-          method: request.method,
-          headers: Object.fromEntries(request.headers.entries()),
-          body: request.body
-        });
-      }
-    ],
     afterResponse: [
       async (request, _options, response) => {
         const url = new URL(request.url);

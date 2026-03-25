@@ -41,12 +41,16 @@ declare namespace LearningManagement {
     word: string;
     pronunciation?: string;
     meaning: string;
+    meaningVi?: string;
     example?: string;
     exampleVi?: string;
     image?: string;
     audio?: string;
     pos?: string;
+    partOfSpeech?: string;
     cefr?: string;
+    synonyms?: string[];
+    difficulty?: number;
     lessonId?: number;
     lesson?: Lesson;
   }

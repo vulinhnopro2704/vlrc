@@ -1,24 +1,29 @@
 export class ActivityManager {
   private activities: LearningManagement.ActivityResult[] = [];
-  private currentActivityIndex = 0;
+  private defaultActivityType: LearningManagement.ActivityType;
 
-  constructor(private defaultActivityType: LearningManagement.ActivityType = 'flip') {}
+  constructor(defaultActivityType: LearningManagement.ActivityType = 'flip') {
+    this.defaultActivityType = defaultActivityType;
+  }
 
   /**
    * Get the activity type for a word at a given index
    * Cycles through different activity types to provide variety
    */
-  getActivityTypeForWord(wordIndex: number, lessonActivities?: LearningManagement.ActivityType[]): LearningManagement.ActivityType {
+  getActivityTypeForWord(
+    wordIndex: number,
+    lessonActivities?: LearningManagement.ActivityType[]
+  ): LearningManagement.ActivityType {
     if (lessonActivities && lessonActivities.length > 0) {
       return lessonActivities[wordIndex % lessonActivities.length];
     }
 
     const activitySequence: LearningManagement.ActivityType[] = [
-      'flip',
+      this.defaultActivityType,
       'listen-fill',
       'fill-blank',
       'meaning-lookup',
-      'flip'
+      this.defaultActivityType
     ];
 
     return activitySequence[wordIndex % activitySequence.length];
@@ -56,8 +61,10 @@ export class ActivityManager {
    * Get total time spent on a word
    */
   getWordTimeSpent(wordId: number): number {
-    return this.getWordActivities(wordId)
-      .reduce((total, activity) => total + activity.timeSpent, 0);
+    return this.getWordActivities(wordId).reduce(
+      (total, activity) => total + activity.timeSpent,
+      0
+    );
   }
 
   /**
@@ -77,7 +84,7 @@ export class ActivityManager {
 
     // If the user is struggling, stick with easier activities
     if (successRate < 50) {
-      return 'flip'; // Basic review
+      return this.defaultActivityType; // Basic review
     }
 
     // If moderate success, try fill-in-the-blank
@@ -121,7 +128,6 @@ export class ActivityManager {
    */
   clearActivities(): void {
     this.activities = [];
-    this.currentActivityIndex = 0;
   }
 
   /**

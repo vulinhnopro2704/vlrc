@@ -78,6 +78,8 @@ declare global {
   const CommandList: typeof import('../components/ui/command').CommandList
   const CommandSeparator: typeof import('../components/ui/command').CommandSeparator
   const CommandShortcut: typeof import('../components/ui/command').CommandShortcut
+  const ConfirmModal: typeof import('../shared/ConfirmModal').default
+  const ConfirmationDialog: typeof import('../shared/index').ConfirmationDialog
   const Copy: typeof import('lucide-react').Copy
   const CopyIcon: typeof import('lucide-react').CopyIcon
   const CreditCard: typeof import('lucide-react').CreditCard
@@ -190,6 +192,8 @@ declare global {
   const KeyIcon: typeof import('lucide-react').KeyIcon
   const LCalendar: typeof import('lucide-react').Calendar
   const Label: typeof import('../components/ui/label').Label
+  const LazyLoad: typeof import('../shared/LazyLoad').default
+  const Link: typeof import('@tanstack/react-router').Link
   const Linkedin: typeof import('lucide-react').Linkedin
   const LinkedinIcon: typeof import('lucide-react').LinkedinIcon
   const List: typeof import('../components/ui/file-upload').List
@@ -280,6 +284,7 @@ declare global {
   const TableHeader: typeof import('../components/ui/table').TableHeader
   const TableRow: typeof import('../components/ui/table').TableRow
   const Textarea: typeof import('../components/ui/textarea').Textarea
+  const Toast: typeof import('../shared/Toast').default
   const Toaster: typeof import('../components/ui/sonner').Toaster
   const Tooltip: typeof import('../components/ui/tooltip').Tooltip
   const TooltipContent: typeof import('../components/ui/tooltip').TooltipContent
@@ -351,7 +356,7 @@ declare global {
   const join: typeof import('lodash-es').join
   const last: typeof import('lodash-es').last
   const lazy: typeof import('react').lazy
-  const lazyLoad: typeof import('../lib/utils').lazyLoad
+  const lazyLoad: typeof import('../shared/index').lazyLoad
   const map: typeof import('lodash-es').map
   const mapValues: typeof import('lodash-es').mapValues
   const mean: typeof import('lodash-es').mean
@@ -372,6 +377,7 @@ declare global {
   const startTransition: typeof import('react').startTransition
   const sumBy: typeof import('lodash-es').sumBy
   const take: typeof import('lodash-es').take
+  const toast: typeof import('../shared/index').toast
   const trim: typeof import('lodash-es').trim
   const uniqBy: typeof import('lodash-es').uniqBy
   const use: typeof import('react').use
@@ -429,4 +435,7 @@ declare global {
   // @ts-ignore
   export type { FunctionComponent, FC, ReactNode, ReactElement, Key, MouseEvent as ReactMouseEvent, KeyboardEvent as ReactKeyboardEvent, ComponentType, ComponentProps, ChangeEvent, Ref, RefObject, Dispatch, SetStateAction, CSSProperties } from 'react'
   import('react')
+  // @ts-ignore
+  export type { ConfirmationDialogProps } from '../shared/ConfirmModal'
+  import('../shared/ConfirmModal')
 }

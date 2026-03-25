@@ -1,15 +1,9 @@
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { useGSAP } from '@gsap/react';
-import gsap from 'gsap';
-import { useRef, useState } from 'react';
 import { FormInput } from '@/components/Form';
 import Icons from '@/components/Icons';
 import LiquidBackground from '@/components/LiquidBackground';
 import AuthCard from '@/components/AuthCard';
 import ThemeToggle from '@/components/ThemeToggle';
 import AnimatedLogo from '@/components/AnimatedLogo';
-import { Link } from '@tanstack/react-router';
 
 const ForgotPasswordPage = () => {
   const { t } = useTranslation();
@@ -63,7 +57,7 @@ const ForgotPasswordPage = () => {
     },
     { dependencies: [isSuccess] }
   );
-
+  // @ts-ignore
   const onSubmit = async (data: Auth.ForgotPasswordFormData) => {
     setIsSubmitting(true);
 
@@ -78,7 +72,6 @@ const ForgotPasswordPage = () => {
 
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1500));
-    console.log('Forgot password data:', data);
     setIsSubmitting(false);
     setIsSuccess(true);
   };

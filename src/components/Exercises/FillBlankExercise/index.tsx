@@ -71,7 +71,6 @@ export default function FillBlankExercise({ vocabulary, onComplete }: FillBlankE
             Incorrect. Try again!
           </div>
         )}
-
         <Button
           variant='accent'
           onClick={handleSubmit}
@@ -80,7 +79,6 @@ export default function FillBlankExercise({ vocabulary, onComplete }: FillBlankE
           Check Answer
         </Button>
       </div>
-
       <div className='text-center text-sm text-muted-foreground'>
         <p>Attempts: {attempts}</p>
         <p className='text-xs'>Meaning: {vocabulary.meaning}</p>

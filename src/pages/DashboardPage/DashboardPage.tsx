@@ -1,6 +1,6 @@
 'use client';
 
-import { AppLayout, AppSidebar } from '@/components/shared';
+import { AppLayout } from '@/components/shared';
 import { useNavigate } from '@tanstack/react-router';
 import Icons from '@/components/Icons';
 import ScrollTrigger from 'gsap/ScrollTrigger';
@@ -170,7 +170,12 @@ const DashboardPage = () => {
               Browse Courses
             </button>
             <button
-              onClick={() => navigate({ to: '/courses/1' })}
+              onClick={() =>
+                navigate({
+                  to: '/courses/$courseId',
+                  params: { courseId: '1' },
+                })
+              }
               className='px-4 py-2 rounded-lg bg-accent/10 hover:bg-accent/20 text-accent text-sm font-medium transition-colors'
             >
               Course Details
@@ -234,7 +239,10 @@ const DashboardPage = () => {
               )}
 
               {selectedLesson ? (
-                <FlashcardViewer words={selectedLesson.words} lessonTitle={selectedLesson.title} />
+                <FlashcardViewer
+                  words={selectedLesson.words ?? []}
+                  lessonTitle={selectedLesson.title}
+                />
               ) : (
                 <CourseGrid course={selectedCourse} onSelectLesson={handleSelectLesson} />
               )}

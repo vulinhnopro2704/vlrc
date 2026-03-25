@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from '@tanstack/react-router';
 import gsap from 'gsap';
@@ -44,6 +44,7 @@ const CourseDetailPage = () => {
   const pageRef = useRef<HTMLDivElement>(null);
 
   const course = mockCourses[parseInt(courseId)];
+  const lessons = course?.lessons ?? [];
 
   useGSAP(() => {
     const items = pageRef.current?.querySelectorAll('.lesson-item');
@@ -110,7 +111,7 @@ const CourseDetailPage = () => {
                   </div>
                 </div>
                 <div className="text-sm text-muted-foreground">
-                  {course.lessons.length} {t('learning_lessons')}
+                  {lessons.length} {t('learning_lessons')}
                 </div>
               </div>
             </div>
@@ -118,7 +119,7 @@ const CourseDetailPage = () => {
             <h2 className="text-2xl font-bold mb-6">{t('learning_lessons')}</h2>
 
             <div className="space-y-4">
-              {course.lessons.map((lesson) => (
+              {lessons.map((lesson) => (
                 <div key={lesson.id} className="lesson-item">
                   <Card className="glass-card p-6 hover:shadow-lg hover:border-primary/50 transition-all duration-300 group">
                     <div className="flex items-center justify-between gap-4">
@@ -134,7 +135,12 @@ const CourseDetailPage = () => {
                         </p>
                       </div>
                       <Button
-                        onClick={() => navigate({ to: `/lessons/${lesson.id}` })}
+                        onClick={() =>
+                          navigate({
+                            to: '/lessons/$lessonId',
+                            params: { lessonId: String(lesson.id) },
+                          })
+                        }
                         className="group-hover:shadow-lg"
                       >
                         Study
