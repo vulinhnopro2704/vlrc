@@ -1,6 +1,6 @@
 'use client';
 
-import { AppLayout, AppSidebar } from '@/components/shared';
+import { AppLayout } from '@/components/shared';
 import { ExerciseManager } from '@/components/Exercises';
 import { commonVerbsLesson } from '@/data/seedVocabularies';
 import Icons from '@/components/Icons';
@@ -81,19 +81,6 @@ const LessonPage = () => {
     }
   };
 
-  const sidebarLinks = [
-    {
-      label: t('learning_my_courses'),
-      href: '/courses',
-      icon: <Icons.BookOpen className='h-4 w-4' />
-    },
-    {
-      label: t('learning_dashboard'),
-      href: '/dashboard',
-      icon: <Icons.BarChart3 className='h-4 w-4' />
-    }
-  ];
-
   if (!lesson || !currentWord) {
     return (
       <AppLayout>
@@ -106,87 +93,89 @@ const LessonPage = () => {
 
   return (
     <AppLayout>
-      <div ref={pageRef} className='flex h-screen bg-background'>
-        <AppSidebar
-          links={sidebarLinks}
-          isLessonMode
-          courseName='Daily Vocabulary'
-          lessonName={lesson.title}
-          onBackToCourse={() =>
-            navigate({
-              to: '/courses/$courseId',
-              params: { courseId: '1' }
-            })
-          }
-        />
-
-        <main className='flex-1 overflow-auto p-8'>
-          <div className='max-w-4xl mx-auto h-full flex flex-col'>
-            {/* Header */}
-            <div className='mb-8'>
-              <h1 className='text-3xl font-bold mb-2'>{lesson.title}</h1>
-              <div className='flex items-center justify-between'>
-                <p className='text-muted-foreground'>{lesson.wordCount} vocabulary items</p>
-                <span className='text-sm font-semibold text-primary'>
-                  {currentIndex + 1} / {lessonWords.length}
-                </span>
-              </div>
-            </div>
-
-            {/* Exercise Component */}
-            <div className='flex-1 flex items-center justify-center mb-8'>
-              <div className='w-full'>
-                <div className='mb-4 flex items-center justify-between text-sm'>
-                  <span className='text-muted-foreground'>
-                    Word {currentIndex + 1} / {lesson?.wordCount || 0}
-                  </span>
-                  <span className='text-muted-foreground'>
-                    Exercise {currentExerciseTypeIndex + 1} / {exerciseTypes.length}
-                  </span>
-                </div>
-                <ExerciseManager
-                  vocabulary={currentWord!}
-                  allVocabularies={lessonWords}
-                  exerciseType={currentExerciseType}
-                  onComplete={handleExerciseComplete}
-                />
-              </div>
-            </div>
-
-            {/* Progress Bar */}
-            <div className='mb-8'>
-              <div className='w-full h-2 bg-primary/20 rounded-full overflow-hidden'>
-                <div
-                  className='h-full bg-gradient-to-r from-primary to-accent transition-all duration-300'
-                  style={{ width: `${((currentIndex + 1) / lessonWords.length) * 100}%` }}
-                />
-              </div>
-            </div>
-            {/* Navigation Buttons */}
-            <div className='flex items-center justify-between gap-4'>
+      <main ref={pageRef} className='w-full bg-background px-4 py-6 sm:px-6 lg:px-8'>
+        <div className='max-w-6xl mx-auto h-full flex flex-col space-y-6'>
+          <div className='rounded-2xl border bg-card/50 p-4 sm:p-5'>
+            <div className='flex flex-wrap items-center gap-2 text-sm text-muted-foreground'>
               <Button
-                variant='outline'
-                onClick={handlePrev}
-                disabled={currentIndex === 0 && currentExerciseTypeIndex === 0}>
-                <Icons.ChevronLeft className='h-4 w-4 mr-2' />
-                Previous
-              </Button>
-              <div className='text-center text-sm text-muted-foreground'>
-                {currentIndex + 1} of {lessonWords.length}
-              </div>
-              <Button
-                onClick={handleNext}
-                disabled={
-                  currentIndex === lessonWords.length - 1 &&
-                  currentExerciseTypeIndex === exerciseTypes.length - 1
+                variant='ghost'
+                size='sm'
+                className='h-auto p-0 text-primary hover:bg-transparent'
+                onClick={() =>
+                  navigate({
+                    to: '/courses/$courseId',
+                    params: { courseId: '1' }
+                  })
                 }>
-                Next
-                <Icons.ChevronRight className='h-4 w-4 ml-2' />
+                <Icons.ChevronLeft className='h-4 w-4 mr-1' />
+                Daily Vocabulary
               </Button>
+              <span>/</span>
+              <span className='font-medium text-foreground'>{lesson.title}</span>
+            </div>
+
+            <div className='mt-4 flex items-center justify-between'>
+              <div>
+                <h1 className='text-3xl font-bold mb-2'>{lesson.title}</h1>
+                <p className='text-muted-foreground'>{lesson.wordCount} vocabulary items</p>
+              </div>
+              <span className='text-sm font-semibold text-primary'>
+                {currentIndex + 1} / {lessonWords.length}
+              </span>
             </div>
           </div>
-        </main>
-      </div>
+
+          <div className='flex-1 flex items-center justify-center'>
+            <div className='w-full'>
+              <div className='mb-4 flex items-center justify-between text-sm'>
+                <span className='text-muted-foreground'>
+                  Word {currentIndex + 1} / {lesson?.wordCount || 0}
+                </span>
+                <span className='text-muted-foreground'>
+                  Exercise {currentExerciseTypeIndex + 1} / {exerciseTypes.length}
+                </span>
+              </div>
+              <ExerciseManager
+                vocabulary={currentWord}
+                allVocabularies={lessonWords}
+                exerciseType={currentExerciseType}
+                onComplete={handleExerciseComplete}
+              />
+            </div>
+          </div>
+
+          <div className='mb-8'>
+            <div className='w-full h-2 bg-primary/20 rounded-full overflow-hidden'>
+              <div
+                className='h-full bg-gradient-to-r from-primary to-accent transition-all duration-300'
+                style={{ width: `${((currentIndex + 1) / lessonWords.length) * 100}%` }}
+              />
+            </div>
+          </div>
+
+          <div className='flex items-center justify-between gap-4'>
+            <Button
+              variant='outline'
+              onClick={handlePrev}
+              disabled={currentIndex === 0 && currentExerciseTypeIndex === 0}>
+              <Icons.ChevronLeft className='h-4 w-4 mr-2' />
+              Previous
+            </Button>
+            <div className='text-center text-sm text-muted-foreground'>
+              {currentIndex + 1} of {lessonWords.length}
+            </div>
+            <Button
+              onClick={handleNext}
+              disabled={
+                currentIndex === lessonWords.length - 1 &&
+                currentExerciseTypeIndex === exerciseTypes.length - 1
+              }>
+              Next
+              <Icons.ChevronRight className='h-4 w-4 ml-2' />
+            </Button>
+          </div>
+        </div>
+      </main>
     </AppLayout>
   );
 };

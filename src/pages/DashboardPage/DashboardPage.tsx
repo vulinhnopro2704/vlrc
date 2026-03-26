@@ -2,7 +2,6 @@
 
 import { AppLayout } from '@/components/shared';
 import Icons from '@/components/Icons';
-import { Sidebar } from './Sidebar';
 import { CourseGrid } from './CourseGrid';
 import { FlashcardViewer } from './FlashcardViewer';
 import { StatsCard } from './StatsCard';
@@ -97,17 +96,10 @@ const mockLeaderboard = [
 const DashboardPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [selectedCourse, setSelectedCourse] = useState<LearningManagement.Course | null>(
-    mockCourses[0]
-  );
+  const selectedCourse = mockCourses[0] ?? null;
   const [selectedLesson, setSelectedLesson] = useState<LearningManagement.Lesson | null>(null);
   const dashboardRef = useRef<HTMLDivElement>(null);
   const mainContentRef = useRef<HTMLDivElement>(null);
-
-  const handleSelectCourse = (course: LearningManagement.Course) => {
-    setSelectedCourse(course);
-    setSelectedLesson(null);
-  };
 
   const handleSelectLesson = (lesson: LearningManagement.Lesson) => {
     setSelectedLesson(lesson);
@@ -149,47 +141,47 @@ const DashboardPage = () => {
 
   return (
     <AppLayout>
-      <div ref={dashboardRef} className='flex gap-6 p-6 max-w-7xl mx-auto'>
-        {/* Sidebar */}
-        <Sidebar
-          courses={mockCourses}
-          selectedCourse={selectedCourse}
-          onSelectCourse={handleSelectCourse}
-        />
+      <div ref={dashboardRef} className='w-full px-4 py-6 sm:px-6 lg:px-8'>
+        <div ref={mainContentRef} className='space-y-6'>
+          <div className='rounded-2xl border bg-card/50 p-4 sm:p-5'>
+            <div className='flex flex-wrap items-center gap-2 text-sm text-muted-foreground'>
+              <Button
+                variant='ghost'
+                size='sm'
+                onClick={() => navigate({ to: '/' })}
+                className='h-auto p-0 text-primary hover:bg-transparent'>
+                <Icons.ChevronLeft className='h-4 w-4 mr-1' />
+                Landing
+              </Button>
+              <span>/</span>
+              <span className='font-medium text-foreground'>Dashboard</span>
+              {selectedCourse && (
+                <>
+                  <span>/</span>
+                  <span className='font-medium text-foreground'>{selectedCourse.title}</span>
+                </>
+              )}
+              {selectedLesson && (
+                <>
+                  <span>/</span>
+                  <span className='font-medium text-foreground'>{selectedLesson.title}</span>
+                </>
+              )}
+            </div>
 
-        {/* Main Content */}
-        <div ref={mainContentRef} className='flex-1 space-y-6'>
-          {/* Quick Navigation */}
-          <div className='flex gap-2 mb-6'>
-            <Button
-              variant='outline'
-              size='sm'
-              onClick={() => navigate({ to: '/' })}
-              className='bg-muted hover:bg-muted/80'>
-              Back to Landing
-            </Button>
-            <Button
-              variant='outline'
-              size='sm'
-              onClick={() => navigate({ to: '/courses' })}
-              className='border-primary/20 bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary'>
-              Browse Courses
-            </Button>
-            <Button
-              variant='outline'
-              size='sm'
-              onClick={() =>
-                navigate({
-                  to: '/courses/$courseId',
-                  params: { courseId: '1' }
-                })
-              }
-              className='border-accent/20 bg-accent/10 text-accent hover:bg-accent/20 hover:text-accent'>
-              Course Details
-            </Button>
+            <div className='mt-4 flex flex-wrap gap-2'>
+              <Button
+                variant='outline'
+                size='sm'
+                onClick={() => {
+                  setSelectedLesson(null);
+                  navigate({ to: '/courses' });
+                }}>
+                Browse Courses
+              </Button>
+            </div>
           </div>
 
-          {/* Stats Cards */}
           <div className='grid grid-cols-1 md:grid-cols-4 gap-4 content-section'>
             <div className='stats-card'>
               <StatsCard
@@ -228,10 +220,8 @@ const DashboardPage = () => {
             </div>
           </div>
 
-          {/* Content Area */}
           <div className='grid grid-cols-1 lg:grid-cols-3 gap-6 content-section'>
             <div className='lg:col-span-2 space-y-6'>
-              {/* Breadcrumb Navigation */}
               {selectedLesson && (
                 <div className='flex items-center gap-2 text-sm text-muted-foreground mb-4'>
                   <Button
@@ -257,7 +247,6 @@ const DashboardPage = () => {
               )}
             </div>
 
-            {/* Leaderboard */}
             <Leaderboard users={mockLeaderboard} currentUserRank={4} />
           </div>
         </div>
