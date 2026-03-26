@@ -1,3 +1,4 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import apiClient from './api-client';
 
 // ── Lessons ──
@@ -17,3 +18,100 @@ export const updateLesson = (id: number, payload: LearningManagement.UpdateLesso
   apiClient.patch(`lessons/${id}`, { json: payload }).json<LearningManagement.Lesson>();
 
 export const deleteLesson = (id: number) => apiClient.delete(`lessons/${id}`).json<void>();
+
+// ── TanStack Query ──
+
+export const LESSON_QUERY_KEYS = {
+  all: ['lessons'] as const,
+  lists: () => [...LESSON_QUERY_KEYS.all, 'list'] as const,
+  list: (params?: LearningManagement.LessonQueryParams) =>
+    [...LESSON_QUERY_KEYS.lists(), params ?? {}] as const,
+  details: () => [...LESSON_QUERY_KEYS.all, 'detail'] as const,
+  detail: (id: App.ID) => [...LESSON_QUERY_KEYS.details(), id] as const
+};
+
+export const getLessonsQueryOptions = (params?: LearningManagement.LessonQueryParams) => ({
+  queryKey: LESSON_QUERY_KEYS.list(params),
+  queryFn: () => getLessons(params)
+});
+
+export const getLessonQueryOptions = (id: number) => ({
+  queryKey: LESSON_QUERY_KEYS.detail(id),
+  queryFn: () => getLesson(id),
+  enabled: id > 0
+});
+
+export const useLessonsQuery = (params?: LearningManagement.LessonQueryParams) =>
+  useQuery(getLessonsQueryOptions(params));
+
+export const useLessonQuery = (id: number) => useQuery(getLessonQueryOptions(id));
+
+export const useCreateLessonMutation = () => {
+  const { t } = useTranslation();
+  const queryClient = useQueryClient();
+  const entityLabel = t('entity_lesson');
+
+  return useMutation({
+    mutationFn: createLesson,
+    onSuccess: lesson => {
+      queryClient.invalidateQueries({ queryKey: LESSON_QUERY_KEYS.lists() });
+      if (lesson.id != null) {
+        queryClient.setQueryData(LESSON_QUERY_KEYS.detail(lesson.id), lesson);
+      }
+      toast.success(t('mutation_success_create', { entity: entityLabel }));
+    },
+    onError: error => {
+      toast.error(
+        `${t('mutation_error_create', { entity: entityLabel })}: ${(error as Error).message}`
+      );
+    }
+  });
+};
+
+export const useUpdateLessonMutation = () => {
+  const { t } = useTranslation();
+  const queryClient = useQueryClient();
+  const entityLabel = t('entity_lesson');
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      payload
+    }: {
+      id: number;
+      payload: LearningManagement.UpdateLessonPayload;
+    }) => updateLesson(id, payload),
+    onSuccess: lesson => {
+      queryClient.invalidateQueries({ queryKey: LESSON_QUERY_KEYS.lists() });
+      if (lesson.id != null) {
+        queryClient.setQueryData(LESSON_QUERY_KEYS.detail(lesson.id), lesson);
+      }
+      toast.success(t('mutation_success_update', { entity: entityLabel }));
+    },
+    onError: error => {
+      toast.error(
+        `${t('mutation_error_update', { entity: entityLabel })}: ${(error as Error).message}`
+      );
+    }
+  });
+};
+
+export const useDeleteLessonMutation = () => {
+  const { t } = useTranslation();
+  const queryClient = useQueryClient();
+  const entityLabel = t('entity_lesson');
+
+  return useMutation({
+    mutationFn: deleteLesson,
+    onSuccess: (_, lessonId) => {
+      queryClient.invalidateQueries({ queryKey: LESSON_QUERY_KEYS.lists() });
+      queryClient.removeQueries({ queryKey: LESSON_QUERY_KEYS.detail(lessonId) });
+      toast.success(t('mutation_success_delete', { entity: entityLabel }));
+    },
+    onError: error => {
+      toast.error(
+        `${t('mutation_error_delete', { entity: entityLabel })}: ${(error as Error).message}`
+      );
+    }
+  });
+};

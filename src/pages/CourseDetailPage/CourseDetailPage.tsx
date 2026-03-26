@@ -1,41 +1,39 @@
 'use client';
 
+import { useCourseQuery } from '@/api/course-management';
+import { useLessonsQuery } from '@/api/lesson-management';
 import { AppLayout } from '@/components/shared';
 import Icons from '@/components/Icons';
 
 gsap.registerPlugin(useGSAP);
-
-// Mock data - replace with API call
-const mockCourses: Record<number, LearningManagement.Course> = {
-  1: {
-    id: 1,
-    title: 'Daily Vocabulary',
-    description: 'Build your vocabulary with 50 essential words per day',
-    icon: '📘',
-    progress: 65,
-    lessons: [
-      { id: 101, title: 'Common Verbs', wordCount: 20, completed: true, words: [] },
-      { id: 102, title: 'Advanced Adjectives', wordCount: 25, completed: false, words: [] }
-    ]
-  },
-  2: {
-    id: 2,
-    title: 'Business English',
-    description: 'Professional vocabulary for workplace communication',
-    icon: '💼',
-    progress: 40,
-    lessons: [{ id: 201, title: 'Meeting Vocabulary', wordCount: 30, completed: false, words: [] }]
-  }
-};
 
 const CourseDetailPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { courseId } = useParams({ from: '/courses/$courseId' });
   const pageRef = useRef<HTMLDivElement>(null);
+  const numericCourseId = Number(courseId);
 
-  const course = mockCourses[parseInt(courseId)];
-  const lessons = course?.lessons ?? [];
+  const {
+    data: course,
+    isLoading: isCourseLoading,
+    isError: isCourseError,
+    error: courseError
+  } = useCourseQuery(numericCourseId);
+
+  const {
+    data: lessonsResponse,
+    isLoading: isLessonsLoading,
+    isError: isLessonsError,
+    error: lessonsError
+  } = useLessonsQuery({
+    courseId: numericCourseId,
+    sortBy: 'order',
+    sortOrder: 'asc',
+    take: 100
+  });
+
+  const lessons = lessonsResponse?.data ?? course?.lessons ?? [];
 
   useGSAP(
     () => {
@@ -51,12 +49,36 @@ const CourseDetailPage = () => {
     { scope: pageRef }
   );
 
-  if (!course) {
+  if (Number.isNaN(numericCourseId)) {
     return (
       <AppLayout>
         <div className='flex items-center justify-center h-screen'>
           <div className='text-center'>
             <p className='text-muted-foreground'>{t('learning_select_course')}</p>
+          </div>
+        </div>
+      </AppLayout>
+    );
+  }
+
+  if (isCourseLoading) {
+    return (
+      <AppLayout>
+        <div className='flex items-center justify-center h-screen'>
+          <Icons.LoaderCircleIcon className='h-6 w-6 animate-spin text-primary' />
+        </div>
+      </AppLayout>
+    );
+  }
+
+  if (isCourseError || !course) {
+    return (
+      <AppLayout>
+        <div className='flex items-center justify-center h-screen'>
+          <div className='text-center'>
+            <p className='text-muted-foreground'>
+              {`${t('mutation_error_create', { entity: t('entity_course') })}: ${(courseError as Error)?.message || ''}`}
+            </p>
           </div>
         </div>
       </AppLayout>
@@ -94,12 +116,14 @@ const CourseDetailPage = () => {
                 <div className='flex-1 max-w-xs'>
                   <div className='flex justify-between mb-2'>
                     <span className='text-sm font-semibold'>{t('learning_completion')}</span>
-                    <span className='text-sm font-semibold text-primary'>{course.progress}%</span>
+                    <span className='text-sm font-semibold text-primary'>
+                      {course.progress ?? 0}%
+                    </span>
                   </div>
                   <div className='w-full h-3 bg-primary/20 rounded-full overflow-hidden'>
                     <div
                       className='h-full bg-gradient-to-r from-primary to-accent'
-                      style={{ width: `${course.progress}%` }}
+                      style={{ width: `${course.progress ?? 0}%` }}
                     />
                   </div>
                 </div>
@@ -112,6 +136,29 @@ const CourseDetailPage = () => {
 
           <div>
             <h2 className='text-2xl font-bold mb-6'>{t('learning_lessons')}</h2>
+
+            {isLessonsLoading && (
+              <Card className='p-6 mb-4'>
+                <div className='flex items-center gap-2 text-sm text-muted-foreground'>
+                  <Icons.LoaderCircleIcon className='h-4 w-4 animate-spin' />
+                  Loading lessons...
+                </div>
+              </Card>
+            )}
+
+            {isLessonsError && (
+              <Card className='p-6 mb-4'>
+                <p className='text-sm text-destructive'>
+                  {`${t('mutation_error_create', { entity: t('entity_lesson') })}: ${(lessonsError as Error).message}`}
+                </p>
+              </Card>
+            )}
+
+            {!isLessonsLoading && !isLessonsError && lessons.length === 0 && (
+              <Card className='p-6 mb-4'>
+                <p className='text-sm text-muted-foreground'>{t('learning_select_lesson')}</p>
+              </Card>
+            )}
 
             <div className='space-y-4'>
               {lessons.map(lesson => (

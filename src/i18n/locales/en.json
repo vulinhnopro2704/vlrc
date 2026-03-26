@@ -167,5 +167,15 @@
   "learning_c1": "C1 - Advanced",
   "learning_pronunciation": "Pronunciation",
   "learning_example": "Example",
-  "learning_flip_to_reveal": "Flip to reveal"
+  "learning_flip_to_reveal": "Flip to reveal",
+  "entity_resource": "resource",
+  "entity_course": "course",
+  "entity_lesson": "lesson",
+  "entity_word": "word",
+  "mutation_success_create": "Created {{entity}} successfully.",
+  "mutation_success_update": "Updated {{entity}} successfully.",
+  "mutation_success_delete": "Deleted {{entity}} successfully.",
+  "mutation_error_create": "Failed to create {{entity}}.",
+  "mutation_error_update": "Failed to update {{entity}}.",
+  "mutation_error_delete": "Failed to delete {{entity}}."
 }

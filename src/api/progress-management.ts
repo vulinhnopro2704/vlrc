@@ -1,3 +1,5 @@
+import { HTTPError } from 'ky';
+import { useMutation } from '@tanstack/react-query';
 import apiClient from './api-client';
 
 // ── Progress ──
@@ -32,3 +34,64 @@ export const getMyWords = (params?: Progress.WordQueryParams) =>
     .json<App.CursorPaginationResponse<Progress.WordProgress>>();
 
 export const getStats = () => apiClient.get('progress/stats').json<Progress.LearningStats>();
+
+// ── TanStack Mutations ──
+
+export const useReviewWordMutation = () => {
+  const { t } = useTranslation();
+  const entityLabel = t('entity_word');
+
+  return useMutation({
+    mutationFn: reviewWord,
+    onSuccess: () => {
+      toast.success(t('mutation_success_update', { entity: entityLabel }));
+    },
+    onError: error => {
+      toast.error(
+        `${t('mutation_error_update', { entity: entityLabel })}: ${(error as Error).message}`
+      );
+    }
+  });
+};
+
+export const useCompleteLessonMutation = () => {
+  const { t } = useTranslation();
+  const entityLabel = t('entity_lesson');
+
+  return useMutation({
+    mutationFn: completeLesson,
+    onSuccess: () => {
+      toast.success(t('mutation_success_update', { entity: entityLabel }));
+    },
+    onError: error => {
+      toast.error(
+        `${t('mutation_error_update', { entity: entityLabel })}: ${(error as Error).message}`
+      );
+    }
+  });
+};
+
+export const useReviewWordWithLessonUnlockMutation = (lessonId: number) => {
+  const { t } = useTranslation();
+  const entityLabel = t('entity_word');
+
+  return useMutation({
+    mutationFn: async (payload: Progress.ReviewWordPayload) => {
+      try {
+        return await reviewWord(payload);
+      } catch (error) {
+        if (error instanceof HTTPError && error.response.status === 404) {
+          await completeLesson(lessonId);
+          return reviewWord(payload);
+        }
+
+        throw error;
+      }
+    },
+    onError: error => {
+      toast.error(
+        `${t('mutation_error_update', { entity: entityLabel })}: ${(error as Error).message}`
+      );
+    }
+  });
+};
