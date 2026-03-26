@@ -1344,7 +1344,6 @@ export {
   FileUploadDropzone as Dropzone,
   FileUploadTrigger as Trigger,
   FileUploadList as List,
-  FileUploadItem as Item,
   FileUploadItemPreview as ItemPreview,
   FileUploadItemMetadata as ItemMetadata,
   FileUploadItemProgress as ItemProgress,

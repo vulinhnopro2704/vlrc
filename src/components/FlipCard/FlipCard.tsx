@@ -134,13 +134,13 @@ function Root({
       : '';
 
   const sceneClassName = cn(
-    'scene perspective-[1000px] w-64 h-64 group',
+    'scene perspective-[1000px] relative group',
     classNames?.scene,
     className
   );
 
   const cardClassName = cn(
-    'card transform-3d w-full h-full transition-transform',
+    'card transform-3d w-full h-full transition-transform grid [&>*]:[grid-area:1/1]',
     'duration-(--flip-duration) ease-(--flip-easing)',
     rotationClass,
     hoverRotationClass,
@@ -178,7 +178,7 @@ function Front({ children, className, classNames, ref, ...props }: FlipCardFaceP
   const { isFlipped } = useFlipCardContext();
 
   const faceClassName = cn(
-    'face bg-amber-500 absolute front w-full h-full backface-hidden translate-z-5',
+    'face front w-full h-full backface-hidden translate-z-5',
     classNames?.face,
     className
   );
@@ -202,7 +202,7 @@ function Back({ children, className, classNames, ref, ...props }: FlipCardFacePr
   const rotationClass = direction === 'horizontal' ? 'rotate-y-180' : 'rotate-x-180';
 
   const faceClassName = cn(
-    'face bg-blue-500 absolute back w-full h-full backface-hidden translate-z-5',
+    'face back w-full h-full backface-hidden translate-z-5',
     rotationClass,
     classNames?.face,
     className

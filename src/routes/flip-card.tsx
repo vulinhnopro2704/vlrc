@@ -76,8 +76,7 @@ function Page() {
           isFlipped={controlled}
           onFlipChange={setControlled}
           flipOnHover={false}
-          animation={{ duration: 500, easing: 'cubic-bezier(0.4, 0, 0.2, 1)' }}
-        >
+          animation={{ duration: 500, easing: 'cubic-bezier(0.4, 0, 0.2, 1)' }}>
           <FlipCard.Front className='bg-linear-to-br from-purple-500 to-pink-500'>
             <div className='w-full h-full flex items-center justify-center text-white text-2xl font-bold'>
               💜 Front
@@ -89,7 +88,7 @@ function Page() {
             </div>
           </FlipCard.Back>
         </FlipCard.Root>
-        <Button onClick={() => setControlled((prev) => !prev)} variant='outline'>
+        <Button onClick={() => setControlled(prev => !prev)} variant='outline'>
           External Toggle: {controlled ? 'Unflip' : 'Flip'}
         </Button>
       </section>
@@ -113,4 +112,3 @@ function Page() {
     </div>
   );
 }
-

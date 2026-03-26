@@ -2,6 +2,7 @@ import './integrations/sentry';
 import './i18n';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import * as Sentry from '@sentry/react';
 import './index.css';
@@ -33,6 +34,7 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
+        <Toaster />
         <RouterProvider router={router} />
       </QueryClientProvider>
     </StrictMode>

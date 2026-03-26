@@ -47,7 +47,8 @@ export default defineConfig({
             'useRouter',
             'useRouteLoaderData',
             'useIsPending',
-            'useLink'
+            'useLink',
+            'Link'
           ]
         },
         {
@@ -255,7 +256,7 @@ export default defineConfig({
           type: true
         }
       ],
-      dirs: ['src/components/ui', 'src/lib'],
+      dirs: ['src/components/ui', 'src/lib', 'src/shared'],
       dts: 'src/types/auto-imports.d.ts'
     })
   ],

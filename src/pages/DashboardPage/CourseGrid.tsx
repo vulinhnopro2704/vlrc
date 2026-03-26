@@ -11,6 +11,7 @@ export const CourseGrid = ({
 }) => {
   const { t } = useTranslation();
   const gridRef = useRef<HTMLDivElement>(null);
+  const lessons = course?.lessons ?? [];
 
   useGSAP(
     () => {
@@ -45,7 +46,7 @@ export const CourseGrid = ({
       </div>
 
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-        {course.lessons.map(lesson => (
+        {lessons.map(lesson => (
           <div
             key={lesson.id}
             className='lesson-card group cursor-pointer'

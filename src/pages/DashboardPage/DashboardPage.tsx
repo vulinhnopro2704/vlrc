@@ -1,6 +1,7 @@
 'use client';
 
 import { AppLayout } from '@/components/shared';
+import { useNavigate } from '@tanstack/react-router';
 import Icons from '@/components/Icons';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import { Sidebar } from './Sidebar';
@@ -97,6 +98,7 @@ const mockLeaderboard = [
 
 const DashboardPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [selectedCourse, setSelectedCourse] = useState<LearningManagement.Course | null>(
     mockCourses[0]
   );
@@ -159,6 +161,27 @@ const DashboardPage = () => {
 
         {/* Main Content */}
         <div ref={mainContentRef} className='flex-1 space-y-6'>
+          {/* Quick Navigation */}
+          <div className='flex gap-2 mb-6'>
+            <button
+              onClick={() => navigate({ to: '/courses' })}
+              className='px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary text-sm font-medium transition-colors'
+            >
+              Browse Courses
+            </button>
+            <button
+              onClick={() =>
+                navigate({
+                  to: '/courses/$courseId',
+                  params: { courseId: '1' },
+                })
+              }
+              className='px-4 py-2 rounded-lg bg-accent/10 hover:bg-accent/20 text-accent text-sm font-medium transition-colors'
+            >
+              Course Details
+            </button>
+          </div>
+
           {/* Stats Cards */}
           <div className='grid grid-cols-1 md:grid-cols-4 gap-4 content-section'>
             <div className='stats-card'>
@@ -216,7 +239,10 @@ const DashboardPage = () => {
               )}
 
               {selectedLesson ? (
-                <FlashcardViewer words={selectedLesson.words} lessonTitle={selectedLesson.title} />
+                <FlashcardViewer
+                  words={selectedLesson.words ?? []}
+                  lessonTitle={selectedLesson.title}
+                />
               ) : (
                 <CourseGrid course={selectedCourse} onSelectLesson={handleSelectLesson} />
               )}
