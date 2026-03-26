@@ -1,9 +1,7 @@
 'use client';
 
 import { AppLayout } from '@/components/shared';
-import { useNavigate } from '@tanstack/react-router';
 import Icons from '@/components/Icons';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 import { Sidebar } from './Sidebar';
 import { CourseGrid } from './CourseGrid';
 import { FlashcardViewer } from './FlashcardViewer';
@@ -163,23 +161,32 @@ const DashboardPage = () => {
         <div ref={mainContentRef} className='flex-1 space-y-6'>
           {/* Quick Navigation */}
           <div className='flex gap-2 mb-6'>
-            <button
+            <Button
+              variant='outline'
+              size='sm'
+              onClick={() => navigate({ to: '/' })}
+              className='bg-muted hover:bg-muted/80'>
+              Back to Landing
+            </Button>
+            <Button
+              variant='outline'
+              size='sm'
               onClick={() => navigate({ to: '/courses' })}
-              className='px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary text-sm font-medium transition-colors'
-            >
+              className='border-primary/20 bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary'>
               Browse Courses
-            </button>
-            <button
+            </Button>
+            <Button
+              variant='outline'
+              size='sm'
               onClick={() =>
                 navigate({
                   to: '/courses/$courseId',
-                  params: { courseId: '1' },
+                  params: { courseId: '1' }
                 })
               }
-              className='px-4 py-2 rounded-lg bg-accent/10 hover:bg-accent/20 text-accent text-sm font-medium transition-colors'
-            >
+              className='border-accent/20 bg-accent/10 text-accent hover:bg-accent/20 hover:text-accent'>
               Course Details
-            </button>
+            </Button>
           </div>
 
           {/* Stats Cards */}
@@ -227,12 +234,14 @@ const DashboardPage = () => {
               {/* Breadcrumb Navigation */}
               {selectedLesson && (
                 <div className='flex items-center gap-2 text-sm text-muted-foreground mb-4'>
-                  <button
+                  <Button
+                    variant='ghost'
+                    size='sm'
                     onClick={() => setSelectedLesson(null)}
-                    className='text-primary hover:underline font-medium flex items-center gap-1'>
+                    className='h-auto p-0 text-primary hover:underline hover:bg-transparent font-medium flex items-center gap-1'>
                     <Icons.ChevronLeft className='h-4 w-4' />
                     {selectedCourse?.title}
-                  </button>
+                  </Button>
                   <span>/</span>
                   <span className='font-medium text-foreground'>{selectedLesson.title}</span>
                 </div>

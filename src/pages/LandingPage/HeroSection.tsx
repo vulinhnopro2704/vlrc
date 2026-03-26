@@ -1,12 +1,8 @@
-import { Button } from '@/components/ui/button';
 import Icons from '@/components/Icons';
-import { useTranslation } from 'react-i18next';
-import { useRef } from 'react';
-import { useGSAP } from '@gsap/react';
-import gsap from 'gsap';
 
 export const HeroSection = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const descRef = useRef<HTMLParagraphElement>(null);
@@ -65,11 +61,19 @@ export const HeroSection = () => {
           </p>
 
           <div ref={ctaRef} className='flex flex-col items-center justify-center gap-4 sm:flex-row'>
-            <Button variant='accent-cta' size='2xl' className='font-semibold'>
+            <Button
+              variant='accent-cta'
+              size='2xl'
+              className='font-semibold'
+              onClick={() => navigate({ to: '/login' })}>
               {t('start_free')}
               <Icons.ChevronRight className='ml-2 h-5 w-5' />
             </Button>
-            <Button variant='outline' size='2xl' className='dark:bg-card/50 dark:backdrop-blur-sm'>
+            <Button
+              variant='outline'
+              size='2xl'
+              className='dark:bg-card/50 dark:backdrop-blur-sm'
+              onClick={() => navigate({ to: '/dashboard' })}>
               <Icons.Play className='mr-2 h-5 w-5' />
               {t('watch_how')}
             </Button>

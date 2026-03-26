@@ -1,16 +1,8 @@
-import { Button } from '@/components/ui/button';
 import Icons from '@/components/Icons';
-import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
 
 export const Header = () => {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const [isDark, setIsDark] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -51,9 +43,13 @@ export const Header = () => {
       }`}>
       <div className='container mx-auto px-4'>
         <div className='flex h-16 items-center justify-between'>
-          <a href='/' className='text-2xl font-bold text-primary'>
+          <Button
+            variant='ghost'
+            size='sm'
+            onClick={() => navigate({ to: '/' })}
+            className='h-auto p-0 text-2xl font-bold text-primary hover:bg-transparent'>
             VLRC
-          </a>
+          </Button>
 
           <div className='flex items-center gap-2'>
             <DropdownMenu>
@@ -80,7 +76,7 @@ export const Header = () => {
               <span className='sr-only'>Toggle theme</span>
             </Button>
 
-            <Button variant='accent' className='ml-2'>
+            <Button variant='accent' className='ml-2' onClick={() => navigate({ to: '/login' })}>
               {t('start_free')}
             </Button>
           </div>

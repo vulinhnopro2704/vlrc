@@ -4,6 +4,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export const CTASection = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -41,7 +42,11 @@ export const CTASection = () => {
           <p className='mx-auto mb-8 max-w-2xl text-lg text-primary-foreground/80'>
             {t('cta_subtitle')}
           </p>
-          <Button variant='accent-cta' size='2xl' className='font-semibold'>
+          <Button
+            variant='accent-cta'
+            size='2xl'
+            className='font-semibold'
+            onClick={() => navigate({ to: '/login' })}>
             {t('cta_button')}
             <Icons.ChevronRight className='ml-2 h-5 w-5' />
           </Button>
