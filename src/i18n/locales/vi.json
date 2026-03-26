@@ -197,5 +197,15 @@
   "learning_c1": "C1 - Nâng cao",
   "learning_pronunciation": "Phát âm",
   "learning_example": "Ví dụ",
-  "learning_flip_to_reveal": "Lật để xem"
+  "learning_flip_to_reveal": "Lật để xem",
+  "entity_resource": "dữ liệu",
+  "entity_course": "khóa học",
+  "entity_lesson": "bài học",
+  "entity_word": "từ vựng",
+  "mutation_success_create": "Tạo {{entity}} thành công.",
+  "mutation_success_update": "Cập nhật {{entity}} thành công.",
+  "mutation_success_delete": "Xóa {{entity}} thành công.",
+  "mutation_error_create": "Không thể tạo {{entity}}.",
+  "mutation_error_update": "Không thể cập nhật {{entity}}.",
+  "mutation_error_delete": "Không thể xóa {{entity}}."
 }

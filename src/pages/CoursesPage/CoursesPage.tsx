@@ -1,34 +1,22 @@
 'use client';
 
+import { useCoursesQuery } from '@/api/course-management';
 import { AppLayout } from '@/components/shared';
 import Icons from '@/components/Icons';
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-// Mock data - replace with API call
-const mockCourses: LearningManagement.Course[] = [
-  {
-    id: 1,
-    title: 'Daily Vocabulary',
-    description: 'Build your vocabulary with 50 essential words per day',
-    icon: '📘',
-    progress: 65,
-    lessons: []
-  },
-  {
-    id: 2,
-    title: 'Business English',
-    description: 'Professional vocabulary for workplace communication',
-    icon: '💼',
-    progress: 40,
-    lessons: []
-  }
-];
-
 const CoursesPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const pageRef = useRef<HTMLDivElement>(null);
+  const { data, isLoading, isError, error } = useCoursesQuery({
+    sortBy: 'order',
+    sortOrder: 'asc',
+    take: 50
+  });
+
+  const courses = data?.data ?? [];
 
   useGSAP(
     () => {
@@ -66,7 +54,26 @@ const CoursesPage = () => {
           </div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-            {mockCourses.map(course => (
+            {isLoading &&
+              Array.from({ length: 3 }).map((_, index) => (
+                <Card key={index} className='h-[260px] animate-pulse border bg-card/40' />
+              ))}
+
+            {isError && (
+              <Card className='col-span-full p-6'>
+                <p className='text-sm text-destructive'>
+                  {`${t('mutation_error_create', { entity: t('entity_course') })}: ${(error as Error).message}`}
+                </p>
+              </Card>
+            )}
+
+            {!isLoading && !isError && courses.length === 0 && (
+              <Card className='col-span-full p-6'>
+                <p className='text-sm text-muted-foreground'>{t('learning_select_course')}</p>
+              </Card>
+            )}
+
+            {courses.map(course => (
               <div key={course.id} className='course-card'>
                 <Card className='glass-card h-full flex flex-col cursor-pointer hover:shadow-lg hover:glow-primary transition-all duration-300 hover:border-primary/50 overflow-hidden'>
                   <div className='p-6 flex-1 flex flex-col'>

@@ -1,15 +1,13 @@
 'use client';
 
+import { useLessonQuery } from '@/api/lesson-management';
+import { useCompleteLessonMutation } from '@/api/progress-management';
+import { useWordsQuery } from '@/api/word-management';
 import { AppLayout } from '@/components/shared';
 import { ExerciseManager } from '@/components/Exercises';
-import { commonVerbsLesson } from '@/data/seedVocabularies';
 import Icons from '@/components/Icons';
 
 gsap.registerPlugin(useGSAP);
-
-const mockLessons: Record<number, LearningManagement.Lesson> = {
-  101: commonVerbsLesson
-};
 
 const exerciseTypes: LearningManagement.ActivityType[] = [
   'flip',
@@ -25,9 +23,30 @@ const LessonPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentExerciseTypeIndex, setCurrentExerciseTypeIndex] = useState(0);
   const pageRef = useRef<HTMLDivElement>(null);
+  const numericLessonId = Number(lessonId);
 
-  const lesson = mockLessons[parseInt(lessonId)];
-  const lessonWords = lesson?.words ?? [];
+  const {
+    data: lesson,
+    isLoading: isLessonLoading,
+    isError: isLessonError,
+    error: lessonError
+  } = useLessonQuery(numericLessonId);
+
+  const {
+    data: wordsResponse,
+    isLoading: isWordsLoading,
+    isError: isWordsError,
+    error: wordsError
+  } = useWordsQuery({
+    lessonId: numericLessonId,
+    sortBy: 'word',
+    sortOrder: 'asc',
+    take: 100
+  });
+
+  const completeLessonMutation = useCompleteLessonMutation();
+
+  const lessonWords = wordsResponse?.data ?? lesson?.words ?? [];
   const currentWord = lessonWords[currentIndex];
   const currentExerciseType = exerciseTypes[currentExerciseTypeIndex];
 
@@ -52,6 +71,8 @@ const LessonPage = () => {
 
   const handleExerciseComplete = (result: LearningManagement.ActivityResult) => {
     void result;
+    const isLastExerciseForWord = currentExerciseTypeIndex === exerciseTypes.length - 1;
+    const isLastWord = currentIndex === lessonWords.length - 1;
 
     if (currentExerciseTypeIndex < exerciseTypes.length - 1) {
       setCurrentExerciseTypeIndex(currentExerciseTypeIndex + 1);
@@ -59,7 +80,9 @@ const LessonPage = () => {
       setCurrentIndex(currentIndex + 1);
       setCurrentExerciseTypeIndex(0);
     } else {
-      // Lesson completed
+      if (isLastExerciseForWord && isLastWord && !completeLessonMutation.isPending) {
+        completeLessonMutation.mutate(numericLessonId);
+      }
     }
   };
 
@@ -81,11 +104,33 @@ const LessonPage = () => {
     }
   };
 
-  if (!lesson || !currentWord) {
+  if (Number.isNaN(numericLessonId)) {
     return (
       <AppLayout>
         <div className='flex items-center justify-center h-screen'>
           <p className='text-muted-foreground'>{t('learning_select_lesson')}</p>
+        </div>
+      </AppLayout>
+    );
+  }
+
+  if (isLessonLoading || isWordsLoading) {
+    return (
+      <AppLayout>
+        <div className='flex items-center justify-center h-screen'>
+          <Icons.LoaderCircleIcon className='h-6 w-6 animate-spin text-primary' />
+        </div>
+      </AppLayout>
+    );
+  }
+
+  if (isLessonError || isWordsError || !lesson || !currentWord) {
+    return (
+      <AppLayout>
+        <div className='flex items-center justify-center h-screen'>
+          <p className='text-muted-foreground'>
+            {`${t('mutation_error_create', { entity: t('entity_lesson') })}: ${((lessonError || wordsError) as Error)?.message || ''}`}
+          </p>
         </div>
       </AppLayout>
     );
@@ -101,14 +146,21 @@ const LessonPage = () => {
                 variant='ghost'
                 size='sm'
                 className='h-auto p-0 text-primary hover:bg-transparent'
-                onClick={() =>
-                  navigate({
-                    to: '/courses/$courseId',
-                    params: { courseId: '1' }
-                  })
-                }>
+                onClick={() => {
+                  const courseId = Number(lesson.courseId);
+
+                  if (Number.isFinite(courseId) && courseId > 0) {
+                    navigate({
+                      to: '/courses/$courseId',
+                      params: { courseId: String(courseId) }
+                    });
+                    return;
+                  }
+
+                  navigate({ to: '/courses' });
+                }}>
                 <Icons.ChevronLeft className='h-4 w-4 mr-1' />
-                Daily Vocabulary
+                {lesson.course?.title || t('learning_courses')}
               </Button>
               <span>/</span>
               <span className='font-medium text-foreground'>{lesson.title}</span>
@@ -117,11 +169,26 @@ const LessonPage = () => {
             <div className='mt-4 flex items-center justify-between'>
               <div>
                 <h1 className='text-3xl font-bold mb-2'>{lesson.title}</h1>
-                <p className='text-muted-foreground'>{lesson.wordCount} vocabulary items</p>
+                <p className='text-muted-foreground'>{lessonWords.length} vocabulary items</p>
               </div>
               <span className='text-sm font-semibold text-primary'>
                 {currentIndex + 1} / {lessonWords.length}
               </span>
+            </div>
+
+            <div className='mt-4 flex flex-wrap gap-2'>
+              {lessonWords.map((word, index) => (
+                <Button
+                  key={word.id ?? `${word.word}-${index}`}
+                  size='sm'
+                  variant={index === currentIndex ? 'default' : 'outline'}
+                  onClick={() => {
+                    setCurrentIndex(index);
+                    setCurrentExerciseTypeIndex(0);
+                  }}>
+                  {word.word}
+                </Button>
+              ))}
             </div>
           </div>
 
@@ -129,7 +196,7 @@ const LessonPage = () => {
             <div className='w-full'>
               <div className='mb-4 flex items-center justify-between text-sm'>
                 <span className='text-muted-foreground'>
-                  Word {currentIndex + 1} / {lesson?.wordCount || 0}
+                  Word {currentIndex + 1} / {lessonWords.length}
                 </span>
                 <span className='text-muted-foreground'>
                   Exercise {currentExerciseTypeIndex + 1} / {exerciseTypes.length}
