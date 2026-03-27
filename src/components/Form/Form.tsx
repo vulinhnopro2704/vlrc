@@ -6,16 +6,44 @@ import {
   FieldError,
   FieldLabel
 } from '@components/ui/field';
-import FilePondUploader from '@components/FilePondUploader';
 import { Select, SelectContent, SelectTrigger, SelectValue } from '@components/ui/select';
 import type { FormBaseProps, FormControlFunc, FormInputExtraProps } from './types';
 import type { FieldPath } from 'react-hook-form';
-import type { FilePond } from 'filepond';
 import Icons from '../Icons';
 import { cn } from '@/lib/utils';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_PATTERN = /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/;
+
+const getAutoComplete = (name: string, htmlType?: string) => {
+  const normalizedName = name.toLowerCase();
+
+  if (htmlType === 'password') {
+    if (normalizedName.includes('confirm') || normalizedName.includes('new')) {
+      return 'new-password';
+    }
+
+    return 'current-password';
+  }
+
+  if (htmlType === 'email' || normalizedName.includes('email')) {
+    return 'email';
+  }
+
+  if (htmlType === 'tel' || normalizedName.includes('phone')) {
+    return 'tel';
+  }
+
+  if (normalizedName.includes('name')) {
+    return 'name';
+  }
+
+  if (normalizedName.includes('username')) {
+    return 'username';
+  }
+
+  return undefined;
+};
 
 export function FormBase<
   TFieldValues extends FieldValues = FieldValues,
@@ -123,10 +151,12 @@ export const FormInput: FormControlFunc<FormInputExtraProps> = ({
   leftIcon,
   rightIcon,
   disabled,
+  autoComplete,
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = props.htmlType === 'password';
+  const resolvedAutoComplete = autoComplete ?? getAutoComplete(String(props.name), props.htmlType);
 
   return (
     <FormBase {...props}>
@@ -140,6 +170,7 @@ export const FormInput: FormControlFunc<FormInputExtraProps> = ({
           <Input
             {...field}
             type={isPassword && showPassword ? 'text' : props.htmlType}
+            autoComplete={resolvedAutoComplete}
             placeholder={placeholder}
             disabled={disabled}
             className={cn(
@@ -201,32 +232,6 @@ export const FormCheckbox: FormControlFunc = props => {
     <FormBase {...props} horizontal controlFirst>
       {({ onChange, value, ...field }) => (
         <Checkbox {...field} checked={value} onCheckedChange={onChange} />
-      )}
-    </FormBase>
-  );
-};
-
-export const FormFileUpload: FormControlFunc<{
-  maxFiles?: number;
-  acceptedFileTypes?: string[];
-  server?: FilePond['server'];
-  instantUpload?: boolean;
-  filePondProps?: Omit<
-    FilePond,
-    'files' | 'onupdatefiles' | 'allowMultiple' | 'maxFiles' | 'acceptedFileTypes' | 'disabled'
-  >;
-}> = ({ maxFiles, acceptedFileTypes, server, instantUpload, filePondProps, ...props }) => {
-  return (
-    <FormBase {...props}>
-      {field => (
-        <FilePondUploader
-          {...field}
-          maxFiles={maxFiles}
-          acceptedFileTypes={acceptedFileTypes}
-          server={server}
-          instantUpload={instantUpload}
-          filePondProps={filePondProps}
-        />
       )}
     </FormBase>
   );

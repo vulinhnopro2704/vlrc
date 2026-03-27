@@ -1,6 +1,6 @@
-import { HTTPError } from 'ky';
 import { useMutation } from '@tanstack/react-query';
 import apiClient from './api-client';
+import { hasApiErrorStatus } from './api-error';
 
 // ── Progress ──
 
@@ -80,7 +80,7 @@ export const useReviewWordWithLessonUnlockMutation = (lessonId: number) => {
       try {
         return await reviewWord(payload);
       } catch (error) {
-        if (error instanceof HTTPError && error.response.status === 404) {
+        if (hasApiErrorStatus(error, 404)) {
           await completeLesson(lessonId);
           return reviewWord(payload);
         }
