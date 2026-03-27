@@ -1,4 +1,4 @@
-import { HTTPError } from 'ky';
+import { applyApiFieldErrors, getErrorMessage } from '@/api/api-error';
 import { FormInput } from '@/components/Form';
 import Icons from '@/components/Icons';
 import LiquidBackground from '@/components/LiquidBackground';
@@ -53,23 +53,6 @@ const RegisterPage = () => {
     { scope: formRef }
   );
 
-  const parseErrorMessage = async (error: unknown) => {
-    if (error instanceof HTTPError) {
-      try {
-        const payload = await error.response.json<{ message?: string }>();
-        return payload?.message || 'Registration failed. Please try again.';
-      } catch (parseError) {
-        console.error('Failed to parse register error response:', parseError);
-      }
-    }
-
-    if (error instanceof Error) {
-      return error.message;
-    }
-
-    return 'Registration failed. Please try again.';
-  };
-
   const registerMutation = useMutation({
     mutationFn: (payload: Auth.RegisterPayload) => registerApi(payload),
     onSuccess: response => {
@@ -77,11 +60,10 @@ const RegisterPage = () => {
       toast.success('Registration successful');
       navigate({ to: '/dashboard' });
     },
-    onError: async error => {
-      const message = await parseErrorMessage(error);
+    onError: error => {
+      applyApiFieldErrors(error, setError);
 
-      setError('email', { type: 'server', message });
-      setError('password', { type: 'server', message });
+      const message = getErrorMessage(error, 'Registration failed. Please try again.');
       toast.error(message);
     }
   });

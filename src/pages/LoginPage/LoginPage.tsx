@@ -1,4 +1,4 @@
-import { HTTPError } from 'ky';
+import { getErrorMessage } from '@/api/api-error';
 import { FormInput, FormCheckbox } from '@/components/Form';
 import Icons from '@/components/Icons';
 import LiquidBackground from '@/components/LiquidBackground';
@@ -19,7 +19,7 @@ const LoginPage = () => {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
 
-  const { control, handleSubmit, setError } = useForm<Auth.LoginFormData>({
+  const { control, handleSubmit } = useForm<Auth.LoginFormData>({
     defaultValues: {
       email: '',
       password: '',
@@ -49,37 +49,14 @@ const LoginPage = () => {
     { scope: formRef }
   );
 
-  const parseErrorMessage = async (error: unknown) => {
-    if (error instanceof HTTPError) {
-      try {
-        const payload = await error.response.json<{ message?: string }>();
-        return payload?.message || 'Login failed. Please try again.';
-      } catch (parseError) {
-        console.error('Failed to parse login error response:', parseError);
-      }
-    }
-
-    if (error instanceof Error) {
-      return error.message;
-    }
-
-    return 'Login failed. Please try again.';
-  };
-
   const loginMutation = useMutation({
-    mutationFn: (payload: Auth.LoginPayload) => login(payload),
+    mutationFn: login,
     onSuccess: response => {
       queryClient.setQueryData(AUTH_ME_QUERY_KEY, response.user);
       toast.success('Login successful');
       navigate({ to: '/dashboard' });
     },
-    onError: async error => {
-      const message = await parseErrorMessage(error);
-
-      setError('email', { type: 'server', message });
-      setError('password', { type: 'server', message });
-      toast.error(message);
-    }
+    onError: error => toast.error(getErrorMessage(error, t('auth_login_failed')))
   });
 
   const onSubmit = async (data: Auth.LoginFormData) => {

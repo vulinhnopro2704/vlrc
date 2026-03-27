@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@english-learning/api-error-types": "^0.1.0",
     "@gsap/react": "^2.1.2",
     "@hookform/resolvers": "^5.2.2",
     "@pqina/filepond-plugin-image-editor": "^9.2.4",

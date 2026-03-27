@@ -2,26 +2,27 @@
 
 import Icons from '@/components/Icons';
 
-interface FillBlankExerciseProps {
+export default function FillBlankExercise({
+  vocabulary: { id, example = '', word, pronunciation, meaning },
+  onComplete
+}: {
   vocabulary: LearningManagement.Word;
   onComplete?: (result: LearningManagement.ActivityResult) => void;
-}
-
-export default function FillBlankExercise({ vocabulary, onComplete }: FillBlankExerciseProps) {
+}) {
   const [userInput, setUserInput] = useState('');
   const [feedback, setFeedback] = useState<'idle' | 'correct' | 'incorrect'>('idle');
   const [attempts, setAttempts] = useState(0);
   const [startTime] = useState(Date.now());
 
   const handleSubmit = () => {
-    const isCorrect = userInput.toLowerCase().trim() === vocabulary.word.toLowerCase();
+    const isCorrect = userInput.toLowerCase().trim() === word.toLowerCase();
     setFeedback(isCorrect ? 'correct' : 'incorrect');
     setAttempts(attempts + 1);
 
     if (isCorrect && onComplete) {
       setTimeout(() => {
         onComplete({
-          wordId: vocabulary.id,
+          wordId: id,
           activityType: 'fill-blank',
           isCorrect: true,
           timeSpent: Date.now() - startTime,
@@ -40,12 +41,10 @@ export default function FillBlankExercise({ vocabulary, onComplete }: FillBlankE
             Fill in the blank with the correct word
           </p>
           <div className='text-lg leading-relaxed text-center'>
-            <p className='mb-6'>
-              {vocabulary.example?.replace(new RegExp(vocabulary.word, 'i'), ' _____ ')}
-            </p>
+            <p className='mb-6'>{example.replace(new RegExp(word, 'i'), ' _____ ')}</p>
             <div className='bg-primary/10 rounded-lg p-4 mb-4'>
               <p className='text-sm text-muted-foreground mb-2'>Hint:</p>
-              <p className='text-base font-medium'>/{vocabulary.pronunciation}/</p>
+              <p className='text-base font-medium'>/{pronunciation}/</p>
             </div>
           </div>
         </div>
@@ -62,7 +61,7 @@ export default function FillBlankExercise({ vocabulary, onComplete }: FillBlankE
         {feedback === 'correct' && (
           <div className='p-3 rounded-lg bg-green-500/20 text-green-700 dark:text-green-400 flex items-center gap-2'>
             <Icons.CheckCircle2 className='h-5 w-5' />
-            Correct! The answer is: {vocabulary.word}
+            Correct! The answer is: {word}
           </div>
         )}
         {feedback === 'incorrect' && (
@@ -81,7 +80,7 @@ export default function FillBlankExercise({ vocabulary, onComplete }: FillBlankE
       </div>
       <div className='text-center text-sm text-muted-foreground'>
         <p>Attempts: {attempts}</p>
-        <p className='text-xs'>Meaning: {vocabulary.meaning}</p>
+        <p className='text-xs'>Meaning: {meaning}</p>
       </div>
     </div>
   );

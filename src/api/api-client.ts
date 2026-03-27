@@ -1,6 +1,13 @@
 import ky from 'ky';
+import { AppApiError, normalizeApiErrorResponse } from './api-error';
 
 const API_BASE_URL = import.meta.env.VITE_BACKEND_API_URL;
+
+const isAuthEndpoint = (url: URL) =>
+  url.pathname.includes('/auth/login') ||
+  url.pathname.includes('/auth/register') ||
+  url.pathname.includes('/auth/me') ||
+  url.pathname.includes('/auth/logout');
 
 const apiClient = ky.create({
   prefixUrl: API_BASE_URL,
@@ -14,18 +21,44 @@ const apiClient = ky.create({
   hooks: {
     afterResponse: [
       async (request, _options, response) => {
-        const url = new URL(request.url);
-        const isAuthEndpoint =
-          url.pathname.includes('/auth/login') ||
-          url.pathname.includes('/auth/register') ||
-          url.pathname.includes('/auth/me') ||
-          url.pathname.includes('/auth/logout');
+        if (response.ok) {
+          return response;
+        }
 
-        if (response.status === 401 && !isAuthEndpoint) {
+        let payload: unknown;
+        try {
+          payload = await response.clone().json();
+        } catch {
+          payload = undefined;
+        }
+
+        const normalizedError = normalizeApiErrorResponse(payload, response.status);
+
+        if (normalizedError.traceId) {
+          console.error(
+            `[API_ERROR][${normalizedError.traceId}] ${normalizedError.errorCode}: ${normalizedError.message}`
+          );
+        }
+
+        const url = new URL(request.url);
+        if (
+          normalizedError.statusCode === 401 &&
+          !isAuthEndpoint(url) &&
+          typeof window !== 'undefined'
+        ) {
           window.location.href = '/login';
         }
 
-        return response;
+        throw new AppApiError({
+          statusCode: normalizedError.statusCode,
+          errorCode: normalizedError.errorCode,
+          message: normalizedError.message,
+          errors: normalizedError.errors,
+          timestamp: normalizedError.timestamp,
+          traceId: normalizedError.traceId,
+          url: request.url,
+          response
+        });
       }
     ]
   }

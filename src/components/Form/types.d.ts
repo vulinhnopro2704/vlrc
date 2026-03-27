@@ -18,6 +18,7 @@ export type FormInputExtraProps = {
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
   disabled?: boolean;
+  autoComplete?: string;
 };
 
 export type FormBaseProps<
