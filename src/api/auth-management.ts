@@ -3,7 +3,7 @@ import apiClient from './api-client';
 // ── Auth ──
 
 export const login = (payload: Auth.LoginPayload) =>
-  apiClient.post('auth/loginn', { json: payload }).json<Auth.AuthResponse>();
+  apiClient.post('auth/login', { json: payload }).json<Auth.AuthResponse>();
 
 export const register = (payload: Auth.RegisterPayload) =>
   apiClient.post('auth/register', { json: payload }).json<Auth.AuthResponse>();
