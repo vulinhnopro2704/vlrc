@@ -1,6 +1,5 @@
 'use client';
 
-import { AppLayout } from '@/components/shared';
 import Icons from '@/components/Icons';
 import { CourseGrid } from './CourseGrid';
 import { FlashcardViewer } from './FlashcardViewer';
@@ -140,118 +139,116 @@ const DashboardPage = () => {
   );
 
   return (
-    <AppLayout>
-      <div ref={dashboardRef} className='w-full px-4 py-6 sm:px-6 lg:px-8'>
-        <div ref={mainContentRef} className='space-y-6'>
-          <div className='rounded-2xl border bg-card/50 p-4 sm:p-5'>
-            <div className='flex flex-wrap items-center gap-2 text-sm text-muted-foreground'>
-              <Button
-                variant='ghost'
-                size='sm'
-                onClick={() => navigate({ to: '/' })}
-                className='h-auto p-0 text-primary hover:bg-transparent'>
-                <Icons.ChevronLeft className='h-4 w-4 mr-1' />
-                Landing
-              </Button>
-              <span>/</span>
-              <span className='font-medium text-foreground'>Dashboard</span>
-              {selectedCourse && (
-                <>
-                  <span>/</span>
-                  <span className='font-medium text-foreground'>{selectedCourse.title}</span>
-                </>
-              )}
-              {selectedLesson && (
-                <>
-                  <span>/</span>
-                  <span className='font-medium text-foreground'>{selectedLesson.title}</span>
-                </>
-              )}
-            </div>
-
-            <div className='mt-4 flex flex-wrap gap-2'>
-              <Button
-                variant='outline'
-                size='sm'
-                onClick={() => {
-                  setSelectedLesson(null);
-                  navigate({ to: '/courses' });
-                }}>
-                Browse Courses
-              </Button>
-            </div>
+    <div ref={dashboardRef} className='w-full px-4 py-6 sm:px-6 lg:px-8'>
+      <div ref={mainContentRef} className='space-y-6'>
+        <div className='rounded-2xl border bg-card/50 p-4 sm:p-5'>
+          <div className='flex flex-wrap items-center gap-2 text-sm text-muted-foreground'>
+            <Button
+              variant='ghost'
+              size='sm'
+              onClick={() => navigate({ to: '/' })}
+              className='h-auto p-0 text-primary hover:bg-transparent'>
+              <Icons.ChevronLeft className='h-4 w-4 mr-1' />
+              Landing
+            </Button>
+            <span>/</span>
+            <span className='font-medium text-foreground'>Dashboard</span>
+            {selectedCourse && (
+              <>
+                <span>/</span>
+                <span className='font-medium text-foreground'>{selectedCourse.title}</span>
+              </>
+            )}
+            {selectedLesson && (
+              <>
+                <span>/</span>
+                <span className='font-medium text-foreground'>{selectedLesson.title}</span>
+              </>
+            )}
           </div>
 
-          <div className='grid grid-cols-1 md:grid-cols-4 gap-4 content-section'>
-            <div className='stats-card'>
-              <StatsCard
-                icon={<Icons.Brain className='h-5 w-5' />}
-                label={t('learning_memory_strength')}
-                value='78'
-                unit='%'
-                color='primary'
-              />
-            </div>
-            <div className='stats-card'>
-              <StatsCard
-                icon={<Icons.Flame className='h-5 w-5' />}
-                label={t('learning_streak')}
-                value='12'
-                unit={t('days')}
-                color='accent'
-              />
-            </div>
-            <div className='stats-card'>
-              <StatsCard
-                icon={<Icons.CheckCircle2 className='h-5 w-5' />}
-                label='Words Learned'
-                value='284'
-                color='success'
-              />
-            </div>
-            <div className='stats-card'>
-              <StatsCard
-                icon={<Icons.BarChart3 className='h-5 w-5' />}
-                label={t('learning_today')}
-                value='28'
-                unit='cards'
-                color='primary'
-              />
-            </div>
-          </div>
-
-          <div className='grid grid-cols-1 lg:grid-cols-3 gap-6 content-section'>
-            <div className='lg:col-span-2 space-y-6'>
-              {selectedLesson && (
-                <div className='flex items-center gap-2 text-sm text-muted-foreground mb-4'>
-                  <Button
-                    variant='ghost'
-                    size='sm'
-                    onClick={() => setSelectedLesson(null)}
-                    className='h-auto p-0 text-primary hover:underline hover:bg-transparent font-medium flex items-center gap-1'>
-                    <Icons.ChevronLeft className='h-4 w-4' />
-                    {selectedCourse?.title}
-                  </Button>
-                  <span>/</span>
-                  <span className='font-medium text-foreground'>{selectedLesson.title}</span>
-                </div>
-              )}
-
-              {selectedLesson ? (
-                <FlashcardViewer
-                  words={selectedLesson.words ?? []}
-                  lessonTitle={selectedLesson.title}
-                />
-              ) : (
-                <CourseGrid course={selectedCourse} onSelectLesson={handleSelectLesson} />
-              )}
-            </div>
-
-            <Leaderboard users={mockLeaderboard} currentUserRank={4} />
+          <div className='mt-4 flex flex-wrap gap-2'>
+            <Button
+              variant='outline'
+              size='sm'
+              onClick={() => {
+                setSelectedLesson(null);
+                navigate({ to: '/courses' });
+              }}>
+              Browse Courses
+            </Button>
           </div>
         </div>
+
+        <div className='grid grid-cols-1 md:grid-cols-4 gap-4 content-section'>
+          <div className='stats-card'>
+            <StatsCard
+              icon={<Icons.Brain className='h-5 w-5' />}
+              label={t('learning_memory_strength')}
+              value='78'
+              unit='%'
+              color='primary'
+            />
+          </div>
+          <div className='stats-card'>
+            <StatsCard
+              icon={<Icons.Flame className='h-5 w-5' />}
+              label={t('learning_streak')}
+              value='12'
+              unit={t('days')}
+              color='accent'
+            />
+          </div>
+          <div className='stats-card'>
+            <StatsCard
+              icon={<Icons.CheckCircle2 className='h-5 w-5' />}
+              label='Words Learned'
+              value='284'
+              color='success'
+            />
+          </div>
+          <div className='stats-card'>
+            <StatsCard
+              icon={<Icons.BarChart3 className='h-5 w-5' />}
+              label={t('learning_today')}
+              value='28'
+              unit='cards'
+              color='primary'
+            />
+          </div>
+        </div>
+
+        <div className='grid grid-cols-1 lg:grid-cols-3 gap-6 content-section'>
+          <div className='lg:col-span-2 space-y-6'>
+            {selectedLesson && (
+              <div className='flex items-center gap-2 text-sm text-muted-foreground mb-4'>
+                <Button
+                  variant='ghost'
+                  size='sm'
+                  onClick={() => setSelectedLesson(null)}
+                  className='h-auto p-0 text-primary hover:underline hover:bg-transparent font-medium flex items-center gap-1'>
+                  <Icons.ChevronLeft className='h-4 w-4' />
+                  {selectedCourse?.title}
+                </Button>
+                <span>/</span>
+                <span className='font-medium text-foreground'>{selectedLesson.title}</span>
+              </div>
+            )}
+
+            {selectedLesson ? (
+              <FlashcardViewer
+                words={selectedLesson.words ?? []}
+                lessonTitle={selectedLesson.title}
+              />
+            ) : (
+              <CourseGrid course={selectedCourse} onSelectLesson={handleSelectLesson} />
+            )}
+          </div>
+
+          <Leaderboard users={mockLeaderboard} currentUserRank={4} />
+        </div>
       </div>
-    </AppLayout>
+    </div>
   );
 };
 

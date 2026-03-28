@@ -57,13 +57,13 @@ const RegisterPage = () => {
     mutationFn: (payload: Auth.RegisterPayload) => registerApi(payload),
     onSuccess: response => {
       queryClient.setQueryData(AUTH_ME_QUERY_KEY, response.user);
-      toast.success('Registration successful');
+      toast.success(t('auth_register_success'));
       navigate({ to: '/dashboard' });
     },
     onError: error => {
       applyApiFieldErrors(error, setError);
 
-      const message = getErrorMessage(error, 'Registration failed. Please try again.');
+      const message = getErrorMessage(error, t('auth_register_failed'));
       toast.error(message);
     }
   });

@@ -21,6 +21,7 @@ export const DataTableRowActions = <TData,>({
   row: Row<TData>;
   table: Table<TData>;
 }) => {
+  const { t } = useTranslation();
   const meta = table.options.meta as
     | { getRowActions?: DataTableActionsConfig<TData>['getRowActions'] }
     | undefined;
@@ -35,12 +36,12 @@ export const DataTableRowActions = <TData,>({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant='ghost' className='h-8 w-8 p-0'>
-          <span className='sr-only'>Open menu</span>
+          <span className='sr-only'>{t('datatable_open_menu')}</span>
           <MoreHorizontal />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end'>
-        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuLabel>{t('datatable_actions')}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {map(items, item => (
           <DropdownMenuItem

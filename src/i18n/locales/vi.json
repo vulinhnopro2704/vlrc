@@ -207,5 +207,6 @@
   "mutation_success_delete": "Xóa {{entity}} thành công.",
   "mutation_error_create": "Không thể tạo {{entity}}.",
   "mutation_error_update": "Không thể cập nhật {{entity}}.",
-  "mutation_error_delete": "Không thể xóa {{entity}}."
+  "mutation_error_delete": "Không thể xóa {{entity}}.",
+  "study": "Học"
 }

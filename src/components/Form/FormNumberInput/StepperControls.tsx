@@ -15,10 +15,12 @@ export function StepperControls({
   disableIncrement,
   disableDecrement
 }: StepperControlsProps) {
+  const { t } = useTranslation();
+
   return (
     <div className='flex flex-col ml-1'>
       <Button
-        aria-label='Increase value'
+        aria-label={t('form_increase_value')}
         className='px-2 h-5 rounded-l-none rounded-br-none border-input border-l-0 border-b-[0.5px] focus-visible:relative'
         variant='outline'
         onClick={onIncrement}
@@ -27,7 +29,7 @@ export function StepperControls({
         <ChevronUp size={15} />
       </Button>
       <Button
-        aria-label='Decrease value'
+        aria-label={t('form_decrease_value')}
         className='px-2 h-5 rounded-l-none rounded-tr-none border-input border-l-0 border-t-[0.5px] focus-visible:relative'
         variant='outline'
         onClick={onDecrement}

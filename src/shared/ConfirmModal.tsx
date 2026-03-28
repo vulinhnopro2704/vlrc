@@ -23,15 +23,18 @@ export default function ConfirmationDialog({
   onConfirm,
   title,
   message,
-  confirmText = 'Xác nhận',
-  cancelText = 'Hủy',
+  confirmText,
+  cancelText,
   type = 'warning',
   isLoading = false
 }: ConfirmationDialogProps) {
+  const { t } = useTranslation();
   const [isRendered, setIsRendered] = useState(isOpen);
   const containerRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
+  const resolvedConfirmText = confirmText ?? t('confirm_confirm');
+  const resolvedCancelText = cancelText ?? t('confirm_cancel');
 
   useEffect(() => {
     if (isOpen) {
@@ -210,7 +213,7 @@ export default function ConfirmationDialog({
           onClick={handleClose}
           disabled={isLoading}
           className='absolute right-4 top-4 rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed'
-          aria-label='Đóng'>
+          aria-label={t('confirm_close')}>
           <XIcon className='h-5 w-5' />
         </button>
 
@@ -230,7 +233,7 @@ export default function ConfirmationDialog({
             onClick={handleClose}
             disabled={isLoading}
             className='rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'>
-            {cancelText}
+            {resolvedCancelText}
           </button>
           <button
             type='button'
@@ -260,10 +263,10 @@ export default function ConfirmationDialog({
                     d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
                   />
                 </svg>
-                Đang xử lý...
+                {t('confirm_processing')}
               </span>
             ) : (
-              confirmText
+              resolvedConfirmText
             )}
           </button>
         </div>

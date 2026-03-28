@@ -177,5 +177,6 @@
   "mutation_success_delete": "Deleted {{entity}} successfully.",
   "mutation_error_create": "Failed to create {{entity}}.",
   "mutation_error_update": "Failed to update {{entity}}.",
-  "mutation_error_delete": "Failed to delete {{entity}}."
+  "mutation_error_delete": "Failed to delete {{entity}}.",
+  "study": "Study"
 }

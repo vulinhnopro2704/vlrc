@@ -1,4 +1,3 @@
-import { AppLayout } from '@/components/shared';
 import { HeroSection } from './HeroSection';
 import { ValuePropsSection } from './ValuePropsSection';
 import { HowItWorksSection } from './HowItWorksSection';
@@ -39,19 +38,17 @@ const LandingPage = () => {
   );
 
   return (
-    <AppLayout>
-      <div ref={mainRef} className='min-h-screen bg-background'>
-        <HeroSection />
-        <ValuePropsSection />
-        <HowItWorksSection />
-        <ScienceSection />
-        <ExperienceSection />
-        <DashboardSection />
-        <TestimonialsSection />
-        <FAQSection />
-        <CTASection />
-      </div>
-    </AppLayout>
+    <div ref={mainRef} className='min-h-screen bg-background'>
+      <HeroSection />
+      <ValuePropsSection />
+      <HowItWorksSection />
+      <ScienceSection />
+      <ExperienceSection />
+      <DashboardSection />
+      <TestimonialsSection />
+      <FAQSection />
+      <CTASection />
+    </div>
   );
 };
 

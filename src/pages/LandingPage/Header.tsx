@@ -60,7 +60,7 @@ export const Header = () => {
               <DropdownMenuTrigger asChild>
                 <Button variant='ghost' size='icon' className='h-9 w-9'>
                   <Icons.Globe className='h-4 w-4' />
-                  <span className='sr-only'>Change language</span>
+                  <span className='sr-only'>{t('header_change_language')}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -77,7 +77,7 @@ export const Header = () => {
 
             <Button variant='ghost' size='icon' onClick={toggleTheme} className='h-9 w-9'>
               {isDark ? <Icons.Sun className='h-4 w-4' /> : <Icons.Moon className='h-4 w-4' />}
-              <span className='sr-only'>Toggle theme</span>
+              <span className='sr-only'>{t('header_toggle_theme')}</span>
             </Button>
 
             <Button variant='accent' className='ml-2'>

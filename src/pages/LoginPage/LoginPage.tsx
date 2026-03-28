@@ -53,7 +53,7 @@ const LoginPage = () => {
     mutationFn: login,
     onSuccess: response => {
       queryClient.setQueryData(AUTH_ME_QUERY_KEY, response.user);
-      toast.success('Login successful');
+      toast.success(t('auth_login_success'));
       navigate({ to: '/dashboard' });
     },
     onError: error => toast.error(getErrorMessage(error, t('auth_login_failed')))
