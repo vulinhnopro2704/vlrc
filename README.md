@@ -76,5 +76,3 @@ export default defineConfig([
 
 ## My reference Document
 
-- https://pqina.nl/filepond/docs/api/instance/properties/
--
