@@ -98,7 +98,7 @@ export const Sidebar = ({ courses, selectedCourse, onSelectCourse }: SidebarProp
       <div className='p-4 border-t border-border'>
         <Button className='w-full rounded-lg gap-2' variant='outline'>
           <Icons.Plus className='h-4 w-4' />
-          Add Course
+          {t('learning_add_course')}
         </Button>
       </div>
     </div>

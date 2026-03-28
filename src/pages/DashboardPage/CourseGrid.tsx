@@ -69,7 +69,7 @@ export const CourseGrid = ({
                       </h3>
                       <p className='text-sm text-muted-foreground flex items-center gap-1'>
                         <Icons.Brain className='h-4 w-4' />
-                        {wordCount} words
+                        {wordCount} {t('learning_vocabulary')}
                       </p>
                     </div>
                     {isLearned && <Icons.CheckCircle2 className='h-6 w-6 text-primary' />}
@@ -89,7 +89,7 @@ export const CourseGrid = ({
                     className='w-full rounded-lg gap-2'
                     variant={isLearned ? 'outline' : 'default'}>
                     <Icons.Play className='h-4 w-4' />
-                    {isLearned ? t('learning_continue') : 'Start'}
+                    {isLearned ? t('learning_continue') : t('learning_start_course')}
                   </Button>
                 </Card>
               );

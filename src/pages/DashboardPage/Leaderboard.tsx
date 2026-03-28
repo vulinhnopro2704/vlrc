@@ -71,7 +71,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ users, currentUserRank
                     <p className='text-sm font-semibold truncate'>{user.name}</p>
                     <p className='text-xs text-muted-foreground flex items-center gap-1'>
                       <Icons.Flame className='h-3 w-3' />
-                      {user.streak} day
+                      {user.streak} {t('days')}
                     </p>
                   </div>
                 </div>

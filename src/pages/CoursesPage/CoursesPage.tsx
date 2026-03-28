@@ -69,7 +69,7 @@ const CoursesPage = () => {
               onClick={() => navigate({ to: '/dashboard' })}
               className='h-auto p-0 text-primary hover:bg-transparent'>
               <Icons.ChevronLeft className='h-4 w-4 mr-1' />
-              Dashboard
+              {t('learning_dashboard')}
             </Button>
             <span>/</span>
             <span className='font-medium text-foreground'>{t('learning_courses')}</span>

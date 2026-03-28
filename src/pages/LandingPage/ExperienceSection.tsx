@@ -157,10 +157,10 @@ const TabPreview = ({ tab }: { tab: TabType }) => {
           ))}
         </div>
         <div className='space-y-2'>
-          <p className='text-sm text-foreground'>{'The most important thing is to...'}</p>
+          <p className='text-sm text-foreground'>{t('experience_listening_preview_sentence')}</p>
           <input
             type='text'
-            placeholder='Type what you hear...'
+            placeholder={t('experience_listening_preview_placeholder')}
             className='w-full rounded-lg border bg-background/50 px-3 py-2 text-sm dark:bg-background/30'
             disabled
           />
@@ -174,12 +174,14 @@ const TabPreview = ({ tab }: { tab: TabType }) => {
       <div className='rounded-xl bg-linear-to-r from-primary/10 to-primary/5 p-6 dark:from-primary/20 dark:to-primary/10'>
         <div className='space-y-4'>
           <p className='text-foreground leading-relaxed'>
-            {'Climate change is one of the most pressing issues of our time.'}
+            {t('experience_reading_preview_sentence')}
           </p>
           <div className='rounded-lg bg-primary/10 p-3 dark:bg-primary/20'>
-            <p className='text-sm text-primary font-medium mb-1'>Translation:</p>
+            <p className='text-sm text-primary font-medium mb-1'>
+              {t('experience_reading_preview_label')}
+            </p>
             <p className='text-sm text-muted-foreground'>
-              {'Biến đổi khí hậu là một trong những vấn đề cấp bách nhất của thời đại chúng ta.'}
+              {t('experience_reading_preview_translation')}
             </p>
           </div>
         </div>
@@ -191,7 +193,7 @@ const TabPreview = ({ tab }: { tab: TabType }) => {
     <div className='rounded-xl bg-linear-to-r from-blue-500/10 to-blue-500/5 p-6 dark:from-blue-500/20 dark:to-blue-500/10'>
       <div className='mb-4'>
         <span className='text-sm font-medium text-muted-foreground'>
-          Topic: Benefits of learning English
+          {t('experience_writing_preview_topic')}
         </span>
       </div>
       <div className='space-y-3'>
@@ -201,7 +203,7 @@ const TabPreview = ({ tab }: { tab: TabType }) => {
       </div>
       <div className='mt-4 rounded-lg bg-green-500/10 p-3 dark:bg-green-500/20'>
         <p className='text-xs text-green-600 dark:text-green-400 font-medium'>
-          AI Feedback: Good structure! Consider adding more examples.
+          {t('experience_writing_preview_feedback')}
         </p>
       </div>
     </div>

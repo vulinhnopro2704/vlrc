@@ -149,10 +149,10 @@ const DashboardPage = () => {
               onClick={() => navigate({ to: '/' })}
               className='h-auto p-0 text-primary hover:bg-transparent'>
               <Icons.ChevronLeft className='h-4 w-4 mr-1' />
-              Landing
+              {t('header_home')}
             </Button>
             <span>/</span>
-            <span className='font-medium text-foreground'>Dashboard</span>
+            <span className='font-medium text-foreground'>{t('learning_dashboard')}</span>
             {selectedCourse && (
               <>
                 <span>/</span>
@@ -175,7 +175,7 @@ const DashboardPage = () => {
                 setSelectedLesson(null);
                 navigate({ to: '/courses' });
               }}>
-              Browse Courses
+              {t('dashboard_browse_courses')}
             </Button>
           </div>
         </div>
@@ -202,7 +202,7 @@ const DashboardPage = () => {
           <div className='stats-card'>
             <StatsCard
               icon={<Icons.CheckCircle2 className='h-5 w-5' />}
-              label='Words Learned'
+              label={t('words_learned_stat')}
               value='284'
               color='success'
             />
@@ -212,7 +212,7 @@ const DashboardPage = () => {
               icon={<Icons.BarChart3 className='h-5 w-5' />}
               label={t('learning_today')}
               value='28'
-              unit='cards'
+              unit={t('learning_cards')}
               color='primary'
             />
           </div>

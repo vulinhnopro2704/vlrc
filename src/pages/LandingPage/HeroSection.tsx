@@ -108,7 +108,7 @@ const FlashcardPreview = () => {
         </span>
       </div>
       <div className='mb-4 text-center'>
-        <p className='text-2xl font-bold text-foreground'>Perseverance</p>
+        <p className='text-2xl font-bold text-foreground'>{t('hero_preview_word')}</p>
         <p className='mt-2 text-muted-foreground'>{t('meaning')}</p>
       </div>
       <div className='flex justify-center gap-2'>
@@ -145,7 +145,7 @@ const AudioPreview = () => {
           />
         ))}
       </div>
-      <div className='text-center text-sm text-muted-foreground'>{'The key to success is...'}</div>
+      <div className='text-center text-sm text-muted-foreground'>{t('audio_preview_sentence')}</div>
     </div>
   );
 };

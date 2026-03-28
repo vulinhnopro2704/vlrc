@@ -162,7 +162,7 @@ const CourseDetailPage = () => {
             <Card className='p-6 mb-4'>
               <div className='flex items-center gap-2 text-sm text-muted-foreground'>
                 <Icons.LoaderCircleIcon className='h-4 w-4 animate-spin' />
-                Loading lessons...
+                {t('course_detail_loading_lessons')}
               </div>
             </Card>
           )}

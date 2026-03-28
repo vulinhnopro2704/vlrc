@@ -69,15 +69,15 @@ export const FlashcardViewer = ({
         <div className='flex-1 flex gap-2'>
           <Button variant='ghost' className='flex-1 rounded-lg'>
             <Icons.Undo2 className='h-4 w-4 mr-2' />
-            Forgot
+            {t('forgot')}
           </Button>
           <Button variant='ghost' className='flex-1 rounded-lg'>
             <Icons.Clock className='h-4 w-4 mr-2' />
-            Hard
+            {t('hard')}
           </Button>
           <Button variant='default' className='flex-1 rounded-lg'>
             <Icons.CheckCircle2 className='h-4 w-4 mr-2' />
-            Good
+            {t('good')}
           </Button>
         </div>
 

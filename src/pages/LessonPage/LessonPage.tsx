@@ -190,7 +190,9 @@ const LessonPage = () => {
           <div className='mt-4 flex items-center justify-between'>
             <div>
               <h1 className='text-3xl font-bold mb-2'>{lesson.title}</h1>
-              <p className='text-muted-foreground'>{size(lessonWords)} vocabulary items</p>
+              <p className='text-muted-foreground'>
+                {t('lesson_vocabulary_items', { count: size(lessonWords) })}
+              </p>
             </div>
             <span className='text-sm font-semibold text-primary'>
               {currentIndex + 1} / {size(lessonWords)}
@@ -217,10 +219,16 @@ const LessonPage = () => {
           <div className='w-full'>
             <div className='mb-4 flex items-center justify-between text-sm'>
               <span className='text-muted-foreground'>
-                Word {currentIndex + 1} / {size(lessonWords)}
+                {t('lesson_progress_word', {
+                  current: currentIndex + 1,
+                  total: size(lessonWords)
+                })}
               </span>
               <span className='text-muted-foreground'>
-                Exercise {currentExerciseTypeIndex + 1} / {size(exerciseTypes)}
+                {t('lesson_progress_exercise', {
+                  current: currentExerciseTypeIndex + 1,
+                  total: size(exerciseTypes)
+                })}
               </span>
             </div>
             <ExerciseManager
@@ -247,10 +255,10 @@ const LessonPage = () => {
             onClick={handlePrev}
             disabled={currentIndex === 0 && currentExerciseTypeIndex === 0}>
             <Icons.ChevronLeft className='h-4 w-4 mr-2' />
-            Previous
+            {t('lesson_prev')}
           </Button>
           <div className='text-center text-sm text-muted-foreground'>
-            {currentIndex + 1} of {size(lessonWords)}
+            {t('lesson_of_counter', { current: currentIndex + 1, total: size(lessonWords) })}
           </div>
           <Button
             onClick={handleNext}
@@ -258,7 +266,7 @@ const LessonPage = () => {
               currentIndex === size(lessonWords) - 1 &&
               currentExerciseTypeIndex === size(exerciseTypes) - 1
             }>
-            Next
+            {t('lesson_next')}
             <Icons.ChevronRight className='h-4 w-4 ml-2' />
           </Button>
         </div>
