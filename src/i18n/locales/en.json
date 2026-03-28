@@ -202,5 +202,17 @@
   "lesson_prev": "Previous",
   "lesson_next": "Next",
   "lesson_of_counter": "{{current}} of {{total}}",
+  "lesson_review": "Review",
+  "lesson_filter_search_title": "Search lesson by title...",
+  "lesson_filter_learned_top": "Learned lessons to top",
+  "lesson_filter_no_results": "No lessons match your filter.",
+  "lesson_review_modal_title": "Review: {{title}}",
+  "lesson_review_modal_description": "{{count}} words in this lesson",
+  "lesson_review_loading_words": "Loading lesson words...",
+  "lesson_review_empty_words": "No words found for this lesson.",
+  "lesson_submitting_completion": "Submitting lesson completion...",
+  "lesson_submit_failed": "Failed to submit lesson completion.",
+  "lesson_submit_retry_message": "Please retry submitting this lesson.",
+  "lesson_retry_submit": "Retry submit",
   "study": "Study"
 }

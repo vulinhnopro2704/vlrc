@@ -3,6 +3,7 @@
 import { useCourseQuery } from '@/api/course-management';
 import { useLessonsQuery } from '@/api/lesson-management';
 import Icons from '@/components/Icons';
+import LessonWordsModal from '@/modals/LessonWordsModal';
 
 gsap.registerPlugin(useGSAP);
 
@@ -11,6 +12,9 @@ const CourseDetailPage = () => {
   const navigate = useNavigate();
   const { courseId } = useParams({ from: '/_app/courses/$courseId' });
   const pageRef = useRef<HTMLDivElement>(null);
+  const [searchTitle, setSearchTitle] = useState('');
+  const [learnedFirst, setLearnedFirst] = useState(true);
+  const [reviewLesson, setReviewLesson] = useState<LearningManagement.Lesson | null>(null);
   const numericCourseId = Number(courseId);
 
   const {
@@ -36,6 +40,30 @@ const CourseDetailPage = () => {
     (get(lessonsResponse, 'data', null) as LearningManagement.Lesson[] | null) ??
     (get(course, 'lessons', []) as LearningManagement.Lesson[]) ??
     [];
+
+  const displayedLessons = useMemo(() => {
+    const normalizedQuery = searchTitle.trim().toLowerCase();
+
+    const filtered = filter(lessons, lesson => {
+      if (!normalizedQuery) {
+        return true;
+      }
+
+      return String(get(lesson, 'title', ''))
+        .toLowerCase()
+        .includes(normalizedQuery);
+    });
+
+    if (!learnedFirst) {
+      return filtered;
+    }
+
+    return [...filtered].sort((a, b) => {
+      const aLearned = (a.isLearned ?? a.completed ?? false) ? 1 : 0;
+      const bLearned = (b.isLearned ?? b.completed ?? false) ? 1 : 0;
+      return bLearned - aLearned;
+    });
+  }, [lessons, searchTitle, learnedFirst]);
 
   useGSAP(
     () => {
@@ -158,6 +186,26 @@ const CourseDetailPage = () => {
         <div>
           <h2 className='text-2xl font-bold mb-6'>{t('learning_lessons')}</h2>
 
+          <div className='mb-6 flex flex-col gap-3 rounded-xl border bg-card/30 p-4 md:flex-row md:items-center'>
+            <div className='relative flex-1'>
+              <Icons.Search className='pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground' />
+              <input
+                value={searchTitle}
+                onChange={e => setSearchTitle(e.target.value)}
+                placeholder={t('lesson_filter_search_title')}
+                className='h-9 w-full rounded-md border bg-background pl-9 pr-3 text-sm outline-hidden ring-offset-background placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
+              />
+            </div>
+            <Button
+              variant={learnedFirst ? 'default' : 'outline'}
+              size='sm'
+              className='md:min-w-52'
+              onClick={() => setLearnedFirst(prev => !prev)}>
+              <Icons.ChevronDown className='mr-2 h-4 w-4' />
+              {t('lesson_filter_learned_top')}
+            </Button>
+          </div>
+
           {isLessonsLoading && (
             <Card className='p-6 mb-4'>
               <div className='flex items-center gap-2 text-sm text-muted-foreground'>
@@ -175,14 +223,14 @@ const CourseDetailPage = () => {
             </Card>
           )}
 
-          {!isLessonsLoading && !isLessonsError && size(lessons) === 0 && (
+          {!isLessonsLoading && !isLessonsError && size(displayedLessons) === 0 && (
             <Card className='p-6 mb-4'>
-              <p className='text-sm text-muted-foreground'>{t('learning_select_lesson')}</p>
+              <p className='text-sm text-muted-foreground'>{t('lesson_filter_no_results')}</p>
             </Card>
           )}
 
           <div className='space-y-4'>
-            {map(lessons, lesson => (
+            {map(displayedLessons, lesson => (
               <div key={lesson.id} className='lesson-item'>
                 {(() => {
                   const isLearned = lesson.isLearned ?? lesson.completed ?? false;
@@ -204,16 +252,25 @@ const CourseDetailPage = () => {
                             {wordCount} {t('learning_vocabulary')}
                           </p>
                         </div>
-                        <Button
-                          onClick={() =>
-                            navigate({
-                              to: '/lessons/$lessonId',
-                              params: { lessonId: String(lesson.id) }
-                            })
-                          }
-                          className='group-hover:shadow-lg'>
-                          {t('study')}
-                        </Button>
+                        {isLearned ? (
+                          <Button
+                            variant='outline'
+                            onClick={() => setReviewLesson(lesson)}
+                            className='group-hover:shadow-lg'>
+                            {t('lesson_review')}
+                          </Button>
+                        ) : (
+                          <Button
+                            onClick={() =>
+                              navigate({
+                                to: '/lessons/$lessonId',
+                                params: { lessonId: String(lesson.id) }
+                              })
+                            }
+                            className='group-hover:shadow-lg'>
+                            {t('study')}
+                          </Button>
+                        )}
                       </div>
                     </Card>
                   );
@@ -223,6 +280,14 @@ const CourseDetailPage = () => {
           </div>
         </div>
       </div>
+
+      {reviewLesson && reviewLesson.id != null ? (
+        <LessonWordsModal
+          id={Number(reviewLesson.id)}
+          open
+          onCancel={() => setReviewLesson(null)}
+        />
+      ) : null}
     </main>
   );
 };

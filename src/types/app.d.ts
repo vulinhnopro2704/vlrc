@@ -3,8 +3,9 @@ declare namespace App {
 
   interface ModalProps<T = void> {
     id?: ID;
+    open: boolean;
     onCancel: () => void;
-    onSuccess: T extends void ? () => void : (data: T) => void;
+    onSuccess?: T extends void ? () => void : (data: T) => void;
   }
 
   interface Base {

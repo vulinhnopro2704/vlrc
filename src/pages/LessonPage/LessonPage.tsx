@@ -2,7 +2,9 @@
 
 import { useLessonQuery } from '@/api/lesson-management';
 import { useCompleteLessonMutation } from '@/api/lesson-management';
+import { LESSON_QUERY_KEYS } from '@/api/lesson-management';
 import { useWordsQuery } from '@/api/word-management';
+import { COURSE_QUERY_KEYS } from '@/api/course-management';
 import { ExerciseManager } from '@/components/Exercises';
 import Icons from '@/components/Icons';
 
@@ -18,9 +20,11 @@ const exerciseTypes: LearningManagement.ActivityType[] = [
 const LessonPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { lessonId } = useParams({ from: '/_app/lessons/$lessonId' });
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentExerciseTypeIndex, setCurrentExerciseTypeIndex] = useState(0);
+  const [completionError, setCompletionError] = useState<string | null>(null);
   const pageRef = useRef<HTMLDivElement>(null);
   const hasMistakeByWordRef = useRef<Record<string, boolean>>({});
   const numericLessonId = Number(lessonId);
@@ -52,6 +56,50 @@ const LessonPage = () => {
     [];
   const currentWord = lessonWords[currentIndex];
   const currentExerciseType = exerciseTypes[currentExerciseTypeIndex];
+
+  const submitLessonCompletion = () => {
+    if (completeLessonMutation.isPending) {
+      return;
+    }
+
+    const totalWords = size(lessonWords);
+    const wrongWords = reduce(
+      lessonWords,
+      (count, word) => {
+        const key = String(word.id ?? '');
+        return count + (hasMistakeByWordRef.current[key] ? 1 : 0);
+      },
+      0
+    );
+    const score = totalWords > 0 ? wrongWords / totalWords : 0;
+
+    setCompletionError(null);
+    completeLessonMutation.mutate(
+      { id: numericLessonId, score },
+      {
+        onSuccess: () => {
+          const courseId = Number(get(lesson, 'courseId'));
+
+          queryClient.invalidateQueries({ queryKey: LESSON_QUERY_KEYS.lists() });
+          queryClient.invalidateQueries({ queryKey: LESSON_QUERY_KEYS.detail(numericLessonId) });
+
+          if (Number.isFinite(courseId) && courseId > 0) {
+            queryClient.invalidateQueries({ queryKey: COURSE_QUERY_KEYS.detail(courseId) });
+            navigate({
+              to: '/courses/$courseId',
+              params: { courseId: String(courseId) }
+            });
+            return;
+          }
+
+          navigate({ to: '/courses' });
+        },
+        onError: error => {
+          setCompletionError((error as Error).message || t('lesson_submit_retry_message'));
+        }
+      }
+    );
+  };
 
   useEffect(() => {
     const page = get(pageRef, 'current');
@@ -95,18 +143,7 @@ const LessonPage = () => {
       setCurrentExerciseTypeIndex(0);
     } else {
       if (isLastExerciseForWord && isLastWord && !completeLessonMutation.isPending) {
-        const totalWords = wordsCount;
-        const wrongWords = reduce(
-          lessonWords,
-          (count, word) => {
-            const key = String(word.id ?? '');
-            return count + (hasMistakeByWordRef.current[key] ? 1 : 0);
-          },
-          0
-        );
-        const score = totalWords > 0 ? wrongWords / totalWords : 0;
-
-        completeLessonMutation.mutate({ id: numericLessonId, score });
+        submitLessonCompletion();
       }
     }
   };
@@ -248,6 +285,25 @@ const LessonPage = () => {
             />
           </div>
         </div>
+
+        {completeLessonMutation.isPending ? (
+          <div className='rounded-xl border bg-card/60 p-4 text-sm text-muted-foreground'>
+            <div className='flex items-center gap-2'>
+              <Icons.LoaderCircleIcon className='h-4 w-4 animate-spin text-primary' />
+              {t('lesson_submitting_completion')}
+            </div>
+          </div>
+        ) : null}
+
+        {completionError ? (
+          <div className='rounded-xl border border-destructive/30 bg-destructive/5 p-4'>
+            <p className='text-sm text-destructive'>{t('lesson_submit_failed')}</p>
+            <p className='mt-1 text-xs text-muted-foreground'>{completionError}</p>
+            <Button size='sm' className='mt-3' onClick={submitLessonCompletion}>
+              {t('lesson_retry_submit')}
+            </Button>
+          </div>
+        ) : null}
 
         <div className='flex items-center justify-between gap-4'>
           <Button

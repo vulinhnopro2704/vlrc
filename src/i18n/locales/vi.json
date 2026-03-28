@@ -232,5 +232,17 @@
   "lesson_prev": "Trước",
   "lesson_next": "Tiếp theo",
   "lesson_of_counter": "{{current}} trên {{total}}",
+  "lesson_review": "Ôn tập",
+  "lesson_filter_search_title": "Tìm bài học theo tiêu đề...",
+  "lesson_filter_learned_top": "Đưa bài đã học lên đầu",
+  "lesson_filter_no_results": "Không có bài học phù hợp với bộ lọc.",
+  "lesson_review_modal_title": "Ôn tập: {{title}}",
+  "lesson_review_modal_description": "{{count}} từ trong bài học này",
+  "lesson_review_loading_words": "Đang tải danh sách từ...",
+  "lesson_review_empty_words": "Không có từ nào trong bài học này.",
+  "lesson_submitting_completion": "Đang gửi kết quả hoàn thành bài học...",
+  "lesson_submit_failed": "Gửi hoàn thành bài học thất bại.",
+  "lesson_submit_retry_message": "Vui lòng thử gửi lại bài học.",
+  "lesson_retry_submit": "Thử gửi lại",
   "study": "Học"
 }
