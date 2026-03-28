@@ -23,6 +23,7 @@ const LessonPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentExerciseTypeIndex, setCurrentExerciseTypeIndex] = useState(0);
   const pageRef = useRef<HTMLDivElement>(null);
+  const hasMistakeByWordRef = useRef<Record<string, boolean>>({});
   const numericLessonId = Number(lessonId);
 
   const {
@@ -46,14 +47,18 @@ const LessonPage = () => {
 
   const completeLessonMutation = useCompleteLessonMutation();
 
-  const lessonWords = wordsResponse?.data ?? lesson?.words ?? [];
+  const lessonWords =
+    (get(wordsResponse, 'data', null) as LearningManagement.Word[] | null) ??
+    (get(lesson, 'words', []) as LearningManagement.Word[]) ??
+    [];
   const currentWord = lessonWords[currentIndex];
   const currentExerciseType = exerciseTypes[currentExerciseTypeIndex];
 
   useEffect(() => {
-    if (pageRef.current) {
+    const page = get(pageRef, 'current');
+    if (page) {
       gsap.fromTo(
-        pageRef.current,
+        page,
         { opacity: 0, y: 10 },
         { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
       );
@@ -62,26 +67,47 @@ const LessonPage = () => {
 
   useGSAP(
     () => {
-      if (pageRef.current) {
-        gsap.fromTo(pageRef.current, { opacity: 0 }, { opacity: 1, duration: 0.5 });
+      const page = get(pageRef, 'current');
+      if (page) {
+        gsap.fromTo(page, { opacity: 0 }, { opacity: 1, duration: 0.5 });
       }
     },
     { scope: pageRef }
   );
 
   const handleExerciseComplete = (result: LearningManagement.ActivityResult) => {
-    void result;
-    const isLastExerciseForWord = currentExerciseTypeIndex === exerciseTypes.length - 1;
-    const isLastWord = currentIndex === lessonWords.length - 1;
+    const resultWordId = get(result, 'wordId', get(currentWord, 'id'));
+    if (resultWordId != null) {
+      const key = String(resultWordId);
+      const hadMistakeThisExercise = result.attempts > 1;
+      hasMistakeByWordRef.current[key] =
+        Boolean(hasMistakeByWordRef.current[key]) || hadMistakeThisExercise;
+    }
 
-    if (currentExerciseTypeIndex < exerciseTypes.length - 1) {
+    const exerciseTypesCount = size(exerciseTypes);
+    const wordsCount = size(lessonWords);
+    const isLastExerciseForWord = currentExerciseTypeIndex === exerciseTypesCount - 1;
+    const isLastWord = currentIndex === wordsCount - 1;
+
+    if (currentExerciseTypeIndex < exerciseTypesCount - 1) {
       setCurrentExerciseTypeIndex(currentExerciseTypeIndex + 1);
-    } else if (lesson && currentIndex < lessonWords.length - 1) {
+    } else if (lesson && currentIndex < wordsCount - 1) {
       setCurrentIndex(currentIndex + 1);
       setCurrentExerciseTypeIndex(0);
     } else {
       if (isLastExerciseForWord && isLastWord && !completeLessonMutation.isPending) {
-        completeLessonMutation.mutate({ id: numericLessonId });
+        const totalWords = wordsCount;
+        const wrongWords = reduce(
+          lessonWords,
+          (count, word) => {
+            const key = String(word.id ?? '');
+            return count + (hasMistakeByWordRef.current[key] ? 1 : 0);
+          },
+          0
+        );
+        const score = totalWords > 0 ? wrongWords / totalWords : 0;
+
+        completeLessonMutation.mutate({ id: numericLessonId, score });
       }
     }
   };
@@ -91,14 +117,17 @@ const LessonPage = () => {
       setCurrentExerciseTypeIndex(currentExerciseTypeIndex - 1);
     } else if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
-      setCurrentExerciseTypeIndex(exerciseTypes.length - 1);
+      setCurrentExerciseTypeIndex(size(exerciseTypes) - 1);
     }
   };
 
   const handleNext = () => {
-    if (currentExerciseTypeIndex < exerciseTypes.length - 1) {
+    const exerciseTypesCount = size(exerciseTypes);
+    const wordsCount = size(lessonWords);
+
+    if (currentExerciseTypeIndex < exerciseTypesCount - 1) {
       setCurrentExerciseTypeIndex(currentExerciseTypeIndex + 1);
-    } else if (lesson && currentIndex < lessonWords.length - 1) {
+    } else if (lesson && currentIndex < wordsCount - 1) {
       setCurrentIndex(currentIndex + 1);
       setCurrentExerciseTypeIndex(0);
     }
@@ -129,7 +158,7 @@ const LessonPage = () => {
       <AppLayout>
         <div className='flex items-center justify-center h-screen'>
           <p className='text-muted-foreground'>
-            {`${t('mutation_error_create', { entity: t('entity_lesson') })}: ${((lessonError || wordsError) as Error)?.message || ''}`}
+            {`${t('mutation_error_create', { entity: t('entity_lesson') })}: ${get(lessonError || wordsError, 'message', '')}`}
           </p>
         </div>
       </AppLayout>
@@ -147,7 +176,7 @@ const LessonPage = () => {
                 size='sm'
                 className='h-auto p-0 text-primary hover:bg-transparent'
                 onClick={() => {
-                  const courseId = Number(lesson.courseId);
+                  const courseId = Number(get(lesson, 'courseId'));
 
                   if (Number.isFinite(courseId) && courseId > 0) {
                     navigate({
@@ -160,7 +189,7 @@ const LessonPage = () => {
                   navigate({ to: '/courses' });
                 }}>
                 <Icons.ChevronLeft className='h-4 w-4 mr-1' />
-                {lesson.course?.title || t('learning_courses')}
+                {(get(lesson, 'course.title') as string) || t('learning_courses')}
               </Button>
               <span>/</span>
               <span className='font-medium text-foreground'>{lesson.title}</span>
@@ -169,15 +198,15 @@ const LessonPage = () => {
             <div className='mt-4 flex items-center justify-between'>
               <div>
                 <h1 className='text-3xl font-bold mb-2'>{lesson.title}</h1>
-                <p className='text-muted-foreground'>{lessonWords.length} vocabulary items</p>
+                <p className='text-muted-foreground'>{size(lessonWords)} vocabulary items</p>
               </div>
               <span className='text-sm font-semibold text-primary'>
-                {currentIndex + 1} / {lessonWords.length}
+                {currentIndex + 1} / {size(lessonWords)}
               </span>
             </div>
 
             <div className='mt-4 flex flex-wrap gap-2'>
-              {lessonWords.map((word, index) => (
+              {map(lessonWords, (word, index) => (
                 <Button
                   key={word.id ?? `${word.word}-${index}`}
                   size='sm'
@@ -196,10 +225,10 @@ const LessonPage = () => {
             <div className='w-full'>
               <div className='mb-4 flex items-center justify-between text-sm'>
                 <span className='text-muted-foreground'>
-                  Word {currentIndex + 1} / {lessonWords.length}
+                  Word {currentIndex + 1} / {size(lessonWords)}
                 </span>
                 <span className='text-muted-foreground'>
-                  Exercise {currentExerciseTypeIndex + 1} / {exerciseTypes.length}
+                  Exercise {currentExerciseTypeIndex + 1} / {size(exerciseTypes)}
                 </span>
               </div>
               <ExerciseManager
@@ -215,7 +244,7 @@ const LessonPage = () => {
             <div className='w-full h-2 bg-primary/20 rounded-full overflow-hidden'>
               <div
                 className='h-full bg-gradient-to-r from-primary to-accent transition-all duration-300'
-                style={{ width: `${((currentIndex + 1) / lessonWords.length) * 100}%` }}
+                style={{ width: `${((currentIndex + 1) / Math.max(size(lessonWords), 1)) * 100}%` }}
               />
             </div>
           </div>
@@ -229,13 +258,13 @@ const LessonPage = () => {
               Previous
             </Button>
             <div className='text-center text-sm text-muted-foreground'>
-              {currentIndex + 1} of {lessonWords.length}
+              {currentIndex + 1} of {size(lessonWords)}
             </div>
             <Button
               onClick={handleNext}
               disabled={
-                currentIndex === lessonWords.length - 1 &&
-                currentExerciseTypeIndex === exerciseTypes.length - 1
+                currentIndex === size(lessonWords) - 1 &&
+                currentExerciseTypeIndex === size(exerciseTypes) - 1
               }>
               Next
               <Icons.ChevronRight className='h-4 w-4 ml-2' />

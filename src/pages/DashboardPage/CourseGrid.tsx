@@ -11,12 +11,17 @@ export const CourseGrid = ({
 }) => {
   const { t } = useTranslation();
   const gridRef = useRef<HTMLDivElement>(null);
-  const lessons = course?.lessons ?? [];
+  const lessons = get(course, 'lessons', []) as LearningManagement.Lesson[];
 
   useGSAP(
     () => {
-      const cards = gridRef.current?.querySelectorAll('.lesson-card');
-      cards?.forEach((card, index) => {
+      const container = get(gridRef, 'current');
+      if (!container) {
+        return;
+      }
+
+      const cards = container.querySelectorAll('.lesson-card');
+      forEach(cards, (card, index) => {
         gsap.fromTo(
           card,
           { opacity: 0, y: 20 },
@@ -46,42 +51,49 @@ export const CourseGrid = ({
       </div>
 
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-        {lessons.map(lesson => (
+        {map(lessons, lesson => (
           <div
             key={lesson.id}
             className='lesson-card group cursor-pointer'
             onClick={() => onSelectLesson(lesson)}>
-            <Card className='p-6 h-full hover:shadow-lg transition-all duration-300 glass-card border-primary/20 hover:border-primary/50'>
-              <div className='flex items-start justify-between mb-4'>
-                <div className='flex-1'>
-                  <h3 className='font-semibold text-lg mb-2 group-hover:text-primary transition-colors'>
-                    {lesson.title}
-                  </h3>
-                  <p className='text-sm text-muted-foreground flex items-center gap-1'>
-                    <Icons.Brain className='h-4 w-4' />
-                    {lesson.wordCount} words
-                  </p>
-                </div>
-                {lesson.completed && <Icons.CheckCircle2 className='h-6 w-6 text-primary' />}
-              </div>
+            {(() => {
+              const isLearned = lesson.isLearned ?? lesson.completed ?? false;
+              const wordCount = get(lesson, '_count.words', get(lesson, 'wordCount', 0)) as number;
 
-              <div className='mb-4'>
-                <div className='w-full bg-muted rounded-full h-2'>
-                  <div
-                    className='bg-primary h-2 rounded-full'
-                    style={{ width: lesson.completed ? '100%' : '0%' }}
-                  />
-                </div>
-              </div>
+              return (
+                <Card className='p-6 h-full hover:shadow-lg transition-all duration-300 glass-card border-primary/20 hover:border-primary/50'>
+                  <div className='flex items-start justify-between mb-4'>
+                    <div className='flex-1'>
+                      <h3 className='font-semibold text-lg mb-2 group-hover:text-primary transition-colors'>
+                        {lesson.title}
+                      </h3>
+                      <p className='text-sm text-muted-foreground flex items-center gap-1'>
+                        <Icons.Brain className='h-4 w-4' />
+                        {wordCount} words
+                      </p>
+                    </div>
+                    {isLearned && <Icons.CheckCircle2 className='h-6 w-6 text-primary' />}
+                  </div>
 
-              <Button
-                size='sm'
-                className='w-full rounded-lg gap-2'
-                variant={lesson.completed ? 'outline' : 'default'}>
-                <Icons.Play className='h-4 w-4' />
-                {lesson.completed ? t('learning_continue') : 'Start'}
-              </Button>
-            </Card>
+                  <div className='mb-4'>
+                    <div className='w-full bg-muted rounded-full h-2'>
+                      <div
+                        className='bg-primary h-2 rounded-full'
+                        style={{ width: isLearned ? '100%' : '0%' }}
+                      />
+                    </div>
+                  </div>
+
+                  <Button
+                    size='sm'
+                    className='w-full rounded-lg gap-2'
+                    variant={isLearned ? 'outline' : 'default'}>
+                    <Icons.Play className='h-4 w-4' />
+                    {isLearned ? t('learning_continue') : 'Start'}
+                  </Button>
+                </Card>
+              );
+            })()}
           </div>
         ))}
       </div>

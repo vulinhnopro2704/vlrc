@@ -23,7 +23,8 @@ export default function ListenAndFillExercise({
   const handleSubmit = () => {
     const isCorrect = userInput.toLowerCase().trim() === vocabulary.word.toLowerCase();
     setFeedback(isCorrect ? 'correct' : 'incorrect');
-    setAttempts(attempts + 1);
+    const currentAttempts = attempts + 1;
+    setAttempts(currentAttempts);
 
     if (isCorrect && onComplete) {
       setTimeout(() => {
@@ -32,7 +33,7 @@ export default function ListenAndFillExercise({
           activityType: 'listen-fill',
           isCorrect: true,
           timeSpent: Date.now() - startTime,
-          attempts,
+          attempts: currentAttempts,
           timestamp: new Date().toISOString()
         });
       }, 1500);

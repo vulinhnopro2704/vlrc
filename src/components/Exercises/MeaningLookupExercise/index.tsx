@@ -30,7 +30,8 @@ export default function MeaningLookupExercise({
     setSelected(selectedId);
     const isCorrect = selectedId === vocabulary.id;
     setFeedback(isCorrect ? 'correct' : 'incorrect');
-    setAttempts(attempts + 1);
+    const currentAttempts = attempts + 1;
+    setAttempts(currentAttempts);
 
     if (isCorrect && onComplete) {
       setTimeout(() => {
@@ -39,7 +40,7 @@ export default function MeaningLookupExercise({
           activityType: 'meaning-lookup',
           isCorrect: true,
           timeSpent: Date.now() - startTime,
-          attempts,
+          attempts: currentAttempts,
           timestamp: new Date().toISOString()
         });
       }, 1500);

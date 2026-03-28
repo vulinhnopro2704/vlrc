@@ -1,6 +1,29 @@
 declare namespace LearningManagement {
   type DateTime = string;
 
+  interface CountSummary {
+    lessons?: number;
+    words?: number;
+  }
+
+  interface CourseProgressSummary {
+    isStarted: boolean;
+    isCompleted: boolean;
+    startedAt?: DateTime | null;
+    lastAccessedAt?: DateTime | null;
+    completedLessons: number;
+    totalLessons: number;
+    lastCompletedLessonAt?: DateTime | null;
+  }
+
+  interface LessonProgressSummary {
+    status: string;
+    score?: number;
+    completedAt?: DateTime | null;
+    isLearned: boolean;
+    learnedAt?: DateTime | null;
+  }
+
   type ActivityType =
     | 'flip'
     | 'listen-fill'
@@ -20,7 +43,10 @@ declare namespace LearningManagement {
     order?: number;
     isPublished?: boolean;
     lessons?: Lesson[];
-    progress?: number;
+    _count?: CountSummary;
+    completedLessons?: number;
+    totalLessons?: number;
+    progress?: number | CourseProgressSummary;
   }
 
   interface Lesson extends App.Base {
@@ -34,6 +60,10 @@ declare namespace LearningManagement {
     words?: Word[];
     wordCount?: number;
     completed?: boolean;
+    isLearned?: boolean;
+    learnedAt?: DateTime | null;
+    progress?: LessonProgressSummary | null;
+    _count?: CountSummary;
     activities?: ActivityType[];
   }
 

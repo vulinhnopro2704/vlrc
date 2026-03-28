@@ -16,8 +16,13 @@ export const Sidebar = ({ courses, selectedCourse, onSelectCourse }: SidebarProp
 
   useGSAP(
     () => {
-      const items = sidebarRef.current?.querySelectorAll('.course-item');
-      items?.forEach((item, index) => {
+      const container = get(sidebarRef, 'current');
+      if (!container) {
+        return;
+      }
+
+      const items = container.querySelectorAll('.course-item');
+      forEach(items, (item, index) => {
         gsap.fromTo(
           item,
           { opacity: 0, x: -20 },
@@ -41,23 +46,50 @@ export const Sidebar = ({ courses, selectedCourse, onSelectCourse }: SidebarProp
 
       <ScrollArea className='flex-1'>
         <div className='p-4 space-y-2'>
-          {courses.map(course => (
+          {map(courses, course => (
             <div key={course.id} className='course-item'>
-              <Button
-                variant={selectedCourse?.id === course.id ? 'default' : 'ghost'}
-                className='w-full justify-start text-left h-auto py-3 px-4 rounded-xl transition-all duration-300'
-                onClick={() => onSelectCourse(course)}>
-                <div className='flex-1'>
-                  <p className='font-semibold text-sm mb-1'>{course.title}</p>
-                  <div className='w-full bg-muted rounded-full h-1.5'>
-                    <div
-                      className='bg-primary h-1.5 rounded-full transition-all duration-500'
-                      style={{ width: `${course.progress}%` }}
-                    />
-                  </div>
-                  <p className='text-xs text-muted-foreground mt-1'>{course.progress}%</p>
-                </div>
-              </Button>
+              {(() => {
+                const progressPercent =
+                  typeof course.progress === 'number'
+                    ? course.progress
+                    : (get(
+                          course,
+                          'progress.totalLessons',
+                          get(course, 'totalLessons', get(course, '_count.lessons', 0))
+                        ) as number) > 0
+                      ? Math.round(
+                          ((get(
+                            course,
+                            'progress.completedLessons',
+                            get(course, 'completedLessons', 0)
+                          ) as number) /
+                            (get(
+                              course,
+                              'progress.totalLessons',
+                              get(course, 'totalLessons', get(course, '_count.lessons', 1))
+                            ) as number)) *
+                            100
+                        )
+                      : 0;
+
+                return (
+                  <Button
+                    variant={get(selectedCourse, 'id') === course.id ? 'default' : 'ghost'}
+                    className='w-full justify-start text-left h-auto py-3 px-4 rounded-xl transition-all duration-300'
+                    onClick={() => onSelectCourse(course)}>
+                    <div className='flex-1'>
+                      <p className='font-semibold text-sm mb-1'>{course.title}</p>
+                      <div className='w-full bg-muted rounded-full h-1.5'>
+                        <div
+                          className='bg-primary h-1.5 rounded-full transition-all duration-500'
+                          style={{ width: `${progressPercent}%` }}
+                        />
+                      </div>
+                      <p className='text-xs text-muted-foreground mt-1'>{progressPercent}%</p>
+                    </div>
+                  </Button>
+                );
+              })()}
             </div>
           ))}
         </div>

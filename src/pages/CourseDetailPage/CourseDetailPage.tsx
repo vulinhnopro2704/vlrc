@@ -33,12 +33,20 @@ const CourseDetailPage = () => {
     take: 100
   });
 
-  const lessons = lessonsResponse?.data ?? course?.lessons ?? [];
+  const lessons =
+    (get(lessonsResponse, 'data', null) as LearningManagement.Lesson[] | null) ??
+    (get(course, 'lessons', []) as LearningManagement.Lesson[]) ??
+    [];
 
   useGSAP(
     () => {
-      const items = pageRef.current?.querySelectorAll('.lesson-item');
-      items?.forEach((item, index) => {
+      const container = get(pageRef, 'current');
+      if (!container) {
+        return;
+      }
+
+      const items = container.querySelectorAll('.lesson-item');
+      forEach(items, (item, index) => {
         gsap.fromTo(
           item,
           { opacity: 0, x: -20 },
@@ -77,13 +85,36 @@ const CourseDetailPage = () => {
         <div className='flex items-center justify-center h-screen'>
           <div className='text-center'>
             <p className='text-muted-foreground'>
-              {`${t('mutation_error_create', { entity: t('entity_course') })}: ${(courseError as Error)?.message || ''}`}
+              {`${t('mutation_error_create', { entity: t('entity_course') })}: ${get(courseError, 'message', '')}`}
             </p>
           </div>
         </div>
       </AppLayout>
     );
   }
+
+  const progressPercent =
+    typeof course.progress === 'number'
+      ? course.progress
+      : (get(
+            course,
+            'progress.totalLessons',
+            get(course, 'totalLessons', size(lessons))
+          ) as number) > 0
+        ? Math.round(
+            ((get(
+              course,
+              'progress.completedLessons',
+              get(course, 'completedLessons', 0)
+            ) as number) /
+              (get(
+                course,
+                'progress.totalLessons',
+                get(course, 'totalLessons', size(lessons))
+              ) as number)) *
+              100
+          )
+        : 0;
 
   return (
     <AppLayout>
@@ -116,19 +147,17 @@ const CourseDetailPage = () => {
                 <div className='flex-1 max-w-xs'>
                   <div className='flex justify-between mb-2'>
                     <span className='text-sm font-semibold'>{t('learning_completion')}</span>
-                    <span className='text-sm font-semibold text-primary'>
-                      {course.progress ?? 0}%
-                    </span>
+                    <span className='text-sm font-semibold text-primary'>{progressPercent}%</span>
                   </div>
                   <div className='w-full h-3 bg-primary/20 rounded-full overflow-hidden'>
                     <div
                       className='h-full bg-gradient-to-r from-primary to-accent'
-                      style={{ width: `${course.progress ?? 0}%` }}
+                      style={{ width: `${progressPercent}%` }}
                     />
                   </div>
                 </div>
                 <div className='text-sm text-muted-foreground'>
-                  {lessons.length} {t('learning_lessons')}
+                  {size(lessons)} {t('learning_lessons')}
                 </div>
               </div>
             </div>
@@ -154,40 +183,49 @@ const CourseDetailPage = () => {
               </Card>
             )}
 
-            {!isLessonsLoading && !isLessonsError && lessons.length === 0 && (
+            {!isLessonsLoading && !isLessonsError && size(lessons) === 0 && (
               <Card className='p-6 mb-4'>
                 <p className='text-sm text-muted-foreground'>{t('learning_select_lesson')}</p>
               </Card>
             )}
 
             <div className='space-y-4'>
-              {lessons.map(lesson => (
+              {map(lessons, lesson => (
                 <div key={lesson.id} className='lesson-item'>
-                  <Card className='glass-card p-6 hover:shadow-lg hover:border-primary/50 transition-all duration-300 group'>
-                    <div className='flex items-center justify-between gap-4'>
-                      <div className='flex-1'>
-                        <div className='flex items-center gap-2 mb-2'>
-                          <h3 className='text-lg font-semibold'>{lesson.title}</h3>
-                          {lesson.completed && (
-                            <Icons.CheckCircle2 className='h-5 w-5 text-accent' />
-                          )}
+                  {(() => {
+                    const isLearned = lesson.isLearned ?? lesson.completed ?? false;
+                    const wordCount = get(
+                      lesson,
+                      '_count.words',
+                      get(lesson, 'wordCount', 0)
+                    ) as number;
+
+                    return (
+                      <Card className='glass-card p-6 hover:shadow-lg hover:border-primary/50 transition-all duration-300 group'>
+                        <div className='flex items-center justify-between gap-4'>
+                          <div className='flex-1'>
+                            <div className='flex items-center gap-2 mb-2'>
+                              <h3 className='text-lg font-semibold'>{lesson.title}</h3>
+                              {isLearned && <Icons.CheckCircle2 className='h-5 w-5 text-accent' />}
+                            </div>
+                            <p className='text-sm text-muted-foreground'>
+                              {wordCount} {t('learning_vocabulary')}
+                            </p>
+                          </div>
+                          <Button
+                            onClick={() =>
+                              navigate({
+                                to: '/lessons/$lessonId',
+                                params: { lessonId: String(lesson.id) }
+                              })
+                            }
+                            className='group-hover:shadow-lg'>
+                            Study
+                          </Button>
                         </div>
-                        <p className='text-sm text-muted-foreground'>
-                          {lesson.wordCount} {t('learning_vocabulary')}
-                        </p>
-                      </div>
-                      <Button
-                        onClick={() =>
-                          navigate({
-                            to: '/lessons/$lessonId',
-                            params: { lessonId: String(lesson.id) }
-                          })
-                        }
-                        className='group-hover:shadow-lg'>
-                        Study
-                      </Button>
-                    </div>
-                  </Card>
+                      </Card>
+                    );
+                  })()}
                 </div>
               ))}
             </div>
