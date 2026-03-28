@@ -1,6 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
 import apiClient from './api-client';
-import { hasApiErrorStatus } from './api-error';
 
 // ── Progress ──
 
@@ -11,9 +10,6 @@ export const getMyCourses = (params?: Progress.CourseQueryParams) =>
   apiClient
     .get('progress/courses', { searchParams: params as Record<string, string | number | boolean> })
     .json<App.CursorPaginationResponse<Progress.CourseProgress>>();
-
-export const completeLesson = (lessonId: number) =>
-  apiClient.post(`progress/lessons/${lessonId}/complete`).json<Progress.LessonProgress>();
 
 export const getMyLessons = (params?: Progress.LessonQueryParams) =>
   apiClient
@@ -45,48 +41,6 @@ export const useReviewWordMutation = () => {
     mutationFn: reviewWord,
     onSuccess: () => {
       toast.success(t('mutation_success_update', { entity: entityLabel }));
-    },
-    onError: error => {
-      toast.error(
-        `${t('mutation_error_update', { entity: entityLabel })}: ${(error as Error).message}`
-      );
-    }
-  });
-};
-
-export const useCompleteLessonMutation = () => {
-  const { t } = useTranslation();
-  const entityLabel = t('entity_lesson');
-
-  return useMutation({
-    mutationFn: completeLesson,
-    onSuccess: () => {
-      toast.success(t('mutation_success_update', { entity: entityLabel }));
-    },
-    onError: error => {
-      toast.error(
-        `${t('mutation_error_update', { entity: entityLabel })}: ${(error as Error).message}`
-      );
-    }
-  });
-};
-
-export const useReviewWordWithLessonUnlockMutation = (lessonId: number) => {
-  const { t } = useTranslation();
-  const entityLabel = t('entity_word');
-
-  return useMutation({
-    mutationFn: async (payload: Progress.ReviewWordPayload) => {
-      try {
-        return await reviewWord(payload);
-      } catch (error) {
-        if (hasApiErrorStatus(error, 404)) {
-          await completeLesson(lessonId);
-          return reviewWord(payload);
-        }
-
-        throw error;
-      }
     },
     onError: error => {
       toast.error(

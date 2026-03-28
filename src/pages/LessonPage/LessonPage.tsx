@@ -1,7 +1,7 @@
 'use client';
 
 import { useLessonQuery } from '@/api/lesson-management';
-import { useCompleteLessonMutation } from '@/api/progress-management';
+import { useCompleteLessonMutation } from '@/api/lesson-management';
 import { useWordsQuery } from '@/api/word-management';
 import { AppLayout } from '@/components/shared';
 import { ExerciseManager } from '@/components/Exercises';
@@ -81,7 +81,7 @@ const LessonPage = () => {
       setCurrentExerciseTypeIndex(0);
     } else {
       if (isLastExerciseForWord && isLastWord && !completeLessonMutation.isPending) {
-        completeLessonMutation.mutate(numericLessonId);
+        completeLessonMutation.mutate({ id: numericLessonId });
       }
     }
   };
