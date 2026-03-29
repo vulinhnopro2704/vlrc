@@ -4,19 +4,40 @@ import FlipCardExercise from './FlipCardExercise';
 import ListenAndFillExercise from './ListenAndFillExercise';
 import FillBlankExercise from './FillBlankExercise';
 import MeaningLookupExercise from './MeaningLookupExercise';
+import ScrambledWordExercise from './ScrambledWordExercise';
+import SpeedChallengeExercise from './SpeedChallengeExercise';
+import WordPuzzleExercise from './WordPuzzleExercise';
+import MatchingPairsExercise from './MatchingPairsExercise';
+import StreakChallengeExercise from './StreakChallengeExercise';
+
+type ExerciseType = LearningManagement.ActivityType | Practice.PracticeActivityType;
+
+interface ExerciseManagerProps {
+  vocabulary: LearningManagement.Word;
+  allVocabularies?: LearningManagement.Word[];
+  activityType?: ExerciseType;
+  exerciseType?: ExerciseType;
+  onComplete?: (result: any) => void;
+  disabled?: boolean;
+  words?: LearningManagement.Word[];
+  currentStreak?: number;
+}
 
 export default function ExerciseManager({
   vocabulary,
-  allVocabularies,
+  allVocabularies = [],
+  activityType,
   exerciseType,
-  onComplete
-}: {
-  vocabulary: LearningManagement.Word;
-  allVocabularies: LearningManagement.Word[];
-  exerciseType: LearningManagement.ActivityType;
-  onComplete?: (result: LearningManagement.ActivityResult) => void;
-}) {
-  switch (exerciseType) {
+  onComplete,
+  disabled = false,
+  words = [],
+  currentStreak = 0
+}: ExerciseManagerProps) {
+  // Support both exerciseType and activityType for backward compatibility
+  const type = (activityType || exerciseType) as ExerciseType;
+
+  switch (type) {
+    // Existing exercises
     case 'flip':
       return <FlipCardExercise vocabulary={vocabulary} onComplete={onComplete} />;
     case 'listen-fill':
@@ -31,6 +52,51 @@ export default function ExerciseManager({
           onComplete={onComplete}
         />
       );
+
+    // New practice exercises
+    case 'scrambled-word':
+      return (
+        <ScrambledWordExercise
+          vocabulary={vocabulary}
+          onExerciseComplete={onComplete}
+          disabled={disabled}
+        />
+      );
+    case 'speed-challenge':
+      return (
+        <SpeedChallengeExercise
+          vocabulary={vocabulary}
+          onExerciseComplete={onComplete}
+          disabled={disabled}
+        />
+      );
+    case 'word-puzzle':
+      return (
+        <WordPuzzleExercise
+          vocabulary={vocabulary}
+          onExerciseComplete={onComplete}
+          disabled={disabled}
+        />
+      );
+    case 'matching-pairs':
+      return (
+        <MatchingPairsExercise
+          vocabulary={vocabulary}
+          onExerciseComplete={onComplete}
+          disabled={disabled}
+          words={words || allVocabularies}
+        />
+      );
+    case 'streak-challenge':
+      return (
+        <StreakChallengeExercise
+          vocabulary={vocabulary}
+          onExerciseComplete={onComplete}
+          disabled={disabled}
+          currentStreak={currentStreak}
+        />
+      );
+
     default:
       return null;
   }

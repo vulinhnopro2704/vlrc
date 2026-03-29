@@ -168,6 +168,10 @@ const DashboardPage = () => {
           </div>
 
           <div className='mt-4 flex flex-wrap gap-2'>
+            <Button size='sm' onClick={() => navigate({ to: '/practice' })} className='gap-2'>
+              <Icons.Play className='h-4 w-4' />
+              {t('dashboard_start_practice')}
+            </Button>
             <Button
               variant='outline'
               size='sm'
