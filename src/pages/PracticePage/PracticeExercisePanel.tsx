@@ -7,7 +7,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ExerciseManager } from '@/components/Exercises/ExerciseManager';
-import { checkAnswer } from '@/utilities/practice/exerciseHandlers';
+import { checkGenericAnswer } from '@/lib/practice/exerciseHandlers';
 import { useAnimationTriggers } from '@/hooks/practice/useAnimationTriggers';
 import { useExerciseState } from '@/hooks/practice/useExerciseState';
 import { Button } from '@/components/ui/button';

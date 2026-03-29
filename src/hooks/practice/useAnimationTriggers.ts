@@ -6,8 +6,13 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import gsap from 'gsap';
-import { createFeedbackAnimation, createExerciseEnterAnimation, createTransitionAnimation, waitForAnimation } from '@/utilities/practice/animationHelpers';
-import { PRACTICE_CONFIG } from '@/utilities/practice/practiceConfig';
+import {
+  createCorrectAnswerAnimation,
+  createIncorrectAnswerAnimation,
+  createExerciseEnterAnimation,
+  createExerciseTransitionAnimation,
+} from '@/lib/practice/animationHelpers';
+import { PRACTICE_CONFIG } from '@/lib/practice/practiceConfig';
 
 interface UseAnimationTriggersProps {
   isEnabled?: boolean;

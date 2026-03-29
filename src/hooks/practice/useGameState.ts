@@ -5,8 +5,8 @@
  */
 
 import { useState, useCallback, useRef } from 'react';
-import { GamificationEngine } from '@/utilities/practice/GamificationEngine';
-import { DifficultyLevel } from '@/utilities/practice/practiceConfig';
+import { GamificationEngine } from '@/lib/practice/GamificationEngine';
+import { DifficultyLevel } from '@/lib/practice/practiceConfig';
 
 interface UseGameStateProps {
   totalWords: number;
@@ -22,8 +22,6 @@ interface UseGameStateReturn {
   getLives: () => number;
   hasEnded: () => boolean;
   getProgress: () => number;
-  getSessionSummary: () => ReturnType<GamificationEngine['getSessionSummary']>;
-  getLatestMilestone: () => ReturnType<GamificationEngine['getLatestMilestone']>;
   reset: () => void;
 }
 
@@ -73,23 +71,7 @@ export const useGameState = (props: UseGameStateProps): UseGameStateReturn => {
     return engineRef.current?.getProgress() ?? 0;
   }, []);
 
-  const getSessionSummary = useCallback(() => {
-    return (
-      engineRef.current?.getSessionSummary() ?? {
-        totalExercises: 0,
-        correctAnswers: 0,
-        accuracy: 0,
-        totalScore: 0,
-        bestStreak: 0,
-        averageTimeMs: 0,
-        lastUpdated: new Date().toISOString(),
-      }
-    );
-  }, []);
 
-  const getLatestMilestone = useCallback(() => {
-    return engineRef.current?.getLatestMilestone() ?? null;
-  }, []);
 
   const reset = useCallback(() => {
     engineRef.current = new GamificationEngine(totalWords, difficulty);
@@ -105,8 +87,6 @@ export const useGameState = (props: UseGameStateProps): UseGameStateReturn => {
     getLives,
     hasEnded,
     getProgress,
-    getSessionSummary,
-    getLatestMilestone,
     reset,
   };
 };

@@ -16,7 +16,7 @@ import { usePracticeSession } from '@/hooks/practice/usePracticeSession';
 import { useGameState } from '@/hooks/practice/useGameState';
 import { useExerciseState } from '@/hooks/practice/useExerciseState';
 import { useAnimationTriggers } from '@/hooks/practice/useAnimationTriggers';
-import { checkAnswer } from '@/utilities/practice/exerciseHandlers';
+import { checkGenericAnswer } from '@/lib/practice/exerciseHandlers';
 import PracticeHeader from './PracticeHeader';
 import PracticeExercisePanel from './PracticeExercisePanel';
 import PracticeResults from './PracticeResults';

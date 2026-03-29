@@ -5,7 +5,6 @@
  */
 
 import { useState, useCallback, useRef } from 'react';
-import { validateInput } from '@/utilities/practice/exerciseHandlers';
 
 interface UseExerciseStateProps {
   exerciseType: LearningManagement.ActivityType | Practice.PracticeActivityType;
