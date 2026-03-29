@@ -5,8 +5,11 @@ import { useCompleteLessonMutation } from '@/api/lesson-management';
 import { LESSON_QUERY_KEYS } from '@/api/lesson-management';
 import { useWordsQuery } from '@/api/word-management';
 import { COURSE_QUERY_KEYS } from '@/api/course-management';
-import { ExerciseManager } from '@/components/Exercises';
 import Icons from '@/components/Icons';
+import LessonHeader from './LessonHeader';
+import LessonExercisePanel from './LessonExercisePanel';
+import LessonSubmissionState from './LessonSubmissionState';
+import LessonNavigation from './LessonNavigation';
 
 gsap.registerPlugin(useGSAP);
 
@@ -56,6 +59,23 @@ const LessonPage = () => {
     [];
   const currentWord = lessonWords[currentIndex];
   const currentExerciseType = exerciseTypes[currentExerciseTypeIndex];
+  const totalWords = size(lessonWords);
+  const totalExerciseTypes = size(exerciseTypes);
+  const lessonProgressPercent = ((currentIndex + 1) / Math.max(totalWords, 1)) * 100;
+
+  const navigateToCourseDetail = () => {
+    const courseId = Number(get(lesson, 'courseId'));
+
+    if (Number.isFinite(courseId) && courseId > 0) {
+      navigate({
+        to: '/courses/$courseId',
+        params: { courseId: String(courseId) }
+      });
+      return;
+    }
+
+    navigate({ to: '/courses' });
+  };
 
   const submitLessonCompletion = () => {
     if (completeLessonMutation.isPending) {
@@ -85,14 +105,9 @@ const LessonPage = () => {
 
           if (Number.isFinite(courseId) && courseId > 0) {
             queryClient.invalidateQueries({ queryKey: COURSE_QUERY_KEYS.detail(courseId) });
-            navigate({
-              to: '/courses/$courseId',
-              params: { courseId: String(courseId) }
-            });
-            return;
           }
 
-          navigate({ to: '/courses' });
+          navigateToCourseDetail();
         },
         onError: error => {
           setCompletionError((error as Error).message || t('lesson_submit_retry_message'));
@@ -198,134 +213,42 @@ const LessonPage = () => {
   return (
     <main ref={pageRef} className='w-full bg-background px-4 py-6 sm:px-6 lg:px-8'>
       <div className='max-w-6xl mx-auto h-full flex flex-col space-y-6'>
-        <div className='rounded-2xl border bg-card/50 p-4 sm:p-5'>
-          <div className='flex flex-wrap items-center gap-2 text-sm text-muted-foreground'>
-            <Button
-              variant='ghost'
-              size='sm'
-              className='h-auto p-0 text-primary hover:bg-transparent'
-              onClick={() => {
-                const courseId = Number(get(lesson, 'courseId'));
-
-                if (Number.isFinite(courseId) && courseId > 0) {
-                  navigate({
-                    to: '/courses/$courseId',
-                    params: { courseId: String(courseId) }
-                  });
-                  return;
-                }
-
-                navigate({ to: '/courses' });
-              }}>
-              <Icons.ChevronLeft className='h-4 w-4 mr-1' />
-              {(get(lesson, 'course.title') as string) || t('learning_courses')}
-            </Button>
-            <span>/</span>
-            <span className='font-medium text-foreground'>{lesson.title}</span>
-          </div>
-
-          <div className='mt-4 flex items-center justify-between'>
-            <div>
-              <h1 className='text-3xl font-bold mb-2'>{lesson.title}</h1>
-              <p className='text-muted-foreground'>
-                {t('lesson_vocabulary_items', { count: size(lessonWords) })}
-              </p>
-            </div>
-            <span className='text-sm font-semibold text-primary'>
-              {currentIndex + 1} / {size(lessonWords)}
-            </span>
-          </div>
-
-          <div className='mt-4 flex flex-wrap gap-2'>
-            {map(lessonWords, (word, index) => (
-              <Button
-                key={word.id ?? `${word.word}-${index}`}
-                size='sm'
-                variant={index === currentIndex ? 'default' : 'outline'}
-                onClick={() => {
-                  setCurrentIndex(index);
-                  setCurrentExerciseTypeIndex(0);
-                }}>
-                {word.word}
-              </Button>
-            ))}
-          </div>
-        </div>
-
-        <div className='flex-1 flex items-center justify-center'>
-          <div className='w-full'>
-            <div className='mb-4 flex items-center justify-between text-sm'>
-              <span className='text-muted-foreground'>
-                {t('lesson_progress_word', {
-                  current: currentIndex + 1,
-                  total: size(lessonWords)
-                })}
-              </span>
-              <span className='text-muted-foreground'>
-                {t('lesson_progress_exercise', {
-                  current: currentExerciseTypeIndex + 1,
-                  total: size(exerciseTypes)
-                })}
-              </span>
-            </div>
-            <ExerciseManager
-              vocabulary={currentWord}
-              allVocabularies={lessonWords}
-              exerciseType={currentExerciseType}
-              onComplete={handleExerciseComplete}
-            />
-          </div>
-        </div>
-
+        <LessonHeader
+          lesson={lesson}
+          currentIndex={currentIndex}
+          totalWords={totalWords}
+          onBack={navigateToCourseDetail}
+        />
+        <LessonExercisePanel
+          currentIndex={currentIndex}
+          currentExerciseTypeIndex={currentExerciseTypeIndex}
+          totalExerciseTypes={totalExerciseTypes}
+          currentWord={currentWord}
+          lessonWords={lessonWords}
+          exerciseType={currentExerciseType}
+          onComplete={handleExerciseComplete}
+        />
         <div className='mb-8'>
           <div className='w-full h-2 bg-primary/20 rounded-full overflow-hidden'>
             <div
-              className='h-full bg-gradient-to-r from-primary to-accent transition-all duration-300'
-              style={{ width: `${((currentIndex + 1) / Math.max(size(lessonWords), 1)) * 100}%` }}
+              className='h-full bg-linear-to-r from-primary to-accent transition-all duration-300'
+              style={{ width: `${lessonProgressPercent}%` }}
             />
           </div>
         </div>
-
-        {completeLessonMutation.isPending ? (
-          <div className='rounded-xl border bg-card/60 p-4 text-sm text-muted-foreground'>
-            <div className='flex items-center gap-2'>
-              <Icons.LoaderCircleIcon className='h-4 w-4 animate-spin text-primary' />
-              {t('lesson_submitting_completion')}
-            </div>
-          </div>
-        ) : null}
-
-        {completionError ? (
-          <div className='rounded-xl border border-destructive/30 bg-destructive/5 p-4'>
-            <p className='text-sm text-destructive'>{t('lesson_submit_failed')}</p>
-            <p className='mt-1 text-xs text-muted-foreground'>{completionError}</p>
-            <Button size='sm' className='mt-3' onClick={submitLessonCompletion}>
-              {t('lesson_retry_submit')}
-            </Button>
-          </div>
-        ) : null}
-
-        <div className='flex items-center justify-between gap-4'>
-          <Button
-            variant='outline'
-            onClick={handlePrev}
-            disabled={currentIndex === 0 && currentExerciseTypeIndex === 0}>
-            <Icons.ChevronLeft className='h-4 w-4 mr-2' />
-            {t('lesson_prev')}
-          </Button>
-          <div className='text-center text-sm text-muted-foreground'>
-            {t('lesson_of_counter', { current: currentIndex + 1, total: size(lessonWords) })}
-          </div>
-          <Button
-            onClick={handleNext}
-            disabled={
-              currentIndex === size(lessonWords) - 1 &&
-              currentExerciseTypeIndex === size(exerciseTypes) - 1
-            }>
-            {t('lesson_next')}
-            <Icons.ChevronRight className='h-4 w-4 ml-2' />
-          </Button>
-        </div>
+        <LessonSubmissionState
+          isSubmitting={completeLessonMutation.isPending}
+          completionError={completionError}
+          onRetry={submitLessonCompletion}
+        />
+        <LessonNavigation
+          currentIndex={currentIndex}
+          currentExerciseTypeIndex={currentExerciseTypeIndex}
+          totalWords={totalWords}
+          totalExerciseTypes={totalExerciseTypes}
+          onPrev={handlePrev}
+          onNext={handleNext}
+        />
       </div>
     </main>
   );

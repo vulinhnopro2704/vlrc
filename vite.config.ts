@@ -7,6 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { resolve } from 'path';
 
 export default defineConfig({
+  optimizeDeps: { force: true },
   plugins: [
     tanstackRouter({
       target: 'react',

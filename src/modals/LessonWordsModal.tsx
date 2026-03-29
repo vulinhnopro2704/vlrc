@@ -4,9 +4,12 @@ import { useWordsQuery } from '@/api/word-management';
 import { Modal } from './Modal';
 import Icons from '@/components/Icons';
 import { useLessonQuery } from '@/api/lesson-management';
+import useAudioSynthesis from '@/hooks/useAudioSynthesis';
 
 export const LessonWordsModal = ({ id, open, onCancel }: App.ModalProps) => {
   const { t } = useTranslation();
+  const { speak, isPlaying, isSupported } = useAudioSynthesis();
+  const [playingWordKey, setPlayingWordKey] = useState<string | null>(null);
   const { data: lesson, isLoading: isLessonLoading } = useLessonQuery(id as number);
   const {
     data: wordsResponse,
@@ -23,6 +26,23 @@ export const LessonWordsModal = ({ id, open, onCancel }: App.ModalProps) => {
   });
 
   const words = (get(wordsResponse, 'data', []) as LearningManagement.Word[]) ?? [];
+
+  useEffect(() => {
+    if (!isPlaying) {
+      setPlayingWordKey(null);
+    }
+  }, [isPlaying]);
+
+  const handleSpeak = (word: LearningManagement.Word) => {
+    const textToSpeak = String(word.word ?? '').trim();
+    if (!textToSpeak || !isSupported) {
+      return;
+    }
+
+    const key = String(word.id ?? word.word ?? '');
+    setPlayingWordKey(key);
+    speak(textToSpeak, { lang: 'en-US', rate: 0.9 });
+  };
 
   return (
     <Modal
@@ -58,7 +78,23 @@ export const LessonWordsModal = ({ id, open, onCancel }: App.ModalProps) => {
           {map(words, word => (
             <div key={word.id ?? word.word} className='rounded-lg border bg-card/40 p-4'>
               <div className='flex flex-wrap items-center justify-between gap-2'>
-                <h4 className='text-base font-semibold'>{word.word}</h4>
+                <div className='flex items-center gap-2'>
+                  <h4 className='text-base font-semibold'>{word.word}</h4>
+                  <Button
+                    variant='ghost'
+                    size='icon'
+                    className='h-7 w-7'
+                    onClick={() => handleSpeak(word)}
+                    disabled={!isSupported || !word.word}
+                    aria-label={t('learning_pronunciation')}
+                    title={t('learning_pronunciation')}>
+                    {isPlaying && playingWordKey === String(word.id ?? word.word ?? '') ? (
+                      <Icons.LoaderCircleIcon className='h-4 w-4 animate-spin' />
+                    ) : (
+                      <Icons.Volume2 className='h-4 w-4' />
+                    )}
+                  </Button>
+                </div>
                 {word.cefr ? (
                   <span className='rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary'>
                     {word.cefr}

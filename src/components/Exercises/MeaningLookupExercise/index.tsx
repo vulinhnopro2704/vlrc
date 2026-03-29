@@ -11,6 +11,7 @@ export default function MeaningLookupExercise({
   allVocabularies: LearningManagement.Word[];
   onComplete?: (result: LearningManagement.ActivityResult) => void;
 }) {
+  const { t } = useTranslation();
   const [options, setOptions] = useState<LearningManagement.Word[]>([]);
   const [selected, setSelected] = useState<App.ID>();
   const [feedback, setFeedback] = useState<'idle' | 'correct' | 'incorrect'>('idle');
@@ -52,7 +53,7 @@ export default function MeaningLookupExercise({
       <div className='glass-card rounded-2xl p-8'>
         <div className='mb-8'>
           <p className='text-sm text-muted-foreground mb-4 text-center'>
-            Select the correct word for this meaning:
+            {t('select_correct_word_for_meaning')}
           </p>
           <div className='bg-primary/10 rounded-lg p-6 text-center'>
             <p className='text-lg font-semibold text-foreground'>{vocabulary.meaning}</p>
@@ -88,24 +89,22 @@ export default function MeaningLookupExercise({
         {feedback === 'correct' && (
           <div className='p-3 rounded-lg bg-green-500/20 text-green-700 dark:text-green-400 flex items-center gap-2'>
             <Icons.CheckCircle2 className='h-5 w-5' />
-            Correct! {vocabulary.word} means {vocabulary.meaning}
+            {t('correct_word_and_meaning', { word: vocabulary.word, meaning: vocabulary.meaning })}
           </div>
         )}
         {feedback === 'incorrect' && (
           <div className='p-3 rounded-lg bg-red-500/20 text-red-700 dark:text-red-400'>
             <p className='flex items-center gap-2 mb-2'>
               <Icons.X className='h-5 w-5' />
-              Try again!
+              {t('try_again')}
             </p>
-            <p className='text-sm'>
-              The correct answer is: <span className='font-semibold'>{vocabulary.word}</span>
-            </p>
+            <p className='text-sm'>{t('correct_answer_is', { word: vocabulary.word })}</p>
           </div>
         )}
       </div>
 
       <div className='text-center text-sm text-muted-foreground'>
-        <p>Attempts: {attempts}</p>
+        <p>{t('attempts', { count: attempts })}</p>
       </div>
     </div>
   );

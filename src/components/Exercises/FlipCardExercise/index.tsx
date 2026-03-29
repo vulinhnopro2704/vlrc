@@ -49,7 +49,7 @@ export default function FlipCardExercise({
         <FlipCard.Back className='bg-gradient-to-br from-accent/90 to-accent/70 dark:from-accent/80 dark:to-accent/60 rounded-2xl p-12 min-h-96 flex flex-col items-center justify-center border border-accent/40'>
           <div className='space-y-6 text-left w-full'>
             <div>
-              <p className='text-sm text-accent-foreground/80 mb-3'>Meaning:</p>
+              <p className='text-sm text-accent-foreground/80 mb-3'>{t('meaning')}</p>
               <p className='text-2xl font-semibold text-accent-foreground'>{vocabulary.meaning}</p>
             </div>
             <div>
