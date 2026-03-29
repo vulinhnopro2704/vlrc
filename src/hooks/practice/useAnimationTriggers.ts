@@ -10,9 +10,8 @@ import {
   createCorrectAnswerAnimation,
   createIncorrectAnswerAnimation,
   createExerciseEnterAnimation,
-  createExerciseTransitionAnimation,
+  createExerciseTransitionAnimation
 } from '@/lib/practice/animationHelpers';
-import { PRACTICE_CONFIG } from '@/lib/practice/practiceConfig';
 
 interface UseAnimationTriggersProps {
   isEnabled?: boolean;
@@ -20,27 +19,42 @@ interface UseAnimationTriggersProps {
 
 interface UseAnimationTriggersReturn {
   animationState: Practice.AnimationState;
-  containerRef: React.RefObject<HTMLDivElement>;
+  containerRef: React.RefObject<HTMLDivElement | null>;
   triggerFeedbackAnimation: (isCorrect: boolean) => Promise<void>;
   triggerEnterAnimation: () => Promise<void>;
-  triggerTransitionAnimation: (nextExerciseRef: React.RefObject<HTMLDivElement>) => Promise<void>;
+  triggerTransitionAnimation: (
+    nextExerciseRef: React.RefObject<HTMLDivElement | null>
+  ) => Promise<void>;
   reset: () => void;
 }
 
-export const useAnimationTriggers = (props: UseAnimationTriggersProps = {}): UseAnimationTriggersReturn => {
+const waitForAnimation = (timeline: gsap.core.Animation): Promise<void> => {
+  return new Promise(resolve => {
+    if (timeline.totalDuration() === 0) {
+      resolve();
+      return;
+    }
+
+    timeline.eventCallback('onComplete', resolve);
+  });
+};
+
+export const useAnimationTriggers = (
+  props: UseAnimationTriggersProps = {}
+): UseAnimationTriggersReturn => {
   const { isEnabled = true } = props;
   const containerRef = useRef<HTMLDivElement>(null);
   const [animationState, setAnimationState] = useState<Practice.AnimationState>({
     isEntering: false,
     isFeedback: false,
-    isTransitioning: false,
+    isTransitioning: false
   });
 
   const reset = useCallback(() => {
     setAnimationState({
       isEntering: false,
       isFeedback: false,
-      isTransitioning: false,
+      isTransitioning: false
     });
   }, []);
 
@@ -52,16 +66,18 @@ export const useAnimationTriggers = (props: UseAnimationTriggersProps = {}): Use
         isEntering: false,
         isFeedback: true,
         isTransitioning: false,
-        feedbackType: isCorrect ? 'correct' : 'wrong',
+        feedbackType: isCorrect ? 'correct' : 'wrong'
       });
 
-      const timeline = createFeedbackAnimation(containerRef.current, isCorrect);
+      const timeline = isCorrect
+        ? createCorrectAnswerAnimation(containerRef.current)
+        : createIncorrectAnswerAnimation(containerRef.current);
       await waitForAnimation(timeline);
 
       setAnimationState({
         isEntering: false,
         isFeedback: false,
-        isTransitioning: false,
+        isTransitioning: false
       });
     },
     [isEnabled]
@@ -73,7 +89,7 @@ export const useAnimationTriggers = (props: UseAnimationTriggersProps = {}): Use
     setAnimationState({
       isEntering: true,
       isFeedback: false,
-      isTransitioning: false,
+      isTransitioning: false
     });
 
     const timeline = createExerciseEnterAnimation(containerRef.current);
@@ -82,27 +98,27 @@ export const useAnimationTriggers = (props: UseAnimationTriggersProps = {}): Use
     setAnimationState({
       isEntering: false,
       isFeedback: false,
-      isTransitioning: false,
+      isTransitioning: false
     });
   }, [isEnabled]);
 
   const triggerTransitionAnimation = useCallback(
-    async (nextExerciseRef: React.RefObject<HTMLDivElement>) => {
+    async (_nextExerciseRef: React.RefObject<HTMLDivElement | null>) => {
       if (!isEnabled || !containerRef.current) return;
 
       setAnimationState({
         isEntering: false,
         isFeedback: false,
-        isTransitioning: true,
+        isTransitioning: true
       });
 
-      const timeline = createTransitionAnimation(containerRef.current, nextExerciseRef.current);
+      const timeline = createExerciseTransitionAnimation(containerRef.current);
       await waitForAnimation(timeline);
 
       setAnimationState({
         isEntering: false,
         isFeedback: false,
-        isTransitioning: false,
+        isTransitioning: false
       });
     },
     [isEnabled]
@@ -123,6 +139,6 @@ export const useAnimationTriggers = (props: UseAnimationTriggersProps = {}): Use
     triggerFeedbackAnimation,
     triggerEnterAnimation,
     triggerTransitionAnimation,
-    reset,
+    reset
   };
 };

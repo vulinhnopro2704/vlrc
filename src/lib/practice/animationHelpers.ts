@@ -10,21 +10,21 @@ import { PRACTICE_CONFIG } from './practiceConfig';
 /**
  * Create exercise enter animation (fade in + slide up)
  */
-export const createExerciseEnterAnimation = (element: HTMLElement | null): gsap.core.Tween => {
+export const createExerciseEnterAnimation = (element: HTMLElement | null): gsap.core.Animation => {
   if (!element) return gsap.timeline();
 
   return gsap.from(element, {
     opacity: 0,
     y: 30,
     duration: PRACTICE_CONFIG.ANIMATION_DURATION_MS / 1000,
-    ease: 'power2.out',
+    ease: 'power2.out'
   });
 };
 
 /**
  * Create correct answer animation (green flash + scale up)
  */
-export const createCorrectAnswerAnimation = (element: HTMLElement | null): gsap.core.Tween => {
+export const createCorrectAnswerAnimation = (element: HTMLElement | null): gsap.core.Animation => {
   if (!element) return gsap.timeline();
 
   const tl = gsap.timeline();
@@ -32,20 +32,20 @@ export const createCorrectAnswerAnimation = (element: HTMLElement | null): gsap.
   tl.to(element, {
     backgroundColor: '#10b981',
     duration: 0.2,
-    ease: 'power2.out',
+    ease: 'power2.out'
   })
     .to(
       element,
       {
         scale: 1.05,
         duration: 0.3,
-        ease: 'back.out',
+        ease: 'back.out'
       },
       0
     )
     .to(element, {
       backgroundColor: 'transparent',
-      duration: 0.2,
+      duration: 0.2
     });
 
   return tl;
@@ -54,14 +54,18 @@ export const createCorrectAnswerAnimation = (element: HTMLElement | null): gsap.
 /**
  * Create incorrect answer animation (red shake)
  */
-export const createIncorrectAnswerAnimation = (element: HTMLElement | null): gsap.core.Tween => {
+export const createIncorrectAnswerAnimation = (
+  element: HTMLElement | null
+): gsap.core.Animation => {
   if (!element) return gsap.timeline();
 
-  return gsap.to(element, {
-    x: [0, -5, 5, -5, 5, 0],
-    duration: 0.5,
-    ease: 'power2.inOut',
-  });
+  return gsap
+    .timeline()
+    .to(element, { x: -5, duration: 0.1, ease: 'power2.inOut' })
+    .to(element, { x: 5, duration: 0.1, ease: 'power2.inOut' })
+    .to(element, { x: -5, duration: 0.1, ease: 'power2.inOut' })
+    .to(element, { x: 5, duration: 0.1, ease: 'power2.inOut' })
+    .to(element, { x: 0, duration: 0.1, ease: 'power2.inOut' });
 };
 
 /**
@@ -71,7 +75,7 @@ export const createScoreUpdateAnimation = (
   element: HTMLElement | null,
   fromScore: number,
   toScore: number
-): gsap.core.Tween => {
+): gsap.core.Animation => {
   if (!element) return gsap.timeline();
 
   const tl = gsap.timeline();
@@ -86,7 +90,7 @@ export const createScoreUpdateAnimation = (
       if (element) {
         element.textContent = Math.round(textObj.value).toString();
       }
-    },
+    }
   })
     // Add scale pulse
     .to(
@@ -94,14 +98,14 @@ export const createScoreUpdateAnimation = (
       {
         scale: 1.2,
         duration: 0.3,
-        ease: 'back.out',
+        ease: 'back.out'
       },
       0
     )
     .to(element, {
       scale: 1,
       duration: 0.3,
-      ease: 'back.in',
+      ease: 'back.in'
     });
 
   return tl;
@@ -110,23 +114,26 @@ export const createScoreUpdateAnimation = (
 /**
  * Create streak animation (floating flame icon)
  */
-export const createStreakAnimation = (element: HTMLElement | null): gsap.core.Tween => {
+export const createStreakAnimation = (element: HTMLElement | null): gsap.core.Animation => {
   if (!element) return gsap.timeline();
 
   return gsap.to(element, {
     y: -20,
-    opacity: [1, 0.8, 1],
-    scale: [1, 1.2, 1],
+    opacity: 0.8,
+    scale: 1.2,
     duration: 1,
     ease: 'sine.inOut',
     repeat: -1,
+    yoyo: true
   });
 };
 
 /**
  * Create exercise transition animation (fade out then fade in)
  */
-export const createExerciseTransitionAnimation = (element: HTMLElement | null): gsap.core.Tween => {
+export const createExerciseTransitionAnimation = (
+  element: HTMLElement | null
+): gsap.core.Animation => {
   if (!element) return gsap.timeline();
 
   const tl = gsap.timeline();
@@ -135,14 +142,14 @@ export const createExerciseTransitionAnimation = (element: HTMLElement | null): 
     opacity: 0,
     y: -20,
     duration: PRACTICE_CONFIG.TRANSITION_DELAY_MS / 1000,
-    ease: 'power2.in',
+    ease: 'power2.in'
   }).to(
     element,
     {
       opacity: 1,
       y: 0,
       duration: PRACTICE_CONFIG.ANIMATION_DURATION_MS / 1000,
-      ease: 'power2.out',
+      ease: 'power2.out'
     },
     PRACTICE_CONFIG.TRANSITION_DELAY_MS / 1000
   );
@@ -153,7 +160,7 @@ export const createExerciseTransitionAnimation = (element: HTMLElement | null): 
 /**
  * Create confetti animation (simple particles falling)
  */
-export const createConfettiAnimation = (container: HTMLElement | null): gsap.core.Tween => {
+export const createConfettiAnimation = (container: HTMLElement | null): gsap.core.Animation => {
   if (!container) return gsap.timeline();
 
   // Create confetti particles
@@ -178,10 +185,10 @@ export const createConfettiAnimation = (container: HTMLElement | null): gsap.cor
   const tl = gsap.timeline({
     onComplete() {
       particles.forEach(p => p.remove());
-    },
+    }
   });
 
-  particles.forEach((particle, index) => {
+  particles.forEach(particle => {
     tl.to(
       particle,
       {
@@ -189,7 +196,7 @@ export const createConfettiAnimation = (container: HTMLElement | null): gsap.cor
         opacity: 0,
         rotation: Math.random() * 360,
         duration: 2 + Math.random() * 0.5,
-        ease: 'none',
+        ease: 'none'
       },
       Math.random() * 0.3
     );
@@ -201,33 +208,40 @@ export const createConfettiAnimation = (container: HTMLElement | null): gsap.cor
 /**
  * Create celebration animation for milestones
  */
-export const createMilestoneAnimation = (element: HTMLElement | null): gsap.core.Tween => {
+export const createMilestoneAnimation = (element: HTMLElement | null): gsap.core.Animation => {
   if (!element) return gsap.timeline();
 
   const tl = gsap.timeline();
 
-  tl.to(element, {
-    scale: [0, 1.2, 1],
-    opacity: [0, 1, 1],
-    duration: 0.5,
-    ease: 'back.out',
-  })
+  tl.fromTo(
+    element,
+    {
+      scale: 0,
+      opacity: 0
+    },
+    {
+      scale: 1.2,
+      opacity: 1,
+      duration: 0.5,
+      ease: 'back.out'
+    }
+  )
     .to(
       element,
       {
         y: -20,
         duration: 0.4,
-        ease: 'power2.out',
+        ease: 'power2.out'
       },
       0
     )
     .to(element, {
       scale: 0.95,
-      duration: 0.2,
+      duration: 0.2
     })
     .to(element, {
       scale: 1,
-      duration: 0.2,
+      duration: 0.2
     });
 
   return tl;
@@ -236,13 +250,17 @@ export const createMilestoneAnimation = (element: HTMLElement | null): gsap.core
 /**
  * Create feedback message animation
  */
-export const createFeedbackMessageAnimation = (element: HTMLElement | null): gsap.core.Tween => {
+export const createFeedbackMessageAnimation = (
+  element: HTMLElement | null
+): gsap.core.Animation => {
   if (!element) return gsap.timeline();
 
-  return gsap.to(element, {
-    opacity: [0, 1, 0],
-    y: [-20, 0, 20],
-    duration: 1.5,
-    ease: 'power2.inOut',
-  });
+  return gsap
+    .timeline()
+    .fromTo(
+      element,
+      { opacity: 0, y: -20 },
+      { opacity: 1, y: 0, duration: 0.75, ease: 'power2.out' }
+    )
+    .to(element, { opacity: 0, y: 20, duration: 0.75, ease: 'power2.in' });
 };

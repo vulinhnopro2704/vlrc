@@ -185,6 +185,7 @@
     "PopoverAnchor": true,
     "PopoverContent": true,
     "PopoverTrigger": true,
+    "Progress": true,
     "QueryClient": true,
     "QueryClientProvider": true,
     "RadioGroup": true,

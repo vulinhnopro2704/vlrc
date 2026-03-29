@@ -8,7 +8,6 @@ import { useState, useCallback, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { useAnimationTriggers } from '@/hooks/practice/useAnimationTriggers';
-import { checkAnswer } from '@/utilities/practice/exerciseHandlers';
 import { shuffleArray } from '@/utilities/practice/exerciseCommon';
 
 interface MatchingPairsExerciseProps extends LearningManagement.ActivityCardProps {
@@ -26,8 +25,7 @@ export const MatchingPairsExercise: React.FC<MatchingPairsExerciseProps> = ({
   vocabulary,
   onExerciseComplete,
   disabled = false,
-  exerciseData,
-  words = [],
+  words = []
 }) => {
   const { t } = useTranslation();
   const { containerRef, triggerFeedbackAnimation } = useAnimationTriggers();
@@ -42,21 +40,21 @@ export const MatchingPairsExercise: React.FC<MatchingPairsExerciseProps> = ({
 
     // Get some distractors from other words
     const distractors = words
-      .filter((w) => w.id !== vocabulary.id)
+      .filter(w => w.id !== vocabulary.id)
       .slice(0, 2)
-      .map((w) => ({
+      .map(w => ({
         word: w.word,
-        meaning: w.meaning,
+        meaning: w.meaning
       }));
 
     return shuffleArray([correctPair, ...distractors]);
   }, [vocabulary, words]);
 
-  const wordsList = shuffleArray(pairs.map((p) => p.word));
-  const meaningsList = pairs.map((p) => p.meaning);
+  const wordsList = shuffleArray(pairs.map(p => p.word));
+  const meaningsList = pairs.map(p => p.meaning);
 
   const handleWordSelect = useCallback((word: string) => {
-    setSelectedWord((prev) => (prev === word ? null : word));
+    setSelectedWord(prev => (prev === word ? null : word));
   }, []);
 
   const handleMeaningSelect = useCallback(
@@ -79,12 +77,12 @@ export const MatchingPairsExercise: React.FC<MatchingPairsExerciseProps> = ({
   const handleSubmit = useCallback(async () => {
     if (disabled || matches.size === 0) return;
 
-    setAttempts((prev) => prev + 1);
+    setAttempts(prev => prev + 1);
 
     // Check if all matches are correct
     let allCorrect = true;
     for (const [word, meaning] of matches) {
-      const pair = pairs.find((p) => p.word === word);
+      const pair = pairs.find(p => p.word === word);
       if (!pair || pair.meaning !== meaning) {
         allCorrect = false;
         break;
@@ -102,22 +100,22 @@ export const MatchingPairsExercise: React.FC<MatchingPairsExerciseProps> = ({
       isCorrect,
       timeSpentMs: timeSpent,
       attempts,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }, [disabled, matches, pairs, triggerFeedbackAnimation, attempts, onExerciseComplete]);
 
   return (
-    <div ref={containerRef} className="flex flex-col gap-6 p-6 bg-card rounded-lg border">
-      <div className="text-center">
-        <p className="text-sm text-muted-foreground">{t('exercise.match-words-meanings')}</p>
+    <div ref={containerRef} className='flex flex-col gap-6 p-6 bg-card rounded-lg border'>
+      <div className='text-center'>
+        <p className='text-sm text-muted-foreground'>{t('exercise_match_words_meanings')}</p>
       </div>
 
       {/* Two Columns Layout */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className='grid grid-cols-2 gap-4'>
         {/* Words Column */}
-        <div className="space-y-2">
-          <p className="text-sm font-semibold text-foreground mb-3">{t('exercise.words')}</p>
-          {wordsList.map((word) => {
+        <div className='space-y-2'>
+          <p className='text-sm font-semibold text-foreground mb-3'>{t('exercise_words')}</p>
+          {wordsList.map(word => {
             const isSelected = selectedWord === word;
             const isMatched = matches.has(word);
             return (
@@ -135,8 +133,7 @@ export const MatchingPairsExercise: React.FC<MatchingPairsExerciseProps> = ({
                         : 'bg-secondary hover:bg-secondary/80 text-secondary-foreground border border-secondary'
                   }
                   ${disabled && !isMatched ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-                `}
-              >
+                `}>
                 {word}
               </button>
             );
@@ -144,9 +141,9 @@ export const MatchingPairsExercise: React.FC<MatchingPairsExerciseProps> = ({
         </div>
 
         {/* Meanings Column */}
-        <div className="space-y-2">
-          <p className="text-sm font-semibold text-foreground mb-3">{t('exercise.meanings')}</p>
-          {meaningsList.map((meaning) => {
+        <div className='space-y-2'>
+          <p className='text-sm font-semibold text-foreground mb-3'>{t('exercise_meanings')}</p>
+          {meaningsList.map(meaning => {
             const matchedWord = Array.from(matches.entries()).find(([, m]) => m === meaning)?.[0];
             const isSelectable = selectedWord !== null;
             return (
@@ -164,8 +161,7 @@ export const MatchingPairsExercise: React.FC<MatchingPairsExerciseProps> = ({
                         : 'bg-secondary text-secondary-foreground border border-secondary'
                   }
                   ${disabled || (!isSelectable && !matchedWord) ? 'opacity-50 cursor-not-allowed' : ''}
-                `}
-              >
+                `}>
                 {meaning}
               </button>
             );
@@ -175,25 +171,29 @@ export const MatchingPairsExercise: React.FC<MatchingPairsExerciseProps> = ({
 
       {/* Matched Pairs Display */}
       {matches.size > 0 && (
-        <div className="space-y-2">
-          <p className="text-xs text-muted-foreground">{t('exercise.matched')} ({matches.size})</p>
+        <div className='space-y-2'>
+          <p className='text-xs text-muted-foreground'>
+            {t('exercise_matched')} ({matches.size})
+          </p>
           {Array.from(matches.entries()).map(([word, meaning]) => (
-            <div key={word} className="flex items-center gap-2 p-2 bg-green-500/10 rounded border border-green-500/30">
-              <span className="flex-1 text-sm font-medium">{word}</span>
-              <span className="text-green-600">→</span>
-              <span className="flex-1 text-sm text-right">{meaning}</span>
+            <div
+              key={word}
+              className='flex items-center gap-2 p-2 bg-green-500/10 rounded border border-green-500/30'>
+              <span className='flex-1 text-sm font-medium'>{word}</span>
+              <span className='text-green-600'>→</span>
+              <span className='flex-1 text-sm text-right'>{meaning}</span>
             </div>
           ))}
         </div>
       )}
 
       {/* Actions */}
-      <div className="flex gap-3 justify-center">
-        <Button variant="outline" onClick={handleClear} disabled={disabled || matches.size === 0}>
-          {t('action.clear')}
+      <div className='flex gap-3 justify-center'>
+        <Button variant='outline' onClick={handleClear} disabled={disabled || matches.size === 0}>
+          {t('action_clear')}
         </Button>
         <Button onClick={handleSubmit} disabled={disabled || matches.size === 0}>
-          {t('action.check')} ({matches.size}/{pairs.length})
+          {t('action_check')} ({matches.size}/{pairs.length})
         </Button>
       </div>
     </div>

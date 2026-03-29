@@ -4,8 +4,6 @@
  * Does NOT manage game mechanics, animation, or exercise state
  */
 
-import { useState, useCallback, useEffect } from 'react';
-
 interface UsePracticeSessionProps {
   words: LearningManagement.Word[];
   onSessionEnd?: () => void;
@@ -27,7 +25,9 @@ interface UsePracticeSessionReturn {
 export const usePracticeSession = (props: UsePracticeSessionProps): UsePracticeSessionReturn => {
   const { words, onSessionEnd } = props;
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [sessionStatus, setSessionStatus] = useState<'loading' | 'active' | 'paused' | 'ended'>('loading');
+  const [sessionStatus, setSessionStatus] = useState<'loading' | 'active' | 'paused' | 'ended'>(
+    'loading'
+  );
 
   // Initialize session when words are loaded
   useEffect(() => {
@@ -37,7 +37,7 @@ export const usePracticeSession = (props: UsePracticeSessionProps): UsePracticeS
     }
   }, [words]);
 
-  const currentWord = words.length > 0 ? words[currentWordIndex] ?? null : null;
+  const currentWord = words.length > 0 ? (words[currentWordIndex] ?? null) : null;
 
   const moveToNextWord = useCallback((): boolean => {
     const nextIndex = currentWordIndex + 1;
@@ -80,6 +80,6 @@ export const usePracticeSession = (props: UsePracticeSessionProps): UsePracticeS
     resetSession,
     endSession,
     pauseSession,
-    resumeSession,
+    resumeSession
   };
 };

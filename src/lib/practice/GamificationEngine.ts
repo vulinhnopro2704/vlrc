@@ -4,6 +4,7 @@
  * NO React dependencies, NO side effects, fully testable
  */
 
+import { PRACTICE_CONFIG, type DifficultyLevel } from './practiceConfig';
 import { calculateTotalScore, applyDifficultyModifier } from './scoringSystem';
 import {
   updateStreak,
@@ -12,9 +13,8 @@ import {
   shouldGameEnd,
   checkMilestone,
   initializeStreakState,
-  StreakState,
+  type StreakState
 } from './streakSystem';
-import { PRACTICE_CONFIG, DifficultyLevel } from './practiceConfig';
 
 /**
  * GamificationEngine manages all game mechanics independently from UI/exercises
@@ -45,7 +45,7 @@ export class GamificationEngine {
       bestStreak: 0,
       livesRemaining: this.streakState.livesRemaining,
       exercisesCompleted: [],
-      hasEnded: false,
+      hasEnded: false
     };
   }
 
@@ -67,7 +67,7 @@ export class GamificationEngine {
     const completeResult: Practice.ExerciseResult = {
       ...result,
       streakAtTime: this.gameState.currentStreak,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
     this.exerciseResults.push(completeResult);
@@ -92,7 +92,9 @@ export class GamificationEngine {
       livesRemaining: this.streakState.livesRemaining,
       exercisesCompleted: [...this.gameState.exercisesCompleted, completeResult],
       currentWordIndex: this.gameState.currentWordIndex + 1,
-      hasEnded: shouldGameEnd(this.streakState) || this.gameState.currentWordIndex >= this.gameState.totalWords,
+      hasEnded:
+        shouldGameEnd(this.streakState) ||
+        this.gameState.currentWordIndex >= this.gameState.totalWords
     };
   }
 

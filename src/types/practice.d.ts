@@ -17,8 +17,8 @@ declare namespace Practice {
     exerciseType: LearningManagement.ActivityType | PracticeActivityType;
     isCorrect: boolean;
     timeSpentMs: number;
-    pointsEarned: number;
-    streakAtTime: number;
+    pointsEarned?: number;
+    streakAtTime?: number;
     attempts: number;
     timestamp: string;
   }

@@ -3,8 +3,6 @@
  * Pure functions for streak tracking and lives management - NO side effects
  */
 
-import { PRACTICE_CONFIG } from './practiceConfig';
-
 export interface StreakState {
   currentStreak: number;
   bestStreak: number;
@@ -20,7 +18,7 @@ export const initializeStreakState = (livesCount: number): StreakState => {
     currentStreak: 0,
     bestStreak: 0,
     livesRemaining: livesCount,
-    totalMistakes: 0,
+    totalMistakes: 0
   };
 };
 
@@ -31,14 +29,14 @@ export const updateStreak = (state: StreakState, isCorrect: boolean): StreakStat
   if (isCorrect) {
     return {
       ...state,
-      currentStreak: state.currentStreak + 1,
+      currentStreak: state.currentStreak + 1
     };
   }
 
   // Reset streak on incorrect answer
   return {
     ...state,
-    currentStreak: 0,
+    currentStreak: 0
   };
 };
 
@@ -49,7 +47,7 @@ export const updateBestStreak = (state: StreakState): StreakState => {
   if (state.currentStreak > state.bestStreak) {
     return {
       ...state,
-      bestStreak: state.currentStreak,
+      bestStreak: state.currentStreak
     };
   }
   return state;
@@ -64,7 +62,7 @@ export const updateLives = (state: StreakState): StreakState => {
   return {
     ...state,
     livesRemaining: newLives,
-    totalMistakes: state.totalMistakes + 1,
+    totalMistakes: state.totalMistakes + 1
   };
 };
 
@@ -92,7 +90,7 @@ export const getMilestoneMessage = (streak: number): string => {
     15: 'Incredible! 15 streak!',
     20: 'Outstanding! 20 streak!',
     25: 'Legendary! 25 streak!',
-    50: 'Unbelievable! 50 streak!',
+    50: 'Unbelievable! 50 streak!'
   };
 
   return milestones[streak] || `Amazing! ${streak} streak!`;

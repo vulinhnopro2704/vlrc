@@ -17,7 +17,7 @@ interface ExerciseManagerProps {
   allVocabularies?: LearningManagement.Word[];
   activityType?: ExerciseType;
   exerciseType?: ExerciseType;
-  onComplete?: (result: LearningManagement.ActivityResult | Practice.ExerciseResult) => void;
+  onComplete?: (result: any) => void;
   disabled?: boolean;
   words?: LearningManagement.Word[];
   currentStreak?: number;
@@ -31,7 +31,7 @@ export default function ExerciseManager({
   onComplete,
   disabled = false,
   words = [],
-  currentStreak = 0,
+  currentStreak = 0
 }: ExerciseManagerProps) {
   // Support both exerciseType and activityType for backward compatibility
   const type = (activityType || exerciseType) as ExerciseType;
@@ -39,28 +39,45 @@ export default function ExerciseManager({
   switch (type) {
     // Existing exercises
     case 'flip':
-      return <FlipCardExercise vocabulary={vocabulary} onComplete={onComplete} disabled={disabled} />;
+      return <FlipCardExercise vocabulary={vocabulary} onComplete={onComplete} />;
     case 'listen-fill':
-      return <ListenAndFillExercise vocabulary={vocabulary} onComplete={onComplete} disabled={disabled} />;
+      return <ListenAndFillExercise vocabulary={vocabulary} onComplete={onComplete} />;
     case 'fill-blank':
-      return <FillBlankExercise vocabulary={vocabulary} onComplete={onComplete} disabled={disabled} />;
+      return <FillBlankExercise vocabulary={vocabulary} onComplete={onComplete} />;
     case 'meaning-lookup':
       return (
         <MeaningLookupExercise
           vocabulary={vocabulary}
           allVocabularies={allVocabularies}
           onComplete={onComplete}
-          disabled={disabled}
         />
       );
 
     // New practice exercises
     case 'scrambled-word':
-      return <ScrambledWordExercise vocabulary={vocabulary} onExerciseComplete={onComplete} disabled={disabled} />;
+      return (
+        <ScrambledWordExercise
+          vocabulary={vocabulary}
+          onExerciseComplete={onComplete}
+          disabled={disabled}
+        />
+      );
     case 'speed-challenge':
-      return <SpeedChallengeExercise vocabulary={vocabulary} onExerciseComplete={onComplete} disabled={disabled} />;
+      return (
+        <SpeedChallengeExercise
+          vocabulary={vocabulary}
+          onExerciseComplete={onComplete}
+          disabled={disabled}
+        />
+      );
     case 'word-puzzle':
-      return <WordPuzzleExercise vocabulary={vocabulary} onExerciseComplete={onComplete} disabled={disabled} />;
+      return (
+        <WordPuzzleExercise
+          vocabulary={vocabulary}
+          onExerciseComplete={onComplete}
+          disabled={disabled}
+        />
+      );
     case 'matching-pairs':
       return (
         <MatchingPairsExercise

@@ -5,8 +5,15 @@
  */
 
 import { calculateTotalScore, applyDifficultyModifier } from './scoringSystem';
-import { updateStreak, updateBestStreak, updateLives, shouldGameEnd, checkMilestone, initializeStreakState } from './streakSystem';
-import { PRACTICE_CONFIG, DifficultyLevel } from './practiceConfig';
+import {
+  updateStreak,
+  updateBestStreak,
+  updateLives,
+  shouldGameEnd,
+  checkMilestone,
+  initializeStreakState
+} from './streakSystem';
+import { PRACTICE_CONFIG, type DifficultyLevel } from './practiceConfig';
 
 /**
  * GamificationEngine manages all game mechanics independently from UI/exercises
@@ -24,7 +31,10 @@ export class GamificationEngine {
 
   private initializeGameState(totalWords: number): Practice.GameState {
     const streakState = initializeStreakState(
-      Math.ceil(PRACTICE_CONFIG.INITIAL_LIVES * PRACTICE_CONFIG.DIFFICULTY_LEVELS[this.difficultyLevel].livesMultiplier)
+      Math.ceil(
+        PRACTICE_CONFIG.INITIAL_LIVES *
+          PRACTICE_CONFIG.DIFFICULTY_LEVELS[this.difficultyLevel].livesMultiplier
+      )
     );
 
     return {
@@ -35,7 +45,7 @@ export class GamificationEngine {
       bestStreak: streakState.bestStreak,
       livesRemaining: streakState.livesRemaining,
       exercisesCompleted: [],
-      hasEnded: false,
+      hasEnded: false
     };
   }
 
@@ -43,7 +53,9 @@ export class GamificationEngine {
    * Record an exercise result and update game state
    * Pure method - returns new game state without mutation
    */
-  recordResult(exerciseResult: Omit<Practice.ExerciseResult, 'streakAtTime' | 'timestamp'>): Practice.GameState {
+  recordResult(
+    exerciseResult: Omit<Practice.ExerciseResult, 'streakAtTime' | 'timestamp'>
+  ): Practice.GameState {
     if (this.gameState.hasEnded) {
       throw new Error('Cannot record result - game has ended');
     }
@@ -56,7 +68,8 @@ export class GamificationEngine {
       this.gameState.currentStreak
     );
 
-    const difficultyModifier = PRACTICE_CONFIG.DIFFICULTY_LEVELS[this.difficultyLevel].scoreMultiplier;
+    const difficultyModifier =
+      PRACTICE_CONFIG.DIFFICULTY_LEVELS[this.difficultyLevel].scoreMultiplier;
     const finalScore = applyDifficultyModifier(scoreCalc, difficultyModifier);
 
     // Update streak
@@ -72,7 +85,7 @@ export class GamificationEngine {
       ...exerciseResult,
       pointsEarned: finalScore,
       streakAtTime: this.gameState.currentStreak,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
     // Update internal state
@@ -81,7 +94,8 @@ export class GamificationEngine {
     this.gameState.bestStreak = newBestStreak;
     this.gameState.livesRemaining = newLives;
     this.gameState.currentWordIndex += 1;
-    this.gameState.hasEnded = gameEnded || this.gameState.currentWordIndex >= this.gameState.totalWords;
+    this.gameState.hasEnded =
+      gameEnded || this.gameState.currentWordIndex >= this.gameState.totalWords;
     this.gameState.exercisesCompleted.push(completeResult);
     this.exerciseResults.push(completeResult);
 
@@ -161,9 +175,14 @@ export class GamificationEngine {
    * Get session summary
    */
   getSessionSummary() {
-    const correctCount = this.exerciseResults.filter((r) => r.isCorrect).length;
-    const accuracy = this.exerciseResults.length > 0 ? (correctCount / this.exerciseResults.length) * 100 : 0;
-    const averageTime = this.exerciseResults.length > 0 ? this.exerciseResults.reduce((sum, r) => sum + r.timeSpentMs, 0) / this.exerciseResults.length : 0;
+    const correctCount = this.exerciseResults.filter(r => r.isCorrect).length;
+    const accuracy =
+      this.exerciseResults.length > 0 ? (correctCount / this.exerciseResults.length) * 100 : 0;
+    const averageTime =
+      this.exerciseResults.length > 0
+        ? this.exerciseResults.reduce((sum, r) => sum + r.timeSpentMs, 0) /
+          this.exerciseResults.length
+        : 0;
 
     return {
       totalExercises: this.exerciseResults.length,
@@ -172,7 +191,7 @@ export class GamificationEngine {
       totalScore: this.gameState.cumulativeScore,
       bestStreak: this.gameState.bestStreak,
       averageTimeMs: Math.round(averageTime),
-      lastUpdated: new Date().toISOString(),
+      lastUpdated: new Date().toISOString()
     };
   }
 }

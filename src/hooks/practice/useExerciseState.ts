@@ -5,6 +5,7 @@
  */
 
 import { useState, useCallback, useRef } from 'react';
+import { validateInput } from '@/utilities/practice/exerciseHandlers';
 
 interface UseExerciseStateProps {
   exerciseType: LearningManagement.ActivityType | Practice.PracticeActivityType;
@@ -80,6 +81,6 @@ export const useExerciseState = (props: UseExerciseStateProps): UseExerciseState
     updateAnswer,
     submitAnswer,
     reset,
-    getTimeSinceStart,
+    getTimeSinceStart
   };
 };

@@ -4,15 +4,8 @@
  * Connects UI to game mechanics
  */
 
-import { useState, useCallback, useRef, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { ExerciseManager } from '@/components/Exercises/ExerciseManager';
-import { checkGenericAnswer } from '@/lib/practice/exerciseHandlers';
+import { ExerciseManager } from '@/components/Exercises';
 import { useAnimationTriggers } from '@/hooks/practice/useAnimationTriggers';
-import { useExerciseState } from '@/hooks/practice/useExerciseState';
-import { Button } from '@/components/ui/button';
-import { AlertCircle } from 'lucide-react';
-import { toast } from 'sonner';
 
 interface PracticeExercisePanelProps {
   currentWord: LearningManagement.Word;
@@ -31,18 +24,41 @@ const EXERCISE_SEQUENCE = [
   'listen-fill',
   'matching-pairs',
   'meaning-lookup',
-  'streak-challenge',
+  'streak-challenge'
 ] as const;
+
+const toPracticeResult = (
+  result: LearningManagement.ActivityResult | Practice.ExerciseResult
+): Omit<Practice.ExerciseResult, 'streakAtTime' | 'timestamp'> => {
+  if ('exerciseType' in result) {
+    return {
+      wordId: result.wordId,
+      exerciseType: result.exerciseType,
+      isCorrect: result.isCorrect,
+      timeSpentMs: result.timeSpentMs,
+      pointsEarned: result.pointsEarned ?? 0,
+      attempts: result.attempts
+    };
+  }
+
+  return {
+    wordId: result.wordId,
+    exerciseType: result.activityType,
+    isCorrect: result.isCorrect,
+    timeSpentMs: result.timeSpent,
+    pointsEarned: 0,
+    attempts: result.attempts
+  };
+};
 
 const PracticeExercisePanel: React.FC<PracticeExercisePanelProps> = ({
   currentWord,
   gameState,
   session,
-  allWords,
+  allWords
 }) => {
   const { t } = useTranslation();
   const { containerRef, triggerFeedbackAnimation } = useAnimationTriggers();
-  const [currentAttempt, setCurrentAttempt] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const startTimeRef = useRef(Date.now());
 
@@ -51,26 +67,27 @@ const PracticeExercisePanel: React.FC<PracticeExercisePanelProps> = ({
   const currentExerciseType = EXERCISE_SEQUENCE[exerciseTypeIndex] as any;
 
   const handleExerciseComplete = useCallback(
-    async (result: Practice.ExerciseResult) => {
+    (result: LearningManagement.ActivityResult | Practice.ExerciseResult) => {
       if (isProcessing) return;
 
       setIsProcessing(true);
 
       try {
+        const normalizedResult = toPracticeResult(result);
+
         // Record result in game state
         gameState.recordResult({
-          wordId: currentWord.id,
-          exerciseType: result.exerciseType,
-          isCorrect: result.isCorrect,
-          timeSpentMs: result.timeSpentMs,
-          attempts: result.attempts,
+          ...normalizedResult,
+          wordId: currentWord.id ?? normalizedResult.wordId
         });
 
+        void triggerFeedbackAnimation(normalizedResult.isCorrect);
+
         // Provide feedback
-        if (result.isCorrect) {
-          toast.success(t('exercise.correct'));
+        if (normalizedResult.isCorrect) {
+          toast.success(t('exercise_correct'));
         } else {
-          toast.error(t('exercise.incorrect'));
+          toast.error(t('exercise_incorrect'));
         }
 
         // Check if game ended
@@ -83,31 +100,28 @@ const PracticeExercisePanel: React.FC<PracticeExercisePanelProps> = ({
         if (!hasMore) {
           session.endSession();
         }
-
-        // Reset for next exercise
-        setCurrentAttempt(0);
         startTimeRef.current = Date.now();
       } catch (error) {
         console.error('Error processing exercise result:', error);
-        toast.error(t('exercise.error'));
+        toast.error(t('exercise_error'));
       } finally {
         setIsProcessing(false);
       }
     },
-    [currentWord, gameState, session, isProcessing, t]
+    [currentWord, gameState, session, isProcessing, t, triggerFeedbackAnimation]
   );
 
   const isGameEnded = gameState.hasEnded() || session.sessionStatus === 'ended';
 
   return (
-    <div ref={containerRef} className="space-y-6">
+    <div ref={containerRef} className='space-y-6'>
       {/* Game Over Warning */}
       {isGameEnded && (
-        <div className="p-4 bg-red-500/10 border border-red-500 rounded-lg flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+        <div className='p-4 bg-red-500/10 border border-red-500 rounded-lg flex items-start gap-3'>
+          <AlertCircle className='w-5 h-5 text-red-600 shrink-0 mt-0.5' />
           <div>
-            <p className="font-semibold text-red-700">{t('practice.game-over')}</p>
-            <p className="text-sm text-red-600">{t('practice.no-lives-remaining')}</p>
+            <p className='font-semibold text-red-700'>{t('practice_game_over')}</p>
+            <p className='text-sm text-red-600'>{t('practice_no_lives_remaining')}</p>
           </div>
         </div>
       )}
@@ -116,11 +130,11 @@ const PracticeExercisePanel: React.FC<PracticeExercisePanelProps> = ({
       {!isGameEnded && (
         <>
           {/* Exercise Info */}
-          <div className="text-center space-y-2">
-            <p className="text-sm text-muted-foreground uppercase tracking-wider">
-              {t(`exercise.${currentExerciseType}`)}
+          <div className='text-center space-y-2'>
+            <p className='text-sm text-muted-foreground uppercase tracking-wider'>
+              {t(`exercise_${String(currentExerciseType).replaceAll('-', '_')}`)}
             </p>
-            <h2 className="text-3xl font-bold text-foreground">{currentWord.word}</h2>
+            <h2 className='text-3xl font-bold text-foreground'>{currentWord.word}</h2>
           </div>
 
           {/* Exercise Component */}
