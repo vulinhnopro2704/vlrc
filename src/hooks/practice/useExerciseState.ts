@@ -4,7 +4,6 @@
  * Does NOT manage game mechanics, score, or animation
  */
 
-import { useState, useCallback, useRef } from 'react';
 import { validateInput } from '@/utilities/practice/exerciseHandlers';
 
 interface UseExerciseStateProps {
@@ -29,49 +28,46 @@ export const useExerciseState = (props: UseExerciseStateProps): UseExerciseState
   const [isSubmitting, setIsSubmitting] = useState(false);
   const startTimeRef = useRef<number>(Date.now());
 
-  const updateAnswer = useCallback((answer: string | string[]) => {
+  const updateAnswer = (answer: string | string[]) => {
     setUserAnswer(answer);
     setValidationError(null); // Clear error when user updates answer
-  }, []);
+  };
 
-  const submitAnswer = useCallback(
-    async (callback: (answer: string | string[]) => void): Promise<boolean> => {
-      // Validate input
-      const isValid = validateInput(userAnswer, exerciseType);
+  const submitAnswer = async (callback: (answer: string | string[]) => void): Promise<boolean> => {
+    // Validate input
+    const isValid = validateInput(userAnswer, exerciseType);
 
-      if (!isValid) {
-        setValidationError('exercise-invalid-answer');
-        return false;
-      }
+    if (!isValid) {
+      setValidationError('exercise-invalid-answer');
+      return false;
+    }
 
-      setIsSubmitting(true);
+    setIsSubmitting(true);
 
-      try {
-        // Call the callback with the answer
-        // The callback should be a pure function that doesn't modify state
-        callback(userAnswer);
-        return true;
-      } catch (error) {
-        console.error('Error submitting answer:', error);
-        setValidationError('exercise-submission-error');
-        return false;
-      } finally {
-        setIsSubmitting(false);
-      }
-    },
-    [userAnswer, exerciseType]
-  );
+    try {
+      // Call the callback with the answer
+      // The callback should be a pure function that doesn't modify state
+      callback(userAnswer);
+      return true;
+    } catch (error) {
+      console.error('Error submitting answer:', error);
+      setValidationError('exercise-submission-error');
+      return false;
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
-  const reset = useCallback(() => {
+  const reset = () => {
     setUserAnswer('');
     setValidationError(null);
     setIsSubmitting(false);
     startTimeRef.current = Date.now();
-  }, []);
+  };
 
-  const getTimeSinceStart = useCallback(() => {
+  const getTimeSinceStart = () => {
     return Date.now() - startTimeRef.current;
-  }, []);
+  };
 
   return {
     userAnswer,

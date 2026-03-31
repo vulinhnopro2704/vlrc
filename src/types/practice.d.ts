@@ -51,6 +51,25 @@ declare namespace Practice {
     isPaused: boolean;
   }
 
+  // ── FSRS Submission ──
+  interface SubmitFSRSItem {
+    wordId: number;
+    isCorrect: boolean;
+    hadWrong?: boolean;
+    durationMs?: number;
+    exerciseType?: string;
+    attempts?: number;
+  }
+
+  interface SubmitFSRSPayload {
+    items: SubmitFSRSItem[];
+  }
+
+  interface SubmitFSRSResponse {
+    session?: Record<string, unknown>;
+    fsrsResult?: Record<string, unknown>;
+  }
+
   // ── Animation State ──
   interface AnimationTrigger {
     type: 'entering' | 'feedback' | 'transitioning' | 'celebration';

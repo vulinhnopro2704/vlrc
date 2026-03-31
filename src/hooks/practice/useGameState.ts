@@ -4,6 +4,7 @@
  * This is the bridge between pure GamificationEngine and React components
  */
 
+import { useEffect, useRef, useState } from 'react';
 import { GamificationEngine } from '@/lib/practice/GamificationEngine';
 import type { DifficultyLevel } from '@/lib/practice/practiceConfig';
 
@@ -49,45 +50,42 @@ export const useGameState = (props: UseGameStateProps): UseGameStateReturn => {
     }
   }, [totalWords, difficulty, gameState.totalWords]);
 
-  const recordResult = useCallback(
-    (result: Omit<Practice.ExerciseResult, 'streakAtTime' | 'timestamp'>) => {
-      if (!engineRef.current) return;
+  const recordResult = (result: Omit<Practice.ExerciseResult, 'streakAtTime' | 'timestamp'>) => {
+    if (!engineRef.current) return;
 
-      try {
-        engineRef.current.recordResult(result);
-        setGameState(engineRef.current.getGameState());
-      } catch (error) {
-        console.error('Error recording result:', error);
-      }
-    },
-    []
-  );
+    try {
+      engineRef.current.recordResult(result);
+      setGameState(engineRef.current.getGameState());
+    } catch (error) {
+      console.error('Error recording result:', error);
+    }
+  };
 
-  const getScore = useCallback(() => {
+  const getScore = () => {
     return engineRef.current?.getScore() ?? 0;
-  }, []);
+  };
 
-  const getStreak = useCallback(() => {
+  const getStreak = () => {
     return engineRef.current?.getStreak() ?? 0;
-  }, []);
+  };
 
-  const getBestStreak = useCallback(() => {
+  const getBestStreak = () => {
     return engineRef.current?.getBestStreak() ?? 0;
-  }, []);
+  };
 
-  const getLives = useCallback(() => {
+  const getLives = () => {
     return engineRef.current?.getLives() ?? 0;
-  }, []);
+  };
 
-  const hasEnded = useCallback(() => {
+  const hasEnded = () => {
     return engineRef.current?.hasGameEnded() ?? false;
-  }, []);
+  };
 
-  const getProgress = useCallback(() => {
+  const getProgress = () => {
     return engineRef.current?.getProgress() ?? 0;
-  }, []);
+  };
 
-  const getSessionSummary = useCallback(() => {
+  const getSessionSummary = () => {
     const totalExercises = gameState.exercisesCompleted.length;
     const correctAnswers = gameState.exercisesCompleted.filter(result => result.isCorrect).length;
     const accuracy = totalExercises > 0 ? Math.round((correctAnswers / totalExercises) * 100) : 0;
@@ -107,12 +105,12 @@ export const useGameState = (props: UseGameStateProps): UseGameStateReturn => {
       bestStreak: gameState.bestStreak,
       averageTimeMs
     };
-  }, [gameState]);
+  };
 
-  const reset = useCallback(() => {
+  const reset = () => {
     engineRef.current = new GamificationEngine(totalWords, difficulty);
     setGameState(engineRef.current.getGameState());
-  }, [totalWords, difficulty]);
+  };
 
   return {
     gameState,

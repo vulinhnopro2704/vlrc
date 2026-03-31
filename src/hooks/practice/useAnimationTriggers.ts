@@ -4,7 +4,7 @@
  * Receives triggers, manages animation state, emits completion callbacks
  */
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import {
   createCorrectAnswerAnimation,
@@ -50,40 +50,37 @@ export const useAnimationTriggers = (
     isTransitioning: false
   });
 
-  const reset = useCallback(() => {
+  const reset = () => {
     setAnimationState({
       isEntering: false,
       isFeedback: false,
       isTransitioning: false
     });
-  }, []);
+  };
 
-  const triggerFeedbackAnimation = useCallback(
-    async (isCorrect: boolean) => {
-      if (!isEnabled || !containerRef.current) return;
+  const triggerFeedbackAnimation = async (isCorrect: boolean) => {
+    if (!isEnabled || !containerRef.current) return;
 
-      setAnimationState({
-        isEntering: false,
-        isFeedback: true,
-        isTransitioning: false,
-        feedbackType: isCorrect ? 'correct' : 'wrong'
-      });
+    setAnimationState({
+      isEntering: false,
+      isFeedback: true,
+      isTransitioning: false,
+      feedbackType: isCorrect ? 'correct' : 'wrong'
+    });
 
-      const timeline = isCorrect
-        ? createCorrectAnswerAnimation(containerRef.current)
-        : createIncorrectAnswerAnimation(containerRef.current);
-      await waitForAnimation(timeline);
+    const timeline = isCorrect
+      ? createCorrectAnswerAnimation(containerRef.current)
+      : createIncorrectAnswerAnimation(containerRef.current);
+    await waitForAnimation(timeline);
 
-      setAnimationState({
-        isEntering: false,
-        isFeedback: false,
-        isTransitioning: false
-      });
-    },
-    [isEnabled]
-  );
+    setAnimationState({
+      isEntering: false,
+      isFeedback: false,
+      isTransitioning: false
+    });
+  };
 
-  const triggerEnterAnimation = useCallback(async () => {
+  const triggerEnterAnimation = async () => {
     if (!isEnabled || !containerRef.current) return;
 
     setAnimationState({
@@ -100,29 +97,28 @@ export const useAnimationTriggers = (
       isFeedback: false,
       isTransitioning: false
     });
-  }, [isEnabled]);
+  };
 
-  const triggerTransitionAnimation = useCallback(
-    async (_nextExerciseRef: React.RefObject<HTMLDivElement | null>) => {
-      if (!isEnabled || !containerRef.current) return;
+  const triggerTransitionAnimation = async (
+    _nextExerciseRef: React.RefObject<HTMLDivElement | null>
+  ) => {
+    if (!isEnabled || !containerRef.current) return;
 
-      setAnimationState({
-        isEntering: false,
-        isFeedback: false,
-        isTransitioning: true
-      });
+    setAnimationState({
+      isEntering: false,
+      isFeedback: false,
+      isTransitioning: true
+    });
 
-      const timeline = createExerciseTransitionAnimation(containerRef.current);
-      await waitForAnimation(timeline);
+    const timeline = createExerciseTransitionAnimation(containerRef.current);
+    await waitForAnimation(timeline);
 
-      setAnimationState({
-        isEntering: false,
-        isFeedback: false,
-        isTransitioning: false
-      });
-    },
-    [isEnabled]
-  );
+    setAnimationState({
+      isEntering: false,
+      isFeedback: false,
+      isTransitioning: false
+    });
+  };
 
   // Cleanup animations on unmount
   useEffect(() => {

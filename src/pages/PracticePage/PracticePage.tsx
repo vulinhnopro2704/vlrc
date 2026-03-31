@@ -7,7 +7,7 @@
 'use client';
 
 import { useNavigate } from '@tanstack/react-router';
-import { useWordsToReviewQuery } from '@/api/progress-management';
+import { useFSRSDueWordsQuery, useSubmitFSRSMutation } from '@/api/practice-management';
 import { usePracticeSession } from '@/hooks/practice/usePracticeSession';
 import { useGameState } from '@/hooks/practice/useGameState';
 import PracticeHeader from './PracticeHeader';
@@ -19,9 +19,12 @@ const PracticePage = () => {
   const navigate = useNavigate();
   const pageRef = useRef<HTMLDivElement>(null);
   const [sessionEnded, setSessionEnded] = useState(false);
+  const [answers, setAnswers] = useState<Practice.SubmitFSRSItem[]>([]);
+  const hasSubmittedRef = useRef(false);
 
   // Fetch words from backend spaced-repetition scheduling
-  const { data: reviewWords, isLoading, isError } = useWordsToReviewQuery({ take: 100 });
+  const { data: reviewWords, isLoading, isError } = useFSRSDueWordsQuery({ take: 100 });
+  const submitMutation = useSubmitFSRSMutation();
 
   const reviewRows = Array.isArray(reviewWords?.data) ? reviewWords.data : [];
   const words = reviewRows
@@ -39,6 +42,61 @@ const PracticePage = () => {
     totalWords: words.length,
     difficulty: 'NORMAL'
   });
+
+  const upsertAnswer = (answer: Practice.SubmitFSRSItem) => {
+    setAnswers(prev => {
+      const existingIndex = prev.findIndex(item => item.wordId === answer.wordId);
+      const existing = existingIndex >= 0 ? prev[existingIndex] : undefined;
+
+      const merged: Practice.SubmitFSRSItem = {
+        wordId: answer.wordId,
+        isCorrect: answer.isCorrect,
+        exerciseType: answer.exerciseType ?? existing?.exerciseType,
+        durationMs: (existing?.durationMs ?? 0) + (answer.durationMs ?? 0),
+        attempts: (existing?.attempts ?? 0) + (answer.attempts ?? 1),
+        hadWrong: (existing?.hadWrong ?? false) || Boolean(answer.hadWrong)
+      };
+
+      if (existingIndex >= 0) {
+        const next = [...prev];
+        next.splice(existingIndex, 1, merged);
+        return next;
+      }
+
+      return [...prev, merged];
+    });
+  };
+
+  const shouldAutoSubmit = sessionEnded || gameState.gameState.hasEnded;
+
+  useEffect(() => {
+    if (!shouldAutoSubmit || answers.length === 0 || hasSubmittedRef.current) return;
+
+    const submitResults = async () => {
+      try {
+        hasSubmittedRef.current = true;
+        await submitMutation.mutateAsync({ items: answers });
+      } catch (error) {
+        console.error('Failed to submit practice results on session-end', error);
+      }
+    };
+
+    void submitResults();
+  }, [shouldAutoSubmit, answers, submitMutation]);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (hasSubmittedRef.current || answers.length === 0) return;
+      hasSubmittedRef.current = true;
+      void submitMutation.mutateAsync({ items: answers });
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      handleBeforeUnload();
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [answers, submitMutation]);
 
   const { currentWord } = session;
 
@@ -93,6 +151,7 @@ const PracticePage = () => {
           gameState={gameState}
           session={session}
           allWords={words}
+          onExerciseResult={upsertAnswer}
         />
       </main>
     </div>

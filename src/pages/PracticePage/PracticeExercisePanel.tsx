@@ -12,6 +12,7 @@ interface PracticeExercisePanelProps {
   gameState: ReturnType<typeof import('@/hooks/practice/useGameState').useGameState>;
   session: ReturnType<typeof import('@/hooks/practice/usePracticeSession').usePracticeSession>;
   allWords: LearningManagement.Word[];
+  onExerciseResult?: (result: Practice.SubmitFSRSItem) => void;
 }
 
 // Mix of new and existing exercises for variety
@@ -55,61 +56,78 @@ const PracticeExercisePanel: React.FC<PracticeExercisePanelProps> = ({
   currentWord,
   gameState,
   session,
-  allWords
+  allWords,
+  onExerciseResult
 }) => {
   const { t } = useTranslation();
   const { containerRef, triggerFeedbackAnimation } = useAnimationTriggers();
   const [isProcessing, setIsProcessing] = useState(false);
   const startTimeRef = useRef(Date.now());
+  const [currentExerciseType, setCurrentExerciseType] = useState<
+    (typeof EXERCISE_SEQUENCE)[number]
+  >(EXERCISE_SEQUENCE[0]);
 
   // Determine which exercise type to use based on word index
-  const exerciseTypeIndex = session.currentWordIndex % EXERCISE_SEQUENCE.length;
-  const currentExerciseType = EXERCISE_SEQUENCE[exerciseTypeIndex] as any;
+  useEffect(() => {
+    const randomIndex = Math.floor(Math.random() * EXERCISE_SEQUENCE.length);
+    setCurrentExerciseType(EXERCISE_SEQUENCE[randomIndex]);
+  }, [session.currentWordIndex]);
 
-  const handleExerciseComplete = useCallback(
-    (result: LearningManagement.ActivityResult | Practice.ExerciseResult) => {
-      if (isProcessing) return;
+  const handleExerciseComplete = (
+    result: LearningManagement.ActivityResult | Practice.ExerciseResult
+  ) => {
+    if (isProcessing) return;
 
-      setIsProcessing(true);
+    setIsProcessing(true);
 
-      try {
-        const normalizedResult = toPracticeResult(result);
+    try {
+      const normalizedResult = toPracticeResult(result);
+      const durationMs = Date.now() - startTimeRef.current;
+      const payload: Practice.SubmitFSRSItem = {
+        wordId: currentWord.id ?? normalizedResult.wordId!,
+        isCorrect: normalizedResult.isCorrect,
+        durationMs,
+        exerciseType: normalizedResult.exerciseType,
+        attempts: normalizedResult.attempts,
+        hadWrong: !normalizedResult.isCorrect
+      };
 
-        // Record result in game state
-        gameState.recordResult({
-          ...normalizedResult,
-          wordId: currentWord.id ?? normalizedResult.wordId
-        });
+      onExerciseResult?.(payload);
 
-        void triggerFeedbackAnimation(normalizedResult.isCorrect);
+      // Record result in game state
+      gameState.recordResult({
+        ...normalizedResult,
+        wordId: currentWord.id ?? normalizedResult.wordId
+      });
 
-        // Provide feedback
-        if (normalizedResult.isCorrect) {
-          toast.success(t('exercise_correct'));
-        } else {
-          toast.error(t('exercise_incorrect'));
-        }
+      void triggerFeedbackAnimation(normalizedResult.isCorrect);
 
-        // Check if game ended
-        if (gameState.hasEnded()) {
-          return;
-        }
-
-        // Move to next word
-        const hasMore = session.moveToNextWord();
-        if (!hasMore) {
-          session.endSession();
-        }
-        startTimeRef.current = Date.now();
-      } catch (error) {
-        console.error('Error processing exercise result:', error);
-        toast.error(t('exercise_error'));
-      } finally {
-        setIsProcessing(false);
+      // Provide feedback
+      if (normalizedResult.isCorrect) {
+        toast.success(t('exercise_correct'));
+      } else {
+        toast.error(t('exercise_incorrect'));
+        session.requeueCurrentWordRandomly();
       }
-    },
-    [currentWord, gameState, session, isProcessing, t, triggerFeedbackAnimation]
-  );
+
+      // Check if game ended
+      if (gameState.hasEnded()) {
+        return;
+      }
+
+      // Move to next word
+      const hasMore = session.moveToNextWord();
+      if (!hasMore) {
+        session.endSession();
+      }
+      startTimeRef.current = Date.now();
+    } catch (error) {
+      console.error('Error processing exercise result:', error);
+      toast.error(t('exercise_error'));
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   const isGameEnded = gameState.hasEnded() || session.sessionStatus === 'ended';
 

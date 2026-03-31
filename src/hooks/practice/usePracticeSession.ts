@@ -4,6 +4,8 @@
  * Does NOT manage game mechanics, animation, or exercise state
  */
 
+import { useEffect, useState } from 'react';
+
 interface UsePracticeSessionProps {
   words: LearningManagement.Word[];
   onSessionEnd?: () => void;
@@ -16,6 +18,7 @@ interface UsePracticeSessionReturn {
   totalWords: number;
   sessionStatus: 'loading' | 'active' | 'paused' | 'ended';
   moveToNextWord: () => boolean; // returns true if there are more words
+  requeueCurrentWordRandomly: () => void;
   resetSession: () => void;
   endSession: () => void;
   pauseSession: () => void;
@@ -25,6 +28,7 @@ interface UsePracticeSessionReturn {
 export const usePracticeSession = (props: UsePracticeSessionProps): UsePracticeSessionReturn => {
   const { words, onSessionEnd } = props;
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [wordQueue, setWordQueue] = useState<number[]>([]);
   const [sessionStatus, setSessionStatus] = useState<'loading' | 'active' | 'paused' | 'ended'>(
     'loading'
   );
@@ -32,17 +36,18 @@ export const usePracticeSession = (props: UsePracticeSessionProps): UsePracticeS
   // Initialize session when words are loaded
   useEffect(() => {
     if (words && words.length > 0) {
+      setWordQueue(words.map((_word, index) => index));
       setCurrentWordIndex(0);
       setSessionStatus('active');
     }
   }, [words]);
 
-  const currentWord = words.length > 0 ? (words[currentWordIndex] ?? null) : null;
+  const currentWord = wordQueue.length > 0 ? (words[wordQueue[currentWordIndex]] ?? null) : null;
 
-  const moveToNextWord = useCallback((): boolean => {
+  const moveToNextWord = (): boolean => {
     const nextIndex = currentWordIndex + 1;
 
-    if (nextIndex >= words.length) {
+    if (nextIndex >= wordQueue.length) {
       setSessionStatus('ended');
       onSessionEnd?.();
       return false;
@@ -50,33 +55,53 @@ export const usePracticeSession = (props: UsePracticeSessionProps): UsePracticeS
 
     setCurrentWordIndex(nextIndex);
     return true;
-  }, [currentWordIndex, words.length, onSessionEnd]);
+  };
 
-  const resetSession = useCallback(() => {
+  const requeueCurrentWordRandomly = () => {
+    // Move the current word to a random position later in the queue (no duplicates)
+    setWordQueue(prevQueue => {
+      const current = prevQueue[currentWordIndex];
+      if (current === undefined) return prevQueue;
+
+      const nextQueue = [...prevQueue];
+      nextQueue.splice(currentWordIndex, 1);
+
+      const remaining = nextQueue.length - currentWordIndex;
+      const insertionOffset = Math.floor(Math.random() * (remaining + 1));
+      const insertAt = currentWordIndex + insertionOffset;
+
+      nextQueue.splice(insertAt, 0, current);
+      return nextQueue;
+    });
+  };
+
+  const resetSession = () => {
+    setWordQueue(words.map((_word, index) => index));
     setCurrentWordIndex(0);
     setSessionStatus('active');
-  }, []);
+  };
 
-  const endSession = useCallback(() => {
+  const endSession = () => {
     setSessionStatus('ended');
     onSessionEnd?.();
-  }, [onSessionEnd]);
+  };
 
-  const pauseSession = useCallback(() => {
+  const pauseSession = () => {
     setSessionStatus('paused');
-  }, []);
+  };
 
-  const resumeSession = useCallback(() => {
+  const resumeSession = () => {
     setSessionStatus('active');
-  }, []);
+  };
 
   return {
     currentWord,
     allWords: words,
     currentWordIndex,
-    totalWords: words.length,
+    totalWords: wordQueue.length,
     sessionStatus,
     moveToNextWord,
+    requeueCurrentWordRandomly,
     resetSession,
     endSession,
     pauseSession,
