@@ -234,6 +234,7 @@ declare global {
   const PopoverAnchor: typeof import('../components/ui/popover').PopoverAnchor
   const PopoverContent: typeof import('../components/ui/popover').PopoverContent
   const PopoverTrigger: typeof import('../components/ui/popover').PopoverTrigger
+  const Progress: typeof import('../components/ui/progress').Progress
   const QueryClient: typeof import('@tanstack/react-query').QueryClient
   const QueryClientProvider: typeof import('@tanstack/react-query').QueryClientProvider
   const RadioGroup: typeof import('../components/ui/radio-group').RadioGroup

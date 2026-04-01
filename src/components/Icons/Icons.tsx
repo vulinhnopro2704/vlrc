@@ -77,7 +77,8 @@ import {
   Flame,
   Undo2,
   Plus,
-  Volume2
+  Volume2,
+  ArrowRight
 } from 'lucide-react';
 
 export const Icons = {
@@ -158,6 +159,7 @@ export const Icons = {
   Flame: Flame,
   Undo2: Undo2,
   Volume2: Volume2,
+  ArrowRight: ArrowRight,
   Plus: Plus,
   GitHub: ({ ...props }: LucideProps) => (
     <svg

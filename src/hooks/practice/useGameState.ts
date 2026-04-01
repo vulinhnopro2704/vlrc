@@ -1,0 +1,124 @@
+/**
+ * useGameState Hook
+ * Wraps GamificationEngine, provides game state to components
+ * This is the bridge between pure GamificationEngine and React components
+ */
+
+import { GamificationEngine } from '@/lib/practice/GamificationEngine';
+import type { DifficultyLevel } from '@/lib/practice/practiceConfig';
+
+interface UseGameStateProps {
+  totalWords: number;
+  difficulty?: DifficultyLevel;
+}
+
+interface UseGameStateReturn {
+  gameState: Practice.GameState;
+  recordResult: (result: Omit<Practice.ExerciseResult, 'streakAtTime' | 'timestamp'>) => void;
+  getScore: () => number;
+  getStreak: () => number;
+  getBestStreak: () => number;
+  getLives: () => number;
+  hasEnded: () => boolean;
+  getProgress: () => number;
+  getSessionSummary: () => {
+    totalExercises: number;
+    correctAnswers: number;
+    accuracy: number;
+    totalScore: number;
+    bestStreak: number;
+    averageTimeMs: number;
+  };
+  reset: () => void;
+}
+
+export const useGameState = (props: UseGameStateProps): UseGameStateReturn => {
+  const { totalWords, difficulty = 'NORMAL' } = props;
+  const engineRef = useRef<GamificationEngine | null>(null);
+  const [gameState, setGameState] = useState<Practice.GameState>(() => {
+    engineRef.current = new GamificationEngine(totalWords, difficulty);
+    return engineRef.current.getGameState();
+  });
+
+  useEffect(() => {
+    if (totalWords > 0 && gameState.totalWords === 0) {
+      engineRef.current = new GamificationEngine(totalWords, difficulty);
+      setGameState(engineRef.current.getGameState());
+    }
+  }, [totalWords, difficulty, gameState.totalWords]);
+
+  const recordResult = (result: Omit<Practice.ExerciseResult, 'streakAtTime' | 'timestamp'>) => {
+    if (!engineRef.current) return;
+
+    try {
+      engineRef.current.recordResult(result);
+      setGameState(engineRef.current.getGameState());
+    } catch (error) {
+      console.error('Error recording result:', error);
+    }
+  };
+
+  const getScore = () => {
+    return engineRef.current?.getScore() ?? 0;
+  };
+
+  const getStreak = () => {
+    return engineRef.current?.getStreak() ?? 0;
+  };
+
+  const getBestStreak = () => {
+    return engineRef.current?.getBestStreak() ?? 0;
+  };
+
+  const getLives = () => {
+    return engineRef.current?.getLives() ?? 0;
+  };
+
+  const hasEnded = () => {
+    return engineRef.current?.hasGameEnded() ?? false;
+  };
+
+  const getProgress = () => {
+    return engineRef.current?.getProgress() ?? 0;
+  };
+
+  const getSessionSummary = () => {
+    const totalExercises = gameState.exercisesCompleted.length;
+    const correctAnswers = gameState.exercisesCompleted.filter(result => result.isCorrect).length;
+    const accuracy = totalExercises > 0 ? Math.round((correctAnswers / totalExercises) * 100) : 0;
+    const averageTimeMs =
+      totalExercises > 0
+        ? Math.round(
+            gameState.exercisesCompleted.reduce((sum, result) => sum + result.timeSpentMs, 0) /
+              totalExercises
+          )
+        : 0;
+
+    return {
+      totalExercises,
+      correctAnswers,
+      accuracy,
+      totalScore: gameState.cumulativeScore,
+      bestStreak: gameState.bestStreak,
+      averageTimeMs
+    };
+  };
+
+  const reset = () => {
+    engineRef.current = new GamificationEngine(totalWords, difficulty);
+    setGameState(engineRef.current.getGameState());
+  };
+
+  return {
+    gameState,
+    recordResult,
+    getScore,
+    getStreak,
+    getBestStreak,
+    getLives,
+    hasEnded,
+    getProgress,
+    getSessionSummary,
+    reset
+  };
+};

@@ -67,6 +67,13 @@ declare namespace Progress {
     take?: number;
   }
 
+  interface ReviewWordsResponse {
+    data: WordProgress[];
+    total?: number;
+    nextCursor?: number | null;
+    hasMore?: boolean;
+  }
+
   // ── Payloads ──
 
   type ReviewResult = 'correct' | 'incorrect';
