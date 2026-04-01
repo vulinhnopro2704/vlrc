@@ -25,7 +25,6 @@ declare namespace Practice {
 
   // ── New Activity Types for Practice Feature ──
   type PracticeActivityType =
-    | 'scrambled-word'
     | 'speed-challenge'
     | 'word-puzzle'
     | 'matching-pairs'

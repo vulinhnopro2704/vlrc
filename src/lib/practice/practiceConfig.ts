@@ -28,7 +28,7 @@ export const PRACTICE_CONFIG = {
   // Exercise variants
   EXERCISES_PER_SESSION: 'all', // 'all' or a number
   REUSE_EXISTING_EXERCISES: true,
-  NEW_EXERCISE_TYPES: ['scrambled-word', 'speed-challenge', 'word-puzzle', 'matching-pairs', 'streak-challenge'] as const,
+  NEW_EXERCISE_TYPES: ['speed-challenge', 'word-puzzle', 'matching-pairs', 'streak-challenge'] as const,
 
   // Difficulty settings
   DIFFICULTY_LEVELS: {

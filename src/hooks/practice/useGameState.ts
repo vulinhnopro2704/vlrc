@@ -4,7 +4,6 @@
  * This is the bridge between pure GamificationEngine and React components
  */
 
-import { useEffect, useRef, useState } from 'react';
 import { GamificationEngine } from '@/lib/practice/GamificationEngine';
 import type { DifficultyLevel } from '@/lib/practice/practiceConfig';
 
@@ -42,9 +41,7 @@ export const useGameState = (props: UseGameStateProps): UseGameStateReturn => {
   });
 
   useEffect(() => {
-    // Initial render often starts with zero words while query is loading.
-    // Recreate engine once words are available to avoid ending after first answer.
-    if (totalWords > 0 && gameState.totalWords !== totalWords) {
+    if (totalWords > 0 && gameState.totalWords === 0) {
       engineRef.current = new GamificationEngine(totalWords, difficulty);
       setGameState(engineRef.current.getGameState());
     }

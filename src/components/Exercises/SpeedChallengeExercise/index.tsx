@@ -1,16 +1,16 @@
 /**
  * SpeedChallengeExercise Component
  * UI-only: Answer a scrambled word within time limit
- * All logic delegated to utilities
+ * All logic delegated to practice library helpers
  */
 
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAnimationTriggers } from '@/hooks/practice/useAnimationTriggers';
 import { useExerciseState } from '@/hooks/practice/useExerciseState';
-import { checkAnswer } from '@/utilities/practice/exerciseHandlers';
+import { checkAnswer } from '@/lib/practice/exerciseHandlers';
 
 interface SpeedChallengeExerciseProps extends LearningManagement.ActivityCardProps {
   exerciseData?: Practice.ExerciseVariant;
@@ -56,7 +56,7 @@ export const SpeedChallengeExercise: React.FC<SpeedChallengeExerciseProps> = ({
     return () => clearInterval(timer);
   }, [disabled, isTimedOut]);
 
-  const handleTimeUp = useCallback(async () => {
+  const handleTimeUp = async () => {
     const timeSpent = Date.now() - startTimeRef.current;
     await triggerFeedbackAnimation(false);
 
@@ -65,15 +65,16 @@ export const SpeedChallengeExercise: React.FC<SpeedChallengeExerciseProps> = ({
       exerciseType: 'speed-challenge',
       isCorrect: false,
       timeSpentMs: timeSpent,
-      attempts,
+      attempts: Math.max(1, attempts),
       timestamp: new Date().toISOString()
     });
-  }, [vocabulary.id, triggerFeedbackAnimation, attempts, onExerciseComplete]);
+  };
 
-  const handleSubmit = useCallback(async () => {
+  const handleSubmit = async () => {
     if (disabled || isTimedOut) return;
 
-    setAttempts(prev => prev + 1);
+    const nextAttempts = attempts + 1;
+    setAttempts(nextAttempts);
     const isCorrect = checkAnswer(userAnswer as string, vocabulary, 'speed-challenge');
 
     await triggerFeedbackAnimation(isCorrect);
@@ -84,18 +85,10 @@ export const SpeedChallengeExercise: React.FC<SpeedChallengeExerciseProps> = ({
       exerciseType: 'speed-challenge',
       isCorrect,
       timeSpentMs: timeSpent,
-      attempts,
+      attempts: nextAttempts,
       timestamp: new Date().toISOString()
     });
-  }, [
-    disabled,
-    isTimedOut,
-    userAnswer,
-    vocabulary,
-    triggerFeedbackAnimation,
-    attempts,
-    onExerciseComplete
-  ]);
+  };
 
   const timePercentage = (timeRemaining / TIME_LIMIT_MS) * 100;
   const timeColor =
@@ -136,6 +129,12 @@ export const SpeedChallengeExercise: React.FC<SpeedChallengeExerciseProps> = ({
         placeholder={t('exercise_type_answer')}
         value={userAnswer as string}
         onChange={e => updateAnswer(e.target.value)}
+        onKeyDown={e => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            void handleSubmit();
+          }
+        }}
         disabled={disabled || isTimedOut}
         autoFocus
         className='text-lg'
@@ -145,6 +144,7 @@ export const SpeedChallengeExercise: React.FC<SpeedChallengeExerciseProps> = ({
       <Button
         onClick={handleSubmit}
         disabled={disabled || isTimedOut || !userAnswer}
+        data-exercise-submit='true'
         className='w-full'>
         {t('action_check')}
       </Button>

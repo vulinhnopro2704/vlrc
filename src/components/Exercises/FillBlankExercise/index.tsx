@@ -16,23 +16,21 @@ export default function FillBlankExercise({
   const [startTime] = useState(Date.now());
 
   const handleSubmit = () => {
+    if (feedback !== 'idle') return;
+
     const isCorrect = userInput.toLowerCase().trim() === word.toLowerCase();
     setFeedback(isCorrect ? 'correct' : 'incorrect');
     const currentAttempts = attempts + 1;
     setAttempts(currentAttempts);
 
-    if (isCorrect && onComplete) {
-      setTimeout(() => {
-        onComplete({
-          wordId: id,
-          activityType: 'fill-blank',
-          isCorrect: true,
-          timeSpent: Date.now() - startTime,
-          attempts: currentAttempts,
-          timestamp: new Date().toISOString()
-        });
-      }, 1500);
-    }
+    onComplete?.({
+      wordId: id,
+      activityType: 'fill-blank',
+      isCorrect,
+      timeSpent: Date.now() - startTime,
+      attempts: currentAttempts,
+      timestamp: new Date().toISOString()
+    });
   };
 
   return (
@@ -75,7 +73,7 @@ export default function FillBlankExercise({
         <Button
           variant='accent'
           onClick={handleSubmit}
-          disabled={!userInput || feedback === 'correct'}
+          disabled={!userInput || feedback !== 'idle'}
           className='w-full mt-4'>
           {t('check_answer')}
         </Button>

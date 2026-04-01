@@ -5,7 +5,8 @@
  */
 
 import { ExerciseManager } from '@/components/Exercises';
-import { useAnimationTriggers } from '@/hooks/practice/useAnimationTriggers';
+import { WordReviewPopover } from '@/components/practice';
+import { useUpdateEffect } from 'ahooks';
 
 interface PracticeExercisePanelProps {
   currentWord: LearningManagement.Word;
@@ -15,10 +16,13 @@ interface PracticeExercisePanelProps {
   onExerciseResult?: (result: Practice.SubmitFSRSItem) => void;
 }
 
+interface PendingReviewState {
+  payload: Practice.SubmitFSRSItem;
+  exerciseResult: Omit<Practice.ExerciseResult, 'streakAtTime' | 'timestamp'>;
+}
+
 // Mix of new and existing exercises for variety
 const EXERCISE_SEQUENCE = [
-  'scrambled-word',
-  'flip',
   'speed-challenge',
   'fill-blank',
   'word-puzzle',
@@ -60,67 +64,73 @@ const PracticeExercisePanel: React.FC<PracticeExercisePanelProps> = ({
   onExerciseResult
 }) => {
   const { t } = useTranslation();
-  const { containerRef, triggerFeedbackAnimation } = useAnimationTriggers();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [pendingReview, setPendingReview] = useState<PendingReviewState | null>(null);
   const startTimeRef = useRef(Date.now());
   const [currentExerciseType, setCurrentExerciseType] = useState<
     (typeof EXERCISE_SEQUENCE)[number]
-  >(EXERCISE_SEQUENCE[0]);
+  >(() => EXERCISE_SEQUENCE[Math.floor(Math.random() * EXERCISE_SEQUENCE.length)]);
 
   // Determine which exercise type to use based on word index
-  useEffect(() => {
+  useUpdateEffect(() => {
     const randomIndex = Math.floor(Math.random() * EXERCISE_SEQUENCE.length);
     setCurrentExerciseType(EXERCISE_SEQUENCE[randomIndex]);
   }, [session.currentWordIndex]);
 
+  useUpdateEffect(() => {
+    // Ensure each new word starts with a fresh processing/time state.
+    setIsProcessing(false);
+    setPendingReview(null);
+    startTimeRef.current = Date.now();
+  }, [session.currentWordIndex, currentWord.id, currentExerciseType]);
+
+  const commitAnswer = async (payload: Practice.SubmitFSRSItem) => {
+    const resolvedExerciseType =
+      (payload.exerciseType as LearningManagement.ActivityType | Practice.PracticeActivityType) ??
+      currentExerciseType;
+
+    const exerciseResult: Omit<Practice.ExerciseResult, 'streakAtTime' | 'timestamp'> = {
+      wordId: payload.wordId,
+      exerciseType: resolvedExerciseType,
+      isCorrect: payload.isCorrect,
+      timeSpentMs: payload.durationMs ?? 0,
+      attempts: Math.max(1, payload.attempts ?? 1),
+      pointsEarned: 0
+    };
+
+    onExerciseResult?.(payload);
+    gameState.recordResult(exerciseResult);
+    setPendingReview({
+      payload,
+      exerciseResult
+    });
+  };
+
   const handleExerciseComplete = (
     result: LearningManagement.ActivityResult | Practice.ExerciseResult
   ) => {
-    if (isProcessing) return;
+    if (isProcessing || pendingReview) return;
 
     setIsProcessing(true);
 
     try {
       const normalizedResult = toPracticeResult(result);
       const durationMs = Date.now() - startTimeRef.current;
+      const resolvedWordId = Number(currentWord.id ?? normalizedResult.wordId);
+
+      if (!Number.isFinite(resolvedWordId)) {
+        throw new Error('Invalid word id for FSRS submission');
+      }
+
       const payload: Practice.SubmitFSRSItem = {
-        wordId: currentWord.id ?? normalizedResult.wordId!,
+        wordId: resolvedWordId,
         isCorrect: normalizedResult.isCorrect,
         durationMs,
         exerciseType: normalizedResult.exerciseType,
-        attempts: normalizedResult.attempts,
+        attempts: Math.max(1, normalizedResult.attempts ?? 1),
         hadWrong: !normalizedResult.isCorrect
       };
-
-      onExerciseResult?.(payload);
-
-      // Record result in game state
-      gameState.recordResult({
-        ...normalizedResult,
-        wordId: currentWord.id ?? normalizedResult.wordId
-      });
-
-      void triggerFeedbackAnimation(normalizedResult.isCorrect);
-
-      // Provide feedback
-      if (normalizedResult.isCorrect) {
-        toast.success(t('exercise_correct'));
-      } else {
-        toast.error(t('exercise_incorrect'));
-        session.requeueCurrentWordRandomly();
-      }
-
-      // Check if game ended
-      if (gameState.hasEnded()) {
-        return;
-      }
-
-      // Move to next word
-      const hasMore = session.moveToNextWord();
-      if (!hasMore) {
-        session.endSession();
-      }
-      startTimeRef.current = Date.now();
+      void commitAnswer(payload);
     } catch (error) {
       console.error('Error processing exercise result:', error);
       toast.error(t('exercise_error'));
@@ -129,10 +139,53 @@ const PracticeExercisePanel: React.FC<PracticeExercisePanelProps> = ({
     }
   };
 
+  const handleDontRemember = () => {
+    if (isProcessing || pendingReview) return;
+    setIsProcessing(true);
+
+    const resolvedWordId = Number(currentWord.id);
+    if (!Number.isFinite(resolvedWordId)) {
+      setIsProcessing(false);
+      toast.error(t('exercise_error'));
+      return;
+    }
+
+    const payload: Practice.SubmitFSRSItem = {
+      wordId: resolvedWordId,
+      isCorrect: false,
+      durationMs: Date.now() - startTimeRef.current,
+      exerciseType: currentExerciseType,
+      attempts: 1,
+      hadWrong: true
+    };
+
+    void commitAnswer(payload).finally(() => {
+      setIsProcessing(false);
+    });
+  };
+
+  const handleNextWord = () => {
+    if (!pendingReview) return;
+
+    if (!pendingReview.payload.isCorrect) {
+      session.requeueCurrentWordRandomly();
+    }
+
+    if (gameState.hasEnded()) {
+      session.endSession();
+      return;
+    }
+
+    const hasMore = session.moveToNextWord();
+    if (!hasMore) {
+      session.endSession();
+    }
+  };
+
   const isGameEnded = gameState.hasEnded() || session.sessionStatus === 'ended';
 
   return (
-    <div ref={containerRef} className='space-y-6'>
+    <div className='space-y-6'>
       {/* Game Over Warning */}
       {isGameEnded && (
         <div className='p-4 bg-red-500/10 border border-red-500 rounded-lg flex items-start gap-3'>
@@ -152,16 +205,36 @@ const PracticeExercisePanel: React.FC<PracticeExercisePanelProps> = ({
             <p className='text-sm text-muted-foreground uppercase tracking-wider'>
               {t(`exercise_${String(currentExerciseType).replaceAll('-', '_')}`)}
             </p>
-            <h2 className='text-3xl font-bold text-foreground'>{currentWord.word}</h2>
+            <h2 className='text-2xl font-bold text-foreground'>
+              {t('practice_focus_no_word_hint')}
+            </h2>
           </div>
 
           {/* Exercise Component */}
           <ExerciseManager
+            key={`${String(currentExerciseType)}-${session.currentWordIndex}-${String(currentWord.id ?? '')}`}
             vocabulary={currentWord}
             activityType={currentExerciseType}
             onComplete={handleExerciseComplete}
-            disabled={isProcessing}
+            disabled={isProcessing || Boolean(pendingReview)}
             words={allWords}
+          />
+
+          <div className='flex justify-center'>
+            <Button
+              variant='outline'
+              onClick={handleDontRemember}
+              disabled={isProcessing || Boolean(pendingReview)}>
+              {t('practice_dont_remember')}
+            </Button>
+          </div>
+
+          <WordReviewPopover
+            open={Boolean(pendingReview)}
+            word={currentWord}
+            isCorrect={pendingReview?.payload.isCorrect ?? false}
+            attempts={pendingReview?.exerciseResult.attempts}
+            onNext={pendingReview ? handleNextWord : undefined}
           />
         </>
       )}

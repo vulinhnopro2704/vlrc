@@ -4,7 +4,6 @@ import FlipCardExercise from './FlipCardExercise';
 import ListenAndFillExercise from './ListenAndFillExercise';
 import FillBlankExercise from './FillBlankExercise';
 import MeaningLookupExercise from './MeaningLookupExercise';
-import ScrambledWordExercise from './ScrambledWordExercise';
 import SpeedChallengeExercise from './SpeedChallengeExercise';
 import WordPuzzleExercise from './WordPuzzleExercise';
 import MatchingPairsExercise from './MatchingPairsExercise';
@@ -20,7 +19,6 @@ interface ExerciseManagerProps {
   onComplete?: (result: any) => void;
   disabled?: boolean;
   words?: LearningManagement.Word[];
-  currentStreak?: number;
 }
 
 export default function ExerciseManager({
@@ -30,8 +28,7 @@ export default function ExerciseManager({
   exerciseType,
   onComplete,
   disabled = false,
-  words = [],
-  currentStreak = 0
+  words = []
 }: ExerciseManagerProps) {
   // Support both exerciseType and activityType for backward compatibility
   const type = (activityType || exerciseType) as ExerciseType;
@@ -48,20 +45,12 @@ export default function ExerciseManager({
       return (
         <MeaningLookupExercise
           vocabulary={vocabulary}
-          allVocabularies={allVocabularies}
+          allVocabularies={words.length > 0 ? words : allVocabularies}
           onComplete={onComplete}
         />
       );
 
     // New practice exercises
-    case 'scrambled-word':
-      return (
-        <ScrambledWordExercise
-          vocabulary={vocabulary}
-          onExerciseComplete={onComplete}
-          disabled={disabled}
-        />
-      );
     case 'speed-challenge':
       return (
         <SpeedChallengeExercise
@@ -93,7 +82,6 @@ export default function ExerciseManager({
           vocabulary={vocabulary}
           onExerciseComplete={onComplete}
           disabled={disabled}
-          currentStreak={currentStreak}
         />
       );
 

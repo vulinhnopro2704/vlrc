@@ -1,14 +1,15 @@
 /**
  * MatchingPairsExercise Component
  * UI-only: Match words with their meanings
- * All logic delegated to utilities
+ * All logic delegated to practice library helpers
  */
 
-import { useState, useCallback, useRef, useMemo } from 'react';
+import { useMemo, useState, useRef } from 'react';
+import { useUpdateEffect } from 'ahooks';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { useAnimationTriggers } from '@/hooks/practice/useAnimationTriggers';
-import { shuffleArray } from '@/utilities/practice/exerciseCommon';
+import { shuffleArray } from '@/lib/practice/exerciseCommon';
 
 interface MatchingPairsExerciseProps extends LearningManagement.ActivityCardProps {
   exerciseData?: Practice.ExerciseVariant;
@@ -17,9 +18,32 @@ interface MatchingPairsExerciseProps extends LearningManagement.ActivityCardProp
 }
 
 interface PairMatch {
+  id: string;
   word: string;
   meaning: string;
 }
+
+const createPairs = (
+  vocabulary: LearningManagement.Word,
+  words: LearningManagement.Word[]
+): PairMatch[] => {
+  const correctPair = {
+    id: String(vocabulary.id),
+    word: vocabulary.word,
+    meaning: vocabulary.meaning
+  };
+
+  const distractors = words
+    .filter(w => w.id !== vocabulary.id)
+    .slice(0, 2)
+    .map(w => ({
+      id: String(w.id),
+      word: w.word,
+      meaning: w.meaning
+    }));
+
+  return shuffleArray([correctPair, ...distractors]);
+};
 
 export const MatchingPairsExercise: React.FC<MatchingPairsExerciseProps> = ({
   vocabulary,
@@ -32,58 +56,49 @@ export const MatchingPairsExercise: React.FC<MatchingPairsExerciseProps> = ({
   const startTimeRef = useRef(Date.now());
   const [attempts, setAttempts] = useState(0);
   const [matches, setMatches] = useState<Map<string, string>>(new Map());
-  const [selectedWord, setSelectedWord] = useState<string | null>(null);
+  const [selectedWordId, setSelectedWordId] = useState<string | null>(null);
+  const wordsSignature = useMemo(() => words.map(word => String(word.id)).join('|'), [words]);
+  const [pairs, setPairs] = useState<PairMatch[]>(() => createPairs(vocabulary, words));
 
-  // Generate pairs from current word + some distractors
-  const pairs: PairMatch[] = useMemo(() => {
-    const correctPair = { word: vocabulary.word, meaning: vocabulary.meaning };
-
-    // Get some distractors from other words
-    const distractors = words
-      .filter(w => w.id !== vocabulary.id)
-      .slice(0, 2)
-      .map(w => ({
-        word: w.word,
-        meaning: w.meaning
-      }));
-
-    return shuffleArray([correctPair, ...distractors]);
-  }, [vocabulary, words]);
-
-  const wordsList = shuffleArray(pairs.map(p => p.word));
-  const meaningsList = pairs.map(p => p.meaning);
-
-  const handleWordSelect = useCallback((word: string) => {
-    setSelectedWord(prev => (prev === word ? null : word));
-  }, []);
-
-  const handleMeaningSelect = useCallback(
-    (meaning: string) => {
-      if (!selectedWord) return;
-
-      const newMatches = new Map(matches);
-      newMatches.set(selectedWord, meaning);
-      setMatches(newMatches);
-      setSelectedWord(null);
-    },
-    [selectedWord, matches]
-  );
-
-  const handleClear = useCallback(() => {
+  useUpdateEffect(() => {
+    setPairs(createPairs(vocabulary, words));
     setMatches(new Map());
-    setSelectedWord(null);
-  }, []);
+    setSelectedWordId(null);
+    setAttempts(0);
+    startTimeRef.current = Date.now();
+  }, [vocabulary.id, wordsSignature]);
 
-  const handleSubmit = useCallback(async () => {
+  const wordsList = pairs.map(p => ({ id: p.id, word: p.word }));
+  const meaningsList = pairs.map(p => ({ id: p.id, meaning: p.meaning }));
+
+  const handleWordSelect = (wordId: string) => {
+    setSelectedWordId(prev => (prev === wordId ? null : wordId));
+  };
+
+  const handleMeaningSelect = (meaningId: string) => {
+    if (!selectedWordId) return;
+
+    const newMatches = new Map(matches);
+    newMatches.set(selectedWordId, meaningId);
+    setMatches(newMatches);
+    setSelectedWordId(null);
+  };
+
+  const handleClear = () => {
+    setMatches(new Map());
+    setSelectedWordId(null);
+  };
+
+  const handleSubmit = async () => {
     if (disabled || matches.size === 0) return;
 
-    setAttempts(prev => prev + 1);
+    const nextAttempts = attempts + 1;
+    setAttempts(nextAttempts);
 
     // Check if all matches are correct
     let allCorrect = true;
-    for (const [word, meaning] of matches) {
-      const pair = pairs.find(p => p.word === word);
-      if (!pair || pair.meaning !== meaning) {
+    for (const [wordId, meaningId] of matches) {
+      if (wordId !== meaningId) {
         allCorrect = false;
         break;
       }
@@ -99,10 +114,10 @@ export const MatchingPairsExercise: React.FC<MatchingPairsExerciseProps> = ({
       exerciseType: 'matching-pairs',
       isCorrect,
       timeSpentMs: timeSpent,
-      attempts,
+      attempts: nextAttempts,
       timestamp: new Date().toISOString()
     });
-  }, [disabled, matches, pairs, triggerFeedbackAnimation, attempts, onExerciseComplete]);
+  };
 
   return (
     <div ref={containerRef} className='flex flex-col gap-6 p-6 bg-card rounded-lg border'>
@@ -115,13 +130,13 @@ export const MatchingPairsExercise: React.FC<MatchingPairsExerciseProps> = ({
         {/* Words Column */}
         <div className='space-y-2'>
           <p className='text-sm font-semibold text-foreground mb-3'>{t('exercise_words')}</p>
-          {wordsList.map(word => {
-            const isSelected = selectedWord === word;
-            const isMatched = matches.has(word);
+          {wordsList.map(item => {
+            const isSelected = selectedWordId === item.id;
+            const isMatched = matches.has(item.id);
             return (
               <button
-                key={word}
-                onClick={() => handleWordSelect(word)}
+                key={`word-${item.id}`}
+                onClick={() => handleWordSelect(item.id)}
                 disabled={disabled || isMatched}
                 className={`
                   w-full p-3 rounded-lg text-sm font-medium text-left transition-all
@@ -134,7 +149,7 @@ export const MatchingPairsExercise: React.FC<MatchingPairsExerciseProps> = ({
                   }
                   ${disabled && !isMatched ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
                 `}>
-                {word}
+                {item.word}
               </button>
             );
           })}
@@ -143,26 +158,26 @@ export const MatchingPairsExercise: React.FC<MatchingPairsExerciseProps> = ({
         {/* Meanings Column */}
         <div className='space-y-2'>
           <p className='text-sm font-semibold text-foreground mb-3'>{t('exercise_meanings')}</p>
-          {meaningsList.map(meaning => {
-            const matchedWord = Array.from(matches.entries()).find(([, m]) => m === meaning)?.[0];
-            const isSelectable = selectedWord !== null;
+          {meaningsList.map(item => {
+            const matchedWord = Array.from(matches.entries()).find(([, meaningId]) => meaningId === item.id)?.[0];
+            const isSelectable = selectedWordId !== null;
             return (
               <button
-                key={meaning}
-                onClick={() => handleMeaningSelect(meaning)}
+                key={`meaning-${item.id}`}
+                onClick={() => handleMeaningSelect(item.id)}
                 disabled={disabled || !!matchedWord || !isSelectable}
                 className={`
                   w-full p-3 rounded-lg text-sm text-left transition-all line-clamp-2
                   ${
                     matchedWord
                       ? 'bg-green-500/20 text-green-700 border border-green-500'
-                      : isSelectable && selectedWord
+                      : isSelectable && selectedWordId
                         ? 'bg-blue-500/10 text-foreground border border-blue-300 hover:bg-blue-500/20 cursor-pointer'
                         : 'bg-secondary text-secondary-foreground border border-secondary'
                   }
                   ${disabled || (!isSelectable && !matchedWord) ? 'opacity-50 cursor-not-allowed' : ''}
                 `}>
-                {meaning}
+                {item.meaning}
               </button>
             );
           })}
@@ -175,15 +190,19 @@ export const MatchingPairsExercise: React.FC<MatchingPairsExerciseProps> = ({
           <p className='text-xs text-muted-foreground'>
             {t('exercise_matched')} ({matches.size})
           </p>
-          {Array.from(matches.entries()).map(([word, meaning]) => (
+          {Array.from(matches.entries()).map(([wordId, meaningId]) => {
+            const wordItem = pairs.find(p => p.id === wordId);
+            const meaningItem = pairs.find(p => p.id === meaningId);
+            return (
             <div
-              key={word}
+              key={`matched-${wordId}-${meaningId}`}
               className='flex items-center gap-2 p-2 bg-green-500/10 rounded border border-green-500/30'>
-              <span className='flex-1 text-sm font-medium'>{word}</span>
+              <span className='flex-1 text-sm font-medium'>{wordItem?.word ?? '-'}</span>
               <span className='text-green-600'>→</span>
-              <span className='flex-1 text-sm text-right'>{meaning}</span>
+              <span className='flex-1 text-sm text-right'>{meaningItem?.meaning ?? '-'}</span>
             </div>
-          ))}
+          );
+          })}
         </div>
       )}
 
@@ -192,7 +211,7 @@ export const MatchingPairsExercise: React.FC<MatchingPairsExerciseProps> = ({
         <Button variant='outline' onClick={handleClear} disabled={disabled || matches.size === 0}>
           {t('action_clear')}
         </Button>
-        <Button onClick={handleSubmit} disabled={disabled || matches.size === 0}>
+        <Button onClick={handleSubmit} disabled={disabled || matches.size === 0} data-exercise-submit='true'>
           {t('action_check')} ({matches.size}/{pairs.length})
         </Button>
       </div>

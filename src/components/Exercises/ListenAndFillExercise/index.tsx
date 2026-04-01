@@ -1,5 +1,6 @@
 'use client';
 
+import { useMount } from 'ahooks';
 import useAudioSynthesis from '@/hooks/useAudioSynthesis';
 import Icons from '@/components/Icons';
 
@@ -17,28 +18,26 @@ export default function ListenAndFillExercise({
   const [attempts, setAttempts] = useState(0);
   const [startTime] = useState(Date.now());
 
-  useEffect(() => {
+  useMount(() => {
     speak(vocabulary.word, { lang: 'en-US', rate: 0.8 });
-  }, [vocabulary, speak]);
+  });
 
   const handleSubmit = () => {
+    if (feedback !== 'idle') return;
+
     const isCorrect = userInput.toLowerCase().trim() === vocabulary.word.toLowerCase();
     setFeedback(isCorrect ? 'correct' : 'incorrect');
     const currentAttempts = attempts + 1;
     setAttempts(currentAttempts);
 
-    if (isCorrect && onComplete) {
-      setTimeout(() => {
-        onComplete({
-          wordId: vocabulary.id,
-          activityType: 'listen-fill',
-          isCorrect: true,
-          timeSpent: Date.now() - startTime,
-          attempts: currentAttempts,
-          timestamp: new Date().toISOString()
-        });
-      }, 1500);
-    }
+    onComplete?.({
+      wordId: vocabulary.id,
+      activityType: 'listen-fill',
+      isCorrect,
+      timeSpent: Date.now() - startTime,
+      attempts: currentAttempts,
+      timestamp: new Date().toISOString()
+    });
   };
 
   return (
@@ -65,6 +64,15 @@ export default function ListenAndFillExercise({
           className='mb-4'
         />
 
+        {vocabulary.exampleVi ? (
+          <div className='mb-4 rounded-lg border border-primary/20 bg-primary/5 p-3'>
+            <p className='text-xs font-semibold uppercase tracking-wide text-muted-foreground'>
+              Example (VI)
+            </p>
+            <p className='mt-1 text-sm text-foreground'>{vocabulary.exampleVi}</p>
+          </div>
+        ) : null}
+
         {feedback === 'correct' && (
           <div className='p-3 rounded-lg bg-green-500/20 text-green-700 dark:text-green-400 flex items-center gap-2'>
             <Icons.CheckCircle2 className='h-5 w-5' />
@@ -74,14 +82,14 @@ export default function ListenAndFillExercise({
         {feedback === 'incorrect' && (
           <div className='p-3 rounded-lg bg-red-500/20 text-red-700 dark:text-red-400 flex items-center gap-2'>
             <Icons.X className='h-5 w-5' />
-            Try again! The word is: {vocabulary.word}
+            {t('exercise_incorrect')}
           </div>
         )}
 
         <Button
           variant='accent'
           onClick={handleSubmit}
-          disabled={!userInput || feedback === 'correct'}
+          disabled={!userInput || feedback !== 'idle'}
           className='w-full mt-4'>
           {t('check_answer')}
         </Button>

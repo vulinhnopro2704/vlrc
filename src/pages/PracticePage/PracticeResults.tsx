@@ -7,10 +7,21 @@
 import Icons from '@/components/Icons';
 import { useTranslation } from 'react-i18next';
 
+interface PracticeReviewDetailItem {
+  wordId: number;
+  word: string;
+  meaningVi: string;
+  example: string;
+  isCorrect: boolean;
+  attempts: number;
+}
+
 const PracticeResults = ({
-  session
+  session,
+  reviewItems
 }: {
   session: ReturnType<typeof import('@/hooks/practice/useGameState').useGameState>;
+  reviewItems: PracticeReviewDetailItem[];
 }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -104,6 +115,48 @@ const PracticeResults = ({
                 {(summary.averageTimeMs / 1000).toFixed(1)}s
               </p>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Reviewed Words Details */}
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('practice_reviewed_words_details')}</CardTitle>
+          </CardHeader>
+          <CardContent className='space-y-3'>
+            {reviewItems.length === 0 ? (
+              <p className='text-sm text-muted-foreground'>{t('practice_no_reviewed_words_details')}</p>
+            ) : (
+              reviewItems.map(item => (
+                <div key={item.wordId} className='rounded-lg border p-3 space-y-2'>
+                  <div className='flex items-center justify-between gap-2'>
+                    <p className='font-semibold text-foreground'>{item.word}</p>
+                    <span
+                      className={`text-xs px-2 py-1 rounded-full ${
+                        item.isCorrect
+                          ? 'bg-green-500/15 text-green-700'
+                          : 'bg-red-500/15 text-red-700'
+                      }`}>
+                      {item.isCorrect ? t('exercise_correct') : t('exercise_wrong')}
+                    </span>
+                  </div>
+                  <p className='text-sm text-muted-foreground'>
+                    <span className='font-medium text-foreground'>{t('practice_meaning_vi_label')}:</span>{' '}
+                    {item.meaningVi}
+                  </p>
+                  <p className='text-sm text-muted-foreground'>
+                    <span className='font-medium text-foreground'>{t('practice_attempts_label')}:</span>{' '}
+                    {item.attempts}
+                  </p>
+                  {item.example ? (
+                    <p className='text-sm text-muted-foreground'>
+                      <span className='font-medium text-foreground'>{t('practice_example_label')}:</span>{' '}
+                      {item.example}
+                    </p>
+                  ) : null}
+                </div>
+              ))
+            )}
           </CardContent>
         </Card>
 

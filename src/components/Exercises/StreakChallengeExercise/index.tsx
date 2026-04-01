@@ -1,30 +1,27 @@
 /**
  * StreakChallengeExercise Component
- * UI-only: Rapid-fire scrambled words to build streak
- * All logic delegated to utilities
+ * UI-only: Rapid-fire scrambled word challenge
+ * All logic delegated to practice library helpers
  */
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAnimationTriggers } from '@/hooks/practice/useAnimationTriggers';
 import { useExerciseState } from '@/hooks/practice/useExerciseState';
-import { checkAnswer } from '@/utilities/practice/exerciseHandlers';
-import { Flame } from 'lucide-react';
+import { checkAnswer } from '@/lib/practice/exerciseHandlers';
 
 interface StreakChallengeExerciseProps extends LearningManagement.ActivityCardProps {
   exerciseData?: Practice.ExerciseVariant;
   onExerciseComplete?: (result: Practice.ExerciseResult) => void;
-  currentStreak?: number;
 }
 
 export const StreakChallengeExercise: React.FC<StreakChallengeExerciseProps> = ({
   vocabulary,
   onExerciseComplete,
   disabled = false,
-  exerciseData,
-  currentStreak = 0
+  exerciseData
 }) => {
   const { t } = useTranslation();
   const { containerRef, triggerFeedbackAnimation } = useAnimationTriggers();
@@ -37,10 +34,11 @@ export const StreakChallengeExercise: React.FC<StreakChallengeExerciseProps> = (
     exerciseData?.data?.scrambledLetters ||
     vocabulary.word.split('').sort(() => Math.random() - 0.5);
 
-  const handleSubmit = useCallback(async () => {
+  const handleSubmit = async () => {
     if (disabled) return;
 
-    setAttempts(prev => prev + 1);
+    const nextAttempts = attempts + 1;
+    setAttempts(nextAttempts);
     const isCorrect = checkAnswer(userAnswer as string, vocabulary, 'streak-challenge');
 
     setLastResult(isCorrect ? 'correct' : 'wrong');
@@ -53,36 +51,17 @@ export const StreakChallengeExercise: React.FC<StreakChallengeExerciseProps> = (
       exerciseType: 'streak-challenge',
       isCorrect,
       timeSpentMs: timeSpent,
-      attempts,
+      attempts: nextAttempts,
       timestamp: new Date().toISOString()
     });
-  }, [disabled, userAnswer, vocabulary, triggerFeedbackAnimation, attempts, onExerciseComplete]);
-
-  const streakLevel = Math.min(Math.floor(currentStreak / 5), 4);
-  const streakColors = [
-    'text-gray-400',
-    'text-orange-400',
-    'text-orange-500',
-    'text-red-500',
-    'text-red-600'
-  ];
+  };
 
   return (
     <div ref={containerRef} className='flex flex-col gap-6 p-6 bg-card rounded-lg border'>
-      {/* Streak Counter */}
-      <div className='flex items-center justify-center gap-3 mb-4'>
-        <Flame className={`w-8 h-8 ${streakColors[streakLevel]} animate-pulse`} />
-        <div className='text-center'>
-          <p className='text-2xl font-bold text-foreground'>{currentStreak}</p>
-          <p className='text-xs text-muted-foreground'>{t('exercise_current_streak')}</p>
-        </div>
-        <Flame className={`w-8 h-8 ${streakColors[streakLevel]} animate-pulse`} />
-      </div>
-
       {/* Challenge Description */}
       <div className='p-4 bg-primary/10 rounded-lg border border-primary/30'>
         <p className='text-sm text-foreground text-center'>
-          {t('exercise_answer_correctly_to_build_streak')}
+          {t('exercise_answer_fast_for_bonus')}
         </p>
       </div>
 
@@ -107,6 +86,12 @@ export const StreakChallengeExercise: React.FC<StreakChallengeExerciseProps> = (
         placeholder={t('exercise_type_answer')}
         value={userAnswer as string}
         onChange={e => updateAnswer(e.target.value)}
+        onKeyDown={e => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            void handleSubmit();
+          }
+        }}
         disabled={disabled}
         autoFocus
         className='text-lg text-center'
@@ -116,6 +101,7 @@ export const StreakChallengeExercise: React.FC<StreakChallengeExerciseProps> = (
       <Button
         onClick={handleSubmit}
         disabled={disabled || !userAnswer}
+        data-exercise-submit='true'
         className={`w-full text-lg h-12 font-bold transition-all ${
           lastResult === 'correct'
             ? 'bg-green-500 hover:bg-green-600'
@@ -133,9 +119,7 @@ export const StreakChallengeExercise: React.FC<StreakChallengeExerciseProps> = (
           {lastResult === 'correct' ? (
             <div className='space-y-1'>
               <p className='text-lg'>✓ {t('exercise_correct')}</p>
-              <p className='text-xs text-opacity-75'>
-                +{Math.ceil(10 * (1 + currentStreak * 0.1))} {t('exercise_points')}
-              </p>
+              <p className='text-xs text-opacity-75'>+10 {t('exercise_points')}</p>
             </div>
           ) : (
             <p className='text-lg'>✗ {t('exercise_wrong')}</p>

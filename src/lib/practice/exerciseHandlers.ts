@@ -147,3 +147,76 @@ export const checkGenericAnswer = (userAnswer: string, correctAnswer: string, to
   const similarity = calculateSimilarity(normalized, expected);
   return similarity >= 1 - tolerance;
 };
+
+/**
+ * Validate user input by exercise type.
+ * Compatibility API used by practice UI hooks/components.
+ */
+export const validateInput = (
+  userInput: string | string[],
+  exerciseType: LearningManagement.ActivityType | Practice.PracticeActivityType
+): boolean => {
+  const normalized = Array.isArray(userInput)
+    ? userInput.filter(value => value.trim().length > 0)
+    : userInput.trim();
+
+  switch (exerciseType) {
+    case 'fill-blank':
+    case 'meaning-lookup':
+    case 'speed-challenge':
+    case 'word-puzzle':
+    case 'streak-challenge':
+    case 'listen-fill':
+    case 'multiple-choice':
+      return typeof normalized === 'string' && normalized.length > 0;
+    case 'matching-pairs':
+      return Array.isArray(normalized) && normalized.length > 0;
+    case 'flip':
+    case 'pronunciation':
+      return true;
+    default:
+      return false;
+  }
+};
+
+/**
+ * Generic answer checker by exercise type.
+ * Compatibility API used by practice UI components.
+ */
+export const checkAnswer = (
+  userAnswer: string | string[],
+  correctWord: LearningManagement.Word,
+  exerciseType: LearningManagement.ActivityType | Practice.PracticeActivityType,
+  exerciseData?: Record<string, any>
+): boolean => {
+  if (!validateInput(userAnswer, exerciseType)) {
+    return false;
+  }
+
+  const normalized = normalizeString(Array.isArray(userAnswer) ? userAnswer[0] : userAnswer);
+  const correctNormalized = normalizeString(correctWord.word);
+
+  switch (exerciseType) {
+    case 'speed-challenge':
+    case 'fill-blank':
+    case 'word-puzzle':
+    case 'streak-challenge':
+    case 'listen-fill':
+    case 'multiple-choice':
+      return normalized === correctNormalized;
+    case 'meaning-lookup':
+      if (!correctWord.meaning) return false;
+      return (
+        correctWord.meaning.toLowerCase().includes(normalized) ||
+        normalized.toLowerCase().includes(correctWord.meaning.toLowerCase())
+      );
+    case 'matching-pairs':
+      if (!Array.isArray(userAnswer) || !exerciseData?.correctPairs) return false;
+      return JSON.stringify(userAnswer.sort()) === JSON.stringify(exerciseData.correctPairs.sort());
+    case 'flip':
+    case 'pronunciation':
+      return true;
+    default:
+      return false;
+  }
+};

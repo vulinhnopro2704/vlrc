@@ -1,16 +1,16 @@
 /**
  * WordPuzzleExercise Component
  * UI-only: Guess word from hints with progressive letter reveals
- * All logic delegated to utilities
+ * All logic delegated to practice library helpers
  */
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAnimationTriggers } from '@/hooks/practice/useAnimationTriggers';
 import { useExerciseState } from '@/hooks/practice/useExerciseState';
-import { checkAnswer } from '@/utilities/practice/exerciseHandlers';
+import { checkAnswer } from '@/lib/practice/exerciseHandlers';
 import { Lightbulb } from 'lucide-react';
 
 interface WordPuzzleExerciseProps extends LearningManagement.ActivityCardProps {
@@ -21,32 +21,22 @@ interface WordPuzzleExerciseProps extends LearningManagement.ActivityCardProps {
 export const WordPuzzleExercise: React.FC<WordPuzzleExerciseProps> = ({
   vocabulary,
   onExerciseComplete,
-  disabled = false,
-  exerciseData
+  disabled = false
 }) => {
   const { t } = useTranslation();
   const { containerRef, triggerFeedbackAnimation } = useAnimationTriggers();
   const { userAnswer, updateAnswer } = useExerciseState({ exerciseType: 'word-puzzle' });
   const startTimeRef = useRef(Date.now());
-  const [usedHints, setUsedHints] = useState(0);
   const [attempts, setAttempts] = useState(0);
   const [revealedLetters, setRevealedLetters] = useState<Set<number>>(new Set());
-
-  const hints: string[] = exerciseData?.data?.hints || [`Meaning: ${vocabulary.meaning}`];
-  const maxHints = hints.length;
+  const pronunciationHint = vocabulary.pronunciation || '/.../';
 
   const currentPattern = vocabulary.word
     .split('')
     .map((letter, idx) => (revealedLetters.has(idx) ? letter : '_'))
     .join(' ');
 
-  const handleRevealHint = useCallback(() => {
-    if (usedHints < maxHints) {
-      setUsedHints(prev => prev + 1);
-    }
-  }, [usedHints, maxHints]);
-
-  const handleRevealLetter = useCallback(() => {
+  const handleRevealLetter = () => {
     const hiddenIndices = vocabulary.word
       .split('')
       .map((_, idx) => idx)
@@ -60,12 +50,13 @@ export const WordPuzzleExercise: React.FC<WordPuzzleExerciseProps> = ({
         return newSet;
       });
     }
-  }, [vocabulary.word, revealedLetters]);
+  };
 
-  const handleSubmit = useCallback(async () => {
+  const handleSubmit = async () => {
     if (disabled) return;
 
-    setAttempts(prev => prev + 1);
+    const nextAttempts = attempts + 1;
+    setAttempts(nextAttempts);
     const isCorrect = checkAnswer(userAnswer as string, vocabulary, 'word-puzzle');
 
     await triggerFeedbackAnimation(isCorrect);
@@ -76,10 +67,10 @@ export const WordPuzzleExercise: React.FC<WordPuzzleExerciseProps> = ({
       exerciseType: 'word-puzzle',
       isCorrect,
       timeSpentMs: timeSpent,
-      attempts,
+      attempts: nextAttempts,
       timestamp: new Date().toISOString()
     });
-  }, [disabled, userAnswer, vocabulary, triggerFeedbackAnimation, attempts, onExerciseComplete]);
+  };
 
   return (
     <div ref={containerRef} className='flex flex-col gap-6 p-6 bg-card rounded-lg border'>
@@ -92,31 +83,33 @@ export const WordPuzzleExercise: React.FC<WordPuzzleExerciseProps> = ({
 
       {/* Hints Section */}
       <div className='space-y-3'>
-        {hints.map((hint: string, idx: number) => (
-          <div
-            key={idx}
-            className={`p-3 rounded-lg border flex items-start gap-3 transition-all ${
-              idx < usedHints ? 'bg-primary/10 border-primary' : 'bg-secondary/30 border-secondary'
-            }`}>
-            <Lightbulb className='w-5 h-5 mt-0.5 flex-shrink-0 text-yellow-500' />
-            <p
-              className={`text-sm ${idx < usedHints ? 'text-foreground' : 'text-muted-foreground'}`}>
-              {idx < usedHints ? hint : t('exercise_hint_locked')}
+        <div className='p-3 rounded-lg border flex items-start gap-3 bg-primary/10 border-primary'>
+          <Lightbulb className='w-5 h-5 mt-0.5 flex-shrink-0 text-yellow-500' />
+          <div>
+            <p className='text-xs font-semibold uppercase tracking-wide text-muted-foreground'>
+              Pronunciation Hint
             </p>
+            <p className='text-sm text-foreground'>{pronunciationHint}</p>
           </div>
-        ))}
+        </div>
+        <div className='p-3 rounded-lg border border-secondary bg-secondary/20'>
+          <p className='text-xs font-semibold uppercase tracking-wide text-muted-foreground'>
+            Meaning
+          </p>
+          <p className='mt-1 text-sm text-foreground'>{vocabulary.meaning}</p>
+        </div>
+        {vocabulary.exampleVi ? (
+          <div className='p-3 rounded-lg border border-secondary bg-secondary/20'>
+            <p className='text-xs font-semibold uppercase tracking-wide text-muted-foreground'>
+              Example (VI)
+            </p>
+            <p className='mt-1 text-sm text-foreground'>{vocabulary.exampleVi}</p>
+          </div>
+        ) : null}
       </div>
 
       {/* Helper Buttons */}
       <div className='flex gap-2'>
-        <Button
-          variant='outline'
-          size='sm'
-          onClick={handleRevealHint}
-          disabled={disabled || usedHints >= maxHints}
-          className='flex-1'>
-          {t('exercise_reveal_hint')} ({usedHints}/{maxHints})
-        </Button>
         <Button
           variant='outline'
           size='sm'
@@ -133,13 +126,23 @@ export const WordPuzzleExercise: React.FC<WordPuzzleExerciseProps> = ({
         placeholder={t('exercise_type_answer')}
         value={userAnswer as string}
         onChange={e => updateAnswer(e.target.value)}
+        onKeyDown={e => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            void handleSubmit();
+          }
+        }}
         disabled={disabled}
         autoFocus
         className='text-lg'
       />
 
       {/* Submit Button */}
-      <Button onClick={handleSubmit} disabled={disabled || !userAnswer} className='w-full'>
+      <Button
+        onClick={handleSubmit}
+        disabled={disabled || !userAnswer}
+        data-exercise-submit='true'
+        className='w-full'>
         {t('action_check')}
       </Button>
     </div>

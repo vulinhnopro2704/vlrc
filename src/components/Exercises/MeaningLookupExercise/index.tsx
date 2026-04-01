@@ -1,5 +1,6 @@
 'use client';
 
+import { useMount, useUpdateEffect } from 'ahooks';
 import Icons from '@/components/Icons';
 
 export default function MeaningLookupExercise({
@@ -18,34 +19,42 @@ export default function MeaningLookupExercise({
   const [attempts, setAttempts] = useState(0);
   const [startTime] = useState(Date.now());
 
-  useEffect(() => {
+  const buildOptions = () => {
     const wrongAnswers = allVocabularies
       .filter(w => w.id !== vocabulary.id)
       .sort(() => Math.random() - 0.5)
       .slice(0, 3);
-    const shuffled = [vocabulary, ...wrongAnswers].sort(() => Math.random() - 0.5);
-    setOptions(shuffled);
+    return [vocabulary, ...wrongAnswers].sort(() => Math.random() - 0.5);
+  };
+
+  useMount(() => {
+    setOptions(buildOptions());
+  });
+
+  useUpdateEffect(() => {
+    setOptions(buildOptions());
+    setSelected(undefined);
+    setFeedback('idle');
+    setAttempts(0);
   }, [vocabulary, allVocabularies]);
 
   const handleSelect = (selectedId?: App.ID) => {
+    if (feedback !== 'idle') return;
+
     setSelected(selectedId);
     const isCorrect = selectedId === vocabulary.id;
     setFeedback(isCorrect ? 'correct' : 'incorrect');
     const currentAttempts = attempts + 1;
     setAttempts(currentAttempts);
 
-    if (isCorrect && onComplete) {
-      setTimeout(() => {
-        onComplete({
-          wordId: vocabulary.id,
-          activityType: 'meaning-lookup',
-          isCorrect: true,
-          timeSpent: Date.now() - startTime,
-          attempts: currentAttempts,
-          timestamp: new Date().toISOString()
-        });
-      }, 1500);
-    }
+    onComplete?.({
+      wordId: vocabulary.id,
+      activityType: 'meaning-lookup',
+      isCorrect,
+      timeSpent: Date.now() - startTime,
+      attempts: currentAttempts,
+      timestamp: new Date().toISOString()
+    });
   };
 
   return (
@@ -67,7 +76,7 @@ export default function MeaningLookupExercise({
               key={option.id}
               variant='outline'
               onClick={() => handleSelect(option.id)}
-              disabled={feedback === 'correct'}
+              disabled={feedback !== 'idle'}
               className={cn(
                 'h-auto p-4 justify-between text-left font-medium',
                 selected === option.id &&

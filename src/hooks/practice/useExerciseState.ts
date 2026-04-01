@@ -4,7 +4,7 @@
  * Does NOT manage game mechanics, score, or animation
  */
 
-import { validateInput } from '@/utilities/practice/exerciseHandlers';
+import { validateInput } from '@/lib/practice/exerciseHandlers';
 
 interface UseExerciseStateProps {
   exerciseType: LearningManagement.ActivityType | Practice.PracticeActivityType;

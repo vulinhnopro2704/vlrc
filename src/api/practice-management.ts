@@ -3,12 +3,8 @@ import apiClient from './api-client';
 
 // ── FSRS Practice ──
 
-export const getFSRSDueWords = (params?: Progress.ReviewQueryParams) =>
-  apiClient
-    .get('practice/fsrs/due', {
-      searchParams: params as Record<string, string | number | boolean>
-    })
-    .json<Progress.ReviewWordsResponse>();
+export const getFSRSDueWords = () =>
+  apiClient.get('practice/fsrs/due').json<Progress.ReviewWordsResponse>();
 
 export const submitFSRSPractice = (payload: Practice.SubmitFSRSPayload) =>
   apiClient.post('practice/fsrs', { json: payload }).json<Practice.SubmitFSRSResponse>();
@@ -18,17 +14,15 @@ export const submitFSRSPractice = (payload: Practice.SubmitFSRSPayload) =>
 export const PRACTICE_QUERY_KEYS = {
   all: ['fsrs-practice'] as const,
   dueLists: () => [...PRACTICE_QUERY_KEYS.all, 'due-list'] as const,
-  dueList: (params?: Progress.ReviewQueryParams) =>
-    [...PRACTICE_QUERY_KEYS.dueLists(), params ?? {}] as const
+  dueList: () => [...PRACTICE_QUERY_KEYS.dueLists()] as const
 };
 
-export const getFSRSDueWordsQueryOptions = (params?: Progress.ReviewQueryParams) => ({
-  queryKey: PRACTICE_QUERY_KEYS.dueList(params),
-  queryFn: () => getFSRSDueWords(params)
+export const getFSRSDueWordsQueryOptions = () => ({
+  queryKey: PRACTICE_QUERY_KEYS.dueList(),
+  queryFn: getFSRSDueWords
 });
 
-export const useFSRSDueWordsQuery = (params?: Progress.ReviewQueryParams) =>
-  useQuery(getFSRSDueWordsQueryOptions(params));
+export const useFSRSDueWordsQuery = () => useQuery(getFSRSDueWordsQueryOptions());
 
 // ── TanStack Mutations ──
 
