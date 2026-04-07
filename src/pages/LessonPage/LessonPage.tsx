@@ -144,26 +144,7 @@ const LessonPage = () => {
     { scope: pageRef }
   );
 
-  const handleExerciseComplete = (result: LearningManagement.ActivityResult) => {
-    const resultWordId = get(result, 'wordId', get(currentWord, 'id'));
-    if (resultWordId != null) {
-      const key = String(resultWordId);
-      const hadMistakeThisExercise = result.attempts > 1;
-      hasMistakeByWordRef.current[key] =
-        Boolean(hasMistakeByWordRef.current[key]) || hadMistakeThisExercise;
-    }
-
-    setReviewResult({
-      word: currentWord,
-      isCorrect: result.attempts === 1,
-      attempts: result.attempts
-    });
-    setIsReviewOpen(true);
-  };
-
-  const handleReviewNext = () => {
-    setIsReviewOpen(false);
-
+  const advanceToNextExercise = () => {
     const exerciseTypesCount = size(exerciseTypes);
     const wordsCount = size(lessonWords);
     const isLastExerciseForWord = currentExerciseTypeIndex === exerciseTypesCount - 1;
@@ -179,6 +160,33 @@ const LessonPage = () => {
         submitLessonCompletion();
       }
     }
+  };
+
+  const handleExerciseComplete = (result: LearningManagement.ActivityResult) => {
+    const resultWordId = get(result, 'wordId', get(currentWord, 'id'));
+    if (resultWordId != null) {
+      const key = String(resultWordId);
+      const hadMistakeThisExercise = !result.isCorrect || result.attempts > 1;
+      hasMistakeByWordRef.current[key] =
+        Boolean(hasMistakeByWordRef.current[key]) || hadMistakeThisExercise;
+    }
+
+    if (currentExerciseType === 'flip') {
+      advanceToNextExercise();
+      return;
+    }
+
+    setReviewResult({
+      word: currentWord,
+      isCorrect: result.isCorrect,
+      attempts: result.attempts
+    });
+    setIsReviewOpen(true);
+  };
+
+  const handleReviewNext = () => {
+    setIsReviewOpen(false);
+    advanceToNextExercise();
   };
 
   const handlePrev = () => {
@@ -267,7 +275,6 @@ const LessonPage = () => {
           onPrev={handlePrev}
           onNext={handleNext}
         />
-
         {reviewResult && (
           <WordReview
             open={isReviewOpen}
