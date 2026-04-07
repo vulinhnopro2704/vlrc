@@ -127,8 +127,7 @@ const PracticeExercisePanel: React.FC<PracticeExercisePanelProps> = ({
         isCorrect: normalizedResult.isCorrect,
         durationMs,
         exerciseType: normalizedResult.exerciseType,
-        attempts: Math.max(1, normalizedResult.attempts ?? 1),
-        hadWrong: !normalizedResult.isCorrect
+        attempts: Math.max(1, normalizedResult.attempts ?? 1)
       };
       void commitAnswer(payload);
     } catch (error) {
@@ -155,8 +154,7 @@ const PracticeExercisePanel: React.FC<PracticeExercisePanelProps> = ({
       isCorrect: false,
       durationMs: Date.now() - startTimeRef.current,
       exerciseType: currentExerciseType,
-      attempts: 1,
-      hadWrong: true
+      attempts: 1
     };
 
     void commitAnswer(payload).finally(() => {

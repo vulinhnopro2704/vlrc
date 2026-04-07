@@ -54,7 +54,6 @@ declare namespace Practice {
   interface SubmitFSRSItem {
     wordId: App.ID;
     isCorrect: boolean;
-    hadWrong?: boolean;
     durationMs?: number;
     exerciseType?: string;
     attempts?: number;
