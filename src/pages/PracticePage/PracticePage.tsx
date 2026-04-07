@@ -33,7 +33,7 @@ const PracticePage = () => {
   const { data: reviewWords, isLoading, isError } = useFSRSDueWordsQuery();
   const submitMutation = useSubmitFSRSMutation();
 
-  const reviewRows = Array.isArray(reviewWords?.data) ? reviewWords.data : [];
+  const reviewRows = Array.isArray(reviewWords?.data) ? reviewWords!.data : [];
   const words = reviewRows
     .map(row => row.word)
     .filter((word): word is LearningManagement.Word => Boolean(word));
@@ -91,8 +91,7 @@ const PracticePage = () => {
         isCorrect: answer.isCorrect,
         exerciseType: answer.exerciseType ?? existing?.exerciseType,
         durationMs: (existing?.durationMs ?? 0) + (answer.durationMs ?? 0),
-        attempts: (existing?.attempts ?? 0) + safeAttempts,
-        hadWrong: (existing?.hadWrong ?? false) || Boolean(answer.hadWrong)
+        attempts: (existing?.attempts ?? 0) + safeAttempts
       };
 
       if (existingIndex >= 0) {
