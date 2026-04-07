@@ -1,27 +1,11 @@
-/**
- * PracticeExercisePanel Component
- * Dispatches to appropriate exercise component and handles result flow
- * Connects UI to game mechanics
- */
-
 import { ExerciseManager } from '@/components/Exercises';
-import { WordReviewPopover } from '@/components/practice';
-import { useUpdateEffect } from 'ahooks';
-
-interface PracticeExercisePanelProps {
-  currentWord: LearningManagement.Word;
-  gameState: ReturnType<typeof import('@/hooks/practice/useGameState').useGameState>;
-  session: ReturnType<typeof import('@/hooks/practice/usePracticeSession').usePracticeSession>;
-  allWords: LearningManagement.Word[];
-  onExerciseResult?: (result: Practice.SubmitFSRSItem) => void;
-}
+import { WordReview } from '@/components/WordReview';
 
 interface PendingReviewState {
   payload: Practice.SubmitFSRSItem;
   exerciseResult: Omit<Practice.ExerciseResult, 'streakAtTime' | 'timestamp'>;
 }
 
-// Mix of new and existing exercises for variety
 const EXERCISE_SEQUENCE = [
   'speed-challenge',
   'fill-blank',
@@ -56,13 +40,13 @@ const toPracticeResult = (
   };
 };
 
-const PracticeExercisePanel: React.FC<PracticeExercisePanelProps> = ({
-  currentWord,
-  gameState,
-  session,
-  allWords,
-  onExerciseResult
-}) => {
+const PracticeExercisePanel: FC<{
+  currentWord: LearningManagement.Word;
+  gameState: ReturnType<typeof import('@/hooks/practice/useGameState').useGameState>;
+  session: ReturnType<typeof import('@/hooks/practice/usePracticeSession').usePracticeSession>;
+  allWords: LearningManagement.Word[];
+  onExerciseResult?: (result: Practice.SubmitFSRSItem) => void;
+}> = ({ currentWord, gameState, session, allWords, onExerciseResult }) => {
   const { t } = useTranslation();
   const [isProcessing, setIsProcessing] = useState(false);
   const [pendingReview, setPendingReview] = useState<PendingReviewState | null>(null);
@@ -71,14 +55,12 @@ const PracticeExercisePanel: React.FC<PracticeExercisePanelProps> = ({
     (typeof EXERCISE_SEQUENCE)[number]
   >(() => EXERCISE_SEQUENCE[Math.floor(Math.random() * EXERCISE_SEQUENCE.length)]);
 
-  // Determine which exercise type to use based on word index
   useUpdateEffect(() => {
     const randomIndex = Math.floor(Math.random() * EXERCISE_SEQUENCE.length);
     setCurrentExerciseType(EXERCISE_SEQUENCE[randomIndex]);
   }, [session.currentWordIndex]);
 
   useUpdateEffect(() => {
-    // Ensure each new word starts with a fresh processing/time state.
     setIsProcessing(false);
     setPendingReview(null);
     startTimeRef.current = Date.now();
@@ -194,11 +176,8 @@ const PracticeExercisePanel: React.FC<PracticeExercisePanelProps> = ({
           </div>
         </div>
       )}
-
-      {/* Exercise Container */}
       {!isGameEnded && (
         <>
-          {/* Exercise Info */}
           <div className='text-center space-y-2'>
             <p className='text-sm text-muted-foreground uppercase tracking-wider'>
               {t(`exercise_${String(currentExerciseType).replaceAll('-', '_')}`)}
@@ -207,8 +186,6 @@ const PracticeExercisePanel: React.FC<PracticeExercisePanelProps> = ({
               {t('practice_focus_no_word_hint')}
             </h2>
           </div>
-
-          {/* Exercise Component */}
           <ExerciseManager
             key={`${String(currentExerciseType)}-${session.currentWordIndex}-${String(currentWord.id ?? '')}`}
             vocabulary={currentWord}
@@ -217,7 +194,6 @@ const PracticeExercisePanel: React.FC<PracticeExercisePanelProps> = ({
             disabled={isProcessing || Boolean(pendingReview)}
             words={allWords}
           />
-
           <div className='flex justify-center'>
             <Button
               variant='outline'
@@ -226,8 +202,7 @@ const PracticeExercisePanel: React.FC<PracticeExercisePanelProps> = ({
               {t('practice_dont_remember')}
             </Button>
           </div>
-
-          <WordReviewPopover
+          <WordReview
             open={Boolean(pendingReview)}
             word={currentWord}
             isCorrect={pendingReview?.payload.isCorrect ?? false}

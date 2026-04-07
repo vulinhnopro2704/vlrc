@@ -10,6 +10,7 @@ import LessonHeader from './LessonHeader';
 import LessonExercisePanel from './LessonExercisePanel';
 import LessonSubmissionState from './LessonSubmissionState';
 import LessonNavigation from './LessonNavigation';
+import { WordReview } from '@/components/WordReview';
 
 gsap.registerPlugin(useGSAP);
 
@@ -28,6 +29,12 @@ const LessonPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentExerciseTypeIndex, setCurrentExerciseTypeIndex] = useState(0);
   const [completionError, setCompletionError] = useState<string | null>(null);
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
+  const [reviewResult, setReviewResult] = useState<{
+    word: LearningManagement.Word;
+    isCorrect: boolean;
+    attempts: number;
+  } | null>(null);
   const pageRef = useRef<HTMLDivElement>(null);
   const hasMistakeByWordRef = useRef<Record<string, boolean>>({});
   const numericLessonId = Number(lessonId);
@@ -146,6 +153,17 @@ const LessonPage = () => {
         Boolean(hasMistakeByWordRef.current[key]) || hadMistakeThisExercise;
     }
 
+    setReviewResult({
+      word: currentWord,
+      isCorrect: result.attempts === 1,
+      attempts: result.attempts
+    });
+    setIsReviewOpen(true);
+  };
+
+  const handleReviewNext = () => {
+    setIsReviewOpen(false);
+
     const exerciseTypesCount = size(exerciseTypes);
     const wordsCount = size(lessonWords);
     const isLastExerciseForWord = currentExerciseTypeIndex === exerciseTypesCount - 1;
@@ -249,6 +267,16 @@ const LessonPage = () => {
           onPrev={handlePrev}
           onNext={handleNext}
         />
+
+        {reviewResult && (
+          <WordReview
+            open={isReviewOpen}
+            word={reviewResult.word}
+            isCorrect={reviewResult.isCorrect}
+            attempts={reviewResult.attempts}
+            onNext={handleReviewNext}
+          />
+        )}
       </div>
     </main>
   );

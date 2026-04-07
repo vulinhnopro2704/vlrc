@@ -1,11 +1,9 @@
 import Icons from '@/components/Icons';
-import { Button } from '@/components/ui/button';
 import useAudioSynthesis from '@/hooks/useAudioSynthesis';
 import { cn } from '@/lib/utils';
-import { useMount, useUnmount, useUpdateEffect } from 'ahooks';
 import { createPortal } from 'react-dom';
 
-const WordReviewPopover: FC<{
+const WordReview: FC<{
   word: LearningManagement.Word;
   isCorrect: boolean;
   open?: boolean;
@@ -76,7 +74,6 @@ const WordReviewPopover: FC<{
           open ? 'opacity-100' : 'opacity-0'
         )}
       />
-
       <div
         className={cn(
           'fixed bottom-0 left-1/2 w-[min(94vw,760px)] -translate-x-1/2 rounded-t-3xl border px-4 pb-5 pt-3 shadow-2xl backdrop-blur-md',
@@ -171,4 +168,4 @@ const WordReviewPopover: FC<{
   );
 };
 
-export default WordReviewPopover;
+export default WordReview;

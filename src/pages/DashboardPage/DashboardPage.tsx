@@ -1,6 +1,5 @@
 'use client';
 
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Icons from '@/components/Icons';
 import {
   DASHBOARD_QUERY_KEYS,
@@ -11,14 +10,6 @@ import {
 } from '@/api/dashboard-management';
 import { useCourseQuery, useCoursesQuery } from '@/api/course-management';
 import { getLessonsQueryOptions } from '@/api/lesson-management';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { CourseGrid } from './CourseGrid';
 import { LessonWordsModal } from '@/modals/LessonWordsModal';
 import { StatsCard } from './StatsCard';
@@ -166,7 +157,7 @@ const DashboardPage = () => {
   const handleSelectLesson = (lesson: LearningManagement.Lesson) => {
     const isLearned = lesson.isLearned ?? lesson.completed ?? false;
     if (lesson.id === undefined) return;
-    
+
     if (!isLearned) {
       navigate({ to: '/lessons/$lessonId', params: { lessonId: lesson.id.toString() } });
     } else {
@@ -238,10 +229,7 @@ const DashboardPage = () => {
               <Icons.Play className='h-4 w-4' />
               {t('dashboard_start_practice')}
             </Button>
-            <Button
-              variant='outline'
-              size='sm'
-              onClick={() => navigate({ to: '/courses' })}>
+            <Button variant='outline' size='sm' onClick={() => navigate({ to: '/courses' })}>
               {t('dashboard_browse_courses')}
             </Button>
             <Button variant='ghost' size='sm' onClick={handleRefresh} className='gap-2'>
@@ -430,7 +418,8 @@ const DashboardPage = () => {
                   </TooltipProvider>
                 </h3>
                 <p className='text-xs text-muted-foreground'>
-                  {t('dashboard_risk_empty')} • {risk?.metrics.items.length ?? 0} {t('learning_cards')}
+                  {t('dashboard_risk_empty')} • {risk?.metrics.items.length ?? 0}{' '}
+                  {t('learning_cards')}
                 </p>
               </div>
             </div>
@@ -439,9 +428,7 @@ const DashboardPage = () => {
               <span className='text-xs font-semibold text-muted-foreground uppercase tracking-wider'>
                 {t('dashboard_risk_show_count')}
               </span>
-              <Select
-                value={riskTake.toString()}
-                onValueChange={val => setRiskTake(Number(val))}>
+              <Select value={riskTake.toString()} onValueChange={val => setRiskTake(Number(val))}>
                 <SelectTrigger className='h-9 w-[80px] bg-card/50'>
                   <SelectValue placeholder='6' />
                 </SelectTrigger>
@@ -488,7 +475,7 @@ const DashboardPage = () => {
           <Leaderboard users={mockLeaderboard} currentUserRank={4} />
         </div>
       </div>
-      
+
       {reviewLessonId ? (
         <LessonWordsModal
           id={reviewLessonId}

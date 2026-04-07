@@ -5,6 +5,8 @@ import { FlipCard } from '@/components/FlipCard';
 import type { AnimationConfig, FlipCardSize, FlipDirection } from '@/components/FlipCard';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import useAudioSynthesis from '@/hooks/useAudioSynthesis';
+import Icons from '@/components/Icons';
 
 type VocabCardLabels = {
   pronunciation: ReactNode;
@@ -58,6 +60,7 @@ const VocabCard = ({
   levelBadgeClassName?: string;
 }) => {
   const mergedLabels = { ...defaultLabels, ...labels };
+  const { speak, isPlaying } = useAudioSynthesis();
 
   return (
     <FlipCard.Root
@@ -80,7 +83,20 @@ const VocabCard = ({
                 {mergedLabels.pronunciation}
               </p>
             )}
-            <p className='text-4xl font-bold text-primary-foreground mb-4'>{vocabulary.word}</p>
+            <div className='flex items-center justify-center gap-2 mb-4'>
+              <p className='text-4xl font-bold text-primary-foreground'>{vocabulary.word}</p>
+              <Button
+                variant='ghost'
+                size='icon-sm'
+                onClick={e => {
+                  e.stopPropagation();
+                  speak(vocabulary.word, { lang: 'en-US', rate: 0.85 });
+                }}
+                disabled={isPlaying}
+                className='text-primary-foreground/60 hover:text-primary-foreground hover:bg-white/10 rounded-full transition-colors'>
+                <Icons.Volume2 className='w-5 h-5' />
+              </Button>
+            </div>
             {showPronunciation && vocabulary.pronunciation && (
               <p className='text-lg text-primary-foreground/90 font-medium italic'>
                 /{vocabulary.pronunciation}/
