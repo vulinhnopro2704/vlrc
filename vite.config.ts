@@ -71,7 +71,7 @@ export default defineConfig({
           ]
         },
         {
-          ahook: ['useUpdateEffect', 'useMount', 'useUnmount']
+          ahooks: ['useUpdateEffect', 'useMount', 'useUnmount']
         },
         {
           'react-hook-form': [

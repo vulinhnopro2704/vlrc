@@ -408,7 +408,7 @@ declare global {
   const useLink: typeof import('@tanstack/react-router').useLink
   const useMatch: typeof import('@tanstack/react-router').useMatch
   const useMemo: typeof import('react').useMemo
-  const useMount: typeof import('ahook').useMount
+  const useMount: typeof import('ahooks').useMount
   const useMutation: typeof import('@tanstack/react-query').useMutation
   const useNavigate: typeof import('@tanstack/react-router').useNavigate
   const useOptimistic: typeof import('react').useOptimistic
@@ -424,8 +424,8 @@ declare global {
   const useSyncExternalStore: typeof import('react').useSyncExternalStore
   const useTransition: typeof import('react').useTransition
   const useTranslation: typeof import('react-i18next').useTranslation
-  const useUnmount: typeof import('ahook').useUnmount
-  const useUpdateEffect: typeof import('ahook').useUpdateEffect
+  const useUnmount: typeof import('ahooks').useUnmount
+  const useUpdateEffect: typeof import('ahooks').useUpdateEffect
   const useWatch: typeof import('react-hook-form').useWatch
   const values: typeof import('lodash-es').values
   const zustandDevtools: typeof import('zustand/middleware').devtools
