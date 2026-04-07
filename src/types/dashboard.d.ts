@@ -63,6 +63,7 @@ declare namespace Dashboard {
     word?: LearningManagement.Word | null;
     riskScore: number;
     retrievability: number;
+    stability: number;
     daysOverdue: number;
   }
 

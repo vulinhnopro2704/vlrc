@@ -78,7 +78,8 @@ import {
   Undo2,
   Plus,
   Volume2,
-  ArrowRight
+  ArrowRight,
+  Info
 } from 'lucide-react';
 
 export const Icons = {
@@ -161,6 +162,7 @@ export const Icons = {
   Volume2: Volume2,
   ArrowRight: ArrowRight,
   Plus: Plus,
+  Info: Info,
   GitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden='true'

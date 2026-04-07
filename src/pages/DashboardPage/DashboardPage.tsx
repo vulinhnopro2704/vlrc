@@ -11,6 +11,14 @@ import {
 } from '@/api/dashboard-management';
 import { useCourseQuery, useCoursesQuery } from '@/api/course-management';
 import { getLessonsQueryOptions } from '@/api/lesson-management';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { CourseGrid } from './CourseGrid';
 import { LessonWordsModal } from '@/modals/LessonWordsModal';
 import { StatsCard } from './StatsCard';
@@ -82,10 +90,11 @@ const DashboardPage = () => {
     return toYmd(from);
   }, []);
 
+  const [riskTake, setRiskTake] = useState(6);
   const insightsQuery = useFsrsInsightsQuery(window);
   const recommendationsQuery = useFsrsRecommendationsQuery();
   const dailyQuery = useFsrsDailyReportQuery(dailyFrom, dailyTo);
-  const riskQuery = useFsrsRiskCardsQuery(20);
+  const riskQuery = useFsrsRiskCardsQuery(riskTake);
 
   const insights = insightsQuery.data;
   const recommendations = recommendationsQuery.data;
@@ -401,12 +410,50 @@ const DashboardPage = () => {
         </div>
 
         <Card className='p-5 content-section'>
-          <div className='flex flex-wrap items-center justify-between gap-2 mb-4'>
-            <h3 className='font-semibold flex items-center gap-2'>
-              <Icons.Shield className='h-4 w-4 text-primary' />
-              {t('dashboard_risk_cards')}
-            </h3>
-            <Badge variant='outline'>{risk?.metrics.items.length ?? 0}</Badge>
+          <div className='flex flex-wrap items-center justify-between gap-4 mb-6'>
+            <div className='flex items-center gap-3'>
+              <div className='flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary'>
+                <Icons.Shield className='h-5 w-5' />
+              </div>
+              <div>
+                <h3 className='text-lg font-bold flex items-center gap-2'>
+                  {t('dashboard_risk_cards')}
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Icons.Info className='h-4 w-4 cursor-help opacity-40 hover:opacity-100 transition-opacity' />
+                      </TooltipTrigger>
+                      <TooltipContent className='max-w-[320px] p-4 text-sm leading-relaxed'>
+                        {t('dashboard_fsrs_summary_info')}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </h3>
+                <p className='text-xs text-muted-foreground'>
+                  {t('dashboard_risk_empty')} • {risk?.metrics.items.length ?? 0} {t('learning_cards')}
+                </p>
+              </div>
+            </div>
+
+            <div className='flex items-center gap-3'>
+              <span className='text-xs font-semibold text-muted-foreground uppercase tracking-wider'>
+                {t('dashboard_risk_show_count')}
+              </span>
+              <Select
+                value={riskTake.toString()}
+                onValueChange={val => setRiskTake(Number(val))}>
+                <SelectTrigger className='h-9 w-[80px] bg-card/50'>
+                  <SelectValue placeholder='6' />
+                </SelectTrigger>
+                <SelectContent>
+                  {[6, 12, 24, 48].map(val => (
+                    <SelectItem key={val} value={val.toString()}>
+                      {val}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           {riskQuery.isLoading && (
@@ -421,8 +468,8 @@ const DashboardPage = () => {
           )}
 
           {!riskQuery.isLoading && (risk?.metrics.items.length ?? 0) > 0 && (
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
-              {risk?.metrics.items.slice(0, 12).map(item => (
+            <div className='grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4'>
+              {risk?.metrics.items.map(item => (
                 <RiskCardItem key={`${item.wordId}-${item.riskScore}`} item={item} />
               ))}
             </div>
