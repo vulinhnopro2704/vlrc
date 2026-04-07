@@ -1,44 +1,129 @@
-You are an AI assistant helping a developer set up skill-to-task mappings for their project.
+# AGENTS - VLRC Project Knowledge
 
-Follow these steps in order:
+This file is the source of truth for agent behavior in this repository.
+It is shared knowledge for Copilot/Claude/other coding agents.
 
-1. CHECK FOR EXISTING MAPPINGS
-   Search the project's agent config files (AGENTS.md, CLAUDE.md, .cursorrules,
-   .github/copilot-instructions.md) for a block delimited by:
-     <!-- intent-skills:start -->
-     <!-- intent-skills:end -->
-   - If found: show the user the current mappings, keep that file as the source of truth,
-     and ask "What would you like to update?" Then skip to step 4 with their requested changes.
-   - If not found: continue to step 2.
+## Core Conventions
 
-2. DISCOVER AVAILABLE SKILLS
-   Run: `npx @tanstack/intent@latest list`
-   This outputs each skill's name, description, full path, and whether it was found in
-   project-local node_modules or accessible global node_modules.
-   This works best in Node-compatible environments (npm, pnpm, Bun, or Deno npm interop
-   with node_modules enabled).
+1. Import hygiene
 
-3. SCAN THE REPOSITORY
-   Build a picture of the project's structure and patterns:
-   - Read package.json for library dependencies
-   - Survey the directory layout (src/, app/, routes/, components/, api/, etc.)
-   - Note recurring patterns (routing, data fetching, auth, UI components, etc.)
+- Auto-import is enabled via Vite config and generated declarations in `src/types/auto-imports.d.ts`.
+- Do not add unnecessary imports for symbols already auto-imported.
 
-   Based on this, propose 3-5 skill-to-task mappings. For each one explain:
-   - The task or code area (in plain language the user would recognise)
-   - Which skill applies and why
+2. Props typing
 
-   Then ask: "What other tasks do you commonly use AI coding agents for?
-   I'll create mappings for those too."
-   Also ask: "I'll default to AGENTS.md unless you want another supported config file.
-   Do you have a preference?"
+- For local components, declare props inline in the component signature.
+- Do not create separate `type Props` / `interface Props` for local-only components.
 
-4. WRITE THE MAPPINGS BLOCK
-   Once you have the full set of mappings, write or update the agent config file.
-   - If you found an existing intent-skills block, update that file in place.
-   - Otherwise prefer AGENTS.md by default, unless the user asked for another supported file.
+3. Type architecture
 
-   Use this exact block:
+- Prefer domain namespace declarations in `src/types/*.d.ts`.
+- Use namespace names with `Management` suffix for management domains.
+- Avoid creating standalone types/interfaces unless reused.
+
+4. State architecture
+
+- Client State: Zustand (stores in `src/stores`).
+- Server/API State: TanStack Query (`useQuery`, `useMutation`, cache invalidation).
+- Do not mirror API state into Zustand unless truly necessary.
+
+5. i18n
+
+- Locale keys are single-level and snake_case (example: `day_la_key`).
+- Keep key parity between `src/i18n/locales/vi.json` and `src/i18n/locales/en.json`.
+
+6. Routing/folder architecture
+
+- Route wiring stays in `src/routes`.
+- Page implementation stays in `src/pages`.
+- This separation is intentional to avoid auto-import confusion and keep route modules lean.
+
+7. TanStack conventions
+
+- TanStack Router files in `src/routes` should focus on route wiring, guards, and loaders.
+- TanStack Query is the default for API state (`useQuery`, `useMutation`, invalidation).
+- Keep query key ownership close to API modules and avoid ad-hoc keys spread across UI components.
+
+8. Store structure (4 files)
+
+- `types.ts`, `state.ts`, `actions.ts`, `index.ts`.
+
+9. Review gate before completion
+
+- Always run a code-review pass against changed files before confirming done.
+
+## GOOD/BAD Examples
+
+### Import Hygiene
+
+GOOD
+
+```tsx
+// useState, useQuery, FC are auto-imported; no extra imports needed
+const Example: FC = () => {
+  const [open, setOpen] = useState(false);
+  const query = useQuery({ queryKey: ['courses'], queryFn: fetchCourses });
+  return <Button onClick={() => setOpen(!open)}>{query.data?.length ?? 0}</Button>;
+};
+```
+
+BAD
+
+```tsx
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import type { FC } from 'react';
+```
+
+### Local Component Props
+
+GOOD
+
+```tsx
+const WordReviewPopover: FC<{
+  word: LearningManagement.Word;
+  isCorrect: boolean;
+  open?: boolean;
+}> = ({ word, isCorrect, open = false }) => <div>{word.word}</div>;
+```
+
+BAD
+
+```tsx
+interface WordReviewPopoverProps {
+  word: LearningManagement.Word;
+  isCorrect: boolean;
+  open?: boolean;
+}
+
+const WordReviewPopover: FC<WordReviewPopoverProps> = props => <div>{props.word.word}</div>;
+```
+
+### Server State vs Client State
+
+GOOD
+
+```tsx
+const courseQuery = useQuery({ queryKey: ['courses'], queryFn: getCourses });
+const isSidebarOpen = useLayoutStore.use.isSidebarOpen();
+```
+
+BAD
+
+```tsx
+// storing API response tree in Zustand without clear UX need
+const useCourseStore = create(() => ({ courses: [] as LearningManagement.Course[] }));
+```
+
+## Tech Stack Snapshot
+
+- React 19, TypeScript, Vite
+- TanStack Router, TanStack Query
+- Zustand
+- React Hook Form
+- Tailwind CSS + Radix UI + shadcn-based UI
+- i18next + react-i18next
+- ky, zod, lodash-es, lucide-react
 
 <!-- intent-skills:start -->
 
@@ -46,14 +131,17 @@ Follow these steps in order:
 
 skills:
 
-- task: "describe the task or code area here"
-load: "node_modules/package-name/skills/skill-name/SKILL.md"
+- task: "Form, input, validation, React Hook Form with UI wrappers"
+  load: ".agent/skills/ui-shadcn-form/SKILL.md"
+- task: "Code review before complete, detect import noise, bugs, performance and architecture issues"
+  load: ".agent/skills/code-review/SKILL.md"
+- task: "Type conventions, inline component props, and import hygiene"
+  load: ".agent/skills/typescript-types-and-import-hygiene/SKILL.md"
+- task: "Client state vs server state boundaries and store structure"
+  load: ".agent/skills/client-server-state-boundary/SKILL.md"
+- task: "i18n flat-key management and locale parity"
+  load: ".agent/skills/i18n-flat-key-management/SKILL.md"
+- task: "Route/page separation and module placement governance"
+  load: ".agent/skills/route-page-structure-governance/SKILL.md"
+
 <!-- intent-skills:end -->
-
-Rules:
-
-- Use the user's own words for task descriptions
-- Include the exact path from `npx @tanstack/intent@latest list` output so agents can load it directly
-- Keep entries concise - this block is read on every agent task
-- Preserve all content outside the block tags unchanged
-- If the user is on Deno, note that this setup is best-effort today and relies on npm interop

@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { useMount, useUnmount, useUpdateEffect } from 'ahooks';
 import { createPortal } from 'react-dom';
 
-interface WordReviewPopoverProps {
+const WordReviewPopover: FC<{
   word: LearningManagement.Word;
   isCorrect: boolean;
   open?: boolean;
@@ -13,17 +13,7 @@ interface WordReviewPopoverProps {
   onNext?: () => void;
   nextLabel?: string;
   className?: string;
-}
-
-const WordReviewPopover: React.FC<WordReviewPopoverProps> = ({
-  word,
-  isCorrect,
-  open = false,
-  attempts,
-  onNext,
-  nextLabel,
-  className
-}) => {
+}> = ({ word, isCorrect, open = false, attempts, onNext, nextLabel, className }) => {
   const { t } = useTranslation();
   const { speak, isPlaying } = useAudioSynthesis();
   const [dragY, setDragY] = useState(0);
@@ -120,12 +110,16 @@ const WordReviewPopover: React.FC<WordReviewPopoverProps> = ({
               <p
                 className={cn(
                   'text-xs uppercase tracking-wider',
-                  isCorrect ? 'text-emerald-700 dark:text-emerald-300' : 'text-rose-700 dark:text-rose-300'
+                  isCorrect
+                    ? 'text-emerald-700 dark:text-emerald-300'
+                    : 'text-rose-700 dark:text-rose-300'
                 )}>
                 {isCorrect ? t('exercise_correct') : t('exercise_wrong')}
               </p>
               <p className='text-3xl font-bold leading-tight'>{word.word}</p>
-              {word.pronunciation ? <p className='text-lg text-foreground/80'>/{word.pronunciation}/</p> : null}
+              {word.pronunciation ? (
+                <p className='text-lg text-foreground/80'>/{word.pronunciation}/</p>
+              ) : null}
             </div>
 
             <Button
