@@ -60,6 +60,7 @@ declare namespace Dashboard {
 
   interface RiskItem {
     wordId: App.ID;
+    word?: LearningManagement.Word | null;
     riskScore: number;
     retrievability: number;
     daysOverdue: number;

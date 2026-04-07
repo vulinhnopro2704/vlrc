@@ -6,8 +6,13 @@ import apiClient from './api-client';
 export const getFSRSDueWords = () =>
   apiClient.get('practice/fsrs/due').json<Progress.ReviewWordsResponse>();
 
-export const submitFSRSPractice = (payload: Practice.SubmitFSRSPayload) =>
-  apiClient.post('practice/fsrs', { json: payload }).json<Practice.SubmitFSRSResponse>();
+export const submitFSRSPractice = (
+  payload: Practice.SubmitFSRSPayload,
+  options?: { keepalive?: boolean }
+) =>
+  apiClient
+    .post('practice/fsrs', { json: payload, ...options })
+    .json<Practice.SubmitFSRSResponse>();
 
 // ── TanStack Query ──
 
@@ -31,7 +36,10 @@ export const useSubmitFSRSMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: submitFSRSPractice,
+    mutationFn: (variables: {
+      payload: Practice.SubmitFSRSPayload;
+      options?: { keepalive?: boolean };
+    }) => submitFSRSPractice(variables.payload, variables.options),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: PRACTICE_QUERY_KEYS.all });
       toast.success(t('practice_submit_success'));

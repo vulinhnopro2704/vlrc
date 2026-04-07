@@ -65,18 +65,9 @@ const PracticePage = () => {
     if (!canSubmitPending()) return;
     hasSubmittedRef.current = true;
 
-    const baseUrl = import.meta.env.VITE_BACKEND_API_URL as string | undefined;
-    const endpoint = baseUrl ? `${baseUrl.replace(/\/$/, '')}/practice/fsrs` : '/practice/fsrs';
-
-    void fetch(endpoint, {
-      method: 'POST',
-      credentials: 'include',
-      keepalive: true,
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json'
-      },
-      body: JSON.stringify({ items: answersRef.current })
+    submitMutation.mutate({
+      payload: { items: answersRef.current },
+      options: { keepalive: true }
     });
   };
 
@@ -132,7 +123,7 @@ const PracticePage = () => {
     const submitResults = async () => {
       try {
         hasSubmittedRef.current = true;
-        await submitMutation.mutateAsync({ items: answers });
+        await submitMutation.mutateAsync({ payload: { items: answers } });
       } catch (error) {
         console.error('Failed to submit practice results on session-end', error);
       }

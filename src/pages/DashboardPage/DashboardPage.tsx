@@ -10,9 +10,9 @@ import {
   useFsrsRiskCardsQuery
 } from '@/api/dashboard-management';
 import { useCourseQuery, useCoursesQuery } from '@/api/course-management';
-import { getLessonsQueryOptions, useLessonQuery } from '@/api/lesson-management';
+import { getLessonsQueryOptions } from '@/api/lesson-management';
 import { CourseGrid } from './CourseGrid';
-import { FlashcardViewer } from './FlashcardViewer';
+import { LessonWordsModal } from '@/modals/LessonWordsModal';
 import { StatsCard } from './StatsCard';
 import { Leaderboard } from './Leaderboard';
 import {
@@ -54,7 +54,7 @@ const DashboardPage = () => {
   const selectedCourseId = courses[0]?.id ?? 0;
   const selectedCourseQuery = useCourseQuery(selectedCourseId);
   const selectedCourse = selectedCourseQuery.data ?? courses[0] ?? null;
-  const [selectedLesson, setSelectedLesson] = useState<LearningManagement.Lesson | null>(null);
+  const [reviewLessonId, setReviewLessonId] = useState<number | null>(null);
   const lessonsQuery = useQuery({
     ...getLessonsQueryOptions({
       courseId: selectedCourseId,
@@ -64,9 +64,7 @@ const DashboardPage = () => {
     }),
     enabled: !!selectedCourseId
   });
-  const selectedLessonQuery = useLessonQuery(selectedLesson?.id ?? 0);
   const lessons = lessonsQuery.data?.data ?? selectedCourse?.lessons ?? [];
-  const activeLesson = selectedLessonQuery.data ?? selectedLesson;
   const selectedCourseWithLessons = selectedCourse
     ? {
         ...selectedCourse,
@@ -157,7 +155,14 @@ const DashboardPage = () => {
   const windowOptions: Dashboard.FsrsWindow[] = ['7d', '30d', '90d'];
 
   const handleSelectLesson = (lesson: LearningManagement.Lesson) => {
-    setSelectedLesson(lesson);
+    const isLearned = lesson.isLearned ?? lesson.completed ?? false;
+    if (lesson.id === undefined) return;
+    
+    if (!isLearned) {
+      navigate({ to: '/lessons/$lessonId', params: { lessonId: lesson.id.toString() } });
+    } else {
+      setReviewLessonId(Number(lesson.id));
+    }
   };
 
   const handleRefresh = async () => {
@@ -217,12 +222,6 @@ const DashboardPage = () => {
                 <span className='font-medium text-foreground'>{selectedCourse.title}</span>
               </>
             )}
-            {selectedLesson && (
-              <>
-                <span>/</span>
-                <span className='font-medium text-foreground'>{selectedLesson.title}</span>
-              </>
-            )}
           </div>
 
           <div className='mt-4 flex flex-wrap items-center gap-2'>
@@ -233,10 +232,7 @@ const DashboardPage = () => {
             <Button
               variant='outline'
               size='sm'
-              onClick={() => {
-                setSelectedLesson(null);
-                navigate({ to: '/courses' });
-              }}>
+              onClick={() => navigate({ to: '/courses' })}>
               {t('dashboard_browse_courses')}
             </Button>
             <Button variant='ghost' size='sm' onClick={handleRefresh} className='gap-2'>
@@ -439,34 +435,20 @@ const DashboardPage = () => {
 
         <div className='grid grid-cols-1 lg:grid-cols-3 gap-6 content-section'>
           <div className='lg:col-span-2 space-y-6'>
-            {selectedLesson && (
-              <div className='flex items-center gap-2 text-sm text-muted-foreground mb-4'>
-                <Button
-                  variant='ghost'
-                  size='sm'
-                  onClick={() => setSelectedLesson(null)}
-                  className='h-auto p-0 text-primary hover:underline hover:bg-transparent font-medium flex items-center gap-1'>
-                  <Icons.ChevronLeft className='h-4 w-4' />
-                  {selectedCourse?.title}
-                </Button>
-                <span>/</span>
-                <span className='font-medium text-foreground'>{selectedLesson.title}</span>
-              </div>
-            )}
-
-            {selectedLesson ? (
-              <FlashcardViewer
-                words={activeLesson?.words ?? []}
-                lessonTitle={activeLesson?.title ?? selectedLesson.title}
-              />
-            ) : (
-              <CourseGrid course={selectedCourseWithLessons} onSelectLesson={handleSelectLesson} />
-            )}
+            <CourseGrid course={selectedCourseWithLessons} onSelectLesson={handleSelectLesson} />
           </div>
 
           <Leaderboard users={mockLeaderboard} currentUserRank={4} />
         </div>
       </div>
+      
+      {reviewLessonId ? (
+        <LessonWordsModal
+          id={reviewLessonId}
+          open={!!reviewLessonId}
+          onCancel={() => setReviewLessonId(null)}
+        />
+      ) : null}
     </div>
   );
 };

@@ -72,7 +72,7 @@ export const RiskCardItem = ({ item }: { item: Dashboard.RiskItem }) => {
   return (
     <div className='rounded-lg border p-3'>
       <div className='flex items-center justify-between mb-2'>
-        <p className='font-medium'>#{item.wordId}</p>
+        <p className='font-medium'>{item.word?.word ?? `#${item.wordId}`}</p>
         <p className='text-sm text-destructive'>
           {t('dashboard_risk_score')}: {percent(item.riskScore)}
         </p>

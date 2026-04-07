@@ -18,7 +18,7 @@ export const getFsrsRecommendations = () =>
 
 export const getFsrsRiskCards = (take = DEFAULT_RISK_TAKE) =>
   apiClient
-    .get('fsrs-ai/api/v1/fsrs/cards/risk', { searchParams: { take } })
+    .get('practice/fsrs/risk', { searchParams: { take } })
     .json<Dashboard.RiskCardsResponse>();
 
 export const DASHBOARD_QUERY_KEYS = {
