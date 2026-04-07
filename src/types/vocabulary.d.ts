@@ -2,7 +2,7 @@ declare namespace Vocabulary {
   // ── Entities ──
 
   interface Note extends App.Base {
-    wordId: number;
+    wordId: App.ID;
     userId?: string;
     note?: string;
     isFavorite?: boolean;

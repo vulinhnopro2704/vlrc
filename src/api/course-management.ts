@@ -8,16 +8,16 @@ export const getCourses = (params?: LearningManagement.CourseQueryParams) =>
     .get('courses', { searchParams: params as Record<string, string | number | boolean> })
     .json<App.CursorPaginationResponse<LearningManagement.Course>>();
 
-export const getCourse = (id: number) =>
+export const getCourse = (id: App.ID) =>
   apiClient.get(`courses/${id}`).json<LearningManagement.Course>();
 
 export const createCourse = (payload: LearningManagement.CreateCoursePayload) =>
   apiClient.post('courses', { json: payload }).json<LearningManagement.Course>();
 
-export const updateCourse = (id: number, payload: LearningManagement.UpdateCoursePayload) =>
+export const updateCourse = (id: App.ID, payload: LearningManagement.UpdateCoursePayload) =>
   apiClient.patch(`courses/${id}`, { json: payload }).json<LearningManagement.Course>();
 
-export const deleteCourse = (id: number) => apiClient.delete(`courses/${id}`).json<void>();
+export const deleteCourse = (id: App.ID) => apiClient.delete(`courses/${id}`).json<void>();
 
 // ── TanStack Query ──
 
@@ -35,16 +35,16 @@ export const getCoursesQueryOptions = (params?: LearningManagement.CourseQueryPa
   queryFn: () => getCourses(params)
 });
 
-export const getCourseQueryOptions = (id: number) => ({
+export const getCourseQueryOptions = (id: App.ID) => ({
   queryKey: COURSE_QUERY_KEYS.detail(id),
   queryFn: () => getCourse(id),
-  enabled: id > 0
+  enabled: !!id
 });
 
 export const useCoursesQuery = (params?: LearningManagement.CourseQueryParams) =>
   useQuery(getCoursesQueryOptions(params));
 
-export const useCourseQuery = (id: number) => useQuery(getCourseQueryOptions(id));
+export const useCourseQuery = (id: App.ID) => useQuery(getCourseQueryOptions(id));
 
 export const useCreateCourseMutation = () => {
   const { t } = useTranslation();
@@ -78,7 +78,7 @@ export const useUpdateCourseMutation = () => {
       id,
       payload
     }: {
-      id: number;
+      id: App.ID;
       payload: LearningManagement.UpdateCoursePayload;
     }) => updateCourse(id, payload),
     onSuccess: course => {

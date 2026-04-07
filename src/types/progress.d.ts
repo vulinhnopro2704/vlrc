@@ -21,7 +21,7 @@ declare namespace Progress {
   }
 
   interface WordProgress extends App.Base {
-    wordId: number;
+    wordId: App.ID;
     userId: string;
     status: 'new' | 'learning' | 'mastered';
     nextReview?: string;
@@ -50,7 +50,7 @@ declare namespace Progress {
   }
 
   interface LessonQueryParams extends App.CursorPaginationParams {
-    courseId?: number;
+    courseId?: App.ID;
     status?: string;
     sortBy?: 'status' | 'completedAt' | 'score';
     sortOrder?: App.SortOrder;
@@ -79,7 +79,7 @@ declare namespace Progress {
   type ReviewResult = 'correct' | 'incorrect';
 
   interface ReviewWordPayload {
-    wordId: number;
+    wordId: App.ID;
     result: ReviewResult;
   }
 }

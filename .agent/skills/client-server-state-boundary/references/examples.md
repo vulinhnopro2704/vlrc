@@ -18,7 +18,7 @@ BAD
 ```tsx
 const useLessonStore = create(() => ({
   lesson: null as LearningManagement.Lesson | null,
-  async fetchLesson(id: number) {
+  async fetchLesson(id: App.ID) {
     this.lesson = await ky.get(`lessons/${id}`).json();
   }
 }));

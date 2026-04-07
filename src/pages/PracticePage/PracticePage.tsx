@@ -38,7 +38,7 @@ const PracticePage = () => {
     .map(row => row.word)
     .filter((word): word is LearningManagement.Word => Boolean(word));
   const stableWords = sessionWords.length > 0 ? sessionWords : words;
-  const wordsById = new Map(stableWords.map(word => [Number(word.id), word]));
+  const wordsById = new Map(stableWords.map(word => [word.id, word]));
 
   useUpdateEffect(() => {
     if (sessionWords.length === 0 && words.length > 0) {

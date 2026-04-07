@@ -71,7 +71,7 @@ export const commonVerbsData: LearningManagement.Word[] = [
   }
 ];
 
-export const vocabularyById = (id: number): LearningManagement.Word | undefined => {
+export const vocabularyById = (id: App.ID): LearningManagement.Word | undefined => {
   return commonVerbsData.find(word => word.id === id);
 };
 

@@ -8,15 +8,15 @@ export const getWords = (params?: LearningManagement.WordQueryParams) =>
     .get('words', { searchParams: params as Record<string, string | number | boolean> })
     .json<App.CursorPaginationResponse<LearningManagement.Word>>();
 
-export const getWord = (id: number) => apiClient.get(`words/${id}`).json<LearningManagement.Word>();
+export const getWord = (id: App.ID) => apiClient.get(`words/${id}`).json<LearningManagement.Word>();
 
 export const createWord = (payload: LearningManagement.CreateWordPayload) =>
   apiClient.post('words', { json: payload }).json<LearningManagement.Word>();
 
-export const updateWord = (id: number, payload: LearningManagement.UpdateWordPayload) =>
+export const updateWord = (id: App.ID, payload: LearningManagement.UpdateWordPayload) =>
   apiClient.patch(`words/${id}`, { json: payload }).json<LearningManagement.Word>();
 
-export const deleteWord = (id: number) => apiClient.delete(`words/${id}`).json<void>();
+export const deleteWord = (id: App.ID) => apiClient.delete(`words/${id}`).json<void>();
 
 // ── TanStack Query ──
 
@@ -34,16 +34,16 @@ export const getWordsQueryOptions = (params?: LearningManagement.WordQueryParams
   queryFn: () => getWords(params)
 });
 
-export const getWordQueryOptions = (id: number) => ({
+export const getWordQueryOptions = (id: App.ID) => ({
   queryKey: WORD_QUERY_KEYS.detail(id),
   queryFn: () => getWord(id),
-  enabled: id > 0
+  enabled: !!id
 });
 
 export const useWordsQuery = (params?: LearningManagement.WordQueryParams) =>
   useQuery(getWordsQueryOptions(params));
 
-export const useWordQuery = (id: number) => useQuery(getWordQueryOptions(id));
+export const useWordQuery = (id: App.ID) => useQuery(getWordQueryOptions(id));
 
 export const useCreateWordMutation = () => {
   const { t } = useTranslation();
@@ -73,7 +73,7 @@ export const useUpdateWordMutation = () => {
   const entityLabel = t('entity_word');
 
   return useMutation({
-    mutationFn: ({ id, payload }: { id: number; payload: LearningManagement.UpdateWordPayload }) =>
+    mutationFn: ({ id, payload }: { id: App.ID; payload: LearningManagement.UpdateWordPayload }) =>
       updateWord(id, payload),
     onSuccess: word => {
       queryClient.invalidateQueries({ queryKey: WORD_QUERY_KEYS.lists() });

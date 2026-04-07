@@ -52,7 +52,7 @@ declare namespace Practice {
 
   // ── FSRS Submission ──
   interface SubmitFSRSItem {
-    wordId: number;
+    wordId: App.ID;
     isCorrect: boolean;
     hadWrong?: boolean;
     durationMs?: number;

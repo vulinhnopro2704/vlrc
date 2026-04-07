@@ -8,7 +8,7 @@ import Icons from '@/components/Icons';
 import { useTranslation } from 'react-i18next';
 
 interface PracticeReviewDetailItem {
-  wordId: number;
+  wordId: App.ID;
   word: string;
   meaningVi: string;
   example: string;
@@ -125,7 +125,9 @@ const PracticeResults = ({
           </CardHeader>
           <CardContent className='space-y-3'>
             {reviewItems.length === 0 ? (
-              <p className='text-sm text-muted-foreground'>{t('practice_no_reviewed_words_details')}</p>
+              <p className='text-sm text-muted-foreground'>
+                {t('practice_no_reviewed_words_details')}
+              </p>
             ) : (
               reviewItems.map(item => (
                 <div key={item.wordId} className='rounded-lg border p-3 space-y-2'>
@@ -141,16 +143,22 @@ const PracticeResults = ({
                     </span>
                   </div>
                   <p className='text-sm text-muted-foreground'>
-                    <span className='font-medium text-foreground'>{t('practice_meaning_vi_label')}:</span>{' '}
+                    <span className='font-medium text-foreground'>
+                      {t('practice_meaning_vi_label')}:
+                    </span>{' '}
                     {item.meaningVi}
                   </p>
                   <p className='text-sm text-muted-foreground'>
-                    <span className='font-medium text-foreground'>{t('practice_attempts_label')}:</span>{' '}
+                    <span className='font-medium text-foreground'>
+                      {t('practice_attempts_label')}:
+                    </span>{' '}
                     {item.attempts}
                   </p>
                   {item.example ? (
                     <p className='text-sm text-muted-foreground'>
-                      <span className='font-medium text-foreground'>{t('practice_example_label')}:</span>{' '}
+                      <span className='font-medium text-foreground'>
+                        {t('practice_example_label')}:
+                      </span>{' '}
                       {item.example}
                     </p>
                   ) : null}

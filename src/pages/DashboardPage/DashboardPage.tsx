@@ -62,7 +62,7 @@ const DashboardPage = () => {
       sortOrder: 'asc',
       take: 100
     }),
-    enabled: selectedCourseId > 0
+    enabled: !!selectedCourseId
   });
   const selectedLessonQuery = useLessonQuery(selectedLesson?.id ?? 0);
   const lessons = lessonsQuery.data?.data ?? selectedCourse?.lessons ?? [];

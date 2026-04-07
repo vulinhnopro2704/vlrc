@@ -55,7 +55,7 @@ declare namespace LearningManagement {
     image?: string;
     order?: number;
     isPublished?: boolean;
-    courseId?: number;
+    courseId?: App.ID;
     course?: Course;
     words?: Word[];
     wordCount?: number;
@@ -81,7 +81,7 @@ declare namespace LearningManagement {
     cefr?: string;
     synonyms?: string[];
     difficulty?: number;
-    lessonId?: number;
+    lessonId?: App.ID;
     lesson?: Lesson;
   }
 
@@ -96,7 +96,7 @@ declare namespace LearningManagement {
 
   interface LessonQueryParams extends App.CursorPaginationParams {
     search?: string;
-    courseId?: number;
+    courseId?: App.ID;
     isPublished?: boolean;
     sortBy?: 'order' | 'createdAt' | 'title';
     sortOrder?: App.SortOrder;
@@ -104,7 +104,7 @@ declare namespace LearningManagement {
 
   interface WordQueryParams extends App.CursorPaginationParams {
     search?: string;
-    lessonId?: number;
+    lessonId?: App.ID;
     cefr?: string;
     pos?: string;
     sortBy?: 'word' | 'createdAt' | 'cefr';
@@ -136,7 +136,7 @@ declare namespace LearningManagement {
   // ── Activity types (client-side) ──
 
   interface VocabularyProgress extends App.Base {
-    wordId: number;
+    wordId: App.ID;
     userId?: number;
     reviewCount: number;
     correctCount: number;

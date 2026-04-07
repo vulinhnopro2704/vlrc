@@ -59,7 +59,7 @@ declare namespace Dashboard {
   }
 
   interface RiskItem {
-    wordId: number;
+    wordId: App.ID;
     riskScore: number;
     retrievability: number;
     daysOverdue: number;
