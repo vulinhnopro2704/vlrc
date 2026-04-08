@@ -59,6 +59,7 @@ declare namespace Progress {
   interface WordQueryParams extends App.CursorPaginationParams {
     status?: string;
     search?: string;
+    cefr?: string;
     sortBy?: 'status' | 'nextReview' | 'lastReviewedAt' | 'proficiency';
     sortOrder?: App.SortOrder;
   }

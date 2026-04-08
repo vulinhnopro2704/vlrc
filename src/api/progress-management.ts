@@ -20,4 +20,17 @@ export const getMyWords = (params?: Progress.WordQueryParams) =>
     .get('progress/words', { searchParams: params as Record<string, string | number | boolean> })
     .json<App.CursorPaginationResponse<Progress.WordProgress>>();
 
+export const PROGRESS_QUERY_KEYS = {
+  all: ['progress'] as const,
+  words: () => [...PROGRESS_QUERY_KEYS.all, 'words'] as const,
+  wordList: (params?: Progress.WordQueryParams) =>
+    [...PROGRESS_QUERY_KEYS.words(), params ?? {}] as const
+};
+
+export const useMyWordsQuery = (params?: Progress.WordQueryParams) =>
+  useQuery({
+    queryKey: PROGRESS_QUERY_KEYS.wordList(params),
+    queryFn: () => getMyWords(params)
+  });
+
 export const getStats = () => apiClient.get('progress/stats').json<Progress.LearningStats>();
