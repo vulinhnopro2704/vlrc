@@ -1,26 +1,11 @@
 'use client';
 
 import { useMyNotesQuery } from '@/api/vocabulary-management';
-import { useNavigate } from '@tanstack/react-router';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
 import Icons from '@/components/Icons';
-import { Card } from '@/components/ui/card';
 import { useModalState } from '@/hooks/use-modal-state';
 import { CreateWordModal } from '@/modals/CreateWordModal';
 import { CreateLessonModal } from '@/modals/CreateLessonModal';
-import { get, size, map, debounce } from 'lodash-es';
-import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
+import { CreateCourseModal } from '@/modals/CreateCourseModal';
 
 export const UserNotebookPage = () => {
   const { t } = useTranslation();
@@ -29,8 +14,13 @@ export const UserNotebookPage = () => {
   const [search, setSearch] = useState<string>('');
   const [level, setLevel] = useState<string>('all');
   const [debouncedSearch, setDebouncedSearch] = useState<string>('');
+  const [editingWordId, setEditingWordId] = useState<App.ID | undefined>(undefined);
 
-  const { modal, openModal, closeModal } = useModalState(['createWord', 'createLesson']);
+  const { modal, openModal, closeModal } = useModalState([
+    'createWord',
+    'createLesson',
+    'createCourse'
+  ]);
 
   // Debounced search
   const debouncedSetSearch = useCallback(
@@ -45,7 +35,12 @@ export const UserNotebookPage = () => {
   }, [search, debouncedSetSearch]);
 
   // Fetch notes
-  const { data: notesResponse, isLoading, isError, error } = useMyNotesQuery({
+  const {
+    data: notesResponse,
+    isLoading,
+    isError,
+    error
+  } = useMyNotesQuery({
     search: debouncedSearch || undefined,
     cefr: level !== 'all' ? level : undefined,
     sortBy: 'createdAt',
@@ -64,11 +59,7 @@ export const UserNotebookPage = () => {
       }
 
       const cards = container.querySelectorAll('.note-card');
-      gsap.fromTo(
-        cards,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.5, stagger: 0.05 }
-      );
+      gsap.fromTo(cards, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.05 });
     },
     { scope: pageRef }
   );
@@ -128,7 +119,10 @@ export const UserNotebookPage = () => {
 
           <div className='flex flex-col gap-2 sm:flex-row'>
             <Button
-              onClick={() => openModal('createWord')}
+              onClick={() => {
+                setEditingWordId(undefined);
+                openModal('createWord');
+              }}
               className='flex-1 sm:flex-initial gap-2'>
               <Icons.Plus className='h-4 w-4' />
               {t('notebook_create_word')}
@@ -139,6 +133,13 @@ export const UserNotebookPage = () => {
               className='flex-1 sm:flex-initial gap-2'>
               <Icons.Plus className='h-4 w-4' />
               {t('notebook_create_lesson')}
+            </Button>
+            <Button
+              onClick={() => openModal('createCourse')}
+              variant='outline'
+              className='flex-1 sm:flex-initial gap-2'>
+              <Icons.Plus className='h-4 w-4' />
+              {t('notebook_create_course')}
             </Button>
           </div>
         </div>
@@ -184,6 +185,17 @@ export const UserNotebookPage = () => {
                         </span>
                       )}
                     </div>
+                    <Button
+                      variant='ghost'
+                      size='icon'
+                      className='h-8 w-8'
+                      onClick={event => {
+                        event.stopPropagation();
+                        setEditingWordId(get(note, 'word.id'));
+                        openModal('createWord');
+                      }}>
+                      <Icons.PenTool className='h-4 w-4' />
+                    </Button>
                   </div>
 
                   {/* Meaning */}
@@ -219,19 +231,27 @@ export const UserNotebookPage = () => {
           )}
         </div>
       </div>
-
       {/* Modals */}
       {modal.createWord.load && (
         <CreateWordModal
+          id={editingWordId}
           open={modal.createWord.open}
-          onCancel={() => closeModal('createWord')}
+          onCancel={() => {
+            setEditingWordId(undefined);
+            closeModal('createWord');
+          }}
         />
       )}
-
       {modal.createLesson.load && (
         <CreateLessonModal
           open={modal.createLesson.open}
           onCancel={() => closeModal('createLesson')}
+        />
+      )}
+      {modal.createCourse.load && (
+        <CreateCourseModal
+          open={modal.createCourse.open}
+          onCancel={() => closeModal('createCourse')}
         />
       )}
     </main>

@@ -9,7 +9,6 @@ import {
   useFsrsRiskCardsQuery
 } from '@/api/dashboard-management';
 import { useCourseQuery, useCoursesQuery } from '@/api/course-management';
-import { getLessonsQueryOptions } from '@/api/lesson-management';
 import { CourseGrid } from './CourseGrid';
 import { LessonWordsModal } from '@/modals/LessonWordsModal';
 import { StatsCard } from './StatsCard';
@@ -21,6 +20,7 @@ import {
   TrendStat,
   percent
 } from './DashboardWidgets';
+import { useLessonsQuery } from '@/api/lesson-management';
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -54,15 +54,15 @@ const DashboardPage = () => {
   const selectedCourseQuery = useCourseQuery(selectedCourseId);
   const selectedCourse = selectedCourseQuery.data ?? courses[0] ?? null;
   const [reviewLessonId, setReviewLessonId] = useState<number | null>(null);
-  const lessonsQuery = useQuery({
-    ...getLessonsQueryOptions({
+  const lessonsQuery = useLessonsQuery(
+    {
       courseId: selectedCourseId,
       sortBy: 'order',
       sortOrder: 'asc',
       take: 100
-    }),
-    enabled: !!selectedCourseId
-  });
+    },
+    !!selectedCourseId
+  );
   const lessons = lessonsQuery.data?.data ?? selectedCourse?.lessons ?? [];
   const selectedCourseWithLessons = selectedCourse
     ? {
@@ -231,6 +231,9 @@ const DashboardPage = () => {
             </Button>
             <Button variant='outline' size='sm' onClick={() => navigate({ to: '/courses' })}>
               {t('dashboard_browse_courses')}
+            </Button>
+            <Button variant='outline' size='sm' onClick={() => navigate({ to: '/notebook' })}>
+              {t('notebook_title')}
             </Button>
             <Button variant='ghost' size='sm' onClick={handleRefresh} className='gap-2'>
               <Icons.Undo2 className={`h-4 w-4 ${isAnyLoading ? 'animate-spin' : ''}`} />

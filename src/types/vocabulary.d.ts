@@ -14,6 +14,7 @@ declare namespace Vocabulary {
 
   interface NoteQueryParams extends App.CursorPaginationParams {
     search?: string;
+    cefr?: string;
     isFavorite?: boolean;
     sortBy?: 'createdAt' | 'updatedAt';
     sortOrder?: App.SortOrder;

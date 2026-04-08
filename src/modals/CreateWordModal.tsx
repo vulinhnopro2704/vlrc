@@ -1,63 +1,52 @@
 'use client';
 
-import { useCreateWordMutation } from '@/api/word-management';
-import { Modal } from './Modal';
-import Icons from '@/components/Icons';
+import { useLessonsQuery } from '@/api/lesson-management';
+import { useWordMutation, useWordQuery } from '@/api/word-management';
+import { FormInput, FormSelect, FormTextarea } from '@/components/Form';
 import ShadcnFileUploader from '@/components/ShadcnFileUploader';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
+import { Modal } from './Modal';
 
-interface CreateWordModalProps extends App.ModalProps {}
-
-interface CreateWordFormData {
-  word: string;
-  meaning: string;
-  pronunciation?: string;
-  example?: string;
-}
-
-export const CreateWordModal = ({ open, onCancel }: CreateWordModalProps) => {
+export const CreateWordModal = ({ id, open, onCancel }: App.ModalProps) => {
   const { t } = useTranslation();
+  const isEditMode = id != null;
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [audioFiles, setAudioFiles] = useState<File[]>([]);
 
-  const { control, handleSubmit, reset } = useForm<CreateWordFormData>({
-    defaultValues: {
-      word: '',
-      meaning: '',
-      pronunciation: '',
-      example: ''
-    }
+  const { control, handleSubmit, reset } = useForm<LearningManagement.Word>();
+
+  const { data: lessonsResponse, isLoading: isLessonsLoading } = useLessonsQuery({
+    createdByMe: true,
+    sortBy: 'createdAt',
+    sortOrder: 'desc',
+    take: 100
   });
+  const lessons = (get(lessonsResponse, 'data', []) as LearningManagement.Lesson[]) ?? [];
+  const lessonOptions = map(lessons, lesson => ({
+    value: Number(lesson.id),
+    label: lesson.title
+  }));
 
-  const createWordMutation = useCreateWordMutation();
-
-  const onSubmit = async (data: CreateWordFormData) => {
-    try {
-      const payload: LearningManagement.CreateWordPayload = {
-        word: data.word,
-        meaning: data.meaning,
-        pronunciation: data.pronunciation || undefined,
-        example: data.example || undefined
-      };
-
-      await createWordMutation.mutateAsync(payload);
-
-      // Reset form
+  const { data: wordDetail, isLoading: isWordLoading } = useWordQuery(id);
+  const wordMutation = useWordMutation({
+    onSuccess: () => {
       reset();
       setImageFiles([]);
       setAudioFiles([]);
-
-      // Close modal
       onCancel();
-    } catch (error) {
-      console.error('[v0] Error creating word:', error);
     }
-  };
+  });
+  const isSubmitting = wordMutation.isPending;
+  const isFormLoading = isSubmitting || (isEditMode && isWordLoading);
+
+  useUpdateEffect(() => {
+    if (wordDetail) {
+      reset(pick(wordDetail, ['word', 'meaning', 'pronunciation', 'example', 'lessonId']));
+    }
+  }, [wordDetail]);
+
+  const onSubmit = handleSubmit((data: LearningManagement.Word) =>
+    wordMutation.mutate({ id, payload: data })
+  );
 
   const handleCancel = () => {
     reset();
@@ -70,67 +59,44 @@ export const CreateWordModal = ({ open, onCancel }: CreateWordModalProps) => {
     <Modal
       open={open}
       onCancel={handleCancel}
-      title={t('create_word_modal_title')}
-      confirmText={t('create_word_submit')}
+      title={isEditMode ? t('edit_word_modal_title') : t('create_word_modal_title')}
+      confirmText={isEditMode ? t('edit_word_submit') : t('create_word_submit')}
       cancelText={t('common_cancel')}
-      isLoading={createWordMutation.isPending}
+      isLoading={isFormLoading}
       width={600}
-      onConfirm={handleSubmit(onSubmit)}>
+      onConfirm={onSubmit}>
       <form className='space-y-5'>
-        {/* Word */}
-        <div className='space-y-2'>
-          <label htmlFor='word' className='text-sm font-medium'>
-            {t('create_word_word_label')} *
-          </label>
-          <Input
-            id='word'
-            placeholder='e.g., English'
-            {...control.register('word', { required: true })}
-            disabled={createWordMutation.isPending}
-          />
-        </div>
-
-        {/* Meaning */}
-        <div className='space-y-2'>
-          <label htmlFor='meaning' className='text-sm font-medium'>
-            {t('create_word_meaning_label')} *
-          </label>
-          <Textarea
-            id='meaning'
-            placeholder={t('create_word_meaning_placeholder')}
-            rows={3}
-            {...control.register('meaning', { required: true })}
-            disabled={createWordMutation.isPending}
-          />
-        </div>
-
-        {/* Pronunciation */}
-        <div className='space-y-2'>
-          <label htmlFor='pronunciation' className='text-sm font-medium'>
-            {t('create_word_pronunciation_label')}
-          </label>
-          <Input
-            id='pronunciation'
-            placeholder={t('create_word_pronunciation_placeholder')}
-            {...control.register('pronunciation')}
-            disabled={createWordMutation.isPending}
-          />
-        </div>
-
-        {/* Example */}
-        <div className='space-y-2'>
-          <label htmlFor='example' className='text-sm font-medium'>
-            {t('create_word_example_label')}
-          </label>
-          <Textarea
-            id='example'
-            placeholder={t('create_word_example_placeholder')}
-            rows={2}
-            {...control.register('example')}
-            disabled={createWordMutation.isPending}
-          />
-        </div>
-
+        <FormSelect
+          control={control}
+          name='lessonId'
+          label={t('create_word_lesson_label')}
+          options={lessonOptions}
+          placeholder={t('create_word_lesson_placeholder')}
+          disabled={isFormLoading || isLessonsLoading}
+          rules={{ required: t('create_word_lesson_required') }}
+        />
+        <FormInput
+          control={control}
+          name='word'
+          label={t('create_word_word_label')}
+          placeholder='e.g., English'
+          disabled={isFormLoading}
+          rules={{ required: true }}
+        />
+        <FormTextarea
+          control={control}
+          name='meaning'
+          label={t('create_word_meaning_label')}
+          rules={{ required: true }}
+        />
+        <FormInput
+          control={control}
+          name='pronunciation'
+          label={t('create_word_pronunciation_label')}
+          placeholder={t('create_word_pronunciation_placeholder')}
+          disabled={isFormLoading}
+        />
+        <FormTextarea control={control} name='example' label={t('create_word_example_label')} />
         {/* Image Upload */}
         <div className='space-y-2'>
           <label className='text-sm font-medium'>{t('create_word_image_label')}</label>
@@ -139,10 +105,9 @@ export const CreateWordModal = ({ open, onCancel }: CreateWordModalProps) => {
             onChange={setImageFiles}
             maxFiles={1}
             accept='image/*'
-            disabled={createWordMutation.isPending}
+            disabled={isFormLoading}
           />
         </div>
-
         {/* Audio Upload */}
         <div className='space-y-2'>
           <label className='text-sm font-medium'>{t('create_word_audio_label')}</label>
@@ -151,7 +116,7 @@ export const CreateWordModal = ({ open, onCancel }: CreateWordModalProps) => {
             onChange={setAudioFiles}
             maxFiles={1}
             accept={['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/webm']}
-            disabled={createWordMutation.isPending}
+            disabled={isFormLoading}
           />
         </div>
       </form>

@@ -1,56 +1,51 @@
 'use client';
 
-import { useCreateLessonMutation } from '@/api/lesson-management';
+import { useLessonMutation, useLessonQuery } from '@/api/lesson-management';
+import { useCoursesQuery } from '@/api/course-management';
+import { FormInput, FormSelect, FormTextarea } from '@/components/Form';
 import { Modal } from './Modal';
-import Icons from '@/components/Icons';
 import ShadcnFileUploader from '@/components/ShadcnFileUploader';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
 
-interface CreateLessonModalProps extends App.ModalProps {}
-
-interface CreateLessonFormData {
-  title: string;
-  description?: string;
-}
-
-export const CreateLessonModal = ({ open, onCancel }: CreateLessonModalProps) => {
+export const CreateLessonModal = ({ id, open, onCancel }: App.ModalProps) => {
   const { t } = useTranslation();
+  const isEditMode = id != null;
   const [imageFiles, setImageFiles] = useState<File[]>([]);
 
-  const { control, handleSubmit, reset } = useForm<CreateLessonFormData>({
-    defaultValues: {
-      title: '',
-      description: ''
-    }
+  const { control, handleSubmit, reset } = useForm<LearningManagement.Lesson>();
+
+  const { data: coursesResponse, isLoading: isCoursesLoading } = useCoursesQuery({
+    sortBy: 'createdAt',
+    sortOrder: 'desc',
+    take: 100
   });
+  const userCourses = (
+    (get(coursesResponse, 'data', []) as LearningManagement.Course[]) ?? []
+  ).filter(course => course.isUserCreated);
+  const courseOptions = userCourses.map(course => ({
+    value: Number(course.id),
+    label: course.title
+  }));
 
-  const createLessonMutation = useCreateLessonMutation();
-
-  const onSubmit = async (data: CreateLessonFormData) => {
-    try {
-      const payload: LearningManagement.CreateLessonPayload = {
-        title: data.title,
-        description: data.description || undefined,
-        order: undefined
-      };
-
-      await createLessonMutation.mutateAsync(payload);
-
-      // Reset form
+  const { data: lessonDetail, isLoading: isLessonLoading } = useLessonQuery(id);
+  const lessonMutation = useLessonMutation({
+    onSuccess: () => {
       reset();
       setImageFiles([]);
-
-      // Close modal
       onCancel();
-    } catch (error) {
-      console.error('[v0] Error creating lesson:', error);
     }
-  };
+  });
+  const isSubmitting = lessonMutation.isPending;
+  const isFormLoading = isSubmitting || (isEditMode && isLessonLoading);
+
+  useUpdateEffect(() => {
+    if (lessonDetail) {
+      reset(pick(lessonDetail, ['title', 'description', 'courseId']));
+    }
+  }, [lessonDetail]);
+
+  const onSubmit = handleSubmit((data: LearningManagement.Lesson) =>
+    lessonMutation.mutate({ id, payload: data })
+  );
 
   const handleCancel = () => {
     reset();
@@ -62,40 +57,34 @@ export const CreateLessonModal = ({ open, onCancel }: CreateLessonModalProps) =>
     <Modal
       open={open}
       onCancel={handleCancel}
-      title={t('create_lesson_modal_title')}
-      confirmText={t('create_lesson_submit')}
+      title={isEditMode ? t('edit_lesson_modal_title') : t('create_lesson_modal_title')}
+      confirmText={isEditMode ? t('edit_lesson_submit') : t('create_lesson_submit')}
       cancelText={t('common_cancel')}
-      isLoading={createLessonMutation.isPending}
+      isLoading={isFormLoading}
       width={600}
-      onConfirm={handleSubmit(onSubmit)}>
+      onConfirm={onSubmit}>
       <form className='space-y-5'>
-        {/* Title */}
-        <div className='space-y-2'>
-          <label htmlFor='title' className='text-sm font-medium'>
-            {t('create_lesson_title_label')} *
-          </label>
-          <Input
-            id='title'
-            placeholder={t('create_lesson_title_placeholder')}
-            {...control.register('title', { required: true })}
-            disabled={createLessonMutation.isPending}
-          />
-        </div>
-
-        {/* Description */}
-        <div className='space-y-2'>
-          <label htmlFor='description' className='text-sm font-medium'>
-            {t('create_lesson_description_label')}
-          </label>
-          <Textarea
-            id='description'
-            placeholder={t('create_lesson_description_placeholder')}
-            rows={3}
-            {...control.register('description')}
-            disabled={createLessonMutation.isPending}
-          />
-        </div>
-
+        <FormInput
+          control={control}
+          name='title'
+          label={t('create_lesson_title_label')}
+          placeholder={t('create_lesson_title_placeholder')}
+          disabled={isFormLoading}
+          rules={{ required: true }}
+        />
+        <FormTextarea
+          control={control}
+          name='description'
+          label={t('create_lesson_description_label')}
+        />
+        <FormSelect
+          control={control}
+          name='courseId'
+          label={t('create_lesson_course_label')}
+          options={courseOptions}
+          placeholder={t('create_lesson_course_placeholder')}
+          disabled={isFormLoading || isCoursesLoading}
+        />
         {/* Image Upload */}
         <div className='space-y-2'>
           <label className='text-sm font-medium'>{t('create_lesson_image_label')}</label>
@@ -104,7 +93,7 @@ export const CreateLessonModal = ({ open, onCancel }: CreateLessonModalProps) =>
             onChange={setImageFiles}
             maxFiles={1}
             accept='image/*'
-            disabled={createLessonMutation.isPending}
+            disabled={isFormLoading}
           />
         </div>
       </form>
