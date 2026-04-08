@@ -2,13 +2,11 @@
 
 import { useCourseQuery, useCourseMutation } from '@/api/course-management';
 import { FormInput, FormTextarea } from '@/components/Form';
-import ShadcnFileUploader from '@/components/ShadcnFileUploader';
 import { Modal } from './Modal';
 
 export const CreateCourseModal = ({ id, open, onCancel }: App.ModalProps) => {
   const { t } = useTranslation();
   const isEditMode = id != null;
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
 
   const { control, handleSubmit, reset } = useForm<LearningManagement.Course>();
 
@@ -16,7 +14,6 @@ export const CreateCourseModal = ({ id, open, onCancel }: App.ModalProps) => {
   const courseMutation = useCourseMutation({
     onSuccess: () => {
       reset();
-      setImageFiles([]);
       onCancel();
     }
   });
@@ -42,7 +39,6 @@ export const CreateCourseModal = ({ id, open, onCancel }: App.ModalProps) => {
 
   const handleCancel = () => {
     reset();
-    setImageFiles([]);
     onCancel();
   };
 
@@ -84,16 +80,6 @@ export const CreateCourseModal = ({ id, open, onCancel }: App.ModalProps) => {
           placeholder={t('create_course_icon_placeholder')}
           disabled={isFormLoading}
         />
-        <div className='space-y-2'>
-          <label className='text-sm font-medium'>{t('create_course_image_label')}</label>
-          <ShadcnFileUploader
-            value={imageFiles}
-            onChange={setImageFiles}
-            maxFiles={1}
-            accept='image/*'
-            disabled={isFormLoading}
-          />
-        </div>
       </form>
     </Modal>
   );

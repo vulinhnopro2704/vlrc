@@ -10,7 +10,7 @@ import { CreateCourseModal } from '@/modals/CreateCourseModal';
 export const UserNotebookPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const pageRef = useRef<HTMLDivElement>(null);
+  const pageRef = useRef<HTMLElement>(null);
   const [search, setSearch] = useState<string>('');
   const [level, setLevel] = useState<string>('all');
   const [debouncedSearch, setDebouncedSearch] = useState<string>('');
@@ -53,15 +53,27 @@ export const UserNotebookPage = () => {
   // GSAP animation
   useGSAP(
     () => {
+      if (isLoading) {
+        return;
+      }
+
       const container = get(pageRef, 'current');
       if (!container) {
         return;
       }
 
       const cards = container.querySelectorAll('.note-card');
+      if (cards.length === 0) {
+        return;
+      }
+
       gsap.fromTo(cards, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.05 });
     },
-    { scope: pageRef }
+    {
+      scope: pageRef,
+      dependencies: [isLoading, notes.length, debouncedSearch, level],
+      revertOnUpdate: true
+    }
   );
 
   return (
@@ -172,11 +184,11 @@ export const UserNotebookPage = () => {
               {map(notes, note => (
                 <div
                   key={note.id}
-                  className='note-card rounded-lg border bg-card/40 p-4 hover:bg-card/60 transition-colors cursor-pointer group'>
+                  className='note-card rounded-lg border bg-card/40 p-4 transition-colors'>
                   {/* Word & Level */}
                   <div className='flex items-start justify-between gap-2 mb-3'>
                     <div className='flex-1'>
-                      <h3 className='text-lg font-semibold text-foreground group-hover:text-primary transition-colors'>
+                      <h3 className='text-lg font-semibold text-foreground transition-colors'>
                         {get(note, 'word.word', 'N/A')}
                       </h3>
                       {get(note, 'word.cefr') && (

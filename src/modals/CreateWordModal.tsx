@@ -3,14 +3,11 @@
 import { useLessonsQuery } from '@/api/lesson-management';
 import { useWordMutation, useWordQuery } from '@/api/word-management';
 import { FormInput, FormSelect, FormTextarea } from '@/components/Form';
-import ShadcnFileUploader from '@/components/ShadcnFileUploader';
 import { Modal } from './Modal';
 
 export const CreateWordModal = ({ id, open, onCancel }: App.ModalProps) => {
   const { t } = useTranslation();
   const isEditMode = id != null;
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
-  const [audioFiles, setAudioFiles] = useState<File[]>([]);
 
   const { control, handleSubmit, reset } = useForm<LearningManagement.Word>();
 
@@ -30,8 +27,6 @@ export const CreateWordModal = ({ id, open, onCancel }: App.ModalProps) => {
   const wordMutation = useWordMutation({
     onSuccess: () => {
       reset();
-      setImageFiles([]);
-      setAudioFiles([]);
       onCancel();
     }
   });
@@ -50,8 +45,6 @@ export const CreateWordModal = ({ id, open, onCancel }: App.ModalProps) => {
 
   const handleCancel = () => {
     reset();
-    setImageFiles([]);
-    setAudioFiles([]);
     onCancel();
   };
 
@@ -97,28 +90,6 @@ export const CreateWordModal = ({ id, open, onCancel }: App.ModalProps) => {
           disabled={isFormLoading}
         />
         <FormTextarea control={control} name='example' label={t('create_word_example_label')} />
-        {/* Image Upload */}
-        <div className='space-y-2'>
-          <label className='text-sm font-medium'>{t('create_word_image_label')}</label>
-          <ShadcnFileUploader
-            value={imageFiles}
-            onChange={setImageFiles}
-            maxFiles={1}
-            accept='image/*'
-            disabled={isFormLoading}
-          />
-        </div>
-        {/* Audio Upload */}
-        <div className='space-y-2'>
-          <label className='text-sm font-medium'>{t('create_word_audio_label')}</label>
-          <ShadcnFileUploader
-            value={audioFiles}
-            onChange={setAudioFiles}
-            maxFiles={1}
-            accept={['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/webm']}
-            disabled={isFormLoading}
-          />
-        </div>
       </form>
     </Modal>
   );

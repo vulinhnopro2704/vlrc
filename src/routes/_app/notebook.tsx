@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { lazy } from 'react';
+import { lazyLoad } from '@/components/lazyLoad';
 
-const UserNotebookPage = lazy(() =>
+const UserNotebookPage = lazyLoad(() =>
   import('@/pages/UserNotebookPage').then(mod => ({ default: mod.UserNotebookPage }))
 );
 

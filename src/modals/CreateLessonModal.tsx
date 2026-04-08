@@ -4,12 +4,10 @@ import { useLessonMutation, useLessonQuery } from '@/api/lesson-management';
 import { useCoursesQuery } from '@/api/course-management';
 import { FormInput, FormSelect, FormTextarea } from '@/components/Form';
 import { Modal } from './Modal';
-import ShadcnFileUploader from '@/components/ShadcnFileUploader';
 
 export const CreateLessonModal = ({ id, open, onCancel }: App.ModalProps) => {
   const { t } = useTranslation();
   const isEditMode = id != null;
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
 
   const { control, handleSubmit, reset } = useForm<LearningManagement.Lesson>();
 
@@ -30,7 +28,6 @@ export const CreateLessonModal = ({ id, open, onCancel }: App.ModalProps) => {
   const lessonMutation = useLessonMutation({
     onSuccess: () => {
       reset();
-      setImageFiles([]);
       onCancel();
     }
   });
@@ -49,7 +46,6 @@ export const CreateLessonModal = ({ id, open, onCancel }: App.ModalProps) => {
 
   const handleCancel = () => {
     reset();
-    setImageFiles([]);
     onCancel();
   };
 
@@ -85,17 +81,6 @@ export const CreateLessonModal = ({ id, open, onCancel }: App.ModalProps) => {
           placeholder={t('create_lesson_course_placeholder')}
           disabled={isFormLoading || isCoursesLoading}
         />
-        {/* Image Upload */}
-        <div className='space-y-2'>
-          <label className='text-sm font-medium'>{t('create_lesson_image_label')}</label>
-          <ShadcnFileUploader
-            value={imageFiles}
-            onChange={setImageFiles}
-            maxFiles={1}
-            accept='image/*'
-            disabled={isFormLoading}
-          />
-        </div>
       </form>
     </Modal>
   );
