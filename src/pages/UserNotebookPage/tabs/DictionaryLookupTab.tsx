@@ -5,6 +5,8 @@ import {
 import Icons from '@/components/Icons';
 import { NotebookTabState } from '../components/NotebookTabState';
 
+const MOCHI_AUDIO_BASE_URL = 'https://mochien-server.mochidemy.com';
+
 export const DictionaryLookupTab: FC = () => {
   const { t } = useTranslation();
   const [word, setWord] = useState('');
@@ -64,6 +66,30 @@ export const DictionaryLookupTab: FC = () => {
     },
     [highlightRegex, normalizedKeyword]
   );
+
+  const buildAudioUrl = useCallback((audioPath?: string | null) => {
+    const value = (audioPath || '').trim();
+    if (!value) {
+      return '';
+    }
+
+    if (/^https?:\/\//i.test(value)) {
+      return value;
+    }
+
+    const normalizedPath = value.startsWith('/') ? value.slice(1) : value;
+
+    return `${MOCHI_AUDIO_BASE_URL}/${normalizedPath}`;
+  }, []);
+
+  const handlePlayAudio = useCallback((audioUrl: string) => {
+    if (!audioUrl) {
+      return;
+    }
+
+    const audio = new Audio(audioUrl);
+    void audio.play().catch(() => undefined);
+  }, []);
 
   const errorDetail =
     (dictionaryQuery.error instanceof Error
@@ -182,8 +208,8 @@ export const DictionaryLookupTab: FC = () => {
 
                 {map(entries, entry => {
                   const entryKey = `${entry.id}-${entry.position || 'unknown'}`;
-                  const usAudio = entry.audioUs || '';
-                  const ukAudio = entry.audioUk || '';
+                  const usAudioUrl = buildAudioUrl(entry.audioUs);
+                  const ukAudioUrl = buildAudioUrl(entry.audioUk);
 
                   return (
                     <Card key={entryKey} className='border-border/70'>
@@ -211,15 +237,29 @@ export const DictionaryLookupTab: FC = () => {
                               )}
                             </div>
                             <div className='flex flex-wrap gap-2 text-xs text-muted-foreground'>
-                              {usAudio && (
-                                <span className='rounded-md border px-2 py-1'>
-                                  {`audio_us: ${usAudio}`}
-                                </span>
+                              {ukAudioUrl && (
+                                <Button
+                                  type='button'
+                                  variant='outline'
+                                  size='sm'
+                                  className='h-8 gap-1.5'
+                                  onClick={() => handlePlayAudio(ukAudioUrl)}
+                                  title='Anh-Anh (UK)'>
+                                  <Icons.Volume2 className='h-3.5 w-3.5' />
+                                  UK
+                                </Button>
                               )}
-                              {ukAudio && (
-                                <span className='rounded-md border px-2 py-1'>
-                                  {`audio_uk: ${ukAudio}`}
-                                </span>
+                              {usAudioUrl && (
+                                <Button
+                                  type='button'
+                                  variant='outline'
+                                  size='sm'
+                                  className='h-8 gap-1.5'
+                                  onClick={() => handlePlayAudio(usAudioUrl)}
+                                  title='Anh-My (US)'>
+                                  <Icons.Volume2 className='h-3.5 w-3.5' />
+                                  US
+                                </Button>
                               )}
                             </div>
                           </div>
