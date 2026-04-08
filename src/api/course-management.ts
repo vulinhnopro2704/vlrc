@@ -11,10 +11,10 @@ export const getCourses = (params?: LearningManagement.CourseQueryParams) =>
 export const getCourse = (id: App.ID) =>
   apiClient.get(`courses/${id}`).json<LearningManagement.Course>();
 
-export const createCourse = (payload: LearningManagement.CreateCoursePayload) =>
+export const createCourse = (payload: LearningManagement.Course) =>
   apiClient.post('courses', { json: payload }).json<LearningManagement.Course>();
 
-export const updateCourse = (id: App.ID, payload: LearningManagement.UpdateCoursePayload) =>
+export const updateCourse = (id: App.ID, payload: LearningManagement.Course) =>
   apiClient.patch(`courses/${id}`, { json: payload }).json<LearningManagement.Course>();
 
 export const deleteCourse = (id: App.ID) => apiClient.delete(`courses/${id}`).json<void>();
@@ -30,68 +30,52 @@ export const COURSE_QUERY_KEYS = {
   detail: (id: App.ID) => [...COURSE_QUERY_KEYS.details(), id] as const
 };
 
-export const getCoursesQueryOptions = (params?: LearningManagement.CourseQueryParams) => ({
-  queryKey: COURSE_QUERY_KEYS.list(params),
-  queryFn: () => getCourses(params)
-});
-
-export const getCourseQueryOptions = (id: App.ID) => ({
-  queryKey: COURSE_QUERY_KEYS.detail(id),
-  queryFn: () => getCourse(id),
-  enabled: !!id
-});
-
 export const useCoursesQuery = (params?: LearningManagement.CourseQueryParams) =>
-  useQuery(getCoursesQueryOptions(params));
-
-export const useCourseQuery = (id: App.ID) => useQuery(getCourseQueryOptions(id));
-
-export const useCreateCourseMutation = () => {
-  const { t } = useTranslation();
-  const queryClient = useQueryClient();
-  const entityLabel = t('entity_course');
-
-  return useMutation({
-    mutationFn: createCourse,
-    onSuccess: course => {
-      queryClient.invalidateQueries({ queryKey: COURSE_QUERY_KEYS.lists() });
-      if (course.id != null) {
-        queryClient.setQueryData(COURSE_QUERY_KEYS.detail(course.id), course);
-      }
-      toast.success(t('mutation_success_create', { entity: entityLabel }));
-    },
-    onError: error => {
-      toast.error(
-        `${t('mutation_error_create', { entity: entityLabel })}: ${(error as Error).message}`
-      );
-    }
+  useQuery({
+    queryKey: COURSE_QUERY_KEYS.list(params),
+    queryFn: () => getCourses(params)
   });
-};
 
-export const useUpdateCourseMutation = () => {
+export const useCourseQuery = (id?: App.ID) =>
+  useQuery({
+    queryKey: COURSE_QUERY_KEYS.detail(id!),
+    queryFn: () => getCourse(id!),
+    enabled: !!id
+  });
+
+export const useCourseMutation = (options?: {
+  onSuccess?: (
+    data: LearningManagement.Course,
+    variables: { id?: App.ID; payload: LearningManagement.Course }
+  ) => void;
+  onError?: (error: Error, variables: { id?: App.ID; payload: LearningManagement.Course }) => void;
+}) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const entityLabel = t('entity_course');
 
   return useMutation({
-    mutationFn: ({
-      id,
-      payload
-    }: {
-      id: App.ID;
-      payload: LearningManagement.UpdateCoursePayload;
-    }) => updateCourse(id, payload),
-    onSuccess: course => {
+    mutationFn: ({ id, payload }: { id?: App.ID; payload: LearningManagement.Course }) =>
+      id != null ? updateCourse(id, payload) : createCourse(payload),
+    onSuccess: (course, variables) => {
       queryClient.invalidateQueries({ queryKey: COURSE_QUERY_KEYS.lists() });
       if (course.id != null) {
         queryClient.setQueryData(COURSE_QUERY_KEYS.detail(course.id), course);
       }
-      toast.success(t('mutation_success_update', { entity: entityLabel }));
-    },
-    onError: error => {
-      toast.error(
-        `${t('mutation_error_update', { entity: entityLabel })}: ${(error as Error).message}`
+      toast.success(
+        t(variables.id != null ? 'mutation_success_update' : 'mutation_success_create', {
+          entity: entityLabel
+        })
       );
+      options?.onSuccess?.(course, variables);
+    },
+    onError: (error, variables) => {
+      toast.error(
+        `${t(variables.id != null ? 'mutation_error_update' : 'mutation_error_create', {
+          entity: entityLabel
+        })}: ${(error as Error).message}`
+      );
+      options?.onError?.(error as Error, variables);
     }
   });
 };

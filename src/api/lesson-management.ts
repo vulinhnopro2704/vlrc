@@ -11,10 +11,10 @@ export const getLessons = (params?: LearningManagement.LessonQueryParams) =>
 export const getLesson = (id: App.ID) =>
   apiClient.get(`lessons/${id}`).json<LearningManagement.Lesson>();
 
-export const createLesson = (payload: LearningManagement.CreateLessonPayload) =>
+export const createLesson = (payload: LearningManagement.Lesson) =>
   apiClient.post('lessons', { json: payload }).json<LearningManagement.Lesson>();
 
-export const updateLesson = (id: App.ID, payload: LearningManagement.UpdateLessonPayload) =>
+export const updateLesson = (id: App.ID, payload: LearningManagement.Lesson) =>
   apiClient.patch(`lessons/${id}`, { json: payload }).json<LearningManagement.Lesson>();
 
 export const deleteLesson = (id: App.ID) => apiClient.delete(`lessons/${id}`).json<void>();
@@ -47,68 +47,53 @@ export const LESSON_QUERY_KEYS = {
   detail: (id: App.ID) => [...LESSON_QUERY_KEYS.details(), id] as const
 };
 
-export const getLessonsQueryOptions = (params?: LearningManagement.LessonQueryParams) => ({
-  queryKey: LESSON_QUERY_KEYS.list(params),
-  queryFn: () => getLessons(params)
-});
-
-export const getLessonQueryOptions = (id: App.ID) => ({
-  queryKey: LESSON_QUERY_KEYS.detail(id),
-  queryFn: () => getLesson(id),
-  enabled: !!id
-});
-
-export const useLessonsQuery = (params?: LearningManagement.LessonQueryParams) =>
-  useQuery(getLessonsQueryOptions(params));
-
-export const useLessonQuery = (id: App.ID) => useQuery(getLessonQueryOptions(id));
-
-export const useCreateLessonMutation = () => {
-  const { t } = useTranslation();
-  const queryClient = useQueryClient();
-  const entityLabel = t('entity_lesson');
-
-  return useMutation({
-    mutationFn: createLesson,
-    onSuccess: lesson => {
-      queryClient.invalidateQueries({ queryKey: LESSON_QUERY_KEYS.lists() });
-      if (lesson.id != null) {
-        queryClient.setQueryData(LESSON_QUERY_KEYS.detail(lesson.id), lesson);
-      }
-      toast.success(t('mutation_success_create', { entity: entityLabel }));
-    },
-    onError: error => {
-      toast.error(
-        `${t('mutation_error_create', { entity: entityLabel })}: ${(error as Error).message}`
-      );
-    }
+export const useLessonsQuery = (params?: LearningManagement.LessonQueryParams, enabled?: boolean) =>
+  useQuery({
+    queryKey: LESSON_QUERY_KEYS.list(params),
+    queryFn: () => getLessons(params),
+    enabled: enabled ?? true
   });
-};
 
-export const useUpdateLessonMutation = () => {
+export const useLessonQuery = (id?: App.ID) =>
+  useQuery({
+    queryKey: LESSON_QUERY_KEYS.detail(id!),
+    queryFn: () => getLesson(id!),
+    enabled: !!id
+  });
+
+export const useLessonMutation = (options?: {
+  onSuccess?: (
+    data: LearningManagement.Lesson,
+    variables: { id?: App.ID; payload: LearningManagement.Lesson }
+  ) => void;
+  onError?: (error: Error, variables: { id?: App.ID; payload: LearningManagement.Lesson }) => void;
+}) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const entityLabel = t('entity_lesson');
 
   return useMutation({
-    mutationFn: ({
-      id,
-      payload
-    }: {
-      id: App.ID;
-      payload: LearningManagement.UpdateLessonPayload;
-    }) => updateLesson(id, payload),
-    onSuccess: lesson => {
+    mutationFn: ({ id, payload }: { id?: App.ID; payload: LearningManagement.Lesson }) =>
+      id != null ? updateLesson(id, payload) : createLesson(payload),
+    onSuccess: (lesson, variables) => {
       queryClient.invalidateQueries({ queryKey: LESSON_QUERY_KEYS.lists() });
       if (lesson.id != null) {
         queryClient.setQueryData(LESSON_QUERY_KEYS.detail(lesson.id), lesson);
       }
-      toast.success(t('mutation_success_update', { entity: entityLabel }));
-    },
-    onError: error => {
-      toast.error(
-        `${t('mutation_error_update', { entity: entityLabel })}: ${(error as Error).message}`
+      toast.success(
+        t(variables.id != null ? 'mutation_success_update' : 'mutation_success_create', {
+          entity: entityLabel
+        })
       );
+      options?.onSuccess?.(lesson, variables);
+    },
+    onError: (error, variables) => {
+      toast.error(
+        `${t(variables.id != null ? 'mutation_error_update' : 'mutation_error_create', {
+          entity: entityLabel
+        })}: ${(error as Error).message}`
+      );
+      options?.onError?.(error as Error, variables);
     }
   });
 };

@@ -42,6 +42,8 @@ declare namespace LearningManagement {
     icon?: string;
     order?: number;
     isPublished?: boolean;
+    isUserCreated?: boolean;
+    createdByUserId?: string;
     lessons?: Lesson[];
     _count?: CountSummary;
     completedLessons?: number;
@@ -55,6 +57,8 @@ declare namespace LearningManagement {
     image?: string;
     order?: number;
     isPublished?: boolean;
+    isUserCreated?: boolean;
+    createdByUserId?: string;
     courseId?: App.ID;
     course?: Course;
     words?: Word[];
@@ -98,6 +102,7 @@ declare namespace LearningManagement {
     search?: string;
     courseId?: App.ID;
     isPublished?: boolean;
+    createdByMe?: boolean;
     sortBy?: 'order' | 'createdAt' | 'title';
     sortOrder?: App.SortOrder;
   }
@@ -110,28 +115,6 @@ declare namespace LearningManagement {
     sortBy?: 'word' | 'createdAt' | 'cefr';
     sortOrder?: App.SortOrder;
   }
-
-  // ── Create / Update payloads (reuse entity via Pick + Partial) ──
-
-  type CreateCoursePayload = Pick<Course, 'title'> &
-    Partial<Pick<Course, 'enTitle' | 'description' | 'image' | 'icon' | 'order' | 'isPublished'>>;
-
-  type UpdateCoursePayload = Partial<CreateCoursePayload>;
-
-  type CreateLessonPayload = Pick<Lesson, 'title'> &
-    Partial<Pick<Lesson, 'description' | 'image' | 'order' | 'isPublished' | 'courseId'>>;
-
-  type UpdateLessonPayload = Partial<CreateLessonPayload>;
-
-  type CreateWordPayload = Pick<Word, 'word' | 'meaning'> &
-    Partial<
-      Pick<
-        Word,
-        'pronunciation' | 'example' | 'exampleVi' | 'image' | 'audio' | 'pos' | 'cefr' | 'lessonId'
-      >
-    >;
-
-  type UpdateWordPayload = Partial<CreateWordPayload>;
 
   // ── Activity types (client-side) ──
 
