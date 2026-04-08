@@ -11,37 +11,38 @@ export default function FlipCardExercise({
   vocabulary: LearningManagement.Word;
   onComplete?: (result: LearningManagement.ActivityResult) => void;
 }) {
-  const normalizeImageUrl = (imageUrl?: string) => {
-    if (!imageUrl) {
-      return null;
-    }
+  // Image support is temporarily disabled.
+  // const normalizeImageUrl = (imageUrl?: string) => {
+  //   if (!imageUrl) {
+  //     return null;
+  //   }
 
-    const trimmedImageUrl = imageUrl.trim();
-    if (!trimmedImageUrl) {
-      return null;
-    }
+  //   const trimmedImageUrl = imageUrl.trim();
+  //   if (!trimmedImageUrl) {
+  //     return null;
+  //   }
 
-    if (trimmedImageUrl.startsWith('http://') || trimmedImageUrl.startsWith('https://')) {
-      return trimmedImageUrl;
-    }
+  //   if (trimmedImageUrl.startsWith('http://') || trimmedImageUrl.startsWith('https://')) {
+  //     return trimmedImageUrl;
+  //   }
 
-    const absoluteUrlStartIndex = Math.max(
-      trimmedImageUrl.indexOf('https://'),
-      trimmedImageUrl.indexOf('http://')
-    );
+  //   const absoluteUrlStartIndex = Math.max(
+  //     trimmedImageUrl.indexOf('https://'),
+  //     trimmedImageUrl.indexOf('http://')
+  //   );
 
-    if (absoluteUrlStartIndex > -1) {
-      return trimmedImageUrl.slice(absoluteUrlStartIndex);
-    }
+  //   if (absoluteUrlStartIndex > -1) {
+  //     return trimmedImageUrl.slice(absoluteUrlStartIndex);
+  //   }
 
-    return trimmedImageUrl;
-  };
+  //   return trimmedImageUrl;
+  // };
 
   const { t } = useTranslation();
   const { speak, isPlaying } = useAudioSynthesis();
   const [startTime] = useState(Date.now());
   const [isWordAudioPlaying, setIsWordAudioPlaying] = useState(false);
-  const normalizedImageUrl = normalizeImageUrl(vocabulary.image);
+  // const normalizedImageUrl = normalizeImageUrl(vocabulary.image);
 
   const handlePlayPronunciation = async () => {
     if (vocabulary.audio) {
@@ -101,6 +102,7 @@ export default function FlipCardExercise({
               </Button>
             </div>
 
+            {/* Image support is temporarily disabled.
             {normalizedImageUrl ? (
               <div className='mx-auto w-32 h-32 overflow-hidden rounded-xl border border-primary-foreground/20 bg-background/20'>
                 <img
@@ -110,7 +112,7 @@ export default function FlipCardExercise({
                   loading='lazy'
                 />
               </div>
-            ) : null}
+            ) : null} */}
 
             <div>
               <p className='text-sm text-primary-foreground/80 mb-4'>
