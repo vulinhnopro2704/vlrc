@@ -31,8 +31,15 @@ declare namespace DictionaryManagement {
     words: WordDetail[];
   }
 
+  interface IeltsReference {
+    name: string;
+    title: string;
+    content: string;
+  }
+
   interface SearchResponse {
     data: Entry[];
+    dataIelts?: IeltsReference[];
     code: number;
     msg?: string;
   }

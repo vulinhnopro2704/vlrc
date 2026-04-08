@@ -30,6 +30,10 @@ export const LearnedWordsTab: FC<{
   });
 
   const items = (get(data, 'data', []) as Progress.WordProgress[]) ?? [];
+  const errorDetail = (error instanceof Error ? error.message : get(error, 'message')) || '';
+  const errorMessage = errorDetail
+    ? `${t('error_loading_notes')}: ${errorDetail}`
+    : t('error_loading_notes');
 
   return (
     <div className='space-y-4'>
@@ -69,7 +73,7 @@ export const LearnedWordsTab: FC<{
         isError={isError}
         isEmpty={!isLoading && !isError && size(items) === 0}
         loadingText={t('notebook_loading')}
-        errorMessage={`${t('error_loading_notes')}: ${(error as Error).message}`}
+        errorMessage={errorMessage}
         emptyText={t('notebook_empty')}
       />
 

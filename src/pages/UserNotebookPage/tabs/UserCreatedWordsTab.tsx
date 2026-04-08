@@ -35,6 +35,12 @@ export const UserCreatedWordsTab: FC<{
   const words = (get(wordsQuery.data, 'data', []) as LearningManagement.Word[]) ?? [];
   const selectedLessonTitle =
     lessons.find(item => Number(item.id) === lessonId)?.title ?? t('notebook_unknown_lesson');
+  const mergedError = lessonsQuery.error ?? wordsQuery.error;
+  const errorDetail =
+    (mergedError instanceof Error ? mergedError.message : get(mergedError, 'message')) || '';
+  const errorMessage = errorDetail
+    ? `${t('error_loading_notes')}: ${errorDetail}`
+    : t('error_loading_notes');
 
   return (
     <div className='space-y-4'>
@@ -61,9 +67,7 @@ export const UserCreatedWordsTab: FC<{
         isError={lessonsQuery.isError || wordsQuery.isError}
         isEmpty={!lessonsQuery.isLoading && !lessonsQuery.isError && size(lessons) === 0}
         loadingText={t('notebook_loading')}
-        errorMessage={`${t('error_loading_notes')}: ${
-          ((lessonsQuery.error ?? wordsQuery.error) as Error)?.message ?? ''
-        }`}
+        errorMessage={errorMessage}
         emptyText={t('notebook_empty_user_words')}
       />
 
@@ -74,7 +78,7 @@ export const UserCreatedWordsTab: FC<{
             isError={wordsQuery.isError}
             isEmpty={!wordsQuery.isLoading && !wordsQuery.isError && size(words) === 0}
             loadingText={t('notebook_loading')}
-            errorMessage={`${t('error_loading_notes')}: ${(wordsQuery.error as Error)?.message ?? ''}`}
+            errorMessage={errorMessage}
             emptyText={t('notebook_empty_user_words')}
           />
 

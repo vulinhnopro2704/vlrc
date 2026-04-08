@@ -16,6 +16,10 @@ export const UserCreatedCoursesTab: FC<{
   const courses = ((get(data, 'data', []) as LearningManagement.Course[]) ?? []).filter(
     course => course.isUserCreated
   );
+  const errorDetail = (error instanceof Error ? error.message : get(error, 'message')) || '';
+  const errorMessage = errorDetail
+    ? `${t('error_loading_notes')}: ${errorDetail}`
+    : t('error_loading_notes');
 
   return (
     <div className='space-y-4'>
@@ -24,7 +28,7 @@ export const UserCreatedCoursesTab: FC<{
         isError={isError}
         isEmpty={!isLoading && !isError && size(courses) === 0}
         loadingText={t('notebook_loading')}
-        errorMessage={`${t('error_loading_notes')}: ${(error as Error).message}`}
+        errorMessage={errorMessage}
         emptyText={t('notebook_empty_courses')}
       />
 
