@@ -5,7 +5,7 @@ import {
 import Icons from '@/components/Icons';
 import { NotebookTabState } from '../components/NotebookTabState';
 
-const MOCHI_AUDIO_BASE_URL = 'https://mochien-server.mochidemy.com';
+const MOCHI_AUDIO_BASE_URL = 'https://mochien-server.mochidemy.com/audios/question/';
 
 export const DictionaryLookupTab: FC = () => {
   const { t } = useTranslation();
@@ -86,7 +86,6 @@ export const DictionaryLookupTab: FC = () => {
     if (!audioUrl) {
       return;
     }
-
     const audio = new Audio(audioUrl);
     void audio.play().catch(() => undefined);
   }, []);
