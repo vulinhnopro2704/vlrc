@@ -444,6 +444,7 @@
   "notebook_unknown_lesson": "Unknown lesson",
   "dictionary_search_label": "Search vocabulary",
   "dictionary_search_placeholder": "Type an English word...",
+  "dictionary_search_action": "Search",
   "dictionary_search_error": "Dictionary search failed",
   "dictionary_loading": "Searching dictionary...",
   "dictionary_empty": "No dictionary result found",
@@ -459,7 +460,7 @@
   "dictionary_examples_label": "Examples",
   "dictionary_no_examples": "No examples",
   "dictionary_show_full_content": "Show full content",
-  "dictionary_save_word": "Save to notebook",
+  "dictionary_save_word": "Save word",
   "dictionary_save_success": "Word saved to notebook",
   "dictionary_save_error": "Cannot save this word"
 }

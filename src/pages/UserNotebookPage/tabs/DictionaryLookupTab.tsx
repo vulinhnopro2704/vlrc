@@ -10,32 +10,25 @@ const MOCHI_AUDIO_BASE_URL = 'https://mochien-server.mochidemy.com/audios/questi
 export const DictionaryLookupTab: FC = () => {
   const { t } = useTranslation();
   const [word, setWord] = useState('');
-  const [debouncedWord, setDebouncedWord] = useState('');
+  const [searchedWord, setSearchedWord] = useState('');
   const [savingWord, setSavingWord] = useState<string | null>(null);
   const [activeSubTab, setActiveSubTab] = useState<'dictionary' | 'ielts'>('dictionary');
 
-  const debouncedSetWord = useCallback(
-    debounce((value: string) => {
-      setDebouncedWord(value.trim());
-    }, 350),
-    []
-  );
-
-  useEffect(() => {
-    debouncedSetWord(word);
-  }, [word, debouncedSetWord]);
+  const handleSearch = useCallback(() => {
+    setSearchedWord(word.trim());
+  }, [word]);
 
   useEffect(() => {
     setActiveSubTab('dictionary');
-  }, [debouncedWord]);
+  }, [searchedWord]);
 
-  const dictionaryQuery = useDictionarySearchQuery({ word: debouncedWord });
+  const dictionaryQuery = useDictionarySearchQuery({ word: searchedWord });
   const saveMutation = useSaveWordFromDictionaryMutation();
 
   const entries = (get(dictionaryQuery.data, 'data', []) as DictionaryManagement.Entry[]) ?? [];
   const ieltsItems =
     (get(dictionaryQuery.data, 'dataIelts', []) as DictionaryManagement.IeltsReference[]) ?? [];
-  const normalizedKeyword = debouncedWord.trim().toLowerCase();
+  const normalizedKeyword = searchedWord.trim().toLowerCase();
   const highlightRegex = useMemo(() => {
     if (!normalizedKeyword) {
       return null;
@@ -98,22 +91,36 @@ export const DictionaryLookupTab: FC = () => {
     ? `${t('dictionary_search_error')}: ${errorDetail}`
     : t('dictionary_search_error');
 
-  const handleSave = (entry: DictionaryManagement.Entry) => {
-    const details = get(entry, 'words[0]') as DictionaryManagement.WordDetail | undefined;
-    const savingKey = `${entry.id}-${entry.position || 'unknown'}`;
+  const handleSave = (
+    entry: DictionaryManagement.Entry,
+    detail: DictionaryManagement.WordDetail,
+    detailIndex: number
+  ) => {
+    const savingKey = `${entry.id}-${entry.position || 'unknown'}-${detailIndex}`;
 
     setSavingWord(savingKey);
     saveMutation.mutate(
       {
         word: entry.content,
-        definition: details?.definition || details?.definitionGpt || '',
-        cefrLevel: details?.cefrLevel || undefined,
-        translation: details?.trans || undefined,
+        definition: detail.definition || detail.definitionGpt || '',
+        cefrLevel: detail.cefrLevel || undefined,
+        translation: detail.trans || undefined,
+        definitionGpt: detail.definitionGpt || undefined,
+        phoneticUs: entry.phoneticUs || undefined,
+        phoneticUk: entry.phoneticUk || undefined,
+        audioUs: entry.audioUs || undefined,
+        audioUk: entry.audioUk || undefined,
         phonetic: entry.phoneticUs || entry.phoneticUk || undefined,
         audio: entry.audioUs || entry.audioUk || undefined,
-        example: get(details, 'sentenceAudio[0].key') || undefined,
-        exampleTranslation: get(details, 'sentenceAudio[0].trans') || undefined,
-        partOfSpeech: entry.position || undefined
+        example: get(detail, 'sentenceAudio[0].key') || undefined,
+        exampleTranslation: get(detail, 'sentenceAudio[0].trans') || undefined,
+        partOfSpeech: entry.position || undefined,
+        examples: map(detail.sentenceAudio ?? [], (item, index) => ({
+          example: item.key,
+          exampleVi: item.trans || undefined,
+          exampleAudio: item.audio || undefined,
+          order: index
+        }))
       },
       {
         onSettled: () => {
@@ -128,11 +135,22 @@ export const DictionaryLookupTab: FC = () => {
       <div className='rounded-2xl border bg-card/50 p-4 sm:p-5'>
         <div className='space-y-2'>
           <label className='text-sm font-medium'>{t('dictionary_search_label')}</label>
-          <Input
-            placeholder={t('dictionary_search_placeholder')}
-            value={word}
-            onChange={event => setWord(event.target.value)}
-          />
+          <div className='flex gap-2'>
+            <Input
+              placeholder={t('dictionary_search_placeholder')}
+              value={word}
+              onChange={event => setWord(event.target.value)}
+              onKeyDown={event => {
+                if (event.key === 'Enter') {
+                  handleSearch();
+                }
+              }}
+            />
+            <Button type='button' className='gap-2' onClick={handleSearch}>
+              <Icons.Search className='h-4 w-4' />
+              {t('dictionary_search_action')}
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -142,7 +160,7 @@ export const DictionaryLookupTab: FC = () => {
         isEmpty={
           !dictionaryQuery.isLoading &&
           !dictionaryQuery.isError &&
-          !!debouncedWord &&
+          !!searchedWord &&
           size(entries) === 0 &&
           size(ieltsItems) === 0
         }
@@ -151,7 +169,7 @@ export const DictionaryLookupTab: FC = () => {
         emptyText={t('dictionary_empty')}
       />
 
-      {!debouncedWord && (
+      {!searchedWord && (
         <Card className='p-6'>
           <p className='text-center text-sm text-muted-foreground'>{t('dictionary_hint')}</p>
         </Card>
@@ -159,7 +177,7 @@ export const DictionaryLookupTab: FC = () => {
 
       {!dictionaryQuery.isLoading &&
         !dictionaryQuery.isError &&
-        !!debouncedWord &&
+        !!searchedWord &&
         (size(entries) > 0 || size(ieltsItems) > 0) && (
           <div className='space-y-4'>
             <div className='overflow-x-auto'>
@@ -213,7 +231,7 @@ export const DictionaryLookupTab: FC = () => {
                   return (
                     <Card key={entryKey} className='border-border/70'>
                       <CardHeader className='space-y-3 pb-4'>
-                        <div className='flex flex-col gap-3 md:flex-row md:items-start md:justify-between'>
+                        <div className='space-y-2'>
                           <div className='space-y-2'>
                             <div className='flex flex-wrap items-center gap-2'>
                               <CardTitle className='text-xl'>{entry.content}</CardTitle>
@@ -262,19 +280,6 @@ export const DictionaryLookupTab: FC = () => {
                               )}
                             </div>
                           </div>
-
-                          <Button
-                            className='gap-2 md:min-w-44'
-                            variant='outline'
-                            disabled={saveMutation.isPending && savingWord === entryKey}
-                            onClick={() => handleSave(entry)}>
-                            {saveMutation.isPending && savingWord === entryKey ? (
-                              <Icons.LoaderCircleIcon className='h-4 w-4 animate-spin' />
-                            ) : (
-                              <Icons.Plus className='h-4 w-4' />
-                            )}
-                            {t('dictionary_save_word')}
-                          </Button>
                         </div>
                       </CardHeader>
 
@@ -293,6 +298,26 @@ export const DictionaryLookupTab: FC = () => {
                               <div className='flex flex-wrap items-center gap-2'>
                                 <h4 className='text-sm font-semibold'>{detailTitle}</h4>
                                 <Badge variant='secondary'>{displayCefr}</Badge>
+                                <Button
+                                  type='button'
+                                  className='h-8 gap-1.5 ml-auto'
+                                  size='sm'
+                                  variant='outline'
+                                  disabled={
+                                    saveMutation.isPending &&
+                                    savingWord ===
+                                      `${entry.id}-${entry.position || 'unknown'}-${detailIndex}`
+                                  }
+                                  onClick={() => handleSave(entry, detail, detailIndex)}>
+                                  {saveMutation.isPending &&
+                                  savingWord ===
+                                    `${entry.id}-${entry.position || 'unknown'}-${detailIndex}` ? (
+                                    <Icons.LoaderCircleIcon className='h-4 w-4 animate-spin' />
+                                  ) : (
+                                    <Icons.Plus className='h-4 w-4' />
+                                  )}
+                                  {t('dictionary_save_word')}
+                                </Button>
                               </div>
 
                               {detail.trans && <p className='text-sm leading-6'>{detail.trans}</p>}

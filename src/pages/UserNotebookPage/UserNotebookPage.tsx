@@ -36,14 +36,7 @@ export const UserNotebookPage = () => {
 
   const renderActiveTab = () => {
     if (activeTab === 'learned_words') {
-      return (
-        <LearnedWordsTab
-          onEditWord={id => {
-            setEditingWordId(id);
-            openModal('createWord');
-          }}
-        />
-      );
+      return <LearnedWordsTab />;
     }
 
     if (activeTab === 'user_words') {

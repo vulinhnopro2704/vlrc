@@ -47,12 +47,23 @@ declare namespace DictionaryManagement {
   interface SavePayload {
     word: string;
     definition: string;
+    definitionGpt?: string;
     cefrLevel?: string;
     translation?: string;
     phonetic?: string;
     audio?: string;
+    phoneticUs?: string;
+    phoneticUk?: string;
+    audioUs?: string;
+    audioUk?: string;
     example?: string;
     exampleTranslation?: string;
+    examples?: Array<{
+      example: string;
+      exampleVi?: string;
+      exampleAudio?: string;
+      order?: number;
+    }>;
     partOfSpeech?: string;
     isFavorite?: boolean;
     note?: string;

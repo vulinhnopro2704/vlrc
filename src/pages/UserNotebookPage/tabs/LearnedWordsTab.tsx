@@ -2,9 +2,7 @@ import { useMyWordsQuery } from '@/api/progress-management';
 import { NotebookTabState } from '../components/NotebookTabState';
 import { NotebookWordCard } from '../components/NotebookWordCard';
 
-export const LearnedWordsTab: FC<{
-  onEditWord: (id?: App.ID) => void;
-}> = ({ onEditWord }) => {
+export const LearnedWordsTab: FC<{}> = () => {
   const { t } = useTranslation();
   const [search, setSearch] = useState('');
   const [level, setLevel] = useState('all');
@@ -85,7 +83,6 @@ export const LearnedWordsTab: FC<{
               word={item.word}
               lessonTitle={get(item, 'word.lesson.title')}
               createdAt={item.createdAt}
-              onEdit={() => onEditWord(get(item, 'word.id'))}
             />
           ))}
         </div>

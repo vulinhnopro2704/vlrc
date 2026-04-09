@@ -443,6 +443,7 @@
   "notebook_unknown_lesson": "Bài học không xác định",
   "dictionary_search_label": "Tra từ vựng",
   "dictionary_search_placeholder": "Nhập từ tiếng Anh...",
+  "dictionary_search_action": "Tra",
   "dictionary_search_error": "Lỗi khi tra từ điển",
   "dictionary_loading": "Đang tra từ điển...",
   "dictionary_empty": "Không tìm thấy kết quả",
@@ -458,7 +459,7 @@
   "dictionary_examples_label": "Ví dụ",
   "dictionary_no_examples": "Không có ví dụ",
   "dictionary_show_full_content": "Xem toàn bộ nội dung",
-  "dictionary_save_word": "Lưu vào sổ tay",
+  "dictionary_save_word": "Lưu từ",
   "dictionary_save_success": "Đã lưu từ vào sổ tay",
   "dictionary_save_error": "Không thể lưu từ này"
 }
