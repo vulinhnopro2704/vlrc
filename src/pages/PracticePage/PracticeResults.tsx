@@ -35,19 +35,21 @@ const PracticeResults = ({
         : 'text-red-600';
 
   return (
-    <div className='min-h-screen bg-background flex items-center justify-center p-4'>
-      <div className='w-full max-w-2xl space-y-6'>
+    <div className='flex min-h-screen items-center justify-center bg-background p-3 sm:p-4'>
+      <div className='w-full max-w-2xl space-y-4 sm:space-y-6'>
         {/* Header */}
-        <div className='text-center space-y-3'>
+        <div className='space-y-2 text-center sm:space-y-3'>
           <div className='flex justify-center mb-4'>
-            <Icons.Trophy className='w-16 h-16 text-yellow-500 animate-bounce' />
+            <Icons.Trophy className='h-12 w-12 animate-bounce text-yellow-500 sm:h-16 sm:w-16' />
           </div>
-          <h1 className='text-4xl font-bold text-foreground'>{t('practice_session_complete')}</h1>
-          <p className='text-muted-foreground'>{t('practice_great_job')}</p>
+          <h1 className='text-2xl font-bold text-foreground sm:text-4xl'>
+            {t('practice_session_complete')}
+          </h1>
+          <p className='text-sm text-muted-foreground sm:text-base'>{t('practice_great_job')}</p>
         </div>
 
         {/* Main Stats Cards */}
-        <div className='grid grid-cols-3 gap-4'>
+        <div className='grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4'>
           {/* Total Score */}
           <Card>
             <CardHeader className='pb-3'>
@@ -57,7 +59,7 @@ const PracticeResults = ({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className='text-3xl font-bold text-foreground'>{summary.totalScore}</p>
+              <p className='text-2xl font-bold text-foreground sm:text-3xl'>{summary.totalScore}</p>
             </CardContent>
           </Card>
 
@@ -67,7 +69,9 @@ const PracticeResults = ({
               <CardTitle className='text-sm font-medium'>{t('exercise_accuracy')}</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className={`text-3xl font-bold ${accuracyColor}`}>{summary.accuracy}%</p>
+              <p className={`text-2xl font-bold sm:text-3xl ${accuracyColor}`}>
+                {summary.accuracy}%
+              </p>
             </CardContent>
           </Card>
 
@@ -80,7 +84,7 @@ const PracticeResults = ({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className='text-3xl font-bold text-orange-600'>{summary.bestStreak}</p>
+              <p className='text-2xl font-bold text-orange-600 sm:text-3xl'>{summary.bestStreak}</p>
             </CardContent>
           </Card>
         </div>
@@ -169,11 +173,11 @@ const PracticeResults = ({
         </Card>
 
         {/* Actions */}
-        <div className='flex gap-4 justify-center'>
+        <div className='flex justify-center gap-3'>
           <Button
             variant='outline'
             onClick={() => navigate({ to: '/dashboard' })}
-            className='w-full max-w-xs'>
+            className='h-10 w-full max-w-xs'>
             {t('action_back')}
           </Button>
         </div>

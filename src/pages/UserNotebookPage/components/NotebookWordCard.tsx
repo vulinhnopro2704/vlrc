@@ -11,10 +11,10 @@ export const NotebookWordCard: FC<{
   }
 
   return (
-    <div className='note-card rounded-lg border bg-card/40 p-4 transition-colors'>
-      <div className='mb-3 flex items-start justify-between gap-2'>
+    <div className='note-card rounded-lg border bg-card/40 p-3.5 transition-colors sm:p-4'>
+      <div className='mb-2.5 flex items-start justify-between gap-2 sm:mb-3'>
         <div className='flex-1'>
-          <h3 className='text-lg font-semibold text-foreground transition-colors'>
+          <h3 className='text-base font-semibold text-foreground transition-colors sm:text-lg'>
             {word.word ?? 'N/A'}
           </h3>
           {word.cefr && (
@@ -31,7 +31,9 @@ export const NotebookWordCard: FC<{
       </div>
 
       {word.meaning && (
-        <p className='mb-3 line-clamp-2 text-sm text-muted-foreground'>{word.meaning}</p>
+        <p className='mb-2.5 line-clamp-2 text-xs text-muted-foreground sm:mb-3 sm:text-sm'>
+          {word.meaning}
+        </p>
       )}
 
       {word.example && (
@@ -48,7 +50,7 @@ export const NotebookWordCard: FC<{
       )}
 
       {createdAt && (
-        <div className='flex items-center gap-1 border-t border-border/30 pt-3 text-xs text-muted-foreground'>
+        <div className='flex items-center gap-1 border-t border-border/30 pt-2.5 text-xs text-muted-foreground sm:pt-3'>
           <Icons.Calendar className='h-3 w-3' />
           {new Date(createdAt).toLocaleDateString()}
         </div>

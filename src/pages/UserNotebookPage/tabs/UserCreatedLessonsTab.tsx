@@ -32,14 +32,14 @@ export const UserCreatedLessonsTab: FC<{
       />
 
       {!isLoading && !isError && size(lessons) > 0 && (
-        <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3'>
+        <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
           {map(lessons, lesson => (
-            <Card key={lesson.id} className='border bg-card/40 p-4'>
-              <div className='mb-3 flex items-start justify-between gap-2'>
+            <Card key={lesson.id} className='border bg-card/40 p-3.5 sm:p-4'>
+              <div className='mb-2.5 flex items-start justify-between gap-2 sm:mb-3'>
                 <div className='min-w-0 flex-1'>
-                  <h3 className='truncate text-lg font-semibold'>{lesson.title}</h3>
+                  <h3 className='truncate text-base font-semibold sm:text-lg'>{lesson.title}</h3>
                   {lesson.description && (
-                    <p className='mt-1 line-clamp-2 text-sm text-muted-foreground'>
+                    <p className='mt-1 line-clamp-2 text-xs text-muted-foreground sm:text-sm'>
                       {lesson.description}
                     </p>
                   )}

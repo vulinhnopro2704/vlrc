@@ -35,21 +35,23 @@ export const LearnedWordsTab: FC<{}> = () => {
 
   return (
     <div className='space-y-4'>
-      <div className='rounded-2xl border bg-card/50 p-4 sm:p-5'>
+      <div className='rounded-2xl border bg-card/50 p-3.5 sm:p-5'>
         <div className='flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between'>
           <div className='flex-1 space-y-2'>
-            <label className='text-sm font-medium'>{t('notebook_search_placeholder')}</label>
+            <label className='text-xs font-medium sm:text-sm'>
+              {t('notebook_search_placeholder')}
+            </label>
             <Input
               placeholder={t('notebook_search_placeholder')}
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className='h-10'
+              className='h-10 text-sm'
             />
           </div>
           <div className='space-y-2'>
-            <label className='text-sm font-medium'>{t('notebook_filter_level')}</label>
+            <label className='text-xs font-medium sm:text-sm'>{t('notebook_filter_level')}</label>
             <Select value={level} onValueChange={setLevel}>
-              <SelectTrigger className='w-full md:w-40'>
+              <SelectTrigger className='w-full text-sm md:w-40'>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -76,7 +78,7 @@ export const LearnedWordsTab: FC<{}> = () => {
       />
 
       {!isLoading && !isError && size(items) > 0 && (
-        <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3'>
+        <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
           {map(items, item => (
             <NotebookWordCard
               key={item.id}

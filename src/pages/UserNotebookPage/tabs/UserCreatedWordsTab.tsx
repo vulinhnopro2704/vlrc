@@ -44,11 +44,11 @@ export const UserCreatedWordsTab: FC<{
 
   return (
     <div className='space-y-4'>
-      <div className='rounded-2xl border bg-card/50 p-4 sm:p-5'>
+      <div className='rounded-2xl border bg-card/50 p-3.5 sm:p-5'>
         <div className='space-y-2'>
-          <label className='text-sm font-medium'>{t('notebook_filter_lesson')}</label>
+          <label className='text-xs font-medium sm:text-sm'>{t('notebook_filter_lesson')}</label>
           <Select value={selectedLessonId} onValueChange={setSelectedLessonId}>
-            <SelectTrigger className='w-full md:w-72'>
+            <SelectTrigger className='w-full text-sm md:w-72'>
               <SelectValue placeholder={t('notebook_filter_lesson_placeholder')} />
             </SelectTrigger>
             <SelectContent>
@@ -83,7 +83,7 @@ export const UserCreatedWordsTab: FC<{
           />
 
           {!wordsQuery.isLoading && !wordsQuery.isError && size(words) > 0 && (
-            <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3'>
+            <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
               {map(words, word => (
                 <NotebookWordCard
                   key={word.id}

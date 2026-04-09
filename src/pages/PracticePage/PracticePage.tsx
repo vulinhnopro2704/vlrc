@@ -215,7 +215,7 @@ const PracticePage = () => {
       <PracticeHeader gameState={gameState} session={session} onExit={handleExitPractice} />
 
       {/* Main exercise panel */}
-      <main className='container mx-auto px-4 py-8 max-w-3xl'>
+      <main className='container mx-auto max-w-3xl px-3 py-4 sm:px-4 sm:py-6 lg:py-8'>
         <PracticeExercisePanel
           currentWord={currentWord}
           gameState={gameState}

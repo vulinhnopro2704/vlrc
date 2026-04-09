@@ -135,10 +135,10 @@ export const DictionaryLookupTab: FC = () => {
 
   return (
     <div className='space-y-4'>
-      <div className='rounded-2xl border bg-card/50 p-4 sm:p-5'>
+      <div className='rounded-2xl border bg-card/50 p-3.5 sm:p-5'>
         <div className='space-y-2'>
-          <label className='text-sm font-medium'>{t('dictionary_search_label')}</label>
-          <div className='flex gap-2'>
+          <label className='text-xs font-medium sm:text-sm'>{t('dictionary_search_label')}</label>
+          <div className='flex flex-col gap-2 sm:flex-row'>
             <Input
               placeholder={t('dictionary_search_placeholder')}
               value={word}
@@ -149,7 +149,7 @@ export const DictionaryLookupTab: FC = () => {
                 }
               }}
             />
-            <Button type='button' className='gap-2' onClick={handleSearch}>
+            <Button type='button' className='h-10 gap-2 sm:w-auto' onClick={handleSearch}>
               <Icons.Search className='h-4 w-4' />
               {t('dictionary_search_action')}
             </Button>
@@ -183,13 +183,13 @@ export const DictionaryLookupTab: FC = () => {
         !!searchedWord &&
         (size(entries) > 0 || size(ieltsItems) > 0) && (
           <div className='space-y-4'>
-            <div className='overflow-x-auto'>
-              <div className='inline-flex rounded-xl border bg-card/50 p-1'>
+            <div className='overflow-x-auto pb-1'>
+              <div className='inline-flex min-w-max rounded-xl border bg-card/50 p-1'>
                 <Button
                   type='button'
                   variant='ghost'
                   className={cn(
-                    'h-9 gap-2 rounded-lg px-3 text-xs sm:text-sm',
+                    'h-8 shrink-0 gap-2 rounded-lg px-2.5 text-xs sm:h-9 sm:px-3 sm:text-sm',
                     activeSubTab === 'dictionary' && 'bg-background shadow-sm text-primary'
                   )}
                   onClick={() => setActiveSubTab('dictionary')}>
@@ -203,7 +203,7 @@ export const DictionaryLookupTab: FC = () => {
                   type='button'
                   variant='ghost'
                   className={cn(
-                    'h-9 gap-2 rounded-lg px-3 text-xs sm:text-sm',
+                    'h-8 shrink-0 gap-2 rounded-lg px-2.5 text-xs sm:h-9 sm:px-3 sm:text-sm',
                     activeSubTab === 'ielts' && 'bg-background shadow-sm text-primary'
                   )}
                   onClick={() => setActiveSubTab('ielts')}>
@@ -237,7 +237,7 @@ export const DictionaryLookupTab: FC = () => {
                         <div className='space-y-2'>
                           <div className='space-y-2'>
                             <div className='flex flex-wrap items-center gap-2'>
-                              <CardTitle className='text-xl'>{entry.content}</CardTitle>
+                              <CardTitle className='text-lg sm:text-xl'>{entry.content}</CardTitle>
                               {entry.position && (
                                 <Badge variant='outline' className='text-xs uppercase'>
                                   {entry.position}
@@ -286,7 +286,7 @@ export const DictionaryLookupTab: FC = () => {
                         </div>
                       </CardHeader>
 
-                      <CardContent className='space-y-4'>
+                      <CardContent className='space-y-3 sm:space-y-4'>
                         {map(entry.words, (detail, detailIndex) => {
                           const examples = detail.sentenceAudio ?? [];
                           const detailTitle = `${t('dictionary_sense_label')} ${detailIndex + 1}`;
@@ -297,7 +297,7 @@ export const DictionaryLookupTab: FC = () => {
                           return (
                             <div
                               key={`${entryKey}-${detailIndex}`}
-                              className='space-y-3 rounded-xl border bg-muted/20 p-4'>
+                              className='space-y-3 rounded-xl border bg-muted/20 p-3 sm:p-4'>
                               <div className='flex flex-wrap items-center gap-2'>
                                 <h4 className='text-sm font-semibold'>{detailTitle}</h4>
                                 <Badge variant='secondary'>{displayCefr}</Badge>

@@ -165,24 +165,24 @@ const PracticeExercisePanel: FC<{
   const isGameEnded = gameState.hasEnded() || session.sessionStatus === 'ended';
 
   return (
-    <div className='space-y-6'>
+    <div className='space-y-4 sm:space-y-6'>
       {/* Game Over Warning */}
       {isGameEnded && (
-        <div className='p-4 bg-red-500/10 border border-red-500 rounded-lg flex items-start gap-3'>
+        <div className='flex items-start gap-3 rounded-lg border border-red-500 bg-red-500/10 p-3 sm:p-4'>
           <AlertCircle className='w-5 h-5 text-red-600 shrink-0 mt-0.5' />
           <div>
             <p className='font-semibold text-red-700'>{t('practice_game_over')}</p>
-            <p className='text-sm text-red-600'>{t('practice_no_lives_remaining')}</p>
+            <p className='text-xs text-red-600 sm:text-sm'>{t('practice_no_lives_remaining')}</p>
           </div>
         </div>
       )}
       {!isGameEnded && (
         <>
-          <div className='text-center space-y-2'>
-            <p className='text-sm text-muted-foreground uppercase tracking-wider'>
+          <div className='space-y-1.5 text-center sm:space-y-2'>
+            <p className='text-[11px] uppercase tracking-wider text-muted-foreground sm:text-sm'>
               {t(`exercise_${String(currentExerciseType).replaceAll('-', '_')}`)}
             </p>
-            <h2 className='text-2xl font-bold text-foreground'>
+            <h2 className='text-lg font-bold text-foreground sm:text-2xl'>
               {t('practice_focus_no_word_hint')}
             </h2>
           </div>
@@ -198,7 +198,8 @@ const PracticeExercisePanel: FC<{
             <Button
               variant='outline'
               onClick={handleDontRemember}
-              disabled={isProcessing || Boolean(pendingReview)}>
+              disabled={isProcessing || Boolean(pendingReview)}
+              className='h-10 w-full sm:w-auto'>
               {t('practice_dont_remember')}
             </Button>
           </div>
