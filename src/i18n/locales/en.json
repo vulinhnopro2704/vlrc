@@ -462,5 +462,12 @@
   "dictionary_show_full_content": "Show full content",
   "dictionary_save_word": "Save word",
   "dictionary_save_success": "Word saved to notebook",
-  "dictionary_save_error": "Cannot save this word"
+  "dictionary_save_error": "Cannot save this word",
+  "dictionary_selection_trigger_aria": "Open quick dictionary popover",
+  "dictionary_selection_word_label": "Selected text",
+  "dictionary_selection_loading": "Looking up selected text...",
+  "dictionary_selection_error": "Unable to look up this selection right now.",
+  "dictionary_selection_empty": "No dictionary entry found for this selection.",
+  "dictionary_selection_example_label": "Example",
+  "dictionary_selection_saved": "Saved to notebook"
 }

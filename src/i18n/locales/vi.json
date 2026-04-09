@@ -461,5 +461,12 @@
   "dictionary_show_full_content": "Xem toàn bộ nội dung",
   "dictionary_save_word": "Lưu từ",
   "dictionary_save_success": "Đã lưu từ vào sổ tay",
-  "dictionary_save_error": "Không thể lưu từ này"
+  "dictionary_save_error": "Không thể lưu từ này",
+  "dictionary_selection_trigger_aria": "Mở popover tra từ nhanh",
+  "dictionary_selection_word_label": "Từ được bôi đen",
+  "dictionary_selection_loading": "Đang tra từ vừa chọn...",
+  "dictionary_selection_error": "Hiện chưa thể tra từ cho vùng bôi đen này.",
+  "dictionary_selection_empty": "Không tìm thấy mục từ cho vùng bôi đen này.",
+  "dictionary_selection_example_label": "Ví dụ",
+  "dictionary_selection_saved": "Đã lưu vào sổ tay"
 }
