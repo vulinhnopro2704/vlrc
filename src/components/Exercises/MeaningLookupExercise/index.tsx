@@ -58,19 +58,23 @@ export default function MeaningLookupExercise({
   };
 
   return (
-    <div className='w-full max-w-2xl mx-auto flex flex-col gap-6'>
-      <div className='glass-card rounded-2xl p-8'>
-        <div className='mb-8'>
-          <p className='text-sm text-muted-foreground mb-4 text-center'>
+    <div className='mx-auto flex w-full max-w-2xl flex-col gap-4 sm:gap-6'>
+      <div className='glass-card rounded-2xl p-4 sm:p-8'>
+        <div className='mb-6 sm:mb-8'>
+          <p className='mb-3 text-center text-xs text-muted-foreground sm:mb-4 sm:text-sm'>
             {t('select_correct_word_for_meaning')}
           </p>
-          <div className='bg-primary/10 rounded-lg p-6 text-center'>
-            <p className='text-lg font-semibold text-foreground'>{vocabulary.meaning}</p>
-            <p className='text-sm text-muted-foreground mt-2'>CEFR Level: {vocabulary.cefr}</p>
+          <div className='rounded-lg bg-primary/10 p-4 text-center sm:p-6'>
+            <p className='text-base font-semibold text-foreground sm:text-lg'>
+              {vocabulary.meaning}
+            </p>
+            <p className='mt-2 text-xs text-muted-foreground sm:text-sm'>
+              CEFR Level: {vocabulary.cefr}
+            </p>
           </div>
         </div>
 
-        <div className='grid grid-cols-1 gap-3 mb-6'>
+        <div className='mb-6 grid grid-cols-1 gap-2.5 sm:gap-3'>
           {options.map(option => (
             <Button
               key={option.id}
@@ -78,7 +82,7 @@ export default function MeaningLookupExercise({
               onClick={() => handleSelect(option.id)}
               disabled={feedback !== 'idle'}
               className={cn(
-                'h-auto p-4 justify-between text-left font-medium',
+                'h-auto justify-between p-3.5 text-left text-sm font-medium sm:p-4 sm:text-base',
                 selected === option.id &&
                   (feedback === 'correct'
                     ? 'border-green-500 bg-green-500/10 hover:bg-green-500/10'
@@ -112,7 +116,7 @@ export default function MeaningLookupExercise({
         )}
       </div>
 
-      <div className='text-center text-sm text-muted-foreground'>
+      <div className='text-center text-xs text-muted-foreground sm:text-sm'>
         <p>{t('attempts', { count: attempts })}</p>
       </div>
     </div>

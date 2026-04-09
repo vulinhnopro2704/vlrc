@@ -75,14 +75,14 @@ export default function FlipCardExercise({
   };
 
   return (
-    <div className='w-full flex flex-col items-center gap-6'>
+    <div className='flex w-full flex-col items-center gap-4 sm:gap-6'>
       <FlipCard.Root
         flipOnHover={false}
         flipOnClick
         direction='horizontal'
         animation={{ duration: 700, easing: 'ease' }}>
-        <FlipCard.Front className='bg-linear-to-br from-primary/90 to-primary/70 dark:from-primary/80 dark:to-primary/60 rounded-2xl p-8 min-h-96 flex flex-col items-center justify-center border border-primary/40'>
-          <div className='text-center space-y-5 w-full'>
+        <FlipCard.Front className='flex min-h-96 flex-col items-center justify-center rounded-2xl border border-primary/40 bg-linear-to-br from-primary/90 to-primary/70 p-4 dark:from-primary/80 dark:to-primary/60 sm:p-8'>
+          <div className='w-full space-y-4 text-center sm:space-y-5'>
             <div className='flex justify-center'>
               <Button
                 variant='secondary'
@@ -115,12 +115,14 @@ export default function FlipCardExercise({
             ) : null} */}
 
             <div>
-              <p className='text-sm text-primary-foreground/80 mb-4'>
+              <p className='mb-3 text-xs text-primary-foreground/80 sm:mb-4 sm:text-sm'>
                 {t('learning_pronunciation')}
               </p>
-              <p className='text-5xl font-bold text-primary-foreground mb-4'>{vocabulary.word}</p>
+              <p className='mb-3 text-3xl font-bold text-primary-foreground sm:mb-4 sm:text-5xl'>
+                {vocabulary.word}
+              </p>
               {vocabulary.pronunciation ? (
-                <p className='text-xl text-primary-foreground/90 font-medium italic'>
+                <p className='text-base font-medium italic text-primary-foreground/90 sm:text-xl'>
                   /{vocabulary.pronunciation}/
                 </p>
               ) : null}
@@ -133,12 +135,14 @@ export default function FlipCardExercise({
               </div>
             ) : null}
 
-            <p className='text-primary-foreground/70 text-sm'>{t('learning_flip_to_reveal')}</p>
+            <p className='text-xs text-primary-foreground/70 sm:text-sm'>
+              {t('learning_flip_to_reveal')}
+            </p>
           </div>
         </FlipCard.Front>
 
-        <FlipCard.Back className='bg-linear-to-br from-accent/90 to-accent/70 dark:from-accent/80 dark:to-accent/60 rounded-2xl p-8 min-h-96 flex flex-col items-center justify-center border border-accent/40'>
-          <div className='space-y-5 text-left w-full'>
+        <FlipCard.Back className='flex min-h-96 flex-col items-center justify-center rounded-2xl border border-accent/40 bg-linear-to-br from-accent/90 to-accent/70 p-4 dark:from-accent/80 dark:to-accent/60 sm:p-8'>
+          <div className='w-full space-y-4 text-left sm:space-y-5'>
             <div className='flex justify-end'>
               <Button
                 variant='secondary'
@@ -159,27 +163,39 @@ export default function FlipCardExercise({
             </div>
 
             <div>
-              <p className='text-sm text-accent-foreground/80 mb-3'>{t('meaning')}</p>
-              <p className='text-2xl font-semibold text-accent-foreground'>{vocabulary.meaning}</p>
+              <p className='mb-2 text-xs text-accent-foreground/80 sm:mb-3 sm:text-sm'>
+                {t('meaning')}
+              </p>
+              <p className='text-lg font-semibold text-accent-foreground sm:text-2xl'>
+                {vocabulary.meaning}
+              </p>
             </div>
 
             {vocabulary.meaningVi ? (
               <div>
-                <p className='text-sm text-accent-foreground/80 mb-3'>Meaning (VI)</p>
-                <p className='text-base text-accent-foreground/95'>{vocabulary.meaningVi}</p>
+                <p className='mb-2 text-xs text-accent-foreground/80 sm:mb-3 sm:text-sm'>
+                  Meaning (VI)
+                </p>
+                <p className='text-sm text-accent-foreground/95 sm:text-base'>
+                  {vocabulary.meaningVi}
+                </p>
               </div>
             ) : null}
 
             <div>
-              <p className='text-sm text-accent-foreground/80 mb-3'>{t('learning_example')}:</p>
-              <p className='text-base italic text-accent-foreground/90'>
+              <p className='mb-2 text-xs text-accent-foreground/80 sm:mb-3 sm:text-sm'>
+                {t('learning_example')}:
+              </p>
+              <p className='text-sm italic text-accent-foreground/90 sm:text-base'>
                 {vocabulary.example || '-'}
               </p>
             </div>
 
             {vocabulary.exampleVi ? (
               <div>
-                <p className='text-sm text-accent-foreground/80 mb-3'>Example (VI):</p>
+                <p className='mb-2 text-xs text-accent-foreground/80 sm:mb-3 sm:text-sm'>
+                  Example (VI):
+                </p>
                 <p className='text-sm text-accent-foreground/95'>{vocabulary.exampleVi}</p>
               </div>
             ) : null}
@@ -194,7 +210,9 @@ export default function FlipCardExercise({
         </FlipCard.Back>
       </FlipCard.Root>
 
-      <Button onClick={handleComplete}>{t('learning_continue')}</Button>
+      <Button onClick={handleComplete} className='h-10 w-full sm:w-auto'>
+        {t('learning_continue')}
+      </Button>
     </div>
   );
 }

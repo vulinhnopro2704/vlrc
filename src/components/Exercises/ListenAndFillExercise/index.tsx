@@ -41,15 +41,16 @@ export default function ListenAndFillExercise({
   };
 
   return (
-    <div className='w-full max-w-2xl mx-auto flex flex-col gap-6'>
-      <div className='glass-card rounded-2xl p-8'>
-        <div className='text-center mb-8'>
-          <p className='text-sm text-muted-foreground mb-4'>
+    <div className='mx-auto flex w-full max-w-2xl flex-col gap-4 sm:gap-6'>
+      <div className='glass-card rounded-2xl p-4 sm:p-8'>
+        <div className='mb-6 text-center sm:mb-8'>
+          <p className='mb-3 text-xs text-muted-foreground sm:mb-4 sm:text-sm'>
             {t('listen_to_pronunciation_and_fill_in_the_blank')}
           </p>
           <Button
             onClick={() => speak(vocabulary.word, { lang: 'en-US', rate: 0.8 })}
-            disabled={isPlaying}>
+            disabled={isPlaying}
+            className='h-10 min-w-36'>
             <Icons.Volume2 className='h-5 w-5' />
             {isPlaying ? t('playing') : t('play_sound')}
           </Button>
@@ -61,7 +62,7 @@ export default function ListenAndFillExercise({
           onChange={e => setUserInput(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && handleSubmit()}
           placeholder={t('type_the_word_here')}
-          className='mb-4'
+          className='mb-4 h-11 text-sm'
         />
 
         {vocabulary.exampleVi ? (
@@ -90,12 +91,12 @@ export default function ListenAndFillExercise({
           variant='accent'
           onClick={handleSubmit}
           disabled={!userInput || feedback !== 'idle'}
-          className='w-full mt-4'>
+          className='mt-4 h-10 w-full'>
           {t('check_answer')}
         </Button>
       </div>
 
-      <div className='text-center text-sm text-muted-foreground'>
+      <div className='text-center text-xs text-muted-foreground sm:text-sm'>
         <p>{t('attempts', { count: attempts })}</p>
         <p className='text-xs'>{t('cefr_level', { level: vocabulary.cefr })}</p>
       </div>

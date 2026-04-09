@@ -14,7 +14,7 @@ const LessonSubmissionState = ({
   return (
     <>
       {isSubmitting ? (
-        <div className='rounded-xl border bg-card/60 p-4 text-sm text-muted-foreground'>
+        <div className='rounded-xl border bg-card/60 p-3 text-xs text-muted-foreground sm:p-4 sm:text-sm'>
           <div className='flex items-center gap-2'>
             <Icons.LoaderCircleIcon className='h-4 w-4 animate-spin text-primary' />
             {t('lesson_submitting_completion')}
@@ -23,10 +23,10 @@ const LessonSubmissionState = ({
       ) : null}
 
       {completionError ? (
-        <div className='rounded-xl border border-destructive/30 bg-destructive/5 p-4'>
+        <div className='rounded-xl border border-destructive/30 bg-destructive/5 p-3 sm:p-4'>
           <p className='text-sm text-destructive'>{t('lesson_submit_failed')}</p>
           <p className='mt-1 text-xs text-muted-foreground'>{completionError}</p>
-          <Button size='sm' className='mt-3' onClick={onRetry}>
+          <Button size='sm' className='mt-3 h-9 px-4' onClick={onRetry}>
             {t('lesson_retry_submit')}
           </Button>
         </div>

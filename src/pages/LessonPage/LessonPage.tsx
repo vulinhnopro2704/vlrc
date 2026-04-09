@@ -237,14 +237,9 @@ const LessonPage = () => {
   }
 
   return (
-    <main ref={pageRef} className='w-full bg-background px-4 py-6 sm:px-6 lg:px-8'>
-      <div className='max-w-6xl mx-auto h-full flex flex-col space-y-6'>
-        <LessonHeader
-          lesson={lesson}
-          currentIndex={currentIndex}
-          totalWords={totalWords}
-          onBack={navigateToCourseDetail}
-        />
+    <main ref={pageRef} className='w-full bg-background px-3 py-4 sm:px-6 sm:py-6 lg:px-8'>
+      <div className='mx-auto flex h-full w-full max-w-6xl flex-col space-y-4 sm:space-y-6'>
+        <LessonHeader lesson={lesson} onBack={navigateToCourseDetail} />
         <LessonExercisePanel
           currentIndex={currentIndex}
           currentExerciseTypeIndex={currentExerciseTypeIndex}
@@ -254,7 +249,7 @@ const LessonPage = () => {
           exerciseType={currentExerciseType}
           onComplete={handleExerciseComplete}
         />
-        <div className='mb-8'>
+        <div className='mb-4 sm:mb-6'>
           <div className='w-full h-2 bg-primary/20 rounded-full overflow-hidden'>
             <div
               className='h-full bg-linear-to-r from-primary to-accent transition-all duration-300'

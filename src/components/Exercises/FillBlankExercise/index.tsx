@@ -34,17 +34,17 @@ export default function FillBlankExercise({
   };
 
   return (
-    <div className='w-full max-w-2xl mx-auto flex flex-col gap-6'>
-      <div className='glass-card rounded-2xl p-8'>
-        <div className='mb-8'>
-          <p className='text-sm text-muted-foreground mb-4 text-center'>
+    <div className='mx-auto flex w-full max-w-2xl flex-col gap-4 sm:gap-6'>
+      <div className='glass-card rounded-2xl p-4 sm:p-8'>
+        <div className='mb-6 sm:mb-8'>
+          <p className='mb-3 text-center text-xs text-muted-foreground sm:mb-4 sm:text-sm'>
             {t('fill_in_the_blank_with_correct_word')}
           </p>
-          <div className='text-lg leading-relaxed text-center'>
-            <p className='mb-6'>{example.replace(new RegExp(word, 'i'), ' _____ ')}</p>
+          <div className='text-center text-base leading-relaxed sm:text-lg'>
+            <p className='mb-4 sm:mb-6'>{example.replace(new RegExp(word, 'i'), ' _____ ')}</p>
             <div className='bg-primary/10 rounded-lg p-4 mb-4'>
-              <p className='text-sm text-muted-foreground mb-2'>{t('hint')}</p>
-              <p className='text-base font-medium'>/{pronunciation}/</p>
+              <p className='mb-2 text-xs text-muted-foreground sm:text-sm'>{t('hint')}</p>
+              <p className='text-sm font-medium sm:text-base'>/{pronunciation}/</p>
             </div>
           </div>
         </div>
@@ -55,7 +55,7 @@ export default function FillBlankExercise({
           onChange={e => setUserInput(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && handleSubmit()}
           placeholder={t('type_the_missing_word')}
-          className='mb-4'
+          className='mb-4 h-11 text-sm'
         />
 
         {feedback === 'correct' && (
@@ -74,11 +74,12 @@ export default function FillBlankExercise({
           variant='accent'
           onClick={handleSubmit}
           disabled={!userInput || feedback !== 'idle'}
-          className='w-full mt-4'>
+          className='mt-4 h-10 w-full'>
           {t('check_answer')}
         </Button>
       </div>
-      <div className='text-center text-sm text-muted-foreground'>
+
+      <div className='text-center text-xs text-muted-foreground sm:text-sm'>
         <p>{t('attempts', { count: attempts })}</p>
         <p className='text-xs'>{t('meaning', { meaning })}</p>
       </div>
