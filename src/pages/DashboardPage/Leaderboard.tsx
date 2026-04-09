@@ -40,27 +40,27 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ users, currentUserRank
   );
 
   return (
-    <Card className='glass-card border-border/50 h-fit sticky top-16 overflow-hidden'>
-      <div className='p-4 border-b border-border'>
+    <Card className='glass-card h-fit overflow-hidden border-border/60'>
+      <div className='border-b border-border p-3'>
         <h3 className='font-bold flex items-center gap-2'>
           <Icons.Trophy className='h-5 w-5 text-accent' />
           {t('learning_leaderboard')}
         </h3>
       </div>
 
-      <ScrollArea className='h-96'>
-        <div ref={leaderboardRef} className='p-4 space-y-2'>
+      <ScrollArea className='h-72'>
+        <div ref={leaderboardRef} className='space-y-2 p-3'>
           {users.map(user => (
             <div
               key={user.rank}
-              className={`leaderboard-row p-3 rounded-lg transition-all duration-300 ${
+              className={`leaderboard-row rounded-lg p-2.5 transition-all duration-300 ${
                 user.rank === currentUserRank
                   ? 'bg-primary/10 border border-primary/50'
                   : 'hover:bg-muted/50'
               }`}>
               <div className='flex items-center justify-between gap-2'>
                 <div className='flex items-center gap-2 flex-1 min-w-0'>
-                  <div className='flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center'>
+                  <div className='flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/20'>
                     {user.rank <= 3 ? (
                       <Icons.Star className='h-4 w-4 text-accent' />
                     ) : (
@@ -68,14 +68,14 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ users, currentUserRank
                     )}
                   </div>
                   <div className='min-w-0'>
-                    <p className='text-sm font-semibold truncate'>{user.name}</p>
-                    <p className='text-xs text-muted-foreground flex items-center gap-1'>
+                    <p className='truncate text-sm font-semibold'>{user.name}</p>
+                    <p className='flex items-center gap-1 text-xs text-muted-foreground'>
                       <Icons.Flame className='h-3 w-3' />
                       {user.streak} {t('days')}
                     </p>
                   </div>
                 </div>
-                <span className='text-sm font-bold text-primary flex-shrink-0'>{user.points}</span>
+                <span className='shrink-0 text-sm font-bold text-primary'>{user.points}</span>
               </div>
             </div>
           ))}

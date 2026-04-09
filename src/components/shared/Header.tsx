@@ -26,6 +26,13 @@ export const Header = () => {
   const [avatarHasError, setAvatarHasError] = useState(false);
   const currentLanguage = i18n.resolvedLanguage?.startsWith('vi') ? 'vi' : 'en';
   const currentFlag = currentLanguage === 'vi' ? '🇻🇳' : '🇺🇸';
+  const appNavItems = me
+    ? [
+        { key: 'courses', label: t('learning_courses'), to: '/courses' as const },
+        { key: 'notebook', label: t('header_notebook_dictionary'), to: '/notebook' as const },
+        { key: 'practice', label: t('header_practice'), to: '/practice' as const }
+      ]
+    : [];
 
   const avatarUrl = me?.avatar?.trim() ? me.avatar : null;
   const avatarFallback = getAvatarFallback(me?.name);
@@ -81,7 +88,7 @@ export const Header = () => {
           : 'bg-transparent'
       }`}>
       <div className='container mx-auto px-4'>
-        <div className='flex h-16 items-center justify-between'>
+        <div className='flex h-16 items-center justify-between gap-3'>
           <Button
             variant='ghost'
             size='sm'
@@ -89,6 +96,21 @@ export const Header = () => {
             className='h-auto p-0 text-2xl font-bold text-primary hover:bg-transparent'>
             VLRC
           </Button>
+
+          {appNavItems.length > 0 ? (
+            <nav className='hidden items-center gap-1 rounded-xl border bg-card/60 p-1 md:flex'>
+              {appNavItems.map(item => (
+                <Button
+                  key={item.key}
+                  variant='ghost'
+                  size='sm'
+                  className='h-8 px-3 text-xs font-semibold'
+                  onClick={() => navigate({ to: item.to })}>
+                  {item.label}
+                </Button>
+              ))}
+            </nav>
+          ) : null}
 
           <div className='flex items-center gap-2'>
             <DropdownMenu>

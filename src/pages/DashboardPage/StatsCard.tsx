@@ -1,14 +1,12 @@
 'use client';
 
-interface StatsCardProps {
+export const StatsCard: FC<{
   icon: ReactNode;
   label: string;
   value: string | number;
   unit?: string;
   color?: 'primary' | 'accent' | 'success';
-}
-
-export const StatsCard: FC<StatsCardProps> = ({ icon, label, value, unit, color = 'primary' }) => {
+}> = ({ icon, label, value, unit, color = 'primary' }) => {
   const cardRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
@@ -29,14 +27,14 @@ export const StatsCard: FC<StatsCardProps> = ({ icon, label, value, unit, color 
 
   return (
     <div ref={cardRef}>
-      <Card className='p-6 glass-card border-border/50 hover:border-primary/30 transition-all duration-300'>
-        <div className='flex items-center justify-between mb-3'>
-          <p className='text-muted-foreground text-sm font-medium'>{label}</p>
-          <div className={`${colorClass} opacity-70`}>{icon}</div>
+      <Card className='glass-card border-border/50 p-4 transition-all duration-300 hover:border-primary/30'>
+        <div className='mb-2 flex items-center justify-between'>
+          <p className='text-xs font-medium text-muted-foreground sm:text-sm'>{label}</p>
+          <div className={`${colorClass} opacity-70 [&_svg]:h-4 [&_svg]:w-4`}>{icon}</div>
         </div>
-        <div className='flex items-baseline gap-1'>
-          <p className='text-3xl font-bold'>{value}</p>
-          {unit && <p className='text-muted-foreground text-sm'>{unit}</p>}
+        <div className='flex items-end gap-1'>
+          <p className='text-2xl font-bold leading-none'>{value}</p>
+          {unit && <p className='pb-0.5 text-xs text-muted-foreground'>{unit}</p>}
         </div>
       </Card>
     </div>
