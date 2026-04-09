@@ -99,6 +99,9 @@ export const DictionaryLookupTab: FC = () => {
     const savingKey = `${entry.id}-${entry.position || 'unknown'}-${detailIndex}`;
 
     setSavingWord(savingKey);
+    const audioUs = buildAudioUrl(entry.audioUs);
+    const audioUk = buildAudioUrl(entry.audioUk);
+
     saveMutation.mutate(
       {
         word: entry.content,
@@ -108,17 +111,17 @@ export const DictionaryLookupTab: FC = () => {
         definitionGpt: detail.definitionGpt || undefined,
         phoneticUs: entry.phoneticUs || undefined,
         phoneticUk: entry.phoneticUk || undefined,
-        audioUs: entry.audioUs || undefined,
-        audioUk: entry.audioUk || undefined,
+        audioUs: audioUs || undefined,
+        audioUk: audioUk || undefined,
         phonetic: entry.phoneticUs || entry.phoneticUk || undefined,
-        audio: entry.audioUs || entry.audioUk || undefined,
+        audio: audioUs || audioUk || undefined,
         example: get(detail, 'sentenceAudio[0].key') || undefined,
         exampleTranslation: get(detail, 'sentenceAudio[0].trans') || undefined,
         partOfSpeech: entry.position || undefined,
         examples: map(detail.sentenceAudio ?? [], (item, index) => ({
           example: item.key,
           exampleVi: item.trans || undefined,
-          exampleAudio: item.audio || undefined,
+          exampleAudio: buildAudioUrl(item.audio) || undefined,
           order: index
         }))
       },
