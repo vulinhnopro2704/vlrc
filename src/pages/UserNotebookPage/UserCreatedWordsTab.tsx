@@ -1,7 +1,7 @@
 import { useLessonsQuery } from '@/api/lesson-management';
 import { useWordsQuery } from '@/api/word-management';
-import { NotebookTabState } from '../components/NotebookTabState';
-import { NotebookWordCard } from '../components/NotebookWordCard';
+import { NotebookTabState } from './NotebookTabState';
+import { NotebookWordCard } from './NotebookWordCard';
 
 export const UserCreatedWordsTab: FC<{
   onEditWord: (id?: App.ID) => void;

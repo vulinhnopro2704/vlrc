@@ -3,7 +3,7 @@ import {
   useSaveWordFromDictionaryMutation
 } from '@/api/dictionary-management';
 import Icons from '@/components/Icons';
-import { NotebookTabState } from '../components/NotebookTabState';
+import { NotebookTabState } from './NotebookTabState';
 
 const MOCHI_AUDIO_BASE_URL = 'https://mochien-server.mochidemy.com/audios/question/';
 

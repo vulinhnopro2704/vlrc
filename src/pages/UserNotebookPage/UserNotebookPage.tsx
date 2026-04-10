@@ -4,12 +4,12 @@ import { useModalState } from '@/hooks/use-modal-state';
 import { CreateWordModal } from '@/modals/CreateWordModal';
 import { CreateLessonModal } from '@/modals/CreateLessonModal';
 import { CreateCourseModal } from '@/modals/CreateCourseModal';
-import { NotebookSegmentedTabs } from './components/NotebookSegmentedTabs';
-import { LearnedWordsTab } from './tabs/LearnedWordsTab';
-import { UserCreatedWordsTab } from './tabs/UserCreatedWordsTab';
-import { UserCreatedLessonsTab } from './tabs/UserCreatedLessonsTab';
-import { UserCreatedCoursesTab } from './tabs/UserCreatedCoursesTab';
-import { DictionaryLookupTab } from './tabs/DictionaryLookupTab';
+import { NotebookSegmentedTabs } from './NotebookSegmentedTabs';
+import { LearnedWordsTab } from './LearnedWordsTab';
+import { UserCreatedWordsTab } from './UserCreatedWordsTab';
+import { UserCreatedLessonsTab } from './UserCreatedLessonsTab';
+import { UserCreatedCoursesTab } from './UserCreatedCoursesTab';
+import { DictionaryLookupTab } from './DictionaryLookupTab';
 import Icons from '@/components/Icons';
 
 export const UserNotebookPage = () => {

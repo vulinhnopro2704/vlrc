@@ -1,6 +1,6 @@
 import { useMyWordsQuery } from '@/api/progress-management';
-import { NotebookTabState } from '../components/NotebookTabState';
-import { NotebookWordCard } from '../components/NotebookWordCard';
+import { NotebookTabState } from './NotebookTabState';
+import { NotebookWordCard } from './NotebookWordCard';
 
 export const LearnedWordsTab: FC<{}> = () => {
   const { t } = useTranslation();

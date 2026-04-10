@@ -73,6 +73,9 @@ declare namespace LearningManagement {
 
   interface Word extends App.Base {
     word: string;
+    phonetic?: string;
+    phoneticUs?: string;
+    phoneticUk?: string;
     pronunciation?: string;
     meaning: string;
     meaningVi?: string;
@@ -80,6 +83,8 @@ declare namespace LearningManagement {
     exampleVi?: string;
     image?: string;
     audio?: string;
+    audioUs?: string;
+    audioUk?: string;
     pos?: string;
     partOfSpeech?: string;
     cefr?: string;

@@ -10,6 +10,20 @@ export const NotebookWordCard: FC<{
     return null;
   }
 
+  const phoneticUs = word.phoneticUs || word.pronunciation || word.phonetic;
+  const phoneticUk = word.phoneticUk;
+  const audioUs = word.audioUs || word.audio;
+  const audioUk = word.audioUk;
+
+  const playAudio = (audioUrl?: string) => {
+    if (!audioUrl) {
+      return;
+    }
+
+    const audio = new Audio(audioUrl);
+    void audio.play().catch(() => undefined);
+  };
+
   return (
     <div className='note-card rounded-lg border bg-card/40 p-3.5 transition-colors sm:p-4'>
       <div className='mb-2.5 flex items-start justify-between gap-2 sm:mb-3'>
@@ -40,6 +54,50 @@ export const NotebookWordCard: FC<{
         <p className='mb-3 line-clamp-2 border-l-2 border-primary/30 pl-2 text-xs italic text-muted-foreground'>
           "{word.example}"
         </p>
+      )}
+
+      {word.exampleVi && (
+        <p className='mb-3 line-clamp-2 text-xs text-muted-foreground'>{word.exampleVi}</p>
+      )}
+
+      {(phoneticUs || phoneticUk) && (
+        <div className='mb-2.5 flex flex-wrap gap-2 text-xs text-muted-foreground sm:mb-3'>
+          {phoneticUs && (
+            <span className='rounded-md bg-muted px-2 py-1'>{`US ${phoneticUs}`}</span>
+          )}
+          {phoneticUk && (
+            <span className='rounded-md bg-muted px-2 py-1'>{`UK ${phoneticUk}`}</span>
+          )}
+        </div>
+      )}
+
+      {(audioUk || audioUs) && (
+        <div className='mb-3 flex flex-wrap gap-2 text-xs'>
+          {audioUk && (
+            <Button
+              type='button'
+              variant='outline'
+              size='sm'
+              className='h-8 gap-1.5'
+              onClick={() => playAudio(audioUk)}
+              title='Anh-Anh (UK)'>
+              <Icons.Volume2 className='h-3.5 w-3.5' />
+              UK
+            </Button>
+          )}
+          {audioUs && (
+            <Button
+              type='button'
+              variant='outline'
+              size='sm'
+              className='h-8 gap-1.5'
+              onClick={() => playAudio(audioUs)}
+              title='Anh-My (US)'>
+              <Icons.Volume2 className='h-3.5 w-3.5' />
+              US
+            </Button>
+          )}
+        </div>
       )}
 
       {lessonTitle && (
