@@ -12,8 +12,17 @@ export const DictionaryLookupTab: FC = () => {
   const [word, setWord] = useState('');
   const [searchedWord, setSearchedWord] = useState('');
   const [savingWord, setSavingWord] = useState<string | null>(null);
-  const [savedEntryIds, setSavedEntryIds] = useState<Set<number>>(new Set());
+  const [savedMeaningKeys, setSavedMeaningKeys] = useState<Set<string>>(new Set());
   const [activeSubTab, setActiveSubTab] = useState<'dictionary' | 'ielts'>('dictionary');
+
+  const buildMeaningKey = useCallback(
+    (
+      entry: DictionaryManagement.Entry,
+      detail: DictionaryManagement.WordDetail,
+      detailIndex: number
+    ) => `${entry.id}-${detail.id ?? detailIndex}-${entry.position || 'unknown'}`,
+    []
+  );
 
   const handleSearch = useCallback(() => {
     setSearchedWord(word.trim());
@@ -31,13 +40,18 @@ export const DictionaryLookupTab: FC = () => {
     (get(dictionaryQuery.data, 'dataIelts', []) as DictionaryManagement.IeltsReference[]) ?? [];
 
   useEffect(() => {
-    const ids = new Set(
-      map(entries, entry => (entry.isSaved ? entry.id : null)).filter(
-        (id): id is number => typeof id === 'number'
-      )
-    );
-    setSavedEntryIds(ids);
-  }, [entries]);
+    const meaningKeys = new Set<string>();
+
+    entries.forEach(entry => {
+      entry.words.forEach((detail, detailIndex) => {
+        if (detail.isSaved) {
+          meaningKeys.add(buildMeaningKey(entry, detail, detailIndex));
+        }
+      });
+    });
+
+    setSavedMeaningKeys(meaningKeys);
+  }, [buildMeaningKey, entries]);
   const normalizedKeyword = searchedWord.trim().toLowerCase();
   const highlightRegex = useMemo(() => {
     if (!normalizedKeyword) {
@@ -106,11 +120,12 @@ export const DictionaryLookupTab: FC = () => {
     detail: DictionaryManagement.WordDetail,
     detailIndex: number
   ) => {
-    if (savedEntryIds.has(entry.id)) {
+    const meaningKey = buildMeaningKey(entry, detail, detailIndex);
+    if (savedMeaningKeys.has(meaningKey)) {
       return;
     }
 
-    const savingKey = `${entry.id}-${entry.position || 'unknown'}-${detailIndex}`;
+    const savingKey = meaningKey;
 
     setSavingWord(savingKey);
     const audioUs = buildAudioUrl(entry.audioUs);
@@ -139,7 +154,7 @@ export const DictionaryLookupTab: FC = () => {
           order: index
         })),
         sourceProvider: 'mochi',
-        externalDictionaryId: entry.id,
+        externalDictionaryId: detail.id || entry.id,
         sourceMetadata: {
           dictionaryEntryId: entry.id,
           position: entry.position || undefined,
@@ -149,9 +164,9 @@ export const DictionaryLookupTab: FC = () => {
       },
       {
         onSuccess: () => {
-          setSavedEntryIds(prev => {
+          setSavedMeaningKeys(prev => {
             const next = new Set(prev);
-            next.add(entry.id);
+            next.add(meaningKey);
             return next;
           });
         },
@@ -259,7 +274,6 @@ export const DictionaryLookupTab: FC = () => {
                   const entryKey = `${entry.id}-${entry.position || 'unknown'}`;
                   const usAudioUrl = buildAudioUrl(entry.audioUs);
                   const ukAudioUrl = buildAudioUrl(entry.audioUk);
-                  const isEntrySaved = savedEntryIds.has(entry.id);
                   const analyzing = entry.analyzing;
                   const phrasalVerbs = entry.phrasalVerbs ?? [];
                   const idioms = entry.idioms ?? [];
@@ -467,6 +481,8 @@ export const DictionaryLookupTab: FC = () => {
                           const displayCefr = detail.cefrLevel
                             ? detail.cefrLevel.toUpperCase()
                             : t('dictionary_cefr_unknown');
+                          const meaningKey = buildMeaningKey(entry, detail, detailIndex);
+                          const isMeaningSaved = savedMeaningKeys.has(meaningKey);
 
                           return (
                             <div
@@ -481,22 +497,18 @@ export const DictionaryLookupTab: FC = () => {
                                   size='sm'
                                   variant='outline'
                                   disabled={
-                                    isEntrySaved ||
-                                    (saveMutation.isPending &&
-                                      savingWord ===
-                                        `${entry.id}-${entry.position || 'unknown'}-${detailIndex}`)
+                                    isMeaningSaved ||
+                                    (saveMutation.isPending && savingWord === meaningKey)
                                   }
                                   onClick={() => handleSave(entry, detail, detailIndex)}>
-                                  {isEntrySaved ? (
+                                  {isMeaningSaved ? (
                                     <Icons.Check className='h-4 w-4' />
-                                  ) : saveMutation.isPending &&
-                                    savingWord ===
-                                      `${entry.id}-${entry.position || 'unknown'}-${detailIndex}` ? (
+                                  ) : saveMutation.isPending && savingWord === meaningKey ? (
                                     <Icons.LoaderCircleIcon className='h-4 w-4 animate-spin' />
                                   ) : (
                                     <Icons.Plus className='h-4 w-4' />
                                   )}
-                                  {isEntrySaved
+                                  {isMeaningSaved
                                     ? t('dictionary_saved_word')
                                     : t('dictionary_save_word')}
                                 </Button>

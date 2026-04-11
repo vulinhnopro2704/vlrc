@@ -17,7 +17,7 @@ const LessonHeader = ({
         <Button
           variant='ghost'
           size='sm'
-          className='h-auto p-0 text-xs text-primary hover:bg-transparent sm:text-sm'
+          className='h-auto p-0 text-xs text-primary hover:bg-transparent hover:text-primary sm:text-sm'
           onClick={onBack}>
           <Icons.ChevronLeft className='h-4 w-4 mr-1' />
           {courseTitle}

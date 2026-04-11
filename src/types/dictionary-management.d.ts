@@ -152,6 +152,7 @@ declare namespace DictionaryManagement {
     sentenceAudio?: SentenceAudio[];
     collocations?: Collocation[];
     synonyms?: Synonyms | null;
+    isSaved?: boolean;
   }
 
   interface Entry {
