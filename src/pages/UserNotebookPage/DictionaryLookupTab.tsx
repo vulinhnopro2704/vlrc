@@ -12,6 +12,7 @@ export const DictionaryLookupTab: FC = () => {
   const [word, setWord] = useState('');
   const [searchedWord, setSearchedWord] = useState('');
   const [savingWord, setSavingWord] = useState<string | null>(null);
+  const [savedEntryIds, setSavedEntryIds] = useState<Set<number>>(new Set());
   const [activeSubTab, setActiveSubTab] = useState<'dictionary' | 'ielts'>('dictionary');
 
   const handleSearch = useCallback(() => {
@@ -28,6 +29,15 @@ export const DictionaryLookupTab: FC = () => {
   const entries = (get(dictionaryQuery.data, 'data', []) as DictionaryManagement.Entry[]) ?? [];
   const ieltsItems =
     (get(dictionaryQuery.data, 'dataIelts', []) as DictionaryManagement.IeltsReference[]) ?? [];
+
+  useEffect(() => {
+    const ids = new Set(
+      map(entries, entry => (entry.isSaved ? entry.id : null)).filter(
+        (id): id is number => typeof id === 'number'
+      )
+    );
+    setSavedEntryIds(ids);
+  }, [entries]);
   const normalizedKeyword = searchedWord.trim().toLowerCase();
   const highlightRegex = useMemo(() => {
     if (!normalizedKeyword) {
@@ -96,6 +106,10 @@ export const DictionaryLookupTab: FC = () => {
     detail: DictionaryManagement.WordDetail,
     detailIndex: number
   ) => {
+    if (savedEntryIds.has(entry.id)) {
+      return;
+    }
+
     const savingKey = `${entry.id}-${entry.position || 'unknown'}-${detailIndex}`;
 
     setSavingWord(savingKey);
@@ -123,9 +137,24 @@ export const DictionaryLookupTab: FC = () => {
           exampleVi: item.trans || undefined,
           exampleAudio: buildAudioUrl(item.audio) || undefined,
           order: index
-        }))
+        })),
+        sourceProvider: 'mochi',
+        externalDictionaryId: entry.id,
+        sourceMetadata: {
+          dictionaryEntryId: entry.id,
+          position: entry.position || undefined,
+          wordDetailId: detail.id || undefined,
+          wmId: detail.wmId || undefined
+        }
       },
       {
+        onSuccess: () => {
+          setSavedEntryIds(prev => {
+            const next = new Set(prev);
+            next.add(entry.id);
+            return next;
+          });
+        },
         onSettled: () => {
           setSavingWord(null);
         }
@@ -230,6 +259,11 @@ export const DictionaryLookupTab: FC = () => {
                   const entryKey = `${entry.id}-${entry.position || 'unknown'}`;
                   const usAudioUrl = buildAudioUrl(entry.audioUs);
                   const ukAudioUrl = buildAudioUrl(entry.audioUk);
+                  const isEntrySaved = savedEntryIds.has(entry.id);
+                  const analyzing = entry.analyzing;
+                  const phrasalVerbs = entry.phrasalVerbs ?? [];
+                  const idioms = entry.idioms ?? [];
+                  const thesaurus = entry.thesaurus ?? [];
 
                   return (
                     <Card key={entryKey} className='border-border/70'>
@@ -287,8 +321,148 @@ export const DictionaryLookupTab: FC = () => {
                       </CardHeader>
 
                       <CardContent className='space-y-3 sm:space-y-4'>
+                        {!!analyzing && (
+                          <details className='rounded-xl border bg-muted/20 p-3 sm:p-4'>
+                            <summary className='cursor-pointer text-sm font-semibold'>
+                              {`${t('dictionary_analyzing_label')} (${analyzing.countPhoneme})`}
+                            </summary>
+                            <div className='mt-3 grid gap-3 sm:grid-cols-2'>
+                              <div className='space-y-2'>
+                                <p className='text-xs font-medium uppercase text-muted-foreground'>
+                                  US
+                                </p>
+                                {map(analyzing.phonemesUs, (phoneme, index) => (
+                                  <div
+                                    key={`us-${entryKey}-${index}`}
+                                    className='rounded-md border bg-background p-2'>
+                                    <p className='text-sm font-medium'>{phoneme.character}</p>
+                                    <p className='text-xs text-muted-foreground'>
+                                      {phoneme.phonemes}
+                                    </p>
+                                  </div>
+                                ))}
+                              </div>
+                              <div className='space-y-2'>
+                                <p className='text-xs font-medium uppercase text-muted-foreground'>
+                                  UK
+                                </p>
+                                {map(analyzing.phonemesUk, (phoneme, index) => (
+                                  <div
+                                    key={`uk-${entryKey}-${index}`}
+                                    className='rounded-md border bg-background p-2'>
+                                    <p className='text-sm font-medium'>{phoneme.character}</p>
+                                    <p className='text-xs text-muted-foreground'>
+                                      {phoneme.phonemes}
+                                    </p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </details>
+                        )}
+
+                        {size(phrasalVerbs) > 0 && (
+                          <details className='rounded-xl border bg-muted/20 p-3 sm:p-4'>
+                            <summary className='cursor-pointer text-sm font-semibold'>
+                              {`${t('dictionary_phrasal_verbs_label')} (${size(phrasalVerbs)})`}
+                            </summary>
+                            <div className='mt-3 flex flex-wrap gap-2'>
+                              {map(phrasalVerbs, phrasalVerb => (
+                                <Badge key={`${entryKey}-${phrasalVerb.id}`} variant='secondary'>
+                                  {phrasalVerb.phrasalVerbs}
+                                </Badge>
+                              ))}
+                            </div>
+                          </details>
+                        )}
+
+                        {size(idioms) > 0 && (
+                          <details className='rounded-xl border bg-muted/20 p-3 sm:p-4'>
+                            <summary className='cursor-pointer text-sm font-semibold'>
+                              {`${t('dictionary_idioms_label')} (${size(idioms)})`}
+                            </summary>
+                            <div className='mt-3 space-y-2'>
+                              {map(idioms, idiom => (
+                                <div
+                                  key={`${entryKey}-${idiom.id}`}
+                                  className='rounded-md border bg-background p-3'>
+                                  <p className='text-sm font-semibold'>{idiom.idiom}</p>
+                                  {idiom.definition && (
+                                    <p className='mt-1 text-sm text-muted-foreground'>
+                                      {idiom.definition}
+                                    </p>
+                                  )}
+                                  {idiom.example && (
+                                    <p className='mt-1 text-sm'>
+                                      {renderHighlightedText(idiom.example)}
+                                    </p>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          </details>
+                        )}
+
+                        {!!entry.verbForm && (
+                          <details className='rounded-xl border bg-muted/20 p-3 sm:p-4'>
+                            <summary className='cursor-pointer text-sm font-semibold'>
+                              {t('dictionary_verb_form_label')}
+                            </summary>
+                            <div className='mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3'>
+                              <div className='rounded-md border bg-background p-2'>
+                                <p className='text-xs text-muted-foreground'>Present</p>
+                                <p className='text-sm font-medium'>
+                                  {entry.verbForm.presentSimple}
+                                </p>
+                              </div>
+                              <div className='rounded-md border bg-background p-2'>
+                                <p className='text-xs text-muted-foreground'>Singular</p>
+                                <p className='text-sm font-medium'>{entry.verbForm.singularVerb}</p>
+                              </div>
+                              <div className='rounded-md border bg-background p-2'>
+                                <p className='text-xs text-muted-foreground'>Past</p>
+                                <p className='text-sm font-medium'>{entry.verbForm.pastSimple}</p>
+                              </div>
+                              <div className='rounded-md border bg-background p-2'>
+                                <p className='text-xs text-muted-foreground'>Past Participle</p>
+                                <p className='text-sm font-medium'>
+                                  {entry.verbForm.pastParticiple}
+                                </p>
+                              </div>
+                              <div className='rounded-md border bg-background p-2'>
+                                <p className='text-xs text-muted-foreground'>Ing</p>
+                                <p className='text-sm font-medium'>{entry.verbForm.ingForm}</p>
+                              </div>
+                            </div>
+                          </details>
+                        )}
+
+                        {size(thesaurus) > 0 && (
+                          <details className='rounded-xl border bg-muted/20 p-3 sm:p-4'>
+                            <summary className='cursor-pointer text-sm font-semibold'>
+                              {`${t('dictionary_thesaurus_label')} (${size(thesaurus)})`}
+                            </summary>
+                            <div className='mt-3 space-y-2'>
+                              {map(thesaurus, thesaurusItem => (
+                                <div
+                                  key={`${entryKey}-${thesaurusItem.id}`}
+                                  className='rounded-md border bg-background p-3'>
+                                  <p className='text-sm font-semibold'>
+                                    {thesaurusItem.positionContent}
+                                  </p>
+                                  <p className='mt-1 text-xs text-muted-foreground'>
+                                    {thesaurusItem.strongestMatch}
+                                  </p>
+                                </div>
+                              ))}
+                            </div>
+                          </details>
+                        )}
+
                         {map(entry.words, (detail, detailIndex) => {
                           const examples = detail.sentenceAudio ?? [];
+                          const collocations = detail.collocations ?? [];
+                          const synonyms = detail.synonyms?.synonym ?? [];
                           const detailTitle = `${t('dictionary_sense_label')} ${detailIndex + 1}`;
                           const displayCefr = detail.cefrLevel
                             ? detail.cefrLevel.toUpperCase()
@@ -307,19 +481,24 @@ export const DictionaryLookupTab: FC = () => {
                                   size='sm'
                                   variant='outline'
                                   disabled={
-                                    saveMutation.isPending &&
-                                    savingWord ===
-                                      `${entry.id}-${entry.position || 'unknown'}-${detailIndex}`
+                                    isEntrySaved ||
+                                    (saveMutation.isPending &&
+                                      savingWord ===
+                                        `${entry.id}-${entry.position || 'unknown'}-${detailIndex}`)
                                   }
                                   onClick={() => handleSave(entry, detail, detailIndex)}>
-                                  {saveMutation.isPending &&
-                                  savingWord ===
-                                    `${entry.id}-${entry.position || 'unknown'}-${detailIndex}` ? (
+                                  {isEntrySaved ? (
+                                    <Icons.Check className='h-4 w-4' />
+                                  ) : saveMutation.isPending &&
+                                    savingWord ===
+                                      `${entry.id}-${entry.position || 'unknown'}-${detailIndex}` ? (
                                     <Icons.LoaderCircleIcon className='h-4 w-4 animate-spin' />
                                   ) : (
                                     <Icons.Plus className='h-4 w-4' />
                                   )}
-                                  {t('dictionary_save_word')}
+                                  {isEntrySaved
+                                    ? t('dictionary_saved_word')
+                                    : t('dictionary_save_word')}
                                 </Button>
                               </div>
 
@@ -335,6 +514,40 @@ export const DictionaryLookupTab: FC = () => {
                                 <p className='text-sm text-muted-foreground leading-6'>
                                   {`${t('dictionary_definition_gpt_label')}: ${detail.definitionGpt}`}
                                 </p>
+                              )}
+
+                              {size(collocations) > 0 && (
+                                <div className='space-y-2'>
+                                  <p className='text-xs font-medium uppercase tracking-wide text-muted-foreground'>
+                                    {t('dictionary_collocations_label')}
+                                  </p>
+                                  <div className='flex flex-wrap gap-2'>
+                                    {map(collocations, collocation => (
+                                      <Badge
+                                        key={`${entryKey}-${detailIndex}-${collocation.id}`}
+                                        variant='outline'>
+                                        {collocation.collocations}
+                                      </Badge>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+
+                              {size(synonyms) > 0 && (
+                                <div className='space-y-2'>
+                                  <p className='text-xs font-medium uppercase tracking-wide text-muted-foreground'>
+                                    {t('dictionary_synonyms_label')}
+                                  </p>
+                                  <div className='flex flex-wrap gap-2'>
+                                    {map(synonyms, synonym => (
+                                      <Badge
+                                        key={`${entryKey}-${detailIndex}-${synonym}`}
+                                        variant='outline'>
+                                        {synonym}
+                                      </Badge>
+                                    ))}
+                                  </div>
+                                </div>
                               )}
 
                               <div className='space-y-2'>
