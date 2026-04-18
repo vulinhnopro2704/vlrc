@@ -15,6 +15,7 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as AppTutor3dRouteImport } from './routes/_app/tutor-3d'
 import { Route as AppPracticeRouteImport } from './routes/_app/practice'
 import { Route as AppNotebookRouteImport } from './routes/_app/notebook'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
@@ -49,6 +50,11 @@ const AppRoute = AppRouteImport.update({
 const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTutor3dRoute = AppTutor3dRouteImport.update({
+  id: '/tutor-3d',
+  path: '/tutor-3d',
   getParentRoute: () => AppRoute,
 } as any)
 const AppPracticeRoute = AppPracticeRouteImport.update({
@@ -91,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AppDashboardRoute
   '/notebook': typeof AppNotebookRoute
   '/practice': typeof AppPracticeRoute
+  '/tutor-3d': typeof AppTutor3dRoute
   '/courses/$courseId': typeof AppCoursesCourseIdRoute
   '/lessons/$lessonId': typeof AppLessonsLessonIdRoute
   '/courses/': typeof AppCoursesIndexRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AppDashboardRoute
   '/notebook': typeof AppNotebookRoute
   '/practice': typeof AppPracticeRoute
+  '/tutor-3d': typeof AppTutor3dRoute
   '/': typeof AppIndexRoute
   '/courses/$courseId': typeof AppCoursesCourseIdRoute
   '/lessons/$lessonId': typeof AppLessonsLessonIdRoute
@@ -118,6 +126,7 @@ export interface FileRoutesById {
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/notebook': typeof AppNotebookRoute
   '/_app/practice': typeof AppPracticeRoute
+  '/_app/tutor-3d': typeof AppTutor3dRoute
   '/_app/': typeof AppIndexRoute
   '/_app/courses/$courseId': typeof AppCoursesCourseIdRoute
   '/_app/lessons/$lessonId': typeof AppLessonsLessonIdRoute
@@ -134,6 +143,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/notebook'
     | '/practice'
+    | '/tutor-3d'
     | '/courses/$courseId'
     | '/lessons/$lessonId'
     | '/courses/'
@@ -146,6 +156,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/notebook'
     | '/practice'
+    | '/tutor-3d'
     | '/'
     | '/courses/$courseId'
     | '/lessons/$lessonId'
@@ -160,6 +171,7 @@ export interface FileRouteTypes {
     | '/_app/dashboard'
     | '/_app/notebook'
     | '/_app/practice'
+    | '/_app/tutor-3d'
     | '/_app/'
     | '/_app/courses/$courseId'
     | '/_app/lessons/$lessonId'
@@ -218,6 +230,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/tutor-3d': {
+      id: '/_app/tutor-3d'
+      path: '/tutor-3d'
+      fullPath: '/tutor-3d'
+      preLoaderRoute: typeof AppTutor3dRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/practice': {
       id: '/_app/practice'
       path: '/practice'
@@ -267,6 +286,7 @@ interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
   AppNotebookRoute: typeof AppNotebookRoute
   AppPracticeRoute: typeof AppPracticeRoute
+  AppTutor3dRoute: typeof AppTutor3dRoute
   AppIndexRoute: typeof AppIndexRoute
   AppCoursesCourseIdRoute: typeof AppCoursesCourseIdRoute
   AppLessonsLessonIdRoute: typeof AppLessonsLessonIdRoute
@@ -277,6 +297,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
   AppNotebookRoute: AppNotebookRoute,
   AppPracticeRoute: AppPracticeRoute,
+  AppTutor3dRoute: AppTutor3dRoute,
   AppIndexRoute: AppIndexRoute,
   AppCoursesCourseIdRoute: AppCoursesCourseIdRoute,
   AppLessonsLessonIdRoute: AppLessonsLessonIdRoute,
