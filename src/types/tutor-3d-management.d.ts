@@ -22,4 +22,10 @@ declare namespace Tutor3DManagement {
   type ExpressionMorphBinding = MorphBinding & {
     morphName: string;
   };
+
+  type ChatMessage = {
+    id: number;
+    role: 'You' | 'Tutor';
+    text: string;
+  };
 }

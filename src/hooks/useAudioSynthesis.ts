@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useState } from 'react';
 
 interface UseAudioSynthesisOptions {
   rate?: number;
@@ -7,65 +7,66 @@ interface UseAudioSynthesisOptions {
   lang?: string;
 }
 
+const isSupported = typeof window !== 'undefined' && 'speechSynthesis' in window;
+
 const useAudioSynthesis = (options: UseAudioSynthesisOptions = {}) => {
   const { rate = 1, pitch = 1, volume = 1, lang = 'en-US' } = options;
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSynthesizing, setIsSynthesizing] = useState(false);
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
-  const speak = useCallback(
-    (text: string, customOptions?: UseAudioSynthesisOptions) => {
-      // Cancel any existing speech
-      window.speechSynthesis.cancel();
+  const speak = (text: string, customOptions?: UseAudioSynthesisOptions) => {
+    if (!isSupported) return;
 
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = customOptions?.rate ?? rate;
-      utterance.pitch = customOptions?.pitch ?? pitch;
-      utterance.volume = customOptions?.volume ?? volume;
-      utterance.lang = customOptions?.lang ?? lang;
+    window.speechSynthesis.cancel();
 
-      utterance.onstart = () => {
-        setIsPlaying(true);
-        setIsSynthesizing(true);
-      };
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = customOptions?.rate ?? rate;
+    utterance.pitch = customOptions?.pitch ?? pitch;
+    utterance.volume = customOptions?.volume ?? volume;
+    utterance.lang = customOptions?.lang ?? lang;
 
-      utterance.onend = () => {
-        setIsPlaying(false);
-        setIsSynthesizing(false);
-      };
+    utterance.onstart = () => {
+      setIsPlaying(true);
+      setIsSynthesizing(true);
+    };
 
-      utterance.onerror = event => {
-        console.error('[useAudioSynthesis] Speech synthesis error:', event.error);
-        setIsPlaying(false);
-        setIsSynthesizing(false);
-      };
+    utterance.onend = () => {
+      setIsPlaying(false);
+      setIsSynthesizing(false);
+    };
 
-      utteranceRef.current = utterance;
-      window.speechSynthesis.speak(utterance);
-    },
-    [rate, pitch, volume, lang]
-  );
+    utterance.onerror = event => {
+      console.error('[useAudioSynthesis] Speech synthesis error:', event.error);
+      setIsPlaying(false);
+      setIsSynthesizing(false);
+    };
 
-  const stop = useCallback(() => {
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const stop = () => {
+    if (!isSupported) return;
     window.speechSynthesis.cancel();
     setIsPlaying(false);
     setIsSynthesizing(false);
-  }, []);
+  };
 
-  const pause = useCallback(() => {
+  const pause = () => {
+    if (!isSupported) return;
     if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
       window.speechSynthesis.pause();
       setIsPlaying(false);
     }
-  }, []);
+  };
 
-  const resume = useCallback(() => {
+  const resume = () => {
+    if (!isSupported) return;
     if (window.speechSynthesis.paused) {
       window.speechSynthesis.resume();
       setIsPlaying(true);
     }
-  }, []);
+  };
 
   return {
     speak,
@@ -74,7 +75,7 @@ const useAudioSynthesis = (options: UseAudioSynthesisOptions = {}) => {
     resume,
     isPlaying,
     isSynthesizing,
-    isSupported: typeof window !== 'undefined' && 'speechSynthesis' in window
+    isSupported
   };
 };
 

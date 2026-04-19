@@ -1,7 +1,7 @@
 import { VISEMES } from 'wawa-lipsync';
 import { Tutor3DAnimation, Tutor3DFacialExpression } from '@/enums/tutor-3d';
 
-export const AVATAR_MODEL_PATH = '/models/64f1a714fe61576b46f27ca2.glb';
+export const AVATAR_MODEL_PATH = '/models/tutor_girl.glb';
 export const ANIMATION_LIBRARY_PATH = '/models/animations.glb';
 
 export const EXTRA_ANIMATION_FILES: Record<
