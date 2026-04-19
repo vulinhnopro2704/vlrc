@@ -1,8 +1,9 @@
 import { Environment, OrbitControls, useAnimations, useFBX, useGLTF } from '@react-three/drei';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import { VISEMES } from 'wawa-lipsync';
-import { AnimationClip, Group, MathUtils, type Object3D } from 'three';
-import type { GLTF } from 'three-stdlib';
+import { AnimationClip, Group, MathUtils, Vector3, type Object3D } from 'three';
+import type { GLTF, OrbitControls as OrbitControlsImpl } from 'three-stdlib';
+import { SkeletonUtils } from 'three-stdlib';
 import { Tutor3DAnimation, Tutor3DFacialExpression } from '@/enums/tutor-3d';
 import {
   ANIMATION_LIBRARY_PATH,
@@ -25,12 +26,35 @@ const TutorAvatarRig: FC<{
   runtimeState: Tutor3DManagement.RuntimeState;
   autoRotate: boolean;
   cameraDistance: number;
+  onCameraDistanceChange: (value: number) => void;
+  animationFadeDuration: number;
+  expressionIntensity: number;
+  visemeStrength: number;
+  visemeSmoothing: number;
   liveVisemeRef: { current: VISEMES };
-}> = ({ runtimeState, autoRotate, cameraDistance, liveVisemeRef }) => {
+}> = ({
+  runtimeState,
+  autoRotate,
+  cameraDistance,
+  onCameraDistanceChange,
+  animationFadeDuration,
+  expressionIntensity,
+  visemeStrength,
+  visemeSmoothing,
+  liveVisemeRef
+}) => {
   const groupRef = useRef<Group>(null);
+  const controlsRef = useRef<OrbitControlsImpl | null>(null);
   const currentActionRef = useRef<Tutor3DAnimation | null>(null);
   const visemeBindingsRef = useRef(createEmptyVisemeBindings());
   const expressionBindingsRef = useRef(createEmptyExpressionBindings());
+  const faceAnchorRef = useRef<Object3D | null>(null);
+  const { camera } = useThree();
+
+  const lookTarget = useMemo(() => new Vector3(0, 1.45, 0), []);
+  const desiredLookTarget = useMemo(() => new Vector3(0, 1.45, 0), []);
+  const worldFacePosition = useMemo(() => new Vector3(), []);
+  const tempDirection = useMemo(() => new Vector3(), []);
 
   const { scene } = useGLTF(AVATAR_MODEL_PATH) as GLTF;
   const animationLibrary = useGLTF(ANIMATION_LIBRARY_PATH) as GLTF;
@@ -45,7 +69,7 @@ const TutorAvatarRig: FC<{
   const [mergedClips, setMergedClips] = useState<AnimationClip[]>([]);
 
   useEffect(() => {
-    setAvatarScene(scene.clone(true));
+    setAvatarScene(SkeletonUtils.clone(scene) as Group);
   }, [scene]);
 
   useEffect(() => {
@@ -75,26 +99,29 @@ const TutorAvatarRig: FC<{
     setMergedClips([...clipsByName.values()]);
   }, [animationLibrary.animations, angryFbx, cryingFbx, laughingFbx, terrifiedFbx, dancingFbx]);
 
-  const { actions } = useAnimations(mergedClips, groupRef);
+  const { actions } = useAnimations(mergedClips, avatarScene ?? undefined);
 
   useEffect(() => {
     const previousKey = currentActionRef.current;
     const previousAction = previousKey ? actions[previousKey] : undefined;
-    const nextAction = actions[runtimeState.animation] ?? actions[Tutor3DAnimation.Idle];
+    const actionByState = actions[runtimeState.animation];
+    const idleAction = actions[Tutor3DAnimation.Idle];
+    const fallbackAction = Object.values(actions).find(Boolean);
+    const nextAction = actionByState ?? idleAction ?? fallbackAction;
 
     if (!nextAction) return;
 
     if (previousAction && previousAction !== nextAction) {
-      previousAction.fadeOut(0.2);
+      previousAction.fadeOut(animationFadeDuration);
     }
 
-    nextAction.reset().fadeIn(0.2).play();
+    nextAction.reset().fadeIn(animationFadeDuration).play();
     currentActionRef.current = runtimeState.animation;
 
     return () => {
-      nextAction.fadeOut(0.2);
+      nextAction.fadeOut(animationFadeDuration);
     };
-  }, [actions, runtimeState.animation]);
+  }, [actions, animationFadeDuration, runtimeState.animation]);
 
   useEffect(() => {
     if (!avatarScene) return;
@@ -143,9 +170,24 @@ const TutorAvatarRig: FC<{
 
     visemeBindingsRef.current = visemeBindings;
     expressionBindingsRef.current = expressionBindings;
+
+    faceAnchorRef.current =
+      avatarScene.getObjectByName('Head') ??
+      avatarScene.getObjectByName('Wolf3D_Head') ??
+      avatarScene.getObjectByName('EyeLeft') ??
+      avatarScene.getObjectByName('EyeRight') ??
+      null;
   }, [avatarScene]);
 
   useFrame((_, delta) => {
+    if (faceAnchorRef.current) {
+      faceAnchorRef.current.getWorldPosition(worldFacePosition);
+      worldFacePosition.y += 0.06;
+      desiredLookTarget.copy(worldFacePosition);
+      lookTarget.lerp(desiredLookTarget, 1 - Math.exp(-8 * delta));
+      controlsRef.current?.target.copy(lookTarget);
+    }
+
     const expressionTargets = FACIAL_EXPRESSION_TARGETS[runtimeState.facialExpression];
 
     (
@@ -159,7 +201,7 @@ const TutorAvatarRig: FC<{
 
     if (runtimeState.facialExpression !== Tutor3DFacialExpression.Default) {
       expressionBindingsRef.current[runtimeState.facialExpression].forEach(binding => {
-        const targetWeight = expressionTargets[binding.morphName] ?? 0;
+        const targetWeight = (expressionTargets[binding.morphName] ?? 0) * expressionIntensity;
         const currentValue = binding.influences[binding.index] ?? 0;
         binding.influences[binding.index] = MathUtils.damp(currentValue, targetWeight, 12, delta);
       });
@@ -169,7 +211,7 @@ const TutorAvatarRig: FC<{
       bindings => {
         bindings.forEach(binding => {
           const currentValue = binding.influences[binding.index] ?? 0;
-          binding.influences[binding.index] = MathUtils.damp(currentValue, 0, 20, delta);
+          binding.influences[binding.index] = MathUtils.damp(currentValue, 0, visemeSmoothing, delta);
         });
       }
     );
@@ -177,31 +219,62 @@ const TutorAvatarRig: FC<{
     const activeViseme = runtimeState.isPlaying ? liveVisemeRef.current : VISEMES.sil;
     visemeBindingsRef.current[activeViseme].forEach((binding: Tutor3DManagement.MorphBinding) => {
       const currentValue = binding.influences[binding.index] ?? 0;
-      binding.influences[binding.index] = MathUtils.damp(currentValue, 1, 16, delta);
+      binding.influences[binding.index] = MathUtils.damp(
+        currentValue,
+        activeViseme === VISEMES.sil ? 0 : visemeStrength,
+        visemeSmoothing,
+        delta
+      );
     });
   });
+
+  useEffect(() => {
+    tempDirection.copy(camera.position).sub(lookTarget);
+
+    if (tempDirection.lengthSq() < 1e-6) {
+      tempDirection.set(0, 0.5, 1);
+    }
+
+    tempDirection.normalize().multiplyScalar(cameraDistance);
+    camera.position.copy(lookTarget).add(tempDirection);
+    camera.lookAt(lookTarget);
+    controlsRef.current?.target.copy(lookTarget);
+    controlsRef.current?.update();
+  }, [camera, cameraDistance, lookTarget, tempDirection]);
 
   return (
     <>
       <OrbitControls
+        ref={controlsRef}
+        makeDefault
         enableDamping
+        enablePan={false}
         dampingFactor={0.08}
-        minDistance={1.25}
-        maxDistance={2.8}
-        minPolarAngle={Math.PI / 3.4}
-        maxPolarAngle={Math.PI / 1.75}
+        target={[lookTarget.x, lookTarget.y, lookTarget.z]}
+        minDistance={2}
+        maxDistance={5}
+        minPolarAngle={Math.PI / 5}
+        maxPolarAngle={Math.PI / 1.9}
+        zoomSpeed={0.9}
         autoRotate={autoRotate}
         autoRotateSpeed={0.8}
+        onChange={event => {
+          if (!event) return;
+          const distance = event.target.object.position.distanceTo(event.target.target);
+          if (Math.abs(distance - cameraDistance) > 0.015) {
+            onCameraDistanceChange(Number(distance.toFixed(2)));
+          }
+        }}
       />
       <Environment preset='studio' />
       <ambientLight intensity={0.45} />
       <directionalLight position={[2, 3, 2]} intensity={1.2} castShadow />
       <directionalLight position={[-2, 2, -1]} intensity={0.55} />
-      <group ref={groupRef} position={[0, -1.55, 0]} scale={1.5}>
+      <group ref={groupRef} position={[0, -1.2, 0]} scale={1.18}>
         {avatarScene ? <primitive object={avatarScene} /> : null}
       </group>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.62, 0]} receiveShadow>
-        <circleGeometry args={[cameraDistance * 1.5, 64]} />
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.24, 0]} receiveShadow>
+        <circleGeometry args={[cameraDistance * 1.4, 64]} />
         <shadowMaterial transparent opacity={0.18} />
       </mesh>
     </>

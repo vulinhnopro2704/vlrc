@@ -1,4 +1,5 @@
 import { Tutor3DAnimation, Tutor3DFacialExpression } from '@/enums/tutor-3d';
+import { cn } from '@/lib/utils';
 import { ANIMATION_OPTIONS, EXPRESSION_OPTIONS } from './constants';
 
 const toAnimationValue = (value: string): Tutor3DAnimation => {
@@ -21,6 +22,10 @@ const TutorControlPanel: FC<{
   selectedExpression: Tutor3DFacialExpression;
   autoRotate: boolean;
   cameraDistance: number;
+  animationFadeDuration: number;
+  expressionIntensity: number;
+  visemeStrength: number;
+  visemeSmoothing: number;
   runtimeState: Tutor3DManagement.RuntimeState;
   currentViseme: string;
   selectedFileName: string;
@@ -28,16 +33,25 @@ const TutorControlPanel: FC<{
   onAnimationChange: (value: Tutor3DAnimation) => void;
   onExpressionChange: (value: Tutor3DFacialExpression) => void;
   onCameraDistanceChange: (value: number) => void;
+  onAnimationFadeDurationChange: (value: number) => void;
+  onExpressionIntensityChange: (value: number) => void;
+  onVisemeStrengthChange: (value: number) => void;
+  onVisemeSmoothingChange: (value: number) => void;
   onAutoRotateToggle: () => void;
   onFileChange: (file: File | null) => void;
   onPlay: () => void;
   onStop: () => void;
+  className?: string;
 }> = ({
   text,
   selectedAnimation,
   selectedExpression,
   autoRotate,
   cameraDistance,
+  animationFadeDuration,
+  expressionIntensity,
+  visemeStrength,
+  visemeSmoothing,
   runtimeState,
   currentViseme,
   selectedFileName,
@@ -45,20 +59,29 @@ const TutorControlPanel: FC<{
   onAnimationChange,
   onExpressionChange,
   onCameraDistanceChange,
+  onAnimationFadeDurationChange,
+  onExpressionIntensityChange,
+  onVisemeStrengthChange,
+  onVisemeSmoothingChange,
   onAutoRotateToggle,
   onFileChange,
   onPlay,
-  onStop
+  onStop,
+  className
 }) => {
   return (
-    <section className='space-y-4 rounded-2xl border bg-card p-4 shadow-sm md:p-5'>
+    <section
+      className={cn(
+        'space-y-4 rounded-2xl border border-white/25 bg-slate-900/75 p-4 text-slate-100 shadow-2xl backdrop-blur-xl',
+        className
+      )}>
       <div className='space-y-1'>
-        <p className='text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground'>
-          3D Tutor Sandbox
+        <p className='text-xs font-semibold uppercase tracking-[0.16em] text-slate-300/90'>
+          Tutor 3D Studio
         </p>
-        <h1 className='text-2xl font-bold text-foreground'>Avatar QA</h1>
-        <p className='text-sm leading-relaxed text-muted-foreground'>
-          Play real audio file for lipsync test. No mock or synthetic audio.
+        <h1 className='text-xl font-semibold text-white'>Avatar Control Panel</h1>
+        <p className='text-sm leading-relaxed text-slate-200/80'>
+          Fullscreen QA playground with live lipsync + animation controls.
         </p>
       </div>
 
@@ -70,7 +93,7 @@ const TutorControlPanel: FC<{
           accept='audio/*'
           onChange={event => onFileChange(event.target.files?.[0] ?? null)}
         />
-        <p className='text-xs text-muted-foreground'>
+        <p className='text-xs text-slate-300/90'>
           Selected: {selectedFileName || 'No file selected'}
         </p>
       </div>
@@ -124,41 +147,108 @@ const TutorControlPanel: FC<{
         </div>
       </div>
 
-      <div className='space-y-2'>
-        <div className='flex items-center justify-between text-sm text-foreground'>
-          <span>Camera distance</span>
-          <span className='font-medium'>{cameraDistance.toFixed(2)}</span>
+      <div className='space-y-3 rounded-xl border border-white/15 bg-black/20 p-3'>
+        <p className='text-xs font-semibold uppercase tracking-[0.14em] text-slate-300'>Camera & Motion</p>
+
+        <div className='space-y-2'>
+          <div className='flex items-center justify-between text-sm text-slate-100'>
+            <span>Camera distance</span>
+            <span className='font-medium text-slate-200'>{cameraDistance.toFixed(2)}</span>
+          </div>
+          <input
+            type='range'
+            min={2}
+            max={5}
+            step={0.05}
+            value={cameraDistance}
+            onChange={event => onCameraDistanceChange(Number(event.target.value))}
+            className='h-2 w-full cursor-pointer accent-sky-400'
+          />
+        </div>
+
+        <div className='flex items-center justify-between text-sm text-slate-100'>
+          <span>Transition blend</span>
+          <span className='font-medium text-slate-200'>{animationFadeDuration.toFixed(2)}s</span>
         </div>
         <input
           type='range'
-          min={1.4}
-          max={2.7}
+          min={0.05}
+          max={0.8}
           step={0.05}
-          value={cameraDistance}
-          onChange={event => onCameraDistanceChange(Number(event.target.value))}
-          className='h-2 w-full cursor-pointer accent-primary'
+          value={animationFadeDuration}
+          onChange={event => onAnimationFadeDurationChange(Number(event.target.value))}
+          className='h-2 w-full cursor-pointer accent-sky-400'
+        />
+      </div>
+
+      <div className='space-y-3 rounded-xl border border-white/15 bg-black/20 p-3'>
+        <p className='text-xs font-semibold uppercase tracking-[0.14em] text-slate-300'>Face & Lipsync</p>
+
+        <div className='flex items-center justify-between text-sm text-slate-100'>
+          <span>Expression intensity</span>
+          <span className='font-medium text-slate-200'>{expressionIntensity.toFixed(2)}</span>
+        </div>
+        <input
+          type='range'
+          min={0}
+          max={1.5}
+          step={0.05}
+          value={expressionIntensity}
+          onChange={event => onExpressionIntensityChange(Number(event.target.value))}
+          className='h-2 w-full cursor-pointer accent-sky-400'
+        />
+
+        <div className='flex items-center justify-between text-sm text-slate-100'>
+          <span>Viseme strength</span>
+          <span className='font-medium text-slate-200'>{visemeStrength.toFixed(2)}</span>
+        </div>
+        <input
+          type='range'
+          min={0.1}
+          max={1.8}
+          step={0.05}
+          value={visemeStrength}
+          onChange={event => onVisemeStrengthChange(Number(event.target.value))}
+          className='h-2 w-full cursor-pointer accent-sky-400'
+        />
+
+        <div className='flex items-center justify-between text-sm text-slate-100'>
+          <span>Viseme smoothing</span>
+          <span className='font-medium text-slate-200'>{visemeSmoothing.toFixed(0)}</span>
+        </div>
+        <input
+          type='range'
+          min={8}
+          max={28}
+          step={1}
+          value={visemeSmoothing}
+          onChange={event => onVisemeSmoothingChange(Number(event.target.value))}
+          className='h-2 w-full cursor-pointer accent-sky-400'
         />
       </div>
 
       <div className='flex flex-wrap items-center gap-2'>
-        <Button onClick={onPlay} className='min-w-32'>
+        <Button onClick={onPlay} className='min-w-24 bg-sky-500 text-white hover:bg-sky-600'>
           Play
         </Button>
-        <Button variant='outline' onClick={onStop}>
+        <Button
+          variant='outline'
+          onClick={onStop}
+          className='border-white/40 bg-white/5 text-slate-100 hover:bg-white/15'>
           Stop
         </Button>
-        <Button variant='ghost' onClick={onAutoRotateToggle}>
-          {autoRotate ? 'Disable Auto Rotate' : 'Enable Auto Rotate'}
+        <Button variant='ghost' onClick={onAutoRotateToggle} className='text-slate-200 hover:bg-white/10'>
+          {autoRotate ? 'Auto Rotate: On' : 'Auto Rotate: Off'}
         </Button>
       </div>
 
-      <div className='rounded-xl border bg-muted/40 p-3 text-xs text-muted-foreground'>
+      <div className='rounded-xl border border-white/20 bg-black/25 p-3 text-xs text-slate-200/90'>
         <p>
-          <span className='font-semibold text-foreground'>Runtime:</span> {runtimeState.animation} /{' '}
+          <span className='font-semibold text-white'>Runtime:</span> {runtimeState.animation} /{' '}
           {runtimeState.facialExpression}
         </p>
         <p>
-          <span className='font-semibold text-foreground'>LipSync viseme:</span> {currentViseme}
+          <span className='font-semibold text-white'>LipSync viseme:</span> {currentViseme}
         </p>
       </div>
     </section>
