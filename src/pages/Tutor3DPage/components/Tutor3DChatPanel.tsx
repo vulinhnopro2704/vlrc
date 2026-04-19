@@ -6,10 +6,19 @@ import { cn } from '@/lib/utils';
 
 export const Tutor3DChatPanel: FC<{
   chatMessages: Tutor3DManagement.ChatMessage[];
-  onSendMessage: (text: string) => void;
+  onSendMessage: (text: string) => Promise<void> | void;
   setAudioFile: (file: File | null) => void;
+  onAudioSelected?: (file: File) => Promise<void> | void;
+  isSending?: boolean;
   selectedFileName: string;
-}> = ({ chatMessages, onSendMessage, setAudioFile, selectedFileName }) => {
+}> = ({
+  chatMessages,
+  onSendMessage,
+  setAudioFile,
+  onAudioSelected,
+  isSending = false,
+  selectedFileName
+}) => {
   const [chatInput, setChatInput] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -17,12 +26,18 @@ export const Tutor3DChatPanel: FC<{
     const trimmed = chatInput.trim();
     if (!trimmed) return;
     setChatInput('');
-    onSendMessage(trimmed);
+    void onSendMessage(trimmed);
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
     setAudioFile(file);
+
+    if (file && onAudioSelected) {
+      void onAudioSelected(file);
+    }
+
+    event.currentTarget.value = '';
   };
 
   return (
@@ -58,9 +73,10 @@ export const Tutor3DChatPanel: FC<{
             handleSendMessage();
           }}
           placeholder='Type transcript or guidance...'
+          disabled={isSending}
           className='mr-2 h-10 flex-1 border-white/20 bg-white/10 text-slate-100 placeholder:text-slate-300/70'
         />
-        
+
         <input
           type='file'
           accept='audio/*'
@@ -72,16 +88,15 @@ export const Tutor3DChatPanel: FC<{
           variant='outline'
           title={selectedFileName || 'Upload Audio'}
           onClick={() => fileInputRef.current?.click()}
-          className='h-10 border-white/20 bg-white/10 text-slate-100 hover:bg-white/20 hover:text-white shrink-0 px-3'
-        >
+          className='h-10 border-white/20 bg-white/10 text-slate-100 hover:bg-white/20 hover:text-white shrink-0 px-3'>
           <UploadCloud size={18} className='mr-2' />
-          <span className='max-w-[100px] truncate'>{selectedFileName || 'Audio'}</span>
+          <span className='max-w-25 truncate'>{selectedFileName || 'Audio'}</span>
         </Button>
         <Button
           onClick={handleSendMessage}
-          disabled={!chatInput.trim()}
+          disabled={!chatInput.trim() || isSending}
           className='h-10 min-w-24 shrink-0 bg-sky-500 text-white hover:bg-sky-600 disabled:bg-slate-700'>
-          Send
+          {isSending ? 'Sending...' : 'Send'}
         </Button>
       </div>
     </div>
