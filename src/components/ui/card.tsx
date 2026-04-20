@@ -13,7 +13,7 @@ const cardVariants = cva('bg-card text-card-foreground flex flex-col rounded-xl 
       elevated: 'gap-6 py-6 border-0 shadow-lg hover:-translate-y-1 hover:shadow-xl transition-all',
       'elevated-glass':
         'gap-6 py-6 border-0 shadow-lg hover:-translate-y-2 hover:shadow-xl transition-all dark:bg-card/60 dark:backdrop-blur-md dark:border dark:border-white/10',
-      auth: 'w-full max-w-md mx-auto bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl backdrop-saturate-150 border-white/50 dark:border-white/10 rounded-2xl shadow-2xl shadow-black/10 dark:shadow-black/30'
+      auth: 'w-full max-w-md mx-auto bg-card/80 dark:bg-card/60 backdrop-blur-xl backdrop-saturate-150 border-border/60 dark:border-white/10 rounded-2xl shadow-2xl shadow-primary/10 dark:shadow-black/30'
     }
   },
   defaultVariants: {

@@ -84,14 +84,12 @@ const ForgotPasswordPage = () => {
       <AuthCard>
         {isSuccess ? (
           <div ref={successRef} className='text-center space-y-6 py-4'>
-            <div className='mx-auto w-16 h-16 rounded-full bg-linear-to-r from-emerald-400 to-green-500 flex items-center justify-center shadow-lg shadow-emerald-500/30'>
-              <Icons.CheckIcon className='w-8 h-8 text-white' />
+            <div className='mx-auto w-16 h-16 rounded-full bg-linear-to-r from-primary to-accent text-primary-foreground flex items-center justify-center shadow-lg shadow-primary/30'>
+              <Icons.CheckIcon className='w-8 h-8' />
             </div>
             <div className='space-y-2'>
-              <h2 className='text-2xl font-bold text-slate-900 dark:text-white'>
-                {t('auth_email_sent_title')}
-              </h2>
-              <p className='text-sm text-slate-600 dark:text-slate-400'>
+              <h2 className='text-2xl font-bold text-foreground'>{t('auth_email_sent_title')}</h2>
+              <p className='text-sm text-muted-foreground'>
                 {t('auth_email_sent_description', { email: getValues('email') })}
               </p>
             </div>
@@ -100,12 +98,12 @@ const ForgotPasswordPage = () => {
                 onClick={() => setIsSuccess(false)}
                 variant='outline'
                 size='xl'
-                className='w-full border-slate-200 dark:border-slate-700'>
+                className='w-full border-border/70 hover:bg-secondary/60'>
                 {t('auth_resend_email')}
               </Button>
               <Link
                 to='/login'
-                className='block text-sm font-medium text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300 transition-colors'>
+                className='block text-sm font-medium text-primary hover:text-primary/80 transition-colors'>
                 ← {t('auth_back_to_login')}
               </Link>
             </div>
@@ -115,12 +113,8 @@ const ForgotPasswordPage = () => {
             {/* Logo & Title */}
             <div ref={titleRef} className='text-center space-y-2'>
               <AnimatedLogo className='flex justify-center mb-4' />
-              <h1 className='text-2xl font-bold text-slate-900 dark:text-white'>
-                {t('auth_forgot_title')}
-              </h1>
-              <p className='text-sm text-slate-600 dark:text-slate-400'>
-                {t('auth_forgot_subtitle')}
-              </p>
+              <h1 className='text-2xl font-bold text-foreground'>{t('auth_forgot_title')}</h1>
+              <p className='text-sm text-muted-foreground'>{t('auth_forgot_subtitle')}</p>
             </div>
 
             {/* Form Fields */}
@@ -156,7 +150,7 @@ const ForgotPasswordPage = () => {
             <div ref={footerRef} className='text-center'>
               <Link
                 to='/login'
-                className='inline-flex items-center gap-1 text-sm font-medium text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300 transition-colors'>
+                className='inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-primary/80 transition-colors'>
                 <Icons.ChevronLeft className='w-4 h-4' />
                 {t('auth_back_to_login')}
               </Link>
