@@ -332,6 +332,8 @@ declare global {
   const compact: typeof import('lodash-es').compact
   const create: typeof import('zustand').create
   const createContext: typeof import('react').createContext
+  const createEmptyExpressionBindings: typeof import('../lib/avatar-utils').createEmptyExpressionBindings
+  const createEmptyVisemeBindings: typeof import('../lib/avatar-utils').createEmptyVisemeBindings
   const createRef: typeof import('react').createRef
   const createSyncStoragePersister: typeof import('@tanstack/react-query').createSyncStoragePersister
   const debounce: typeof import('lodash-es').debounce
@@ -351,6 +353,7 @@ declare global {
   const includes: typeof import('lodash-es').includes
   const indexOf: typeof import('lodash-es').indexOf
   const isEmpty: typeof import('lodash-es').isEmpty
+  const isMorphMesh: typeof import('../lib/avatar-utils').isMorphMesh
   const isNil: typeof import('lodash-es').isNil
   const isNumber: typeof import('lodash-es').isNumber
   const isValidElement: typeof import('react').isValidElement

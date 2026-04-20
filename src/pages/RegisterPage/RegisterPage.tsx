@@ -94,12 +94,8 @@ const RegisterPage = () => {
           {/* Logo & Title */}
           <div ref={titleRef} className='text-center space-y-2'>
             <AnimatedLogo className='flex justify-center mb-4' />
-            <h1 className='text-2xl font-bold text-slate-900 dark:text-white'>
-              {t('auth_register_title')}
-            </h1>
-            <p className='text-sm text-slate-600 dark:text-slate-400'>
-              {t('auth_register_subtitle')}
-            </p>
+            <h1 className='text-2xl font-bold text-foreground'>{t('auth_register_title')}</h1>
+            <p className='text-sm text-muted-foreground'>{t('auth_register_subtitle')}</p>
           </div>
 
           {/* Form Fields */}
@@ -163,24 +159,24 @@ const RegisterPage = () => {
 
           {/* Footer */}
           <div ref={footerRef} className='text-center'>
-            <p className='text-sm text-slate-600 dark:text-slate-400'>
+            <p className='text-sm text-muted-foreground'>
               {t('auth_have_account')}{' '}
               <Link
                 to='/login'
-                className='font-medium text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300 transition-colors'>
+                className='font-medium text-primary hover:text-primary/80 transition-colors'>
                 {t('auth_login_link')}
               </Link>
             </p>
           </div>
 
           {/* Terms */}
-          <p className='text-xs text-center text-slate-500 dark:text-slate-400'>
+          <p className='text-xs text-center text-muted-foreground'>
             {t('auth_terms_prefix')}{' '}
-            <a href='#' className='text-violet-600 hover:underline dark:text-violet-400'>
+            <a href='#' className='text-primary hover:underline'>
               {t('auth_terms_of_service')}
             </a>{' '}
             {t('auth_and')}{' '}
-            <a href='#' className='text-violet-600 hover:underline dark:text-violet-400'>
+            <a href='#' className='text-primary hover:underline'>
               {t('auth_privacy_policy')}
             </a>
           </p>

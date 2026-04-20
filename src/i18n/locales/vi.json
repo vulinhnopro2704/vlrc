@@ -212,6 +212,7 @@
   "header_toggle_theme": "Chuyển giao diện sáng/tối",
   "header_notebook_dictionary": "Sổ tay & Từ điển",
   "header_practice": "Ôn tập",
+  "header_tutor_3d": "Gia sư 3D",
   "header_user_avatar_alt": "Ảnh đại diện của {{name}}",
   "auth_logout": "Đăng xuất",
   "auth_logout_failed": "Đăng xuất thất bại. Vui lòng thử lại.",

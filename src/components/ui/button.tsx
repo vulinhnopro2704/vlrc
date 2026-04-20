@@ -21,7 +21,7 @@ const buttonVariants = cva(
         'accent-cta':
           'bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 hover:scale-105',
         gradient:
-          'bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white shadow-lg shadow-violet-500/30 hover:shadow-violet-500/40',
+          'bg-linear-to-r from-primary to-accent text-primary-foreground hover:opacity-95 shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30',
         'gradient-success':
           'bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/40'
       },

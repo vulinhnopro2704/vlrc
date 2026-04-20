@@ -85,10 +85,8 @@ const LoginPage = () => {
           {/* Logo & Title */}
           <div ref={titleRef} className='text-center space-y-2'>
             <AnimatedLogo className='flex justify-center mb-4' />
-            <h1 className='text-2xl font-bold text-slate-900 dark:text-white'>
-              {t('auth_login_title')}
-            </h1>
-            <p className='text-sm text-slate-600 dark:text-slate-400'>{t('auth_login_subtitle')}</p>
+            <h1 className='text-2xl font-bold text-foreground'>{t('auth_login_title')}</h1>
+            <p className='text-sm text-muted-foreground'>{t('auth_login_subtitle')}</p>
           </div>
 
           {/* Form Fields */}
@@ -113,7 +111,7 @@ const LoginPage = () => {
               <FormCheckbox control={control} name='rememberMe' label={t('auth_remember_me')} />
               <Link
                 to='/forgot-password'
-                className='text-sm text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300 transition-colors'>
+                className='text-sm text-primary hover:text-primary/80 transition-colors'>
                 {t('auth_forgot_password')}
               </Link>
             </div>
@@ -139,11 +137,11 @@ const LoginPage = () => {
 
           {/* Footer */}
           <div ref={footerRef} className='text-center'>
-            <p className='text-sm text-slate-600 dark:text-slate-400'>
+            <p className='text-sm text-muted-foreground'>
               {t('auth_no_account')}{' '}
               <Link
                 to='/register'
-                className='font-medium text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300 transition-colors'>
+                className='font-medium text-primary hover:text-primary/80 transition-colors'>
                 {t('auth_register_link')}
               </Link>
             </p>
@@ -152,12 +150,10 @@ const LoginPage = () => {
           {/* Social Login Divider */}
           <div className='relative'>
             <div className='absolute inset-0 flex items-center'>
-              <div className='w-full border-t border-slate-200 dark:border-slate-700' />
+              <div className='w-full border-t border-border' />
             </div>
             <div className='relative flex justify-center text-xs uppercase'>
-              <span className='bg-white/70 dark:bg-slate-900/70 px-2 text-slate-500'>
-                {t('auth_or_continue')}
-              </span>
+              <span className='bg-card/80 px-2 text-muted-foreground'>{t('auth_or_continue')}</span>
             </div>
           </div>
 
@@ -167,7 +163,7 @@ const LoginPage = () => {
               type='button'
               variant='outline'
               size='xl'
-              className='border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50'>
+              className='border-border/70 hover:bg-secondary/60'>
               <Icons.GitHub className='w-5 h-5 mr-2' />
               GitHub
             </Button>
@@ -175,7 +171,7 @@ const LoginPage = () => {
               type='button'
               variant='outline'
               size='xl'
-              className='border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50'>
+              className='border-border/70 hover:bg-secondary/60'>
               <Icons.Globe className='w-5 h-5 mr-2' />
               Google
             </Button>

@@ -30,7 +30,8 @@ export const Header = () => {
     ? [
         { key: 'courses', label: t('learning_courses'), to: '/courses' as const },
         { key: 'notebook', label: t('header_notebook_dictionary'), to: '/notebook' as const },
-        { key: 'practice', label: t('header_practice'), to: '/practice' as const }
+        { key: 'practice', label: t('header_practice'), to: '/practice' as const },
+        { key: 'tutor_3d', label: t('header_tutor_3d'), to: '/tutor-3d' as const }
       ]
     : [];
 

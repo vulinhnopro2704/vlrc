@@ -182,6 +182,7 @@
   "header_toggle_theme": "Toggle theme",
   "header_notebook_dictionary": "Notebook & Dictionary",
   "header_practice": "Practice",
+  "header_tutor_3d": "3D Tutor",
   "header_user_avatar_alt": "Avatar of {{name}}",
   "auth_logout": "Log out",
   "auth_logout_failed": "Log out failed. Please try again.",
