@@ -21,6 +21,8 @@ import {
   interactVoiceTutorSession
 } from '@/api/tutor-3d-management';
 import { getErrorMessage } from '@/api/api-error';
+import useAudioSynthesis from '@/hooks/useAudioSynthesis';
+import { mapTutorAnimation, mapTutorExpression } from '@/lib/tutor-3d-mappers';
 
 const DEFAULT_TUTOR_SESSION_PAYLOAD: Tutor3DManagement.CreateTutorSessionPayload = {
   cefrLevel: 'A2',
@@ -101,9 +103,26 @@ const Tutor3DPage: FC = () => {
   ]);
 
   const cameraDistance = useTutor3DStore(s => s.cameraDistance);
+  const setSelectedAnimation = useTutor3DStore(s => s.setSelectedAnimation);
+  const setSelectedExpression = useTutor3DStore(s => s.setSelectedExpression);
 
-  const { isPlaying, selectedFileName, liveVisemeRef, playAudio, stopPlayback, setAudioFile } =
-    useTutor3DLipsync();
+  const {
+    isPlaying,
+    selectedFileName,
+    liveVisemeRef,
+    playAudio,
+    stopPlayback,
+    setAudioFile,
+    setAudioFileAndPlay,
+    setLipSyncCues
+  } = useTutor3DLipsync();
+  const {
+    speak,
+    stop: stopSynthesis,
+    isSupported: isSpeechSynthesisSupported
+  } = useAudioSynthesis({
+    lang: 'en-US'
+  });
 
   const createSessionMutation = useMutation({
     mutationFn: createTutorSession,
@@ -136,14 +155,31 @@ const Tutor3DPage: FC = () => {
     setChatMessages(prev => [...prev, { id: Date.now(), role: 'Tutor', text }]);
   };
 
+  const applyRuntimeState = (response: Tutor3DManagement.TutorInteractionResponse) => {
+    setSelectedAnimation(mapTutorAnimation(response));
+    setSelectedExpression(mapTutorExpression(response));
+  };
+
   const hydrateAudioFromResponse = (response: Tutor3DManagement.TutorInteractionResponse) => {
+    setLipSyncCues(response.lipSync?.mouthCues ?? null);
+
     if (!response.audio.url || response.audio.status !== 'completed') {
+      stopPlayback();
+      if (isSpeechSynthesisSupported && response.tutorText.trim()) {
+        speak(response.tutorText);
+      }
       return;
     }
 
+    stopSynthesis();
     const outputFile = dataUrlToAudioFile(response.audio.url, `tutor-${response.turnId}.mp3`);
     if (outputFile) {
-      setAudioFile(outputFile);
+      setAudioFileAndPlay(outputFile);
+      return;
+    }
+
+    if (isSpeechSynthesisSupported && response.tutorText.trim()) {
+      speak(response.tutorText);
     }
   };
 
@@ -179,6 +215,7 @@ const Tutor3DPage: FC = () => {
       });
 
       appendTutorMessage(response.tutorText);
+      applyRuntimeState(response);
       hydrateAudioFromResponse(response);
     } catch (error) {
       appendTutorMessage('I could not answer right now. Please try again in a moment.');
@@ -213,6 +250,7 @@ const Tutor3DPage: FC = () => {
         ? `Transcript: ${response.transcript.text}`
         : 'Transcript processed.';
       appendTutorMessage(`${transcriptText}\n${response.tutorText}`);
+      applyRuntimeState(response);
       hydrateAudioFromResponse(response);
     } catch (error) {
       appendTutorMessage('I could not process your voice input. Please upload again.');

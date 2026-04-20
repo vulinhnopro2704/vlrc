@@ -83,13 +83,13 @@ declare namespace Tutor3DManagement {
     turnId: string;
     sessionId: string;
     tutorText: string;
-    emotionState: string;
-    animationState: string;
-    facialExpression: string;
-    animation: string;
+    emotionState?: string | null;
+    animationState?: string | null;
+    facialExpression?: string | null;
+    animation?: string | null;
     lipSync: {
       mouthCues: TutorLipSyncCue[];
-    };
+    } | null;
     correction: TutorCorrection;
     audio: TutorInteractionAudio;
     transcript?: TutorTranscript;
