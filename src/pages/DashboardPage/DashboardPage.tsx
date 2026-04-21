@@ -256,7 +256,7 @@ const DashboardPage = () => {
   );
 
   return (
-    <div ref={dashboardRef} className='relative w-full overflow-hidden px-4 py-4 sm:px-6 lg:px-8'>
+    <div ref={dashboardRef} className='relative w-full px-3 py-3 sm:px-6 sm:py-4 lg:px-8'>
       <div className='pointer-events-none absolute inset-0 -z-10'>
         <div className='absolute -left-14 top-6 h-44 w-44 rounded-full bg-primary/12 blur-3xl' />
         <div className='absolute right-0 top-24 h-52 w-52 rounded-full bg-accent/12 blur-3xl' />
@@ -273,8 +273,8 @@ const DashboardPage = () => {
               ) : null}
             </div>
 
-            <div className='flex flex-wrap items-center gap-2'>
-              <div className='flex flex-wrap gap-1'>
+            <div className='flex w-full flex-wrap items-center gap-2 sm:w-auto'>
+              <div className='flex max-w-full flex-wrap gap-1'>
                 {windowOptions.map(option => (
                   <Button
                     key={option}
@@ -446,7 +446,7 @@ const DashboardPage = () => {
           </Card>
         ) : null}
 
-        <Card className='content-section glass-card rounded-2xl border-border/60 p-3.5 sm:p-4'>
+        <Card className='content-section glass-card overflow-hidden rounded-2xl border-border/60 p-3.5 sm:p-4'>
           <div className='mb-3 flex items-center justify-between gap-2'>
             <h3 className='text-sm font-semibold sm:text-base'>{t('dashboard_lessons_focus')}</h3>
             <span className='rounded-full bg-primary/10 px-2 py-0.5 text-[11px] text-primary'>
@@ -510,7 +510,9 @@ const DashboardPage = () => {
               ) : (
                 <div className='space-y-2'>
                   {recommendationLines.slice(0, 5).map((line, index) => (
-                    <p key={`${line}-${index}`} className='text-xs text-foreground/90 sm:text-sm'>
+                    <p
+                      key={`${line}-${index}`}
+                      className='wrap-break-word text-xs text-foreground/90 sm:text-sm'>
                       {line}
                     </p>
                   ))}
@@ -561,12 +563,12 @@ const DashboardPage = () => {
                 </div>
               </div>
 
-              <div className='flex items-center gap-3'>
+              <div className='flex flex-wrap items-center gap-2 sm:gap-3'>
                 <span className='text-xs font-semibold uppercase tracking-wider text-muted-foreground'>
                   {t('dashboard_risk_show_count')}
                 </span>
                 <Select value={riskTake.toString()} onValueChange={val => setRiskTake(Number(val))}>
-                  <SelectTrigger className='h-8 w-19 bg-card/50'>
+                  <SelectTrigger className='h-8 w-20 bg-card/50'>
                     <SelectValue placeholder='6' />
                   </SelectTrigger>
                   <SelectContent>

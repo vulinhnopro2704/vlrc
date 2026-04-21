@@ -1,7 +1,6 @@
 'use client';
 
 import Icons from '@/components/Icons';
-import { ScrollArea } from '@/components/ui/scroll-area';
 
 export const CourseGrid = ({
   course,
@@ -56,7 +55,7 @@ export const CourseGrid = ({
         </p>
       </div>
 
-      <ScrollArea className='max-h-96 pr-2'>
+      <div className='max-h-104 overflow-y-auto pr-1 sm:pr-2'>
         <div className='grid grid-cols-1 gap-3 pb-1 md:grid-cols-2 lg:grid-cols-3'>
           {map(limitedLessons, lesson => (
             <div
@@ -110,7 +109,7 @@ export const CourseGrid = ({
             </div>
           ))}
         </div>
-      </ScrollArea>
+      </div>
     </div>
   );
 };

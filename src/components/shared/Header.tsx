@@ -24,6 +24,7 @@ export const Header = () => {
   const [isDark, setIsDark] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [avatarHasError, setAvatarHasError] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const currentLanguage = i18n.resolvedLanguage?.startsWith('vi') ? 'vi' : 'en';
   const currentFlag = currentLanguage === 'vi' ? '🇻🇳' : '🇺🇸';
   const appNavItems = me
@@ -32,6 +33,12 @@ export const Header = () => {
         { key: 'notebook', label: t('header_notebook_dictionary'), to: '/notebook' as const },
         { key: 'practice', label: t('header_practice'), to: '/practice' as const },
         { key: 'tutor_3d', label: t('header_tutor_3d'), to: '/tutor-3d' as const }
+      ]
+    : [];
+  const mobileNavItems = me
+    ? [
+        { key: 'dashboard', label: t('learning_dashboard'), to: '/dashboard' as const },
+        ...appNavItems
       ]
     : [];
 
@@ -114,6 +121,50 @@ export const Header = () => {
           ) : null}
 
           <div className='flex items-center gap-2'>
+            {mobileNavItems.length > 0 ? (
+              <Dialog open={isMobileNavOpen} onOpenChange={setIsMobileNavOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    variant='ghost'
+                    size='icon'
+                    className='h-9 w-9 md:hidden'
+                    aria-label={t('dashboard_customize_view')}>
+                    <Icons.MoreHorizontal className='h-4 w-4' />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent
+                  showCloseButton={false}
+                  className='fixed inset-x-0 bottom-0 top-auto z-60 max-w-none translate-x-0 translate-y-0 rounded-t-2xl border-x-0 border-b-0 px-4 pb-5 pt-4 sm:max-w-none'>
+                  <div className='mx-auto h-1.5 w-12 rounded-full bg-muted' />
+                  <div className='mt-3 flex items-center justify-between'>
+                    <h3 className='text-sm font-semibold'>{t('learning_dashboard')}</h3>
+                    <Button
+                      variant='ghost'
+                      size='icon'
+                      className='h-8 w-8'
+                      onClick={() => setIsMobileNavOpen(false)}>
+                      <Icons.X className='h-4 w-4' />
+                    </Button>
+                  </div>
+
+                  <div className='mt-3 grid grid-cols-1 gap-2'>
+                    {mobileNavItems.map(item => (
+                      <Button
+                        key={item.key}
+                        variant='outline'
+                        className='h-10 justify-start rounded-xl px-3 text-sm font-semibold'
+                        onClick={() => {
+                          setIsMobileNavOpen(false);
+                          navigate({ to: item.to });
+                        }}>
+                        {item.label}
+                      </Button>
+                    ))}
+                  </div>
+                </DialogContent>
+              </Dialog>
+            ) : null}
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant='ghost' size='sm' className='h-9 gap-2 px-2'>
