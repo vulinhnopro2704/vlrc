@@ -1,11 +1,7 @@
 import SceneLoader from './SceneLoader';
 import TutorAvatarRig from './TutorAvatarRig';
 import useTutor3DLipsync from './useTutor3DLipsync';
-import {
-  ANIMATION_LIBRARY_PATH,
-  AVATAR_MODEL_PATH,
-  EXTRA_ANIMATION_FILES
-} from '@/constants/moded-3d-config';
+import { Loader } from '@react-three/drei';
 import { Tutor3DChatPanel } from './Tutor3DChatPanel';
 import { Tutor3DDebugControls } from './Tutor3DDebugControls';
 import { useTutor3DStore } from '@/stores/tutor-3d';
@@ -165,6 +161,7 @@ const Tutor3DPage: FC = () => {
             <TutorAvatarRig liveVisemeRef={liveVisemeRef} isPlaying={isPlaying} />
           </Suspense>
         </Canvas>
+        <Loader />
       </section>
       <Tutor3DChatPanel
         chatMessages={chatMessages}
@@ -175,13 +172,5 @@ const Tutor3DPage: FC = () => {
     </section>
   );
 };
-
-useGLTF.preload(AVATAR_MODEL_PATH);
-useGLTF.preload(ANIMATION_LIBRARY_PATH);
-useFBX.preload(EXTRA_ANIMATION_FILES[Tutor3DAnimation.Angry]);
-useFBX.preload(EXTRA_ANIMATION_FILES[Tutor3DAnimation.Crying]);
-useFBX.preload(EXTRA_ANIMATION_FILES[Tutor3DAnimation.Laughing]);
-useFBX.preload(EXTRA_ANIMATION_FILES[Tutor3DAnimation.Terrified]);
-useFBX.preload(EXTRA_ANIMATION_FILES[Tutor3DAnimation.RumbaDancing]);
 
 export default Tutor3DPage;

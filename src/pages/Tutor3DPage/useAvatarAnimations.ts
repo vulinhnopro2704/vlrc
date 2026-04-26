@@ -4,23 +4,44 @@ import {
   AVATAR_MODEL_PATH,
   EXTRA_ANIMATION_FILES
 } from '@/constants/moded-3d-config';
+import { KTX2Loader } from 'three-stdlib';
 
-type AnimationAsset = Group & {
-  animations: AnimationClip[];
-};
+
 
 export const useAvatarAnimations = (
   runtimeAnimation: Tutor3DAnimation,
   animationFadeDuration: number
 ) => {
+  const gl = useThree(state => state.gl);
+
   const currentActionRef = useRef<Tutor3DAnimation | null>(null);
-  const { scene } = useGLTF(AVATAR_MODEL_PATH) as GLTF;
-  const animationLibrary = useGLTF(ANIMATION_LIBRARY_PATH) as GLTF;
-  const angryFbx = useFBX(EXTRA_ANIMATION_FILES[Tutor3DAnimation.Angry]) as AnimationAsset;
-  const cryingFbx = useFBX(EXTRA_ANIMATION_FILES[Tutor3DAnimation.Crying]) as AnimationAsset;
-  const laughingFbx = useFBX(EXTRA_ANIMATION_FILES[Tutor3DAnimation.Laughing]) as AnimationAsset;
-  const terrifiedFbx = useFBX(EXTRA_ANIMATION_FILES[Tutor3DAnimation.Terrified]) as AnimationAsset;
-  const dancingFbx = useFBX(EXTRA_ANIMATION_FILES[Tutor3DAnimation.RumbaDancing]) as AnimationAsset;
+  const { scene } = useGLTF(
+    AVATAR_MODEL_PATH,
+    true,
+    true,
+    (loader) => {
+      const ktx2Loader = new KTX2Loader();
+      ktx2Loader.setTranscoderPath('https://cdn.jsdelivr.net/gh/pmndrs/drei-assets/basis/');
+      ktx2Loader.detectSupport(gl);
+      loader.setKTX2Loader(ktx2Loader);
+    }
+  ) as GLTF;
+  const animationLibrary = useGLTF(
+    ANIMATION_LIBRARY_PATH,
+    true,
+    true,
+    (loader) => {
+      const ktx2Loader = new KTX2Loader();
+      ktx2Loader.setTranscoderPath('https://cdn.jsdelivr.net/gh/pmndrs/drei-assets/basis/');
+      ktx2Loader.detectSupport(gl);
+      loader.setKTX2Loader(ktx2Loader);
+    }
+  ) as GLTF;
+  const angryGlb = useGLTF(EXTRA_ANIMATION_FILES[Tutor3DAnimation.Angry]) as GLTF;
+  const cryingGlb = useGLTF(EXTRA_ANIMATION_FILES[Tutor3DAnimation.Crying]) as GLTF;
+  const laughingGlb = useGLTF(EXTRA_ANIMATION_FILES[Tutor3DAnimation.Laughing]) as GLTF;
+  const terrifiedGlb = useGLTF(EXTRA_ANIMATION_FILES[Tutor3DAnimation.Terrified]) as GLTF;
+  const dancingGlb = useGLTF(EXTRA_ANIMATION_FILES[Tutor3DAnimation.RumbaDancing]) as GLTF;
 
   const [avatarScene, setAvatarScene] = useState<Group | null>(null);
   const [mergedClips, setMergedClips] = useState<AnimationClip[]>([]);
@@ -36,15 +57,15 @@ export const useAvatarAnimations = (
       clipsByName.set(clip.name, clip.clone());
     });
 
-    const fbxSources: Array<{ name: Tutor3DAnimation; source: AnimationAsset }> = [
-      { name: Tutor3DAnimation.Angry, source: angryFbx },
-      { name: Tutor3DAnimation.Crying, source: cryingFbx },
-      { name: Tutor3DAnimation.Laughing, source: laughingFbx },
-      { name: Tutor3DAnimation.Terrified, source: terrifiedFbx },
-      { name: Tutor3DAnimation.RumbaDancing, source: dancingFbx }
+    const glbSources: Array<{ name: Tutor3DAnimation; source: GLTF }> = [
+      { name: Tutor3DAnimation.Angry, source: angryGlb },
+      { name: Tutor3DAnimation.Crying, source: cryingGlb },
+      { name: Tutor3DAnimation.Laughing, source: laughingGlb },
+      { name: Tutor3DAnimation.Terrified, source: terrifiedGlb },
+      { name: Tutor3DAnimation.RumbaDancing, source: dancingGlb }
     ];
 
-    fbxSources.forEach(item => {
+    glbSources.forEach(item => {
       const clip = item.source.animations.at(0);
       if (!clip) return;
 
@@ -54,7 +75,7 @@ export const useAvatarAnimations = (
     });
 
     setMergedClips([...clipsByName.values()]);
-  }, [animationLibrary.animations, angryFbx, cryingFbx, laughingFbx, terrifiedFbx, dancingFbx]);
+  }, [animationLibrary.animations, angryGlb, cryingGlb, laughingGlb, terrifiedGlb, dancingGlb]);
 
   const { actions } = useAnimations(mergedClips, avatarScene ?? undefined);
 

@@ -1,18 +1,18 @@
 import { VISEMES } from 'wawa-lipsync';
 import { Tutor3DAnimation, Tutor3DFacialExpression } from '@/enums/tutor-3d';
 
-export const AVATAR_MODEL_PATH = '/models/tutor_girl.glb';
-export const ANIMATION_LIBRARY_PATH = '/models/animations.glb';
+export const AVATAR_MODEL_PATH = '/models/tutor_girl_ktx2.glb';
+export const ANIMATION_LIBRARY_PATH = '/models/animations_ktx2.glb';
 
 export const EXTRA_ANIMATION_FILES: Record<
   Exclude<Tutor3DManagement.AvatarAnimation, 'Idle' | 'Talking_0' | 'Talking_1' | 'Talking_2'>,
   string
 > = {
-  [Tutor3DAnimation.Angry]: '/animations/Angry.fbx',
-  [Tutor3DAnimation.Crying]: '/animations/Crying.fbx',
-  [Tutor3DAnimation.Laughing]: '/animations/Laughing.fbx',
-  [Tutor3DAnimation.Terrified]: '/animations/Terrified.fbx',
-  [Tutor3DAnimation.RumbaDancing]: '/animations/Rumba Dancing.fbx'
+  [Tutor3DAnimation.Angry]: '/animations/Angry_ktx2.glb',
+  [Tutor3DAnimation.Crying]: '/animations/Crying_ktx2.glb',
+  [Tutor3DAnimation.Laughing]: '/animations/Laughing_ktx2.glb',
+  [Tutor3DAnimation.Terrified]: '/animations/Terrified_ktx2.glb',
+  [Tutor3DAnimation.RumbaDancing]: '/animations/Rumba Dancing_ktx2.glb'
 };
 
 export const ANIMATION_OPTIONS: readonly Tutor3DAnimation[] = [
