@@ -18,6 +18,7 @@ import { Tutor3DAnimation, Tutor3DFacialExpression } from '@/enums/tutor-3d';
 import {
   createTutorSession,
   interactTutorSession,
+  interactVoiceTutorSession
 } from '@/api/tutor-3d-management';
 import { getErrorMessage } from '@/api/api-error';
 
@@ -59,6 +60,16 @@ const Tutor3DPage: FC = () => {
       targetSessionId: string;
       payload: Tutor3DManagement.InteractTutorPayload;
     }) => interactTutorSession(targetSessionId, payload)
+  });
+
+  const interactVoiceMutation = useMutation({
+    mutationFn: ({
+      targetSessionId,
+      payload
+    }: {
+      targetSessionId: string;
+      payload: Tutor3DManagement.InteractVoiceTutorPayload;
+    }) => interactVoiceTutorSession(targetSessionId, payload)
   });
 
   const appendTutorMessage = (text: string) => {
@@ -116,9 +127,34 @@ const Tutor3DPage: FC = () => {
     }
   };
 
+  const handleSendVoice = async (audioBase64: string, mimeType: string) => {
+    try {
+      const targetSessionId = await ensureSession();
+      const response = await interactVoiceMutation.mutateAsync({
+        targetSessionId,
+        payload: {
+          audioBase64,
+          mimeType: mimeType as any,
+          clientTurnId: `voice-${Date.now()}`
+        }
+      });
+
+      if (response.transcript?.text) {
+        setChatMessages(prev => [...prev, { id: Date.now() - 1, role: 'You', text: response.transcript!.text }]);
+      }
+      
+      appendTutorMessage(response.tutorText);
+      syncAvatarResponse(response);
+    } catch (error) {
+      appendTutorMessage('I could not process your voice. Please try again in a moment.');
+      toast.error(getErrorMessage(error, 'Failed to process voice'));
+    }
+  };
+
   const isGenerating =
     createSessionMutation.isPending ||
-    interactTextMutation.isPending;
+    interactTextMutation.isPending ||
+    interactVoiceMutation.isPending;
 
   return (
     <section className='relative h-[calc(100vh-4rem)] w-full overflow-hidden bg-slate-950'>
@@ -143,6 +179,7 @@ const Tutor3DPage: FC = () => {
       <Tutor3DChatPanel
         chatMessages={chatMessages}
         onSendMessage={handleSendMessage}
+        onSendVoice={handleSendVoice}
         isSending={isGenerating}
       />
     </section>
