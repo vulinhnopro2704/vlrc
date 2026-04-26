@@ -1,6 +1,3 @@
-import { Suspense, useState, type FC } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { useFBX, useGLTF } from '@react-three/drei';
 import SceneLoader from './SceneLoader';
 import TutorAvatarRig from './TutorAvatarRig';
 import useTutor3DLipsync from './useTutor3DLipsync';
@@ -9,10 +6,8 @@ import {
   AVATAR_MODEL_PATH,
   EXTRA_ANIMATION_FILES
 } from '@/constants/moded-3d-config';
-import { Tutor3DHeader } from './components/Tutor3DHeader';
-import { Tutor3DActionDock } from './components/Tutor3DActionDock';
-import { Tutor3DChatPanel } from './components/Tutor3DChatPanel';
-import { Tutor3DDebugControls } from './components/Tutor3DDebugControls';
+import { Tutor3DChatPanel } from './Tutor3DChatPanel';
+import { Tutor3DDebugControls } from './Tutor3DDebugControls';
 import { useTutor3DStore } from '@/stores/tutor-3d';
 import { Tutor3DAnimation, Tutor3DFacialExpression } from '@/enums/tutor-3d';
 import {
@@ -171,11 +166,6 @@ const Tutor3DPage: FC = () => {
           </Suspense>
         </Canvas>
       </section>
-
-      <Tutor3DHeader liveVisemeRef={liveVisemeRef} />
-
-      <Tutor3DActionDock />
-
       <Tutor3DChatPanel
         chatMessages={chatMessages}
         onSendMessage={handleSendMessage}

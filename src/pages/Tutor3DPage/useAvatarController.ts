@@ -1,22 +1,21 @@
-import { useFrame } from '@react-three/fiber';
-import { MathUtils, Vector3, Object3D } from 'three';
 import { Tutor3DFacialExpression } from '@/enums/tutor-3d';
 import { FACIAL_EXPRESSION_TARGETS } from '@/constants/moded-3d-config';
 import { VISEMES } from 'wawa-lipsync';
+import { Vector3 } from 'three';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 
 interface UseAvatarControllerProps {
-  faceAnchorRef: React.MutableRefObject<Object3D | null>;
+  faceAnchorRef: React.RefObject<Object3D | null>;
   lookTarget: Vector3;
-  controlsRef: React.MutableRefObject<OrbitControlsImpl | null>;
-  expressionBindingsRef: React.MutableRefObject<Record<Tutor3DFacialExpression, Tutor3DManagement.ExpressionMorphBinding[]>>;
-  visemeBindingsRef: React.MutableRefObject<Record<VISEMES, Tutor3DManagement.MorphBinding[]>>;
+  controlsRef: React.RefObject<OrbitControlsImpl | null>;
+  expressionBindingsRef: React.RefObject<Record<Tutor3DFacialExpression, Tutor3DManagement.ExpressionMorphBinding[]>>;
+  visemeBindingsRef: React.RefObject<Record<VISEMES, Tutor3DManagement.MorphBinding[]>>;
   runtimeFacialExpression: Tutor3DFacialExpression;
   expressionIntensity: number;
   visemeStrength: number;
   visemeSmoothing: number;
   isPlaying: boolean;
-  liveVisemeRef: React.MutableRefObject<VISEMES>;
+  liveVisemeRef: React.RefObject<VISEMES>;
 }
 
 export const useAvatarController = ({

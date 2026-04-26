@@ -79,7 +79,9 @@ import {
   Plus,
   Volume2,
   ArrowRight,
-  Info
+  Info,
+  Square,
+  Mic
 } from 'lucide-react';
 
 export const Icons = {
@@ -163,6 +165,8 @@ export const Icons = {
   ArrowRight: ArrowRight,
   Plus: Plus,
   Info: Info,
+  Square: Square,
+  Mic: Mic,
   GitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden='true'

@@ -1,10 +1,7 @@
-import { useEffect } from 'react';
-import { useThree } from '@react-three/fiber';
-import { Vector3 } from 'three';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 
 export const useCameraFollow = (
-  controlsRef: React.MutableRefObject<OrbitControlsImpl | null>,
+  controlsRef: React.RefObject<OrbitControlsImpl | null>,
   cameraDistance: number
 ) => {
   const { camera } = useThree();

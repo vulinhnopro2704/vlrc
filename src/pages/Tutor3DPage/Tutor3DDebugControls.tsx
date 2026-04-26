@@ -1,6 +1,3 @@
-import type { FC } from 'react';
-import { useEffect } from 'react';
-import { Leva, useControls } from 'leva';
 import { useTutor3DStore } from '@/stores/tutor-3d';
 import { ANIMATION_OPTIONS, EXPRESSION_OPTIONS } from '@/constants/moded-3d-config';
 

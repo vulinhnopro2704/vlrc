@@ -1,5 +1,3 @@
-import { Html, useProgress } from '@react-three/drei';
-
 const SceneLoader = () => {
   const { progress } = useProgress();
 

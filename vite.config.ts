@@ -40,6 +40,36 @@ export default defineConfig({
           'gsap/ScrollTrigger': ['ScrollTrigger']
         },
         {
+          'leva': ['Leva', 'useControls']
+        },
+        {
+          '@react-three/fiber': ['useFrame', 'Canvas', 'useThree']
+        },
+        {
+          '@react-three/drei': ['useAnimations', 'useFBX', 'useGLTF', 'useProgress', 'Html', 'Environment', 'OrbitControls']
+        },
+        {
+          'three': ['MathUtils', 'Vector3']
+        },
+        {
+          from: 'wawa-lipsync',
+          imports: ['VISEMES'],
+          type: true
+        },
+        {
+          from: 'three',
+          imports: ['AnimationClip', 'Group', 'Object3D'],
+          type: true
+        },
+        {
+          'three-stdlib': ['SkeletonUtils']
+        },
+        {
+          from: 'three-stdlib',
+          imports: ['GLTF'],
+          type: true
+        },
+        {
           '@tanstack/react-router': [
             'useNavigate',
             'useMatch',

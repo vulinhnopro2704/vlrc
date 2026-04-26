@@ -1,9 +1,4 @@
-import { useRef, useState, type FC } from 'react';
-import { MessageCircle, Mic, Square } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
-import { toast } from '@/shared';
+import Icons from '@/components/Icons';
 
 export const Tutor3DChatPanel: FC<{
   chatMessages: Tutor3DManagement.ChatMessage[];
@@ -102,7 +97,7 @@ export const Tutor3DChatPanel: FC<{
 
       <div className='pointer-events-auto absolute bottom-4 left-1/2 flex w-[min(94vw,760px)] -translate-x-1/2 items-center gap-2 rounded-2xl border border-white/20 bg-slate-900/72 p-2 shadow-2xl backdrop-blur-xl'>
         <div className='grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/10 text-slate-100'>
-          <MessageCircle size={18} />
+          <Icons.MessageCircle size={18} />
         </div>
         <Input
           value={chatInput}
@@ -136,9 +131,9 @@ export const Tutor3DChatPanel: FC<{
                  : 'bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30'
              )}>
             {isRecording ? (
-              <span className="flex items-center gap-2 animate-pulse"><Square size={14} fill="currentColor" /> Stop</span>
+              <span className="flex items-center gap-2 animate-pulse"><Icons.Square size={14} fill="currentColor" /> Stop</span>
             ) : (
-              <span className="flex items-center gap-1.5"><Mic size={16} /> Voice</span>
+              <span className="flex items-center gap-1.5"><Icons.Mic size={16} /> Voice</span>
             )}
           </Button>
         )}

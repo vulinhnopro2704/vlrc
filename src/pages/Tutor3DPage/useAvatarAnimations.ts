@@ -1,8 +1,3 @@
-import { useEffect, useState, useRef } from 'react';
-import { useAnimations, useFBX, useGLTF } from '@react-three/drei';
-import { SkeletonUtils } from 'three-stdlib';
-import { AnimationClip, Group } from 'three';
-import type { GLTF } from 'three-stdlib';
 import { Tutor3DAnimation } from '@/enums/tutor-3d';
 import {
   ANIMATION_LIBRARY_PATH,

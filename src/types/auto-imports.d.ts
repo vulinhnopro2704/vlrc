@@ -15,6 +15,7 @@ declare global {
   const AlertCircleIcon: typeof import('lucide-react').AlertCircleIcon
   const AlertTriangle: typeof import('lucide-react').AlertTriangle
   const AlertTriangleIcon: typeof import('lucide-react').AlertTriangleIcon
+  const AnimationClip: typeof import('three').AnimationClip
   const ArrowDown: typeof import('lucide-react').ArrowDown
   const ArrowDownIcon: typeof import('lucide-react').ArrowDownIcon
   const ArrowLeft: typeof import('lucide-react').ArrowLeft
@@ -44,6 +45,7 @@ declare global {
   const CalendarXIcon: typeof import('lucide-react').CalendarXIcon
   const Camera: typeof import('lucide-react').Camera
   const CameraIcon: typeof import('lucide-react').CameraIcon
+  const Canvas: typeof import('@react-three/fiber').Canvas
   const Car: typeof import('lucide-react').Car
   const CarIcon: typeof import('lucide-react').CarIcon
   const Card: typeof import('../components/ui/card').Card
@@ -118,6 +120,7 @@ declare global {
   const Edit3: typeof import('lucide-react').Edit3
   const Edit3Icon: typeof import('lucide-react').Edit3Icon
   const EditIcon: typeof import('lucide-react').EditIcon
+  const Environment: typeof import('@react-three/drei').Environment
   const Eye: typeof import('lucide-react').Eye
   const EyeIcon: typeof import('lucide-react').EyeIcon
   const EyeOff: typeof import('lucide-react').EyeOff
@@ -165,10 +168,12 @@ declare global {
   const Fragment: typeof import('react').Fragment
   const Gift: typeof import('lucide-react').Gift
   const GiftIcon: typeof import('lucide-react').GiftIcon
+  const Group: typeof import('three').Group
   const History: typeof import('lucide-react').History
   const HistoryIcon: typeof import('lucide-react').HistoryIcon
   const Home: typeof import('lucide-react').Home
   const HomeIcon: typeof import('lucide-react').HomeIcon
+  const Html: typeof import('@react-three/drei').Html
   const Hydrate: typeof import('@tanstack/react-query').Hydrate
   const Info: typeof import('lucide-react').Info
   const InfoIcon: typeof import('lucide-react').InfoIcon
@@ -193,6 +198,7 @@ declare global {
   const LCalendar: typeof import('lucide-react').Calendar
   const Label: typeof import('../components/ui/label').Label
   const LazyLoad: typeof import('../shared/LazyLoad').default
+  const Leva: typeof import('leva').Leva
   const Link: typeof import('@tanstack/react-router').Link
   const Linkedin: typeof import('lucide-react').Linkedin
   const LinkedinIcon: typeof import('lucide-react').LinkedinIcon
@@ -206,6 +212,7 @@ declare global {
   const MailIcon: typeof import('lucide-react').MailIcon
   const MapPin: typeof import('lucide-react').MapPin
   const MapPinIcon: typeof import('lucide-react').MapPinIcon
+  const MathUtils: typeof import('three').MathUtils
   const MessageCircle: typeof import('lucide-react').MessageCircle
   const MessageCircleIcon: typeof import('lucide-react').MessageCircleIcon
   const MessageSquare: typeof import('lucide-react').MessageSquare
@@ -218,6 +225,8 @@ declare global {
   const MoreVerticalIcon: typeof import('lucide-react').MoreVerticalIcon
   const Navigation: typeof import('lucide-react').Navigation
   const NavigationIcon: typeof import('lucide-react').NavigationIcon
+  const Object3D: typeof import('three').Object3D
+  const OrbitControls: typeof import('@react-three/drei').OrbitControls
   const Package: typeof import('lucide-react').Package
   const PackageIcon: typeof import('lucide-react').PackageIcon
   const Paperclip: typeof import('lucide-react').Paperclip
@@ -267,6 +276,7 @@ declare global {
   const SettingsIcon: typeof import('lucide-react').SettingsIcon
   const Shield: typeof import('lucide-react').Shield
   const ShieldIcon: typeof import('lucide-react').ShieldIcon
+  const SkeletonUtils: typeof import('three-stdlib').SkeletonUtils
   const Spinner: typeof import('../components/ui/spinner').Spinner
   const Star: typeof import('lucide-react').Star
   const StarHalf: typeof import('lucide-react').StarHalf
@@ -315,6 +325,8 @@ declare global {
   const UserXIcon: typeof import('lucide-react').UserXIcon
   const Users: typeof import('lucide-react').Users
   const UsersIcon: typeof import('lucide-react').UsersIcon
+  const VISEMES: typeof import('wawa-lipsync').VISEMES
+  const Vector3: typeof import('three').Vector3
   const X: typeof import('lucide-react').X
   const XCircle: typeof import('lucide-react').XCircle
   const XCircleIcon: typeof import('lucide-react').XCircleIcon
@@ -386,18 +398,23 @@ declare global {
   const uniqBy: typeof import('lodash-es').uniqBy
   const use: typeof import('react').use
   const useActionState: typeof import('react').useActionState
+  const useAnimations: typeof import('@react-three/drei').useAnimations
   const useCallback: typeof import('react').useCallback
   const useContext: typeof import('react').useContext
   const useController: typeof import('react-hook-form').useController
+  const useControls: typeof import('leva').useControls
   const useDebugValue: typeof import('react').useDebugValue
   const useDeferredValue: typeof import('react').useDeferredValue
   const useEffect: typeof import('react').useEffect
   const useEffectEvent: typeof import('react').useEffectEvent
+  const useFBX: typeof import('@react-three/drei').useFBX
   const useFieldArray: typeof import('react-hook-form').useFieldArray
   const useForm: typeof import('react-hook-form').useForm
   const useFormContext: typeof import('react-hook-form').useFormContext
   const useFormField: typeof import('../components/ui/form').useFormField
   const useFormState: typeof import('react-hook-form').useFormState
+  const useFrame: typeof import('@react-three/fiber').useFrame
+  const useGLTF: typeof import('@react-three/drei').useGLTF
   const useGSAP: typeof import('@gsap/react').useGSAP
   const useHydrate: typeof import('@tanstack/react-query').useHydrate
   const useId: typeof import('react').useId
@@ -416,6 +433,7 @@ declare global {
   const useNavigate: typeof import('@tanstack/react-router').useNavigate
   const useOptimistic: typeof import('react').useOptimistic
   const useParams: typeof import('@tanstack/react-router').useParams
+  const useProgress: typeof import('@react-three/drei').useProgress
   const useQuery: typeof import('@tanstack/react-query').useQuery
   const useQueryClient: typeof import('@tanstack/react-query').useQueryClient
   const useReducer: typeof import('react').useReducer
@@ -425,6 +443,7 @@ declare global {
   const useSearch: typeof import('@tanstack/react-router').useSearch
   const useState: typeof import('react').useState
   const useSyncExternalStore: typeof import('react').useSyncExternalStore
+  const useThree: typeof import('@react-three/fiber').useThree
   const useTransition: typeof import('react').useTransition
   const useTranslation: typeof import('react-i18next').useTranslation
   const useUnmount: typeof import('ahooks').useUnmount
@@ -435,6 +454,15 @@ declare global {
 }
 // for type re-export
 declare global {
+  // @ts-ignore
+  export type { VISEMES } from 'wawa-lipsync'
+  import('wawa-lipsync')
+  // @ts-ignore
+  export type { AnimationClip, Group, Object3D } from 'three'
+  import('three')
+  // @ts-ignore
+  export type { GLTF } from 'three-stdlib'
+  import('three-stdlib')
   // @ts-ignore
   export type { FieldErrors, Control, RegisterOptions, UseFormGetValues, UseFormReturn, FieldValues, FieldArrayWithId, UseFormSetValue, UseFormSetError, UseFormHandleSubmit } from 'react-hook-form'
   import('react-hook-form')

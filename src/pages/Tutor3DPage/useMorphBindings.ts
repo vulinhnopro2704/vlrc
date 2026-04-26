@@ -1,5 +1,3 @@
-import { useEffect, useRef } from 'react';
-import type { Object3D, Group } from 'three';
 import { Tutor3DFacialExpression } from '@/enums/tutor-3d';
 import {
   createEmptyExpressionBindings,
@@ -10,7 +8,6 @@ import {
   FACIAL_EXPRESSION_TARGETS,
   VISEME_TO_MORPH_TARGET
 } from '@/constants/moded-3d-config';
-import type { VISEMES } from 'wawa-lipsync';
 
 export const useMorphBindings = (avatarScene: Group | null) => {
   const visemeBindingsRef = useRef(createEmptyVisemeBindings());

@@ -8,7 +8,7 @@ export const initialState: Tutor3DState = {
   expressionIntensity: 1,
   visemeStrength: 1,
   visemeSmoothing: 16,
-  selectedAnimation: Tutor3DAnimation.Talking0,
+  selectedAnimation: Tutor3DAnimation.Idle,
   selectedExpression: Tutor3DFacialExpression.Smile,
   isControlPanelOpen: true
 };

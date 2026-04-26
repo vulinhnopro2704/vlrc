@@ -1,16 +1,12 @@
-import { useRef, type FC } from 'react';
-import { Environment, OrbitControls } from '@react-three/drei';
 import { useTutor3DStore } from '@/stores/tutor-3d';
-import { useAvatarAnimations } from './hooks/useAvatarAnimations';
-import { useMorphBindings } from './hooks/useMorphBindings';
-import { useAvatarController } from './hooks/useAvatarController';
-import { useCameraFollow } from './hooks/useCameraFollow';
+import { useAvatarAnimations } from './useAvatarAnimations';
+import { useMorphBindings } from './useMorphBindings';
+import { useAvatarController } from './useAvatarController';
+import { useCameraFollow } from './useCameraFollow';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
-import type { Group } from 'three';
-import type { VISEMES } from 'wawa-lipsync';
 
 const TutorAvatarRig: FC<{
-  liveVisemeRef: React.MutableRefObject<VISEMES>;
+  liveVisemeRef: React.RefObject<VISEMES>;
   isPlaying: boolean;
 }> = ({ liveVisemeRef, isPlaying }) => {
   const groupRef = useRef<Group>(null);
