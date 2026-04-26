@@ -42,7 +42,7 @@ const Tutor3DPage: FC = () => {
   const cameraDistance = useTutor3DStore(s => s.cameraDistance);
   const { setSelectedAnimation, setSelectedExpression } = useTutor3DStore(s => s.actions);
 
-  const { isPlaying, liveVisemeRef, playAudioFromResponse, stopPlayback } =
+  const { isPlaying, liveVisemeRef, playAudioFromResponse } =
     useTutor3DLipsync();
 
   const createSessionMutation = useMutation({
