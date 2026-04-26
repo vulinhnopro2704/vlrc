@@ -77,19 +77,21 @@ const apiClient = ky.create({
               isRefreshing = false;
               processQueue(null);
 
-              return ky(request);
+              return ky(request.url, _options);
             } catch (err) {
               isRefreshing = false;
               processQueue(err);
+              
               if (typeof window !== 'undefined') {
-                window.location.href = '/login';
+                window.dispatchEvent(new CustomEvent('auth:unauthorized'));
               }
+              
               throw err;
             }
           } else {
             return new Promise((resolve, reject) => {
               failedQueue.push({
-                resolve: () => resolve(ky(request)),
+                resolve: () => resolve(ky(request.url, _options)),
                 reject: err => reject(err)
               });
             });
