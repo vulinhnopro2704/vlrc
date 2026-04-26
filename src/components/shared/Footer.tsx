@@ -37,8 +37,11 @@ export const Footer = () => {
           </div>
         </div>
         
-        <div className="mt-12 border-t pt-8 text-center text-muted-foreground dark:border-white/10">
-          {t('copyright')}
+        <div className="mt-12 border-t pt-8 text-center text-muted-foreground dark:border-white/10 flex flex-col items-center gap-2">
+          <span>{t('copyright')}</span>
+          <span className="text-sm opacity-80">
+            Voice by <a href="https://elevenlabs.io" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors hover:underline underline-offset-2">elevenlabs.io</a>
+          </span>
         </div>
       </div>
     </footer>

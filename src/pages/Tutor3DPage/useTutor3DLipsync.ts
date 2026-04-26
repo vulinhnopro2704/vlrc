@@ -1,17 +1,14 @@
+import { useRef, useState, useEffect } from 'react';
 import { Lipsync, VISEMES } from 'wawa-lipsync';
 
 const useTutor3DLipsync = () => {
-  const [audioFile, setAudioFile] = useState<File | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const lipsyncRef = useRef<Lipsync | null>(null);
   const rafRef = useRef<number | null>(null);
-  const objectUrlRef = useRef<string>('');
   const liveVisemeRef = useRef<VISEMES>(VISEMES.sil);
   const playbackTokenRef = useRef<number>(0);
-
-  const selectedFileName = audioFile?.name ?? '';
 
   const stopVisemeLoop = () => {
     if (rafRef.current !== null) {
@@ -45,13 +42,16 @@ const useTutor3DLipsync = () => {
     rafRef.current = requestAnimationFrame(() => runVisemeLoop(token));
   };
 
-  const playAudio = () => {
+  const playAudioFromResponse = (audioSrc: string) => {
+    stopPlayback();
+
     const audio = audioRef.current;
     const manager = lipsyncRef.current;
 
-    if (!audio || !manager || !audio.src) return;
+    if (!audio || !manager) return;
 
-    stopPlayback();
+    audio.src = audioSrc;
+    audio.load();
 
     const currentToken = playbackTokenRef.current;
     manager.connectAudio(audio);
@@ -77,59 +77,33 @@ const useTutor3DLipsync = () => {
       });
   };
 
-  useMount(() => {
+  useEffect(() => {
     const audio = new Audio();
     audio.preload = 'auto';
 
     audioRef.current = audio;
     lipsyncRef.current = new Lipsync();
-  });
 
-  useEffect(() => {
-    if (!audioRef.current) return;
-
-    if (objectUrlRef.current) {
-      URL.revokeObjectURL(objectUrlRef.current);
-      objectUrlRef.current = '';
-    }
-
-    if (!audioFile) {
-      audioRef.current.src = '';
+    return () => {
+      playbackTokenRef.current += 1;
       stopPlayback();
-      return;
-    }
 
-    const url = URL.createObjectURL(audioFile);
-    objectUrlRef.current = url;
-    audioRef.current.src = url;
-    audioRef.current.load();
-    stopPlayback();
-  }, [audioFile, stopPlayback]);
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+        audioRef.current.onended = null;
+      }
 
-  useUnmount(() => {
-    playbackTokenRef.current += 1;
-    stopPlayback();
-
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.src = '';
-      audioRef.current.onended = null;
-    }
-
-    if (objectUrlRef.current) {
-      URL.revokeObjectURL(objectUrlRef.current);
-    }
-
-    lipsyncRef.current = null;
-  });
+      lipsyncRef.current = null;
+    };
+  // eslint-disable-next-deps
+  }, []);
 
   return {
     isPlaying,
-    selectedFileName,
     liveVisemeRef,
-    playAudio,
-    stopPlayback,
-    setAudioFile
+    playAudioFromResponse,
+    stopPlayback
   };
 };
 

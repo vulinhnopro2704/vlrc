@@ -2,7 +2,7 @@ import { Tutor3DAnimation, Tutor3DFacialExpression } from '@/enums/tutor-3d';
 import type { Tutor3DState } from './types';
 
 export const initialState: Tutor3DState = {
-  autoRotate: true,
+  autoRotate: false,
   cameraDistance: 3.2,
   animationFadeDuration: 0.25,
   expressionIntensity: 1,

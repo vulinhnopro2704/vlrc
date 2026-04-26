@@ -60,12 +60,6 @@ declare namespace Tutor3DManagement {
     shortReason?: string;
   };
 
-  type TutorLipSyncCue = {
-    start: number;
-    end: number;
-    value: string;
-  };
-
   type TutorInteractionAudio = {
     url: string | null;
     mimeType: string;
@@ -87,9 +81,7 @@ declare namespace Tutor3DManagement {
     animationState: string;
     facialExpression: string;
     animation: string;
-    lipSync: {
-      mouthCues: TutorLipSyncCue[];
-    };
+
     correction: TutorCorrection;
     audio: TutorInteractionAudio;
     transcript?: TutorTranscript;

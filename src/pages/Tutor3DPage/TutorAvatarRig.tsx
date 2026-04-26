@@ -24,7 +24,7 @@ const TutorAvatarRig: FC<{
   const visemeSmoothing = useTutor3DStore(s => s.visemeSmoothing);
   const selectedAnimation = useTutor3DStore(s => s.selectedAnimation);
   const selectedExpression = useTutor3DStore(s => s.selectedExpression);
-  const setCameraDistance = useTutor3DStore(s => s.setCameraDistance);
+  const { setCameraDistance } = useTutor3DStore(s => s.actions);
 
   const { avatarScene } = useAvatarAnimations(selectedAnimation, animationFadeDuration);
   const { visemeBindingsRef, expressionBindingsRef, faceAnchorRef } = useMorphBindings(avatarScene);

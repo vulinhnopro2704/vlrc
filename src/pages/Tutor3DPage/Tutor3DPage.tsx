@@ -1,7 +1,6 @@
 import { Suspense, useState, type FC } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { useFBX, useGLTF } from '@react-three/drei';
-import { Tutor3DAnimation } from '@/enums/tutor-3d';
 import SceneLoader from './SceneLoader';
 import TutorAvatarRig from './TutorAvatarRig';
 import useTutor3DLipsync from './useTutor3DLipsync';
@@ -15,10 +14,10 @@ import { Tutor3DActionDock } from './components/Tutor3DActionDock';
 import { Tutor3DChatPanel } from './components/Tutor3DChatPanel';
 import { Tutor3DDebugControls } from './components/Tutor3DDebugControls';
 import { useTutor3DStore } from '@/stores/tutor-3d';
+import { Tutor3DAnimation, Tutor3DFacialExpression } from '@/enums/tutor-3d';
 import {
   createTutorSession,
   interactTutorSession,
-  interactVoiceTutorSession
 } from '@/api/tutor-3d-management';
 import { getErrorMessage } from '@/api/api-error';
 
@@ -27,67 +26,6 @@ const DEFAULT_TUTOR_SESSION_PAYLOAD: Tutor3DManagement.CreateTutorSessionPayload
   focusTopics: ['daily_conversation', 'pronunciation']
 };
 
-const fileToBase64 = async (file: File) => {
-  const dataUrl = await new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        resolve(reader.result);
-        return;
-      }
-
-      reject(new Error('Invalid audio payload format'));
-    };
-
-    reader.onerror = () => reject(new Error('Failed to read audio payload'));
-    reader.readAsDataURL(file);
-  });
-
-  const payload = dataUrl.split(',')[1];
-  if (!payload) {
-    throw new Error('Invalid audio payload format');
-  }
-
-  return payload;
-};
-
-const dataUrlToAudioFile = (dataUrl: string, fileName: string) => {
-  const [meta, data] = dataUrl.split(',');
-  if (!meta || !data) {
-    return null;
-  }
-
-  const mimeMatch = /data:(.*?);base64/.exec(meta);
-  const mimeType = mimeMatch?.[1] ?? 'audio/mpeg';
-
-  const binary = window.atob(data);
-  const length = binary.length;
-  const bytes = new Uint8Array(length);
-  for (let index = 0; index < length; index += 1) {
-    bytes[index] = binary.charCodeAt(index);
-  }
-
-  return new File([bytes], fileName, { type: mimeType });
-};
-
-const toSupportedMimeType = (
-  mimeType: string
-): Tutor3DManagement.InteractVoiceTutorPayload['mimeType'] => {
-  const allowedMimeTypes: NonNullable<Tutor3DManagement.InteractVoiceTutorPayload['mimeType']>[] = [
-    'audio/webm',
-    'audio/wav',
-    'audio/mpeg',
-    'audio/mp4',
-    'audio/ogg'
-  ];
-
-  if (allowedMimeTypes.includes(mimeType as (typeof allowedMimeTypes)[number])) {
-    return mimeType as (typeof allowedMimeTypes)[number];
-  }
-
-  return 'audio/webm';
-};
 
 const Tutor3DPage: FC = () => {
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -101,8 +39,9 @@ const Tutor3DPage: FC = () => {
   ]);
 
   const cameraDistance = useTutor3DStore(s => s.cameraDistance);
+  const { setSelectedAnimation, setSelectedExpression } = useTutor3DStore(s => s.actions);
 
-  const { isPlaying, selectedFileName, liveVisemeRef, playAudio, stopPlayback, setAudioFile } =
+  const { isPlaying, liveVisemeRef, playAudioFromResponse, stopPlayback } =
     useTutor3DLipsync();
 
   const createSessionMutation = useMutation({
@@ -122,28 +61,19 @@ const Tutor3DPage: FC = () => {
     }) => interactTutorSession(targetSessionId, payload)
   });
 
-  const interactVoiceMutation = useMutation({
-    mutationFn: ({
-      targetSessionId,
-      payload
-    }: {
-      targetSessionId: string;
-      payload: Tutor3DManagement.InteractVoiceTutorPayload;
-    }) => interactVoiceTutorSession(targetSessionId, payload)
-  });
-
   const appendTutorMessage = (text: string) => {
     setChatMessages(prev => [...prev, { id: Date.now(), role: 'Tutor', text }]);
   };
 
-  const hydrateAudioFromResponse = (response: Tutor3DManagement.TutorInteractionResponse) => {
-    if (!response.audio.url || response.audio.status !== 'completed') {
-      return;
+  const syncAvatarResponse = (response: Tutor3DManagement.TutorInteractionResponse) => {
+    if (response.animation) {
+      setSelectedAnimation(response.animation as Tutor3DAnimation);
     }
-
-    const outputFile = dataUrlToAudioFile(response.audio.url, `tutor-${response.turnId}.mp3`);
-    if (outputFile) {
-      setAudioFile(outputFile);
+    if (response.facialExpression) {
+      setSelectedExpression(response.facialExpression as Tutor3DFacialExpression);
+    }
+    if (response.audio?.url && response.audio.status === 'completed') {
+      playAudioFromResponse(response.audio.url);
     }
   };
 
@@ -179,51 +109,16 @@ const Tutor3DPage: FC = () => {
       });
 
       appendTutorMessage(response.tutorText);
-      hydrateAudioFromResponse(response);
+      syncAvatarResponse(response);
     } catch (error) {
       appendTutorMessage('I could not answer right now. Please try again in a moment.');
       toast.error(getErrorMessage(error, 'Failed to send tutor message'));
     }
   };
 
-  const handleAudioUpload = async (file: File) => {
-    setChatMessages(prev => [
-      ...prev,
-      {
-        id: Date.now(),
-        role: 'You',
-        text: `Uploaded audio: ${file.name}`
-      }
-    ]);
-
-    try {
-      const targetSessionId = await ensureSession();
-      const audioBase64 = await fileToBase64(file);
-      const response = await interactVoiceMutation.mutateAsync({
-        targetSessionId,
-        payload: {
-          audioBase64,
-          mimeType: toSupportedMimeType(file.type),
-          languageCode: 'eng',
-          clientTurnId: `voice-${Date.now()}`
-        }
-      });
-
-      const transcriptText = response.transcript?.text
-        ? `Transcript: ${response.transcript.text}`
-        : 'Transcript processed.';
-      appendTutorMessage(`${transcriptText}\n${response.tutorText}`);
-      hydrateAudioFromResponse(response);
-    } catch (error) {
-      appendTutorMessage('I could not process your voice input. Please upload again.');
-      toast.error(getErrorMessage(error, 'Failed to process voice interaction'));
-    }
-  };
-
   const isGenerating =
     createSessionMutation.isPending ||
-    interactTextMutation.isPending ||
-    interactVoiceMutation.isPending;
+    interactTextMutation.isPending;
 
   return (
     <section className='relative h-[calc(100vh-4rem)] w-full overflow-hidden bg-slate-950'>
@@ -243,19 +138,12 @@ const Tutor3DPage: FC = () => {
 
       <Tutor3DHeader liveVisemeRef={liveVisemeRef} />
 
-      <Tutor3DActionDock
-        selectedFileName={selectedFileName}
-        playAudio={playAudio}
-        stopPlayback={stopPlayback}
-      />
+      <Tutor3DActionDock />
 
       <Tutor3DChatPanel
         chatMessages={chatMessages}
         onSendMessage={handleSendMessage}
-        setAudioFile={setAudioFile}
-        onAudioSelected={handleAudioUpload}
         isSending={isGenerating}
-        selectedFileName={selectedFileName}
       />
     </section>
   );

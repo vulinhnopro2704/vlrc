@@ -8,7 +8,7 @@ export const Tutor3DHeader: FC<{
   liveVisemeRef: React.MutableRefObject<VISEMES>;
 }> = ({ liveVisemeRef }) => {
   const isControlPanelOpen = useTutor3DStore(s => s.isControlPanelOpen);
-  const setIsControlPanelOpen = useTutor3DStore(s => s.setIsControlPanelOpen);
+  const { setIsControlPanelOpen } = useTutor3DStore(s => s.actions);
   const selectedAnimation = useTutor3DStore(s => s.selectedAnimation);
 
   return (

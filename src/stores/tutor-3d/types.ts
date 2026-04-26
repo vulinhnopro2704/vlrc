@@ -22,4 +22,6 @@ export interface Tutor3DActions {
   setIsControlPanelOpen: (value: boolean | ((prev: boolean) => boolean)) => void;
 }
 
-export type Tutor3DStore = Tutor3DState & Tutor3DActions;
+export interface Tutor3DStore extends Tutor3DState {
+  actions: Tutor3DActions;
+}

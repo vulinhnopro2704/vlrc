@@ -19,6 +19,8 @@ const getAvatarFallback = (name?: string) => {
 export const Header = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const router = useRouter();
+  const currentPath = router.state.location.pathname;
   const queryClient = useQueryClient();
   const { data: me } = useAuthSession();
   const [isDark, setIsDark] = useState(false);
@@ -110,9 +112,9 @@ export const Header = () => {
               {appNavItems.map(item => (
                 <Button
                   key={item.key}
-                  variant='ghost'
+                  variant={currentPath.startsWith(item.to) ? 'secondary' : 'ghost'}
                   size='sm'
-                  className='h-8 px-3 text-xs font-semibold'
+                  className={currentPath.startsWith(item.to) ? 'bg-primary/10 text-primary hover:bg-primary/20 h-8 px-3 text-xs font-semibold' : 'h-8 px-3 text-xs font-semibold text-muted-foreground'}
                   onClick={() => navigate({ to: item.to })}>
                   {item.label}
                 </Button>
@@ -151,8 +153,8 @@ export const Header = () => {
                     {mobileNavItems.map(item => (
                       <Button
                         key={item.key}
-                        variant='outline'
-                        className='h-10 justify-start rounded-xl px-3 text-sm font-semibold'
+                        variant={currentPath.startsWith(item.to) ? 'secondary' : 'outline'}
+                        className={currentPath.startsWith(item.to) ? 'bg-primary/10 text-primary border-primary/20 h-10 justify-start rounded-xl px-3 text-sm font-semibold' : 'h-10 justify-start rounded-xl px-3 text-sm font-semibold text-muted-foreground'}
                         onClick={() => {
                           setIsMobileNavOpen(false);
                           navigate({ to: item.to });

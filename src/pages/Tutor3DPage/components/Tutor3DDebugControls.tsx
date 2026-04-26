@@ -6,23 +6,26 @@ import { ANIMATION_OPTIONS, EXPRESSION_OPTIONS } from '@/constants/moded-3d-conf
 
 export const Tutor3DDebugControls: FC = () => {
   const autoRotate = useTutor3DStore(s => s.autoRotate);
-  const setAutoRotate = useTutor3DStore(s => s.setAutoRotate);
   const cameraDistance = useTutor3DStore(s => s.cameraDistance);
-  const setCameraDistance = useTutor3DStore(s => s.setCameraDistance);
   const animationFadeDuration = useTutor3DStore(s => s.animationFadeDuration);
-  const setAnimationFadeDuration = useTutor3DStore(s => s.setAnimationFadeDuration);
   const expressionIntensity = useTutor3DStore(s => s.expressionIntensity);
-  const setExpressionIntensity = useTutor3DStore(s => s.setExpressionIntensity);
   const visemeStrength = useTutor3DStore(s => s.visemeStrength);
-  const setVisemeStrength = useTutor3DStore(s => s.setVisemeStrength);
   const visemeSmoothing = useTutor3DStore(s => s.visemeSmoothing);
-  const setVisemeSmoothing = useTutor3DStore(s => s.setVisemeSmoothing);
   const selectedAnimation = useTutor3DStore(s => s.selectedAnimation);
-  const setSelectedAnimation = useTutor3DStore(s => s.setSelectedAnimation);
   const selectedExpression = useTutor3DStore(s => s.selectedExpression);
-  const setSelectedExpression = useTutor3DStore(s => s.setSelectedExpression);
   const isControlPanelOpen = useTutor3DStore(s => s.isControlPanelOpen);
-  const setIsControlPanelOpen = useTutor3DStore(s => s.setIsControlPanelOpen);
+
+  const {
+    setAutoRotate,
+    setCameraDistance,
+    setAnimationFadeDuration,
+    setExpressionIntensity,
+    setVisemeStrength,
+    setVisemeSmoothing,
+    setSelectedAnimation,
+    setSelectedExpression,
+    setIsControlPanelOpen
+  } = useTutor3DStore(s => s.actions);
 
   const [, setLevaControls] = useControls(
     'Tutor Debug',

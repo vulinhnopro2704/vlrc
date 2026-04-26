@@ -1,5 +1,5 @@
-import { useState, useRef, type FC } from 'react';
-import { MessageCircle, UploadCloud } from 'lucide-react';
+import { useState, type FC } from 'react';
+import { MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
@@ -7,37 +7,15 @@ import { cn } from '@/lib/utils';
 export const Tutor3DChatPanel: FC<{
   chatMessages: Tutor3DManagement.ChatMessage[];
   onSendMessage: (text: string) => Promise<void> | void;
-  setAudioFile: (file: File | null) => void;
-  onAudioSelected?: (file: File) => Promise<void> | void;
   isSending?: boolean;
-  selectedFileName: string;
-}> = ({
-  chatMessages,
-  onSendMessage,
-  setAudioFile,
-  onAudioSelected,
-  isSending = false,
-  selectedFileName
-}) => {
+}> = ({ chatMessages, onSendMessage, isSending = false }) => {
   const [chatInput, setChatInput] = useState('');
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSendMessage = () => {
     const trimmed = chatInput.trim();
     if (!trimmed) return;
     setChatInput('');
     void onSendMessage(trimmed);
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] || null;
-    setAudioFile(file);
-
-    if (file && onAudioSelected) {
-      void onAudioSelected(file);
-    }
-
-    event.currentTarget.value = '';
   };
 
   return (
@@ -60,6 +38,12 @@ export const Tutor3DChatPanel: FC<{
         ))}
       </div>
 
+      <div className="pointer-events-auto absolute bottom-20 left-1/2 flex w-[min(94vw,760px)] -translate-x-1/2 justify-end px-2">
+        <span className="text-[10px] text-white/60 bg-black/40 px-2 py-1 rounded-md backdrop-blur-md shadow-sm border border-white/10">
+          Voice by <a href="https://elevenlabs.io" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors underline underline-offset-2">elevenlabs.io</a>
+        </span>
+      </div>
+
       <div className='pointer-events-auto absolute bottom-4 left-1/2 flex w-[min(94vw,760px)] -translate-x-1/2 items-center gap-2 rounded-2xl border border-white/20 bg-slate-900/72 p-2 shadow-2xl backdrop-blur-xl'>
         <div className='grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/10 text-slate-100'>
           <MessageCircle size={18} />
@@ -69,6 +53,7 @@ export const Tutor3DChatPanel: FC<{
           onChange={event => setChatInput(event.target.value)}
           onKeyDown={event => {
             if (event.key !== 'Enter') return;
+            if (event.nativeEvent.isComposing || event.keyCode === 229) return;
             event.preventDefault();
             handleSendMessage();
           }}
@@ -76,22 +61,6 @@ export const Tutor3DChatPanel: FC<{
           disabled={isSending}
           className='mr-2 h-10 flex-1 border-white/20 bg-white/10 text-slate-100 placeholder:text-slate-300/70'
         />
-
-        <input
-          type='file'
-          accept='audio/*'
-          className='hidden'
-          ref={fileInputRef}
-          onChange={handleFileChange}
-        />
-        <Button
-          variant='outline'
-          title={selectedFileName || 'Upload Audio'}
-          onClick={() => fileInputRef.current?.click()}
-          className='h-10 border-white/20 bg-white/10 text-slate-100 hover:bg-white/20 hover:text-white shrink-0 px-3'>
-          <UploadCloud size={18} className='mr-2' />
-          <span className='max-w-25 truncate'>{selectedFileName || 'Audio'}</span>
-        </Button>
         <Button
           onClick={handleSendMessage}
           disabled={!chatInput.trim() || isSending}
