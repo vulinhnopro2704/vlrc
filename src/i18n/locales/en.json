@@ -489,5 +489,21 @@
   "dictionary_selection_error": "Unable to look up this selection right now.",
   "dictionary_selection_empty": "No dictionary entry found for this selection.",
   "dictionary_selection_example_label": "Example",
-  "dictionary_selection_saved": "Saved to notebook"
+  "dictionary_selection_saved": "Saved to notebook",
+  "roleplay_title": "Role Play",
+  "roleplay_description": "Practice English conversation through realistic role-play scenarios",
+  "roleplay_create_scenario": "Create Scenario",
+  "roleplay_free_talk": "Free Talk",
+  "roleplay_generate_success": "Scenario generated successfully!",
+  "roleplay_generate_error": "Failed to generate scenario",
+  "roleplay_modal_title": "Generate AI Scenario",
+  "roleplay_modal_desc": "Describe the situation you want to practice, and the AI will generate a tailored role-play scenario.",
+  "roleplay_topic_label": "Topic / Situation",
+  "roleplay_topic_placeholder": "E.g., Ordering coffee at a cafe",
+  "roleplay_level_label": "Level",
+  "roleplay_level_placeholder": "E.g., A2",
+  "roleplay_submit": "Generate",
+  "roleplay_scenario_level": "Level: {{level}}",
+  "roleplay_scenario_topic": "Topic: {{topic}}",
+  "roleplay_scenario_start": "Start"
 }

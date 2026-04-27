@@ -488,5 +488,21 @@
   "dictionary_selection_error": "Hiện chưa thể tra từ cho vùng bôi đen này.",
   "dictionary_selection_empty": "Không tìm thấy mục từ cho vùng bôi đen này.",
   "dictionary_selection_example_label": "Ví dụ",
-  "dictionary_selection_saved": "Đã lưu vào sổ tay"
+  "dictionary_selection_saved": "Đã lưu vào sổ tay",
+  "roleplay_title": "Role Play",
+  "roleplay_description": "Luyện tập tiếng Anh giao tiếp qua các tình huống nhập vai chân thực",
+  "roleplay_create_scenario": "Tạo kịch bản",
+  "roleplay_free_talk": "Nói chuyện tự do",
+  "roleplay_generate_success": "Tạo kịch bản thành công!",
+  "roleplay_generate_error": "Lỗi khi tạo kịch bản",
+  "roleplay_modal_title": "Tạo kịch bản AI",
+  "roleplay_modal_desc": "Mô tả tình huống bạn muốn luyện tập, AI sẽ tự động tạo ra một kịch bản giao tiếp phù hợp.",
+  "roleplay_topic_label": "Chủ đề / Tình huống",
+  "roleplay_topic_placeholder": "Ví dụ: Gọi món ở quán cà phê",
+  "roleplay_level_label": "Trình độ",
+  "roleplay_level_placeholder": "Ví dụ: A2",
+  "roleplay_submit": "Tạo kịch bản",
+  "roleplay_scenario_level": "Trình độ: {{level}}",
+  "roleplay_scenario_topic": "Chủ đề: {{topic}}",
+  "roleplay_scenario_start": "Bắt đầu"
 }

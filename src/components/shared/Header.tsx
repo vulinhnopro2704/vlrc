@@ -2,6 +2,7 @@ import Icons from '@/components/Icons';
 import { logout } from '@/api/auth-management';
 import { AUTH_ME_QUERY_KEY, useAuthSession } from '@/hooks/useAuthSession';
 import { toast } from '@/shared';
+import { useRouterState } from '@tanstack/react-router';
 
 const getAvatarFallback = (name?: string) => {
   if (!name || !name.trim()) {
@@ -19,8 +20,7 @@ const getAvatarFallback = (name?: string) => {
 export const Header = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const router = useRouter();
-  const currentPath = router.state.location.pathname;
+  const currentPath = useRouterState({ select: s => s.location.pathname });
   const queryClient = useQueryClient();
   const { data: me } = useAuthSession();
   const [isDark, setIsDark] = useState(false);
@@ -34,7 +34,8 @@ export const Header = () => {
         { key: 'courses', label: t('learning_courses'), to: '/courses' as const },
         { key: 'notebook', label: t('header_notebook_dictionary'), to: '/notebook' as const },
         { key: 'practice', label: t('header_practice'), to: '/practice' as const },
-        { key: 'tutor_3d', label: t('header_tutor_3d'), to: '/tutor-3d' as const }
+        { key: 'tutor_3d', label: t('header_tutor_3d'), to: '/tutor-3d' as const },
+        { key: 'role_play', label: t('roleplay_title'), to: '/role-play' as const }
       ]
     : [];
   const mobileNavItems = me
