@@ -64,7 +64,8 @@ const apiClient = ky.create({
             isRefreshing = true;
 
             try {
-              const refreshResponse = await fetch(`${API_BASE_URL}/auth/refresh`, {
+              const refreshPath = `${API_BASE_URL}/auth/refresh`.replace(/\/\/+/g, '/');
+              const refreshResponse = await fetch(refreshPath, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include'
