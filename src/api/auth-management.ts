@@ -24,4 +24,19 @@ export const forgotPassword = (payload: Auth.ForgotPasswordPayload) =>
 export const resetPassword = (payload: Auth.ResetPasswordPayload) =>
   apiClient.post('auth/reset-password', { json: payload }).json<Auth.MessageResponse>();
 
-export const getGoogleOAuthStartUrl = () => `${import.meta.env.VITE_BACKEND_API_URL}/auth/google`;
+function cleanPathname(urlString: string) {
+  try {
+    const url = new URL(urlString);
+    // Chỉ replace // thành / ở phần pathname
+    url.pathname = url.pathname.replace(/\/+/g, '/');
+    return url.toString();
+  } catch (e) {
+    // Fallback nếu chuỗi không phải là 1 URL hợp lệ
+    return urlString.replace(/\/+/g, '/');
+  }
+}
+
+export const getGoogleOAuthStartUrl = () => {
+  const url = `${import.meta.env.VITE_BACKEND_API_URL}/auth/google`;
+  return cleanPathname(url);
+};
