@@ -8,6 +8,7 @@ import AnimatedLogo from '@/components/AnimatedLogo';
 import { register as registerApi } from '@/api/auth-management';
 import { toast } from '@/shared';
 import { AUTH_ME_QUERY_KEY } from '@/hooks/useAuthSession';
+import { AuthFormSkeleton } from '@/components/AuthSkeletons';
 
 const RegisterPage = () => {
   const { t } = useTranslation();
@@ -83,6 +84,10 @@ const RegisterPage = () => {
   };
 
   const isSubmitting = registerMutation.isPending;
+
+  if (isSubmitting) {
+    return <AuthFormSkeleton />;
+  }
 
   return (
     <div className='min-h-screen flex items-center justify-center p-4'>

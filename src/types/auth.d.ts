@@ -1,21 +1,15 @@
 declare namespace Auth {
-  // ── Enums ──
-
   type Role = 'USER' | 'ADMIN' | 'CONTENT_CREATOR';
-
-  // ── Entities ──
 
   interface UserProfile extends App.Base {
     email: string;
     name: string;
     avatar?: string;
     role: Role;
+    emailVerifiedAt?: string | null;
   }
 
-  // ── Auth payloads (reuse form types via Omit) ──
-
   type LoginPayload = Omit<LoginFormData, 'rememberMe'>;
-
   type RegisterPayload = Omit<RegisterFormData, 'confirmPassword'>;
 
   interface AuthTokens {
@@ -27,7 +21,9 @@ declare namespace Auth {
     user: UserProfile;
   }
 
-  // ── User management payloads ──
+  interface MessageResponse {
+    message: string;
+  }
 
   type CreateUserPayload = Pick<UserProfile, 'email'> & {
     password: string;
@@ -41,8 +37,6 @@ declare namespace Auth {
     search?: string;
     role?: Role;
   }
-
-  // ── Form types (existing) ──
 
   interface LoginFormData {
     email: string;
@@ -59,5 +53,22 @@ declare namespace Auth {
 
   interface ForgotPasswordFormData {
     email: string;
+  }
+
+  interface VerifyEmailPayload {
+    token: string;
+  }
+
+  interface ResendVerificationPayload {
+    email: string;
+  }
+
+  interface ForgotPasswordPayload {
+    email: string;
+  }
+
+  interface ResetPasswordPayload {
+    token: string;
+    password: string;
   }
 }

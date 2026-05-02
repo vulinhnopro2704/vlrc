@@ -4,18 +4,13 @@ import LiquidBackground from '@/components/LiquidBackground';
 import AuthCard from '@/components/AuthCard';
 import ThemeToggle from '@/components/ThemeToggle';
 import AnimatedLogo from '@/components/AnimatedLogo';
+import { forgotPassword } from '@/api/auth-management';
+import { getErrorMessage } from '@/api/api-error';
+import { AuthFormSkeleton } from '@/components/AuthSkeletons';
 
 const ForgotPasswordPage = () => {
   const { t } = useTranslation();
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-
-  const formRef = useRef<HTMLFormElement>(null);
-  const titleRef = useRef<HTMLDivElement>(null);
-  const fieldsRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const footerRef = useRef<HTMLDivElement>(null);
-  const successRef = useRef<HTMLDivElement>(null);
 
   const { control, handleSubmit, getValues } = useForm<Auth.ForgotPasswordFormData>({
     defaultValues: {
@@ -23,58 +18,21 @@ const ForgotPasswordPage = () => {
     }
   });
 
-  useGSAP(
-    () => {
-      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-
-      tl.fromTo(titleRef.current, { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 })
-        .fromTo(
-          fieldsRef.current?.children || [],
-          { x: -30, opacity: 0 },
-          { x: 0, opacity: 1, duration: 0.4, stagger: 0.1 },
-          '-=0.2'
-        )
-        .fromTo(
-          buttonRef.current,
-          { y: 20, opacity: 0, scale: 0.95 },
-          { y: 0, opacity: 1, scale: 1, duration: 0.4 },
-          '-=0.1'
-        )
-        .fromTo(footerRef.current, { opacity: 0 }, { opacity: 1, duration: 0.3 }, '-=0.1');
+  const forgotMutation = useMutation({
+    mutationFn: forgotPassword,
+    onSuccess: () => {
+      setIsSuccess(true);
     },
-    { scope: formRef }
-  );
+    onError: error => toast.error(getErrorMessage(error, t('auth_reset_request_error')))
+  });
 
-  useGSAP(
-    () => {
-      if (isSuccess && successRef.current) {
-        gsap.fromTo(
-          successRef.current,
-          { scale: 0.8, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(1.7)' }
-        );
-      }
-    },
-    { dependencies: [isSuccess] }
-  );
-  // @ts-ignore
   const onSubmit = async (data: Auth.ForgotPasswordFormData) => {
-    setIsSubmitting(true);
-
-    if (buttonRef.current) {
-      gsap.to(buttonRef.current, {
-        scale: 0.98,
-        duration: 0.1,
-        yoyo: true,
-        repeat: 1
-      });
-    }
-
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setIsSuccess(true);
+    await forgotMutation.mutateAsync({ email: data.email });
   };
+
+  if (forgotMutation.isPending) {
+    return <AuthFormSkeleton />;
+  }
 
   return (
     <div className='min-h-screen flex items-center justify-center p-4'>
@@ -83,7 +41,7 @@ const ForgotPasswordPage = () => {
 
       <AuthCard>
         {isSuccess ? (
-          <div ref={successRef} className='text-center space-y-6 py-4'>
+          <div className='text-center space-y-6 py-4'>
             <div className='mx-auto w-16 h-16 rounded-full bg-linear-to-r from-primary to-accent text-primary-foreground flex items-center justify-center shadow-lg shadow-primary/30'>
               <Icons.CheckIcon className='w-8 h-8' />
             </div>
@@ -109,16 +67,14 @@ const ForgotPasswordPage = () => {
             </div>
           </div>
         ) : (
-          <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
-            {/* Logo & Title */}
-            <div ref={titleRef} className='text-center space-y-2'>
+          <form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
+            <div className='text-center space-y-2'>
               <AnimatedLogo className='flex justify-center mb-4' />
               <h1 className='text-2xl font-bold text-foreground'>{t('auth_forgot_title')}</h1>
               <p className='text-sm text-muted-foreground'>{t('auth_forgot_subtitle')}</p>
             </div>
 
-            {/* Form Fields */}
-            <div ref={fieldsRef} className='space-y-4'>
+            <div className='space-y-4'>
               <FormInput
                 control={control}
                 name='email'
@@ -128,15 +84,13 @@ const ForgotPasswordPage = () => {
               />
             </div>
 
-            {/* Submit Button */}
             <Button
-              ref={buttonRef}
               type='submit'
               variant='gradient'
               size='xl'
-              disabled={isSubmitting}
+              disabled={forgotMutation.isPending}
               className='w-full font-medium'>
-              {isSubmitting ? (
+              {forgotMutation.isPending ? (
                 <Icons.LoaderCircleIcon className='w-5 h-5 animate-spin' />
               ) : (
                 <>
@@ -146,8 +100,7 @@ const ForgotPasswordPage = () => {
               )}
             </Button>
 
-            {/* Footer */}
-            <div ref={footerRef} className='text-center'>
+            <div className='text-center'>
               <Link
                 to='/login'
                 className='inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-primary/80 transition-colors'>

@@ -5,13 +5,15 @@ import LiquidBackground from '@/components/LiquidBackground';
 import AuthCard from '@/components/AuthCard';
 import ThemeToggle from '@/components/ThemeToggle';
 import AnimatedLogo from '@/components/AnimatedLogo';
-import { login } from '@/api/auth-management';
+import { login, getGoogleOAuthStartUrl } from '@/api/auth-management';
 import { AUTH_ME_QUERY_KEY } from '@/hooks/useAuthSession';
+import { AuthFormSkeleton } from '@/components/AuthSkeletons';
 
 const LoginPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
   const formRef = useRef<HTMLFormElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
@@ -75,6 +77,10 @@ const LoginPage = () => {
 
   const isSubmitting = loginMutation.isPending;
 
+  if (isSubmitting) {
+    return <AuthFormSkeleton />;
+  }
+
   return (
     <div className='min-h-screen flex items-center justify-center p-4'>
       <LiquidBackground />
@@ -82,14 +88,12 @@ const LoginPage = () => {
 
       <AuthCard>
         <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
-          {/* Logo & Title */}
           <div ref={titleRef} className='text-center space-y-2'>
             <AnimatedLogo className='flex justify-center mb-4' />
             <h1 className='text-2xl font-bold text-foreground'>{t('auth_login_title')}</h1>
             <p className='text-sm text-muted-foreground'>{t('auth_login_subtitle')}</p>
           </div>
 
-          {/* Form Fields */}
           <div ref={fieldsRef} className='space-y-4'>
             <FormInput
               control={control}
@@ -117,7 +121,6 @@ const LoginPage = () => {
             </div>
           </div>
 
-          {/* Submit Button */}
           <Button
             ref={buttonRef}
             type='submit'
@@ -135,7 +138,6 @@ const LoginPage = () => {
             )}
           </Button>
 
-          {/* Footer */}
           <div ref={footerRef} className='text-center'>
             <p className='text-sm text-muted-foreground'>
               {t('auth_no_account')}{' '}
@@ -147,7 +149,6 @@ const LoginPage = () => {
             </p>
           </div>
 
-          {/* Social Login Divider */}
           <div className='relative'>
             <div className='absolute inset-0 flex items-center'>
               <div className='w-full border-t border-border' />
@@ -157,7 +158,6 @@ const LoginPage = () => {
             </div>
           </div>
 
-          {/* Social Buttons */}
           <div className='grid grid-cols-2 gap-3'>
             <Button
               type='button'
@@ -171,8 +171,17 @@ const LoginPage = () => {
               type='button'
               variant='outline'
               size='xl'
+              disabled={isGoogleLoading}
+              onClick={() => {
+                setIsGoogleLoading(true);
+                window.location.href = getGoogleOAuthStartUrl();
+              }}
               className='border-border/70 hover:bg-secondary/60'>
-              <Icons.Globe className='w-5 h-5 mr-2' />
+              {isGoogleLoading ? (
+                <Icons.LoaderCircleIcon className='w-5 h-5 animate-spin mr-2' />
+              ) : (
+                <Icons.Globe className='w-5 h-5 mr-2' />
+              )}
               Google
             </Button>
           </div>

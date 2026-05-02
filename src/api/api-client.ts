@@ -7,7 +7,10 @@ const isAuthEndpoint = (url: URL) =>
   url.pathname.includes('/auth/login') ||
   url.pathname.includes('/auth/register') ||
   url.pathname.includes('/auth/refresh') ||
-  url.pathname.includes('/auth/logout');
+  url.pathname.includes('/auth/logout') ||
+  url.pathname.includes('/auth/verify-email') ||
+  url.pathname.includes('/auth/forgot-password') ||
+  url.pathname.includes('/auth/reset-password');
 
 let isRefreshing = false;
 let failedQueue: Array<{

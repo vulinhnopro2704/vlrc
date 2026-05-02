@@ -9,12 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VerifyEmailRouteImport } from './routes/verify-email'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as AppTutor3dRouteImport } from './routes/_app/tutor-3d'
 import { Route as AppRolePlayRouteImport } from './routes/_app/role-play'
 import { Route as AppPracticeRouteImport } from './routes/_app/practice'
@@ -24,6 +27,16 @@ import { Route as AppCoursesIndexRouteImport } from './routes/_app/courses/index
 import { Route as AppLessonsLessonIdRouteImport } from './routes/_app/lessons/$lessonId'
 import { Route as AppCoursesCourseIdRouteImport } from './routes/_app/courses/$courseId'
 
+const VerifyEmailRoute = VerifyEmailRouteImport.update({
+  id: '/verify-email',
+  path: '/verify-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
@@ -52,6 +65,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppRoute,
+} as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AppTutor3dRoute = AppTutor3dRouteImport.update({
   id: '/tutor-3d',
@@ -100,11 +118,14 @@ export interface FileRoutesByFullPath {
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/dashboard': typeof AppDashboardRoute
   '/notebook': typeof AppNotebookRoute
   '/practice': typeof AppPracticeRoute
   '/role-play': typeof AppRolePlayRoute
   '/tutor-3d': typeof AppTutor3dRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/courses/$courseId': typeof AppCoursesCourseIdRoute
   '/lessons/$lessonId': typeof AppLessonsLessonIdRoute
   '/courses/': typeof AppCoursesIndexRoute
@@ -114,11 +135,14 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/dashboard': typeof AppDashboardRoute
   '/notebook': typeof AppNotebookRoute
   '/practice': typeof AppPracticeRoute
   '/role-play': typeof AppRolePlayRoute
   '/tutor-3d': typeof AppTutor3dRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/': typeof AppIndexRoute
   '/courses/$courseId': typeof AppCoursesCourseIdRoute
   '/lessons/$lessonId': typeof AppLessonsLessonIdRoute
@@ -131,11 +155,14 @@ export interface FileRoutesById {
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/notebook': typeof AppNotebookRoute
   '/_app/practice': typeof AppPracticeRoute
   '/_app/role-play': typeof AppRolePlayRoute
   '/_app/tutor-3d': typeof AppTutor3dRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/_app/': typeof AppIndexRoute
   '/_app/courses/$courseId': typeof AppCoursesCourseIdRoute
   '/_app/lessons/$lessonId': typeof AppLessonsLessonIdRoute
@@ -149,11 +176,14 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/register'
+    | '/reset-password'
+    | '/verify-email'
     | '/dashboard'
     | '/notebook'
     | '/practice'
     | '/role-play'
     | '/tutor-3d'
+    | '/auth/callback'
     | '/courses/$courseId'
     | '/lessons/$lessonId'
     | '/courses/'
@@ -163,11 +193,14 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/register'
+    | '/reset-password'
+    | '/verify-email'
     | '/dashboard'
     | '/notebook'
     | '/practice'
     | '/role-play'
     | '/tutor-3d'
+    | '/auth/callback'
     | '/'
     | '/courses/$courseId'
     | '/lessons/$lessonId'
@@ -179,11 +212,14 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/register'
+    | '/reset-password'
+    | '/verify-email'
     | '/_app/dashboard'
     | '/_app/notebook'
     | '/_app/practice'
     | '/_app/role-play'
     | '/_app/tutor-3d'
+    | '/auth/callback'
     | '/_app/'
     | '/_app/courses/$courseId'
     | '/_app/lessons/$lessonId'
@@ -196,10 +232,27 @@ export interface RootRouteChildren {
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  VerifyEmailRoute: typeof VerifyEmailRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/verify-email': {
+      id: '/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof VerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/register': {
       id: '/register'
       path: '/register'
@@ -241,6 +294,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_app/tutor-3d': {
       id: '/_app/tutor-3d'
@@ -333,6 +393,9 @@ const rootRouteChildren: RootRouteChildren = {
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  VerifyEmailRoute: VerifyEmailRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

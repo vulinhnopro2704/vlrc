@@ -12,7 +12,12 @@ const RootLayout = () => {
   useEffect(() => {
     const handleUnauthorized = () => {
       const currentPath = router.state.location.pathname;
-      if (currentPath !== '/login' && currentPath !== '/register') {
+      if (currentPath !== '/login' &&
+        currentPath !== '/register' &&
+        currentPath !== '/forgot-password' &&
+        currentPath !== '/reset-password' &&
+        currentPath !== '/verify-email' &&
+        currentPath !== '/auth/callback') {
         navigate({ to: '/login', search: { redirect: currentPath } as any });
       }
     };
