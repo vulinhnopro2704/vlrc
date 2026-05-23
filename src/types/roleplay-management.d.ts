@@ -125,5 +125,22 @@ declare namespace RoleplayManagement {
   export interface SessionDetailsResponse extends SessionHistoryItem {
     messages: Message[];
   }
+
+  export interface ActiveMessage {
+    id: string;
+    role: 'You' | 'AI';
+    text: string;
+    grammarCorrection?: string;
+  }
+
+  export interface ActiveSession {
+    sessionId: string;
+    scenario: Scenario;
+    messages: ActiveMessage[];
+    taskEvaluation: TaskEvaluation;
+    scenarioCompleted: boolean;
+    isReadOnly?: boolean;
+    cumulativeGrammarFeedback?: string[];
+  }
 }
 

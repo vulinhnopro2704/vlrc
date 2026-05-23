@@ -77,11 +77,20 @@ import {
   Flame,
   Undo2,
   Plus,
+  PlusCircle,
   Volume2,
   ArrowRight,
+  ArrowLeft,
   Info,
   Square,
-  Mic
+  Mic,
+  MessageSquare,
+  Phone,
+  PhoneOff,
+  Circle,
+  Send,
+  Loader2,
+  History
 } from 'lucide-react';
 
 export const Icons = {
@@ -163,10 +172,19 @@ export const Icons = {
   Undo2: Undo2,
   Volume2: Volume2,
   ArrowRight: ArrowRight,
+  ArrowLeft: ArrowLeft,
   Plus: Plus,
+  PlusCircle: PlusCircle,
   Info: Info,
   Square: Square,
   Mic: Mic,
+  MessageSquare: MessageSquare,
+  Phone: Phone,
+  PhoneOff: PhoneOff,
+  Circle: Circle,
+  Send: Send,
+  Loader2: Loader2,
+  History: History,
   GitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden='true'
