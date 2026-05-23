@@ -15,7 +15,19 @@ export const generateScenario = (payload: RoleplayManagement.GenerateScenarioPay
   apiClient.post(`${ROLEPLAY_BASE_PATH}/scenarios/generate`, { json: payload }).json<RoleplayManagement.Scenario>();
 
 export const startRoleplaySession = (payload: RoleplayManagement.StartRoleplayPayload) =>
-  apiClient.post(`${ROLEPLAY_BASE_PATH}/start`, { json: payload }).json<{ sessionId: string, ai_first_message: string }>();
+  apiClient.post(`${ROLEPLAY_BASE_PATH}/start`, { json: payload }).json<RoleplayManagement.StartRoleplayResponse>();
+
+export const chatRoleplaySession = (payload: RoleplayManagement.ChatRoleplayPayload) =>
+  apiClient.post(`${ROLEPLAY_BASE_PATH}/chat`, { json: payload }).json<RoleplayManagement.ChatRoleplayResponse>();
+
+export const chatVoiceRoleplaySession = (payload: RoleplayManagement.ChatVoiceRoleplayPayload) =>
+  apiClient.post(`${ROLEPLAY_BASE_PATH}/chat-voice`, { json: payload }).json<RoleplayManagement.ChatVoiceRoleplayResponse>();
+
+export const getSessionHistory = () =>
+  apiClient.get(`${ROLEPLAY_BASE_PATH}/history`).json<RoleplayManagement.SessionHistoryItem[]>();
+
+export const getSessionDetails = (sessionId: string) =>
+  apiClient.get(`${ROLEPLAY_BASE_PATH}/sessions/${sessionId}`).json<RoleplayManagement.SessionDetailsResponse>();
 
 // ── TanStack Query ──
 
@@ -23,13 +35,28 @@ export const ROLEPLAY_QUERY_KEYS = {
   all: ['roleplay'] as const,
   scenarios: () => [...ROLEPLAY_QUERY_KEYS.all, 'scenarios'] as const,
   scenarioList: (params?: Record<string, any>) =>
-    [...ROLEPLAY_QUERY_KEYS.scenarios(), params ?? {}] as const
+    [...ROLEPLAY_QUERY_KEYS.scenarios(), params ?? {}] as const,
+  history: () => [...ROLEPLAY_QUERY_KEYS.all, 'history'] as const,
+  session: (sessionId: string) => [...ROLEPLAY_QUERY_KEYS.all, 'sessions', sessionId] as const
 };
 
 export const useScenariosQuery = (params?: Record<string, any>) =>
   useQuery({
     queryKey: ROLEPLAY_QUERY_KEYS.scenarioList(params),
     queryFn: () => getScenarios(params)
+  });
+
+export const useSessionHistoryQuery = () =>
+  useQuery({
+    queryKey: ROLEPLAY_QUERY_KEYS.history(),
+    queryFn: getSessionHistory
+  });
+
+export const useSessionDetailsQuery = (sessionId: string, enabled = false) =>
+  useQuery({
+    queryKey: ROLEPLAY_QUERY_KEYS.session(sessionId),
+    queryFn: () => getSessionDetails(sessionId),
+    enabled
   });
 
 export const useGenerateScenarioMutation = (options?: {
@@ -52,3 +79,52 @@ export const useGenerateScenarioMutation = (options?: {
     }
   });
 };
+
+export const useStartRoleplayMutation = (options?: {
+  onSuccess?: (data: RoleplayManagement.StartRoleplayResponse) => void;
+  onError?: (error: Error) => void;
+}) => {
+  return useMutation({
+    mutationFn: startRoleplaySession,
+    onSuccess: (data) => {
+      options?.onSuccess?.(data);
+    },
+    onError: (error) => {
+      toast.error(`Lỗi bắt đầu kịch bản: ${(error as Error).message}`);
+      options?.onError?.(error as Error);
+    }
+  });
+};
+
+export const useChatRoleplayMutation = (options?: {
+  onSuccess?: (data: RoleplayManagement.ChatRoleplayResponse) => void;
+  onError?: (error: Error) => void;
+}) => {
+  return useMutation({
+    mutationFn: chatRoleplaySession,
+    onSuccess: (data) => {
+      options?.onSuccess?.(data);
+    },
+    onError: (error) => {
+      toast.error(`Lỗi gửi tin nhắn: ${(error as Error).message}`);
+      options?.onError?.(error as Error);
+    }
+  });
+};
+
+export const useChatVoiceRoleplayMutation = (options?: {
+  onSuccess?: (data: RoleplayManagement.ChatVoiceRoleplayResponse) => void;
+  onError?: (error: Error) => void;
+}) => {
+  return useMutation({
+    mutationFn: chatVoiceRoleplaySession,
+    onSuccess: (data) => {
+      options?.onSuccess?.(data);
+    },
+    onError: (error) => {
+      toast.error(`Lỗi gửi giọng nói: ${(error as Error).message}`);
+      options?.onError?.(error as Error);
+    }
+  });
+};
+
