@@ -9,7 +9,7 @@ export const SessionHistory = ({
   isHistoryDetailsLoading,
   selectedHistorySessionId
 }: {
-  historyItems: RoleplayManagement.HistoryItem[] | undefined;
+  historyItems: RoleplayManagement.SessionHistoryItem[] | undefined;
   isLoading: boolean;
   setSelectedHistorySessionId: (id: string | null) => void;
   isHistoryDetailsLoading: boolean;

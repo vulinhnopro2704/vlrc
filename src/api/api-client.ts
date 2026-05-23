@@ -30,7 +30,7 @@ const processQueue = (error: any) => {
 };
 
 const apiClient = ky.create({
-  prefixUrl: API_BASE_URL,
+  prefix: API_BASE_URL,
   timeout: 10_000,
   credentials: 'include',
   headers: {
@@ -40,7 +40,7 @@ const apiClient = ky.create({
   retry: 0,
   hooks: {
     afterResponse: [
-      async (request, _options, response) => {
+      async ({ request, options: _options, response }) => {
         if (response.ok) {
           return response;
         }
@@ -85,11 +85,11 @@ const apiClient = ky.create({
             } catch (err) {
               isRefreshing = false;
               processQueue(err);
-              
+
               if (typeof window !== 'undefined') {
                 window.dispatchEvent(new CustomEvent('auth:unauthorized'));
               }
-              
+
               throw err;
             }
           } else {

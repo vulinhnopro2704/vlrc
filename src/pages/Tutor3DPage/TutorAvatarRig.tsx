@@ -6,7 +6,7 @@ import { useCameraFollow } from './useCameraFollow';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 
 const TutorAvatarRig: FC<{
-  liveVisemeRef: React.RefObject<VISEMES>;
+  liveVisemeRef: RefObject<VISEMES>;
   isPlaying: boolean;
 }> = ({ liveVisemeRef, isPlaying }) => {
   const groupRef = useRef<Group>(null);

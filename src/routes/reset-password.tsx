@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import ResetPasswordPage from '@/pages/ResetPasswordPage';
 
-export const Route = createFileRoute('/reset-password' as any)({
+export const Route = createFileRoute('/reset-password')({
   component: ResetPasswordPage,
 });
