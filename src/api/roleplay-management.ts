@@ -5,7 +5,7 @@ const ROLEPLAY_BASE_PATH = 'roleplay';
 
 export const getScenarios = (params?: Record<string, unknown>) =>
   apiClient
-    .get(`${ROLEPLAY_BASE_PATH}/scenarios`, { searchParams: params })
+    .get(`${ROLEPLAY_BASE_PATH}/scenarios`, { searchParams: params as any })
     .json<RoleplayManagement.Scenario[]>();
 
 export const createScenario = (payload: RoleplayManagement.CreateScenarioPayload) =>

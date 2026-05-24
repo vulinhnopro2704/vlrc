@@ -7,7 +7,7 @@ export const ProfileForm: FC = () => {
   const { data: me } = useAuthSession();
   const queryClient = useQueryClient();
 
-  const form = useForm<Auth.UpdateProfilePayload>({
+  const form = useForm<Omit<Auth.UpdateProfilePayload, 'hobbies'> & { hobbies: string }>({
     defaultValues: {
       name: me?.name || '',
       phoneNumber: me?.phoneNumber || '',
@@ -30,12 +30,12 @@ export const ProfileForm: FC = () => {
     }
   });
 
-  const onSubmit = (values: Auth.UpdateProfilePayload) => {
+  const onSubmit = (values: Omit<Auth.UpdateProfilePayload, 'hobbies'> & { hobbies: string }) => {
     // Convert hobbies from string back to array before saving if needed
     const payload: Auth.UpdateProfilePayload = {
       ...values,
-      hobbies: typeof values.hobbies === 'string' && values.hobbies.trim() !== '' 
-        ? (values.hobbies as string).split(',').map(h => h.trim()).filter(Boolean) as any 
+      hobbies: values.hobbies && values.hobbies.trim() !== '' 
+        ? values.hobbies.split(',').map((h: string) => h.trim()).filter(Boolean)
         : undefined,
       dateOfBirth: values.dateOfBirth || undefined,
       avatar: values.avatar || undefined
@@ -101,7 +101,6 @@ export const ProfileForm: FC = () => {
               name="funFact"
               className="md:col-span-2"
               label="Fun fact về bản thân"
-              placeholder="Một điều thú vị về bạn..."
             />
 
             <FormInput

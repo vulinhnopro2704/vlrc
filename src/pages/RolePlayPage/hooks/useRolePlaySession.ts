@@ -192,8 +192,8 @@ export const useRolePlaySession = (
         };
       };
 
-      const AudioContext = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      const audioCtx = new AudioContext();
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      const audioCtx = new AudioCtx();
       audioContextRef.current = audioCtx;
       const analyser = audioCtx.createAnalyser();
       analyser.fftSize = 512;

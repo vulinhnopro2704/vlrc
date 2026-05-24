@@ -227,11 +227,11 @@ export const FormSimpleSelect: FormControlFunc<{ children: ReactNode }> = ({
   );
 };
 
-export const FormCheckbox: FormControlFunc = props => {
+export const FormCheckbox: FormControlFunc<{ disabled?: boolean }> = ({ disabled, ...props }) => {
   return (
     <FormBase {...props} horizontal controlFirst>
       {({ onChange, value, ...field }) => (
-        <Checkbox {...field} checked={value} onCheckedChange={onChange} />
+        <Checkbox {...field} checked={value} onCheckedChange={onChange} disabled={disabled} />
       )}
     </FormBase>
   );

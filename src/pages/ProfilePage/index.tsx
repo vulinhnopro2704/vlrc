@@ -3,7 +3,6 @@ import { ProfileForm } from './components/ProfileForm';
 import { PasswordForm } from './components/PasswordForm';
 
 export const ProfilePage: FC = () => {
-  const { t } = useTranslation();
   const { data: me } = useAuthSession();
   const [activeTab, setActiveTab] = useState<'profile' | 'security'>('profile');
 
