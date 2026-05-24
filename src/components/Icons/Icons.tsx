@@ -90,7 +90,9 @@ import {
   Circle,
   Send,
   Loader2,
-  History
+  History,
+  Languages,
+  Lightbulb
 } from 'lucide-react';
 
 export const Icons = {
@@ -185,6 +187,8 @@ export const Icons = {
   Send: Send,
   Loader2: Loader2,
   History: History,
+  Languages: Languages,
+  Lightbulb: Lightbulb,
   GitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden='true'

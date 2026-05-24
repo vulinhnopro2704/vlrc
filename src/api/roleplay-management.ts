@@ -29,6 +29,12 @@ export const getSessionHistory = () =>
 export const getSessionDetails = (sessionId: string) =>
   apiClient.get(`${ROLEPLAY_BASE_PATH}/sessions/${sessionId}`).json<RoleplayManagement.SessionDetailsResponse>();
 
+export const translateMessage = (sessionId: string, text: string) =>
+  apiClient.post(`${ROLEPLAY_BASE_PATH}/sessions/${sessionId}/translate`, { json: { text } }).json<RoleplayManagement.TranslateMessageResponse>();
+
+export const suggestReplies = (sessionId: string) =>
+  apiClient.get(`${ROLEPLAY_BASE_PATH}/sessions/${sessionId}/suggest-replies`).json<RoleplayManagement.SuggestRepliesResponse>();
+
 // ── TanStack Query ──
 
 export const ROLEPLAY_QUERY_KEYS = {
@@ -124,6 +130,28 @@ export const useChatVoiceRoleplayMutation = (options?: {
     onError: (error) => {
       toast.error(`Lỗi gửi giọng nói: ${(error as Error).message}`);
       options?.onError?.(error as Error);
+    }
+  });
+};
+
+export const useTranslateMessageMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ sessionId, text }: { sessionId: string; text: string }) => translateMessage(sessionId, text),
+    onSuccess: (_, { sessionId }) => {
+      queryClient.invalidateQueries({ queryKey: ROLEPLAY_QUERY_KEYS.session(sessionId) });
+    },
+    onError: (error) => {
+      toast.error(`Lỗi dịch tin nhắn: ${(error as Error).message}`);
+    }
+  });
+};
+
+export const useSuggestRepliesMutation = () => {
+  return useMutation({
+    mutationFn: (sessionId: string) => suggestReplies(sessionId),
+    onError: (error) => {
+      toast.error(`Lỗi lấy gợi ý: ${(error as Error).message}`);
     }
   });
 };

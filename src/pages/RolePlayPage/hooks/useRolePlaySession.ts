@@ -7,7 +7,9 @@ import {
   useChatRoleplayMutation,
   useChatVoiceRoleplayMutation,
   useSessionHistoryQuery,
-  useSessionDetailsQuery
+  useSessionDetailsQuery,
+  useTranslateMessageMutation,
+  useSuggestRepliesMutation
 } from '@/api/roleplay-management';
 
 export const useRolePlaySession = (
@@ -42,6 +44,8 @@ export const useRolePlaySession = (
   const startMutation = useStartRoleplayMutation();
   const chatMutation = useChatRoleplayMutation();
   const chatVoiceMutation = useChatVoiceRoleplayMutation();
+  const translateMutation = useTranslateMessageMutation();
+  const suggestRepliesMutation = useSuggestRepliesMutation();
 
   useEffect(() => {
     if (activeTab === 'history') {
@@ -66,7 +70,10 @@ export const useRolePlaySession = (
         mappedMessages.push({
           id: m.id,
           role: m.role === 'user' ? 'You' : 'AI',
-          text: m.content
+          text: m.content,
+          audioUrl: m.audioUrl,
+          translation: m.translation,
+          grammarCorrection: m.grammarFeedback
         });
       });
 
@@ -374,6 +381,37 @@ export const useRolePlaySession = (
     setShowCorrectionIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
   };
 
+  const handleTranslateMessage = async (messageId: string) => {
+    if (!activeSession) return;
+    const msg = activeSession.messages.find(m => m.id === messageId);
+    if (!msg) return;
+    try {
+      const { translation } = await translateMutation.mutateAsync({
+        sessionId: activeSession.sessionId,
+        text: msg.text
+      });
+      setActiveSession(prev => {
+        if (!prev) return null;
+        return {
+          ...prev,
+          messages: prev.messages.map(m => m.id === messageId ? { ...m, translation } : m)
+        };
+      });
+    } catch (e) {
+      // toast already handled in mutation
+    }
+  };
+
+  const handleSuggestReplies = async () => {
+    if (!activeSession) return [];
+    try {
+      const { suggestions } = await suggestRepliesMutation.mutateAsync(activeSession.sessionId);
+      return suggestions;
+    } catch (e) {
+      return [];
+    }
+  };
+
   const completedObjectivesCount = activeSession
     ? [
         activeSession.taskEvaluation.task_1_completed,
@@ -405,6 +443,8 @@ export const useRolePlaySession = (
       isStartPending: startMutation.isPending,
       isChatPending: chatMutation.isPending,
       isVoicePending: chatVoiceMutation.isPending,
+      isTranslatePending: translateMutation.isPending,
+      isSuggestRepliesPending: suggestRepliesMutation.isPending,
       startVariables: startMutation.variables
     },
     actions: {
@@ -418,7 +458,9 @@ export const useRolePlaySession = (
       handleSendMessage,
       startRecording,
       stopRecording,
-      toggleCorrection
+      toggleCorrection,
+      handleTranslateMessage,
+      handleSuggestReplies
     }
   };
 };

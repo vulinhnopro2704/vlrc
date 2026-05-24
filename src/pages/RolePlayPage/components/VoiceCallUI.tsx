@@ -20,9 +20,13 @@ export const VoiceCallUI = ({
   setSelectedHistorySessionId,
   setActiveSession,
   setIsVoiceMode,
-  stopRecording,
   startRecording,
-  setShowChatPopup
+  stopRecording,
+  setShowChatPopup,
+  handleSuggestReplies,
+  isSuggestRepliesPending,
+  handleTranslateMessage,
+  isTranslatePending
 }: {
   activeSession: RoleplayManagement.ActiveSession;
   isRecording: boolean;
@@ -43,8 +47,21 @@ export const VoiceCallUI = ({
   stopRecording: () => void;
   startRecording: () => void;
   setShowChatPopup: (val: boolean) => void;
+  handleSuggestReplies?: () => Promise<string[]>;
+  isSuggestRepliesPending?: boolean;
+  handleTranslateMessage?: (messageId: string) => void;
+  isTranslatePending?: boolean;
 }) => {
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   const cameraDistance = useTutor3DStore(s => s.cameraDistance);
+
+  const onSuggestReplies = async () => {
+    if (!handleSuggestReplies) return;
+    const reps = await handleSuggestReplies();
+    if (reps && reps.length > 0) {
+      setSuggestions(reps);
+    }
+  };
 
   const renderTopLeftActions = () => (
     <div className='absolute top-4 left-4 z-10 flex items-center gap-3'>
@@ -336,11 +353,33 @@ export const VoiceCallUI = ({
 
       <Dialog open={showChatPopup} onOpenChange={setShowChatPopup}>
         <DialogContent className='bg-slate-950/95 border border-slate-800 text-slate-100 rounded-2xl shadow-2xl backdrop-blur-xl max-w-lg w-[90vw] h-[80vh] flex flex-col p-0'>
-          <DialogHeader className='p-4 border-b border-slate-800'>
+          <DialogHeader className='p-4 border-b border-slate-800 flex flex-row items-center justify-between'>
             <DialogTitle className='text-sm font-bold flex items-center gap-2 text-indigo-400'>
               <Icons.MessageCircle size={16} /> Lịch sử hội thoại
             </DialogTitle>
+            <div className='flex gap-2 mr-6'>
+              {handleSuggestReplies && (
+                <Button
+                  variant='outline'
+                  size='sm'
+                  onClick={onSuggestReplies}
+                  disabled={isSuggestRepliesPending || activeSession.scenarioCompleted}
+                  className='h-7 px-2 text-[10px] bg-slate-900 border-slate-700 text-slate-300 hover:text-indigo-400'>
+                  <Icons.Lightbulb size={12} className={isSuggestRepliesPending ? 'animate-pulse text-amber-400' : 'mr-1'} />
+                  Gợi ý trả lời
+                </Button>
+              )}
+            </div>
           </DialogHeader>
+          {suggestions.length > 0 && (
+            <div className='p-3 border-b border-slate-800/60 bg-slate-900/50 flex flex-wrap gap-2 animate-fade-in'>
+              {suggestions.map((sug, idx) => (
+                <div key={idx} className='text-[11px] px-3 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-200'>
+                  {sug}
+                </div>
+              ))}
+            </div>
+          )}
           <div className='flex-1 overflow-y-auto p-4 space-y-4'>
             {activeSession.messages
               .filter(m => !m.id.startsWith('ai-intro'))
@@ -352,9 +391,53 @@ export const VoiceCallUI = ({
                     className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${msg.role === 'You' ? 'bg-indigo-600 text-white' : 'bg-slate-800 border border-slate-700 text-indigo-300'}`}>
                     {msg.role === 'You' ? 'ME' : 'AI'}
                   </div>
-                  <div
-                    className={`p-3 rounded-xl text-xs leading-relaxed ${msg.role === 'You' ? 'bg-indigo-600 text-white rounded-tr-none' : 'bg-slate-800 text-slate-200 rounded-tl-none'}`}>
-                    {msg.text}
+                  <div className='flex flex-col items-start w-full max-w-full space-y-1.5'>
+                    <div
+                      className={`p-3 rounded-xl text-xs leading-relaxed ${msg.role === 'You' ? 'bg-indigo-600 text-white rounded-tr-none' : 'bg-slate-800 text-slate-200 rounded-tl-none'}`}>
+                      {msg.text}
+                    </div>
+                    {msg.grammarCorrection && (
+                      <div className='w-full max-w-sm bg-amber-500/10 border border-amber-500/20 p-2.5 rounded-xl text-[11px] text-amber-200 leading-relaxed flex items-start gap-2 mt-1 self-end'>
+                        <Icons.Sparkles size={12} className='text-amber-400 shrink-0 mt-0.5 animate-pulse' />
+                        <div>
+                          <div className='font-bold text-amber-300 text-[9px] uppercase tracking-wider'>
+                            AI nhận xét lỗi:
+                          </div>
+                          <div>{msg.grammarCorrection}</div>
+                        </div>
+                      </div>
+                    )}
+                    {msg.translation && (
+                      <div className='w-full max-w-sm bg-indigo-500/10 border border-indigo-500/20 p-2.5 rounded-xl text-[11px] text-indigo-200 leading-relaxed flex items-start gap-2 mt-1'>
+                        <Icons.Languages size={12} className='text-indigo-400 shrink-0 mt-0.5' />
+                        <div>{msg.translation}</div>
+                      </div>
+                    )}
+                    <div className={`flex items-center gap-1 mt-1 ${msg.role === 'You' ? 'self-end' : ''}`}>
+                      {msg.audioUrl && (
+                        <Button
+                          variant='ghost'
+                          size='icon'
+                          onClick={() => {
+                            stopPlayback();
+                            const audio = new Audio(msg.audioUrl!);
+                            audio.play().catch(console.error);
+                          }}
+                          className='w-6 h-6 rounded-full bg-slate-800/50 hover:bg-slate-700 text-slate-400 hover:text-indigo-300'>
+                          <Icons.Play size={10} />
+                        </Button>
+                      )}
+                      {handleTranslateMessage && (
+                        <Button
+                          variant='ghost'
+                          size='icon'
+                          disabled={isTranslatePending}
+                          onClick={() => handleTranslateMessage(msg.id)}
+                          className='w-6 h-6 rounded-full bg-slate-800/50 hover:bg-slate-700 text-slate-400 hover:text-indigo-300'>
+                          <Icons.Languages size={10} />
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}

@@ -1,10 +1,3 @@
-import { useState, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useGSAP } from '@gsap/react';
-import gsap from 'gsap';
-import { toast } from 'sonner';
-
-import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/Icons/Icons';
 import CreateScenarioModal from './CreateScenarioModal';
 
@@ -56,11 +49,11 @@ const RolePlayPage = () => {
   return (
     <div
       ref={containerRef}
-      className='h-[calc(100vh-4rem)] flex flex-col overflow-hidden bg-slate-950 relative text-slate-50 w-full'>
+      className='h-[calc(100dvh-4rem)] flex flex-col overflow-hidden bg-slate-950 relative text-slate-50 w-full min-h-0'>
       <div className='absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(56,189,248,0.12),transparent_35%),radial-gradient(circle_at_75%_10%,rgba(99,102,241,0.12),transparent_40%),radial-gradient(circle_at_50%_80%,rgba(15,23,42,0.95),rgba(2,6,23,1))] pointer-events-none' />
 
       <div
-        className={`relative z-10 w-full flex-1 max-w-7xl mx-auto px-4 md:px-6 flex flex-col ${!state.activeSession ? 'py-8 md:py-12 overflow-y-auto pb-20' : 'py-4 md:py-6'}`}>
+        className={`relative z-10 w-full flex-1 max-w-7xl mx-auto px-4 md:px-6 flex flex-col min-h-0 ${!state.activeSession ? 'py-8 md:py-12 overflow-y-auto pb-20' : 'py-4 md:py-6'}`}>
         {!state.activeSession ? (
           <div className='flex-1'>
             <div className='hero-content text-center mb-8 space-y-5 animate-fade-in'>
@@ -151,6 +144,10 @@ const RolePlayPage = () => {
                 stopRecording={actions.stopRecording}
                 startRecording={actions.startRecording}
                 setShowChatPopup={actions.setShowChatPopup}
+                handleSuggestReplies={actions.handleSuggestReplies}
+                isSuggestRepliesPending={mutations.isSuggestRepliesPending}
+                handleTranslateMessage={actions.handleTranslateMessage}
+                isTranslatePending={mutations.isTranslatePending}
               />
             ) : (
               <TextChatUI
@@ -168,6 +165,10 @@ const RolePlayPage = () => {
                 setInputText={actions.setInputText}
                 handleSendMessage={actions.handleSendMessage}
                 toggleCorrection={actions.toggleCorrection}
+                handleSuggestReplies={actions.handleSuggestReplies}
+                isSuggestRepliesPending={mutations.isSuggestRepliesPending}
+                handleTranslateMessage={actions.handleTranslateMessage}
+                isTranslatePending={mutations.isTranslatePending}
               />
             )}
           </div>

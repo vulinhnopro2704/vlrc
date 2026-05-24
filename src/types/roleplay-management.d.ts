@@ -108,6 +108,9 @@ declare namespace RoleplayManagement {
     sessionId: string;
     role: 'user' | 'ai';
     content: string;
+    audioUrl?: string | null;
+    translation?: string | null;
+    grammarFeedback?: string | null;
     createdAt: string;
   }
 
@@ -130,7 +133,9 @@ declare namespace RoleplayManagement {
     id: string;
     role: 'You' | 'AI';
     text: string;
-    grammarCorrection?: string;
+    audioUrl?: string | null;
+    translation?: string | null;
+    grammarCorrection?: string | null;
   }
 
   export interface ActiveSession {
@@ -141,6 +146,14 @@ declare namespace RoleplayManagement {
     scenarioCompleted: boolean;
     isReadOnly?: boolean;
     cumulativeGrammarFeedback?: string[];
+  }
+
+  export interface TranslateMessageResponse {
+    translation: string;
+  }
+
+  export interface SuggestRepliesResponse {
+    suggestions: string[];
   }
 }
 

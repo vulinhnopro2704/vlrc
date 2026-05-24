@@ -1,8 +1,17 @@
 'use client';
 
 import { useGenerateScenarioMutation } from '@/api/roleplay-management';
-import { FormInput } from '@/components/Form';
+import { FormInput, FormSelect } from '@/components/Form';
 import { Modal } from '@/modals/Modal';
+
+const CEFR_OPTIONS = [
+  { label: 'A1 - Beginner', value: 'A1' },
+  { label: 'A2 - Elementary', value: 'A2' },
+  { label: 'B1 - Intermediate', value: 'B1' },
+  { label: 'B2 - Upper Intermediate', value: 'B2' },
+  { label: 'C1 - Advanced', value: 'C1' },
+  { label: 'C2 - Proficient', value: 'C2' }
+];
 
 export const CreateScenarioModal = ({ open, onCancel }: App.ModalProps) => {
   const { t } = useTranslation();
@@ -51,11 +60,12 @@ export const CreateScenarioModal = ({ open, onCancel }: App.ModalProps) => {
           disabled={isFormLoading}
           rules={{ required: true }}
         />
-        <FormInput
+        <FormSelect
           control={control}
           name='level'
           label={t('roleplay_level_label')}
           placeholder={t('roleplay_level_placeholder')}
+          options={CEFR_OPTIONS}
           disabled={isFormLoading}
           rules={{ required: true }}
         />

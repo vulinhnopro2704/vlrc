@@ -1,4 +1,7 @@
 import { Icons } from '@/components/Icons/Icons';
+import { useState, useRef, useEffect, RefObject } from 'react';
+import { Button } from '@/components/ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 export const TextChatUI = ({
   activeSession,
@@ -14,7 +17,11 @@ export const TextChatUI = ({
   setIsVoiceMode,
   setInputText,
   handleSendMessage,
-  toggleCorrection
+  toggleCorrection,
+  handleTranslateMessage,
+  handleSuggestReplies,
+  isTranslatePending,
+  isSuggestRepliesPending
 }: {
   activeSession: RoleplayManagement.ActiveSession;
   isChatPending: boolean;
@@ -35,7 +42,25 @@ export const TextChatUI = ({
   setInputText: (val: string) => void;
   handleSendMessage: (e: React.FormEvent) => Promise<void>;
   toggleCorrection: (id: string) => void;
+  handleTranslateMessage: (messageId: string) => void;
+  handleSuggestReplies: () => Promise<string[]>;
+  isTranslatePending: boolean;
+  isSuggestRepliesPending: boolean;
 }) => {
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  
+  const onSuggestReplies = async () => {
+    const reps = await handleSuggestReplies();
+    if (reps && reps.length > 0) {
+      setSuggestions(reps);
+    }
+  };
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [activeSession.messages.length, isChatPending, isVoicePending, chatEndRef]);
+
   const renderHeader = () => (
     <div className='flex items-center justify-between px-4 sm:px-6 py-4 border-b border-slate-800/80 bg-slate-950/60 backdrop-blur'>
       <div className='flex items-center gap-3'>
@@ -259,94 +284,19 @@ export const TextChatUI = ({
         </div>
       );
     }
-
-    return (
-      <div key={msg.id} className='w-full max-w-[95%] mx-auto animate-fade-in'>
-        <div className='w-full bg-slate-900/80 border border-slate-800/80 backdrop-blur-md rounded-2xl p-5 shadow-lg space-y-5'>
-          <div className='space-y-2'>
-            <div className='flex items-center gap-2 text-indigo-400'>
-              <Icons.BookOpen size={16} />
-              <span className='text-xs font-bold uppercase tracking-wider'>Bối Cảnh Nhập Vai</span>
-            </div>
-            <div className='text-sm text-slate-300 leading-relaxed italic bg-slate-950/40 p-4 rounded-xl border border-slate-800/40 relative'>
-              <span className='absolute top-1 left-2 text-slate-700 text-3xl font-serif leading-none'>
-                {'\u201c'}
-              </span>
-              <p className='pl-4 pr-2'>{activeSession.scenario.description}</p>
-              <span className='absolute bottom-1 right-2 text-slate-700 text-3xl font-serif leading-none'>
-                {'\u201d'}
-              </span>
-            </div>
-          </div>
-
-          <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-            <div className='bg-indigo-950/20 border border-indigo-900/35 p-3 rounded-xl'>
-              <div className='text-[10px] font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-1.5'>
-                <span className='w-1.5 h-1.5 rounded-full bg-indigo-400' />
-                Bạn đóng vai
-              </div>
-              <div className='text-sm font-semibold text-slate-100 mt-1'>
-                {activeSession.scenario.userPersona}
-              </div>
-            </div>
-            <div className='bg-purple-950/20 border border-purple-900/35 p-3 rounded-xl'>
-              <div className='text-[10px] font-bold text-purple-400 uppercase tracking-wider flex items-center gap-1.5'>
-                <span className='w-1.5 h-1.5 rounded-full bg-purple-400' />
-                AI đóng vai
-              </div>
-              <div className='text-sm font-semibold text-slate-100 mt-1'>
-                {activeSession.scenario.aiPersona}
-              </div>
-            </div>
-          </div>
-
-          <div className='space-y-3 pt-1'>
-            <div className='flex items-center gap-2 text-emerald-400'>
-              <Icons.Sparkles size={16} />
-              <span className='text-xs font-bold uppercase tracking-wider'>
-                Nhiệm Vụ Cần Hoàn Thành ({completedObjectivesCount}/3)
-              </span>
-            </div>
-            <div className='space-y-2'>
-              {[0, 1, 2].map(i => {
-                const completed =
-                  i === 0
-                    ? activeSession.taskEvaluation.task_1_completed
-                    : i === 1
-                      ? activeSession.taskEvaluation.task_2_completed
-                      : activeSession.taskEvaluation.task_3_completed;
-                return (
-                  <div
-                    key={i}
-                    className={`flex items-start gap-2.5 p-3 rounded-xl border transition-all duration-300 ${completed ? 'bg-emerald-950/20 border-emerald-500/30 text-emerald-200' : 'bg-slate-950/40 border-slate-800 text-slate-400'}`}>
-                    {completed ? (
-                      <Icons.CheckCircle2 size={16} className='text-emerald-400 shrink-0 mt-0.5' />
-                    ) : (
-                      <Icons.Circle size={16} className='text-slate-600 shrink-0 mt-0.5' />
-                    )}
-                    <span className='text-xs font-medium leading-relaxed'>
-                      {activeSession.scenario.requiredTasks[i] || `Nhiệm vụ ${i + 1}`}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return null;
   };
 
   return (
-    <div className='grid grid-cols-1 lg:grid-cols-12 gap-6 h-full items-stretch relative'>
-      <div className='lg:col-span-12 flex flex-col h-full bg-slate-900/50 border border-slate-800/80 backdrop-blur-md rounded-2xl overflow-hidden shadow-2xl relative'>
-        {renderHeader()}
+    <div className='flex flex-col h-full bg-slate-900/50 border border-slate-800/80 backdrop-blur-md rounded-2xl overflow-hidden shadow-2xl relative'>
+      {renderHeader()}
 
-        <div className='flex-1 overflow-y-auto p-6 space-y-6'>
-          {activeSession.messages.map(msg => {
-            const isIntroTitle = msg.id.startsWith('ai-intro-title-');
-            const isIntroContext = msg.id.startsWith('ai-intro-context-');
-            if (isIntroTitle || isIntroContext) return renderIntroMessage(msg);
+      <div className='flex-1 overflow-y-auto p-6 space-y-6'>
+        {activeSession.messages.map(msg => {
+          const isIntroTitle = msg.id.startsWith('ai-intro-title-');
+          const isIntroContext = msg.id.startsWith('ai-intro-context-');
+          if (isIntroContext) return null;
+          if (isIntroTitle) return renderIntroMessage(msg);
 
             return (
               <div
@@ -405,10 +355,43 @@ export const TextChatUI = ({
                       )}
                     </div>
                   ) : (
-                    <div className='px-4 py-3 rounded-2xl text-sm leading-relaxed bg-slate-800/80 border border-slate-700/40 text-slate-100 rounded-tl-none shadow-md'>
-                      {msg.text}
+                    <div className='flex flex-col items-start w-full space-y-1'>
+                      <div className='px-4 py-3 rounded-2xl text-sm leading-relaxed bg-slate-800/80 border border-slate-700/40 text-slate-100 rounded-tl-none shadow-md'>
+                        {msg.text}
+                      </div>
+                      {msg.translation && (
+                        <div className='w-full max-w-lg bg-indigo-500/10 border border-indigo-500/20 p-3 rounded-xl text-xs sm:text-sm text-indigo-200 shadow-sm leading-relaxed flex items-start gap-2.5 animate-fade-in mt-1.5 ml-0.5'>
+                          <Icons.Languages size={14} className='text-indigo-400 shrink-0 mt-0.5' />
+                          <div className='leading-relaxed'>{msg.translation}</div>
+                        </div>
+                      )}
                     </div>
                   )}
+
+                  <div className={`flex items-center gap-1.5 pt-1 ${msg.role === 'You' ? 'self-end' : ''}`}>
+                    {msg.audioUrl && (
+                      <Button
+                        variant='ghost'
+                        size='icon'
+                        onClick={() => {
+                          stopPlayback();
+                          // Just play audio simply
+                          const audio = new Audio(msg.audioUrl!);
+                          audio.play().catch(console.error);
+                        }}
+                        className='w-6 h-6 rounded-full bg-slate-800/50 hover:bg-slate-700 text-slate-400 hover:text-indigo-300'>
+                        <Icons.Play size={10} />
+                      </Button>
+                    )}
+                    <Button
+                      variant='ghost'
+                      size='icon'
+                      disabled={isTranslatePending}
+                      onClick={() => handleTranslateMessage(msg.id)}
+                      className='w-6 h-6 rounded-full bg-slate-800/50 hover:bg-slate-700 text-slate-400 hover:text-indigo-300'>
+                      <Icons.Languages size={10} />
+                    </Button>
+                  </div>
                 </div>
               </div>
             );
@@ -460,10 +443,41 @@ export const TextChatUI = ({
             luyện tập này dưới dạng chỉ đọc.
           </div>
         ) : (
-          <form
-            onSubmit={handleSendMessage}
-            className='p-4 border-t border-slate-800/85 bg-slate-950/70 backdrop-blur-md flex gap-3'>
-            <input
+          <div className='flex flex-col gap-2 p-4 border-t border-slate-800/85 bg-slate-950/70 backdrop-blur-md'>
+            {suggestions.length > 0 && (
+              <div className='flex flex-wrap gap-2 animate-fade-in'>
+                {suggestions.map((sug, idx) => (
+                  <button
+                    key={idx}
+                    type='button'
+                    onClick={() => {
+                      setInputText(sug);
+                      setSuggestions([]);
+                    }}
+                    className='text-xs px-3 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 transition-all text-left max-w-full truncate'>
+                    {sug}
+                  </button>
+                ))}
+              </div>
+            )}
+            <div className='flex justify-between items-center px-1 pb-1'>
+              <Button
+                variant='ghost'
+                size='sm'
+                onClick={onSuggestReplies}
+                disabled={isSuggestRepliesPending || isChatPending || activeSession.scenarioCompleted}
+                className='text-[10px] h-6 px-2 rounded-md bg-slate-800/50 text-slate-400 hover:text-indigo-300 hover:bg-slate-800'>
+                <Icons.Lightbulb size={12} className={isSuggestRepliesPending ? 'animate-pulse text-amber-400' : 'mr-1'} />
+                {isSuggestRepliesPending ? 'Đang phân tích...' : 'Gợi ý trả lời'}
+              </Button>
+            </div>
+            <form
+              onSubmit={e => {
+                handleSendMessage(e);
+                setSuggestions([]);
+              }}
+              className='flex gap-3'>
+              <input
               type='text'
               value={inputText}
               onChange={e => setInputText(e.target.value)}
@@ -483,6 +497,7 @@ export const TextChatUI = ({
               <span className='hidden sm:inline'>Gửi</span>
             </Button>
           </form>
+          </div>
         )}
 
         {activeSession.scenarioCompleted && (
@@ -529,6 +544,5 @@ export const TextChatUI = ({
           </div>
         )}
       </div>
-    </div>
   );
 };

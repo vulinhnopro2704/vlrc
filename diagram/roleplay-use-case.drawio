@@ -1,0 +1,95 @@
+<mxfile host="Electron" modified="2024-05-23T15:00:00.000Z" agent="Mozilla/5.0" etag="xxxx" version="24.4.0" type="device">
+  <diagram id="roleplay_usecase" name="Use Case Role-play">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- System Boundary -->
+        <mxCell id="System" value="Hệ thống Role-play" style="swimlane;whiteSpace=wrap;html=1;startSize=23;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="250" y="50" width="500" height="650" as="geometry" />
+        </mxCell>
+
+        <!-- Actors -->
+        <mxCell id="Actor_Learner" value="Người học" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="100" y="150" width="40" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Actor_Admin" value="Quản trị viên" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="100" y="500" width="40" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Use Cases - Learner -->
+        <mxCell id="UC_ViewScenario" value="Xem danh sách&#10;tình huống" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="System">
+          <mxGeometry x="60" y="50" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="UC_SelectScenario" value="Chọn tình huống" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="System">
+          <mxGeometry x="300" y="55" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="UC_CreatePersonal" value="Tạo tình huống&#10;cá nhân" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="System">
+          <mxGeometry x="60" y="140" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="UC_Participate" value="Thực hiện&#10;Role-play" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="System">
+          <mxGeometry x="60" y="240" width="140" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="UC_TextChat" value="Nhắn tin&#10;văn bản" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="System">
+          <mxGeometry x="300" y="150" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="UC_VoiceChat" value="Trò chuyện&#10;giọng nói" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="System">
+          <mxGeometry x="300" y="220" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="UC_ViewFeedback" value="Nhận đánh giá và&#10;sửa lỗi ngữ pháp" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="System">
+          <mxGeometry x="300" y="300" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Use Cases - Admin -->
+        <mxCell id="UC_ManageScenario" value="Quản lý tình huống&#10;mẫu" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="System">
+          <mxGeometry x="60" y="530" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="UC_CreateSystemScenario" value="Tạo tình huống&#10;mẫu" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="System">
+          <mxGeometry x="60" y="440" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="UC_EditSystemScenario" value="Sửa/Xóa&#10;tình huống" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="System">
+          <mxGeometry x="300" y="530" width="120" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Relationships - Learner -->
+        <mxCell id="Rel_L_1" edge="1" parent="1" source="Actor_Learner" target="UC_ViewScenario">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Rel_L_2" edge="1" parent="1" source="Actor_Learner" target="UC_CreatePersonal">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Rel_L_3" edge="1" parent="1" source="Actor_Learner" target="UC_Participate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Relationships - Admin -->
+        <mxCell id="Rel_A_1" edge="1" parent="1" source="Actor_Admin" target="UC_ManageScenario">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Rel_A_2" edge="1" parent="1" source="Actor_Admin" target="UC_CreateSystemScenario">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Extends / Includes -->
+        <mxCell id="Rel_Ext_1" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="html=1;dashed=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=none;" edge="1" parent="System" source="UC_TextChat" target="UC_Participate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Rel_Ext_2" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="html=1;dashed=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=none;" edge="1" parent="System" source="UC_VoiceChat" target="UC_Participate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Rel_Inc_1" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="html=1;dashed=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=none;" edge="1" parent="System" source="UC_Participate" target="UC_ViewFeedback">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="Rel_Ext_3" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="html=1;dashed=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=none;" edge="1" parent="System" source="UC_EditSystemScenario" target="UC_ManageScenario">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Rel_Ext_4" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="html=1;dashed=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=none;" edge="1" parent="System" source="UC_SelectScenario" target="UC_ViewScenario">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
