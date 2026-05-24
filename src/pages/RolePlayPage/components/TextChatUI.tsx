@@ -1,7 +1,5 @@
 import { Icons } from '@/components/Icons/Icons';
-import { useState, useRef, useEffect, RefObject } from 'react';
-import { Button } from '@/components/ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+
 
 export const TextChatUI = ({
   activeSession,

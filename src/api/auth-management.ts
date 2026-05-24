@@ -12,6 +12,12 @@ export const refreshToken = () => apiClient.post('auth/refresh').json<Auth.AuthT
 
 export const getMe = () => apiClient.get('auth/me').json<Auth.UserProfile>();
 
+export const updateProfile = (payload: Auth.UpdateProfilePayload) =>
+  apiClient.patch('auth/me', { json: payload }).json<Auth.UserProfile>();
+
+export const changePassword = (payload: Auth.ChangePasswordPayload) =>
+  apiClient.post('auth/change-password', { json: payload }).json<Auth.MessageResponse>();
+
 export const verifyEmail = (payload: Auth.VerifyEmailPayload) =>
   apiClient.post('auth/verify-email', { json: payload }).json<Auth.MessageResponse>();
 

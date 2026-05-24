@@ -18,8 +18,8 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
-import { Route as AppTutor3dRouteImport } from './routes/_app/tutor-3d'
 import { Route as AppRolePlayRouteImport } from './routes/_app/role-play'
+import { Route as AppProfileRouteImport } from './routes/_app/profile'
 import { Route as AppPracticeRouteImport } from './routes/_app/practice'
 import { Route as AppNotebookRouteImport } from './routes/_app/notebook'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
@@ -71,14 +71,14 @@ const AuthCallbackRoute = AuthCallbackRouteImport.update({
   path: '/auth/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AppTutor3dRoute = AppTutor3dRouteImport.update({
-  id: '/tutor-3d',
-  path: '/tutor-3d',
-  getParentRoute: () => AppRoute,
-} as any)
 const AppRolePlayRoute = AppRolePlayRouteImport.update({
   id: '/role-play',
   path: '/role-play',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppProfileRoute = AppProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => AppRoute,
 } as any)
 const AppPracticeRoute = AppPracticeRouteImport.update({
@@ -123,8 +123,8 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AppDashboardRoute
   '/notebook': typeof AppNotebookRoute
   '/practice': typeof AppPracticeRoute
+  '/profile': typeof AppProfileRoute
   '/role-play': typeof AppRolePlayRoute
-  '/tutor-3d': typeof AppTutor3dRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/courses/$courseId': typeof AppCoursesCourseIdRoute
   '/lessons/$lessonId': typeof AppLessonsLessonIdRoute
@@ -140,8 +140,8 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AppDashboardRoute
   '/notebook': typeof AppNotebookRoute
   '/practice': typeof AppPracticeRoute
+  '/profile': typeof AppProfileRoute
   '/role-play': typeof AppRolePlayRoute
-  '/tutor-3d': typeof AppTutor3dRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/': typeof AppIndexRoute
   '/courses/$courseId': typeof AppCoursesCourseIdRoute
@@ -160,8 +160,8 @@ export interface FileRoutesById {
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/notebook': typeof AppNotebookRoute
   '/_app/practice': typeof AppPracticeRoute
+  '/_app/profile': typeof AppProfileRoute
   '/_app/role-play': typeof AppRolePlayRoute
-  '/_app/tutor-3d': typeof AppTutor3dRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/_app/': typeof AppIndexRoute
   '/_app/courses/$courseId': typeof AppCoursesCourseIdRoute
@@ -181,8 +181,8 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/notebook'
     | '/practice'
+    | '/profile'
     | '/role-play'
-    | '/tutor-3d'
     | '/auth/callback'
     | '/courses/$courseId'
     | '/lessons/$lessonId'
@@ -198,8 +198,8 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/notebook'
     | '/practice'
+    | '/profile'
     | '/role-play'
-    | '/tutor-3d'
     | '/auth/callback'
     | '/'
     | '/courses/$courseId'
@@ -217,8 +217,8 @@ export interface FileRouteTypes {
     | '/_app/dashboard'
     | '/_app/notebook'
     | '/_app/practice'
+    | '/_app/profile'
     | '/_app/role-play'
-    | '/_app/tutor-3d'
     | '/auth/callback'
     | '/_app/'
     | '/_app/courses/$courseId'
@@ -302,18 +302,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_app/tutor-3d': {
-      id: '/_app/tutor-3d'
-      path: '/tutor-3d'
-      fullPath: '/tutor-3d'
-      preLoaderRoute: typeof AppTutor3dRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/_app/role-play': {
       id: '/_app/role-play'
       path: '/role-play'
       fullPath: '/role-play'
       preLoaderRoute: typeof AppRolePlayRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/profile': {
+      id: '/_app/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AppProfileRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/practice': {
@@ -365,8 +365,8 @@ interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
   AppNotebookRoute: typeof AppNotebookRoute
   AppPracticeRoute: typeof AppPracticeRoute
+  AppProfileRoute: typeof AppProfileRoute
   AppRolePlayRoute: typeof AppRolePlayRoute
-  AppTutor3dRoute: typeof AppTutor3dRoute
   AppIndexRoute: typeof AppIndexRoute
   AppCoursesCourseIdRoute: typeof AppCoursesCourseIdRoute
   AppLessonsLessonIdRoute: typeof AppLessonsLessonIdRoute
@@ -377,8 +377,8 @@ const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
   AppNotebookRoute: AppNotebookRoute,
   AppPracticeRoute: AppPracticeRoute,
+  AppProfileRoute: AppProfileRoute,
   AppRolePlayRoute: AppRolePlayRoute,
-  AppTutor3dRoute: AppTutor3dRoute,
   AppIndexRoute: AppIndexRoute,
   AppCoursesCourseIdRoute: AppCoursesCourseIdRoute,
   AppLessonsLessonIdRoute: AppLessonsLessonIdRoute,

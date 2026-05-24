@@ -4,6 +4,11 @@ declare namespace Auth {
   interface UserProfile extends App.Base {
     email: string;
     name: string;
+    phoneNumber?: string;
+    dateOfBirth?: string;
+    gender?: 'MALE' | 'FEMALE' | 'OTHER' | 'PREFER_NOT_TO_SAY';
+    hobbies?: string[];
+    funFact?: string;
     avatar?: string;
     role: Role;
     emailVerifiedAt?: string | null;
@@ -32,6 +37,8 @@ declare namespace Auth {
   };
 
   type UpdateUserPayload = Partial<CreateUserPayload & Pick<UserProfile, 'avatar'>>;
+  
+  type UpdateProfilePayload = Partial<Pick<UserProfile, 'name' | 'phoneNumber' | 'dateOfBirth' | 'gender' | 'hobbies' | 'funFact' | 'avatar'>>;
 
   interface UserQueryParams extends App.CursorPaginationParams {
     search?: string;
@@ -70,5 +77,10 @@ declare namespace Auth {
   interface ResetPasswordPayload {
     token: string;
     password: string;
+  }
+
+  interface ChangePasswordPayload {
+    oldPassword?: string;
+    newPassword?: string;
   }
 }

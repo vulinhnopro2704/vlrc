@@ -3,7 +3,7 @@ import apiClient from './api-client';
 
 const ROLEPLAY_BASE_PATH = 'roleplay';
 
-export const getScenarios = (params?: Record<string, any>) =>
+export const getScenarios = (params?: Record<string, unknown>) =>
   apiClient
     .get(`${ROLEPLAY_BASE_PATH}/scenarios`, { searchParams: params })
     .json<RoleplayManagement.Scenario[]>();
@@ -40,13 +40,13 @@ export const suggestReplies = (sessionId: string) =>
 export const ROLEPLAY_QUERY_KEYS = {
   all: ['roleplay'] as const,
   scenarios: () => [...ROLEPLAY_QUERY_KEYS.all, 'scenarios'] as const,
-  scenarioList: (params?: Record<string, any>) =>
+  scenarioList: (params?: Record<string, unknown>) =>
     [...ROLEPLAY_QUERY_KEYS.scenarios(), params ?? {}] as const,
   history: () => [...ROLEPLAY_QUERY_KEYS.all, 'history'] as const,
   session: (sessionId: string) => [...ROLEPLAY_QUERY_KEYS.all, 'sessions', sessionId] as const
 };
 
-export const useScenariosQuery = (params?: Record<string, any>) =>
+export const useScenariosQuery = (params?: Record<string, unknown>) =>
   useQuery({
     queryKey: ROLEPLAY_QUERY_KEYS.scenarioList(params),
     queryFn: () => getScenarios(params)

@@ -1,9 +1,9 @@
-import { ErrorComponentProps, useRouter } from '@tanstack/react-router';
+import { useRouter } from '@tanstack/react-router';
 import { AlertCircle, Home, RefreshCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
 
-export const PageErrorFallback = ({ error, reset }: ErrorComponentProps) => {
+export const PageErrorFallback = ({ error, reset }: { error: any; reset: () => void }) => {
   const router = useRouter();
   const { t } = useTranslation();
 

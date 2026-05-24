@@ -3,6 +3,7 @@ import CreateScenarioModal from './CreateScenarioModal';
 
 import { useRolePlaySession } from './hooks/useRolePlaySession';
 import useTutor3DLipsync from '../Tutor3DPage/useTutor3DLipsync';
+import Tutor3DPage from '../Tutor3DPage/Tutor3DPage';
 
 import { ScenarioSelection } from './components/ScenarioSelection';
 import { SessionHistory } from './components/SessionHistory';
@@ -12,6 +13,7 @@ import { TextChatUI } from './components/TextChatUI';
 const RolePlayPage = () => {
   const { t } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<'scenario' | 'freetalk'>('scenario');
   const containerRef = useRef<HTMLDivElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
@@ -43,8 +45,12 @@ const RolePlayPage = () => {
   );
 
   const handleFreeTalk = () => {
-    toast.info('Bắt đầu Free Talk (vui lòng truy cập Tutor 3D để trải nghiệm voice trực quan)');
+    setViewMode('freetalk');
   };
+
+  if (viewMode === 'freetalk') {
+    return <Tutor3DPage onBack={() => setViewMode('scenario')} />;
+  }
 
   return (
     <div
@@ -52,11 +58,12 @@ const RolePlayPage = () => {
       className='h-[calc(100dvh-4rem)] flex flex-col overflow-hidden bg-slate-950 relative text-slate-50 w-full min-h-0'>
       <div className='absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(56,189,248,0.12),transparent_35%),radial-gradient(circle_at_75%_10%,rgba(99,102,241,0.12),transparent_40%),radial-gradient(circle_at_50%_80%,rgba(15,23,42,0.95),rgba(2,6,23,1))] pointer-events-none' />
 
-      <div
-        className={`relative z-10 w-full flex-1 max-w-7xl mx-auto px-4 md:px-6 flex flex-col min-h-0 ${!state.activeSession ? 'py-8 md:py-12 overflow-y-auto pb-20' : 'py-4 md:py-6'}`}>
-        {!state.activeSession ? (
-          <div className='flex-1'>
-            <div className='hero-content text-center mb-8 space-y-5 animate-fade-in'>
+      <div className={`relative z-10 w-full flex-1 flex flex-col min-h-0 ${!state.activeSession ? 'overflow-y-auto' : ''}`}>
+        <div
+          className={`w-full flex-1 max-w-[1920px] mx-auto px-4 md:px-8 2xl:px-12 flex flex-col min-h-0 ${!state.activeSession ? 'py-8 md:py-12 pb-20' : 'py-4 md:py-6 h-full'}`}>
+          {!state.activeSession ? (
+            <>
+              <div className='hero-content text-center mb-8 space-y-5 animate-fade-in'>
               <h1 className='text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 tracking-tight'>
                 {t('roleplay_title')}
               </h1>
@@ -125,9 +132,9 @@ const RolePlayPage = () => {
                 selectedHistorySessionId={state.selectedHistorySessionId}
               />
             )}
-          </div>
-        ) : (
-          <div className='flex-1 flex flex-col min-h-0'>
+            </>
+          ) : (
+            <div className='flex-1 flex flex-col min-h-0'>
             {!state.activeSession.isReadOnly && state.isVoiceMode ? (
               <VoiceCallUI
                 activeSession={state.activeSession}
@@ -172,7 +179,8 @@ const RolePlayPage = () => {
               />
             )}
           </div>
-        )}
+          )}
+        </div>
       </div>
 
       <CreateScenarioModal open={isModalOpen} onCancel={() => setIsModalOpen(false)} />

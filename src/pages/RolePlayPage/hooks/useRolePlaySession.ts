@@ -77,19 +77,21 @@ export const useRolePlaySession = (
         });
       });
 
-      setActiveSession({
-        sessionId: historyDetails.id,
-        scenario: historyDetails.scenario,
-        messages: mappedMessages,
-        taskEvaluation: {
-          task_1_completed: historyDetails.sessionEvaluation?.task1Completed ?? false,
-          task_2_completed: historyDetails.sessionEvaluation?.task2Completed ?? false,
-          task_3_completed: historyDetails.sessionEvaluation?.task3Completed ?? false
-        },
-        scenarioCompleted: false,
-        isReadOnly: true,
-        cumulativeGrammarFeedback: (historyDetails.sessionEvaluation?.grammarFeedback as string[]) ?? []
-      });
+      setTimeout(() => {
+        setActiveSession({
+          sessionId: historyDetails.id,
+          scenario: historyDetails.scenario,
+          messages: mappedMessages,
+          taskEvaluation: {
+            task_1_completed: historyDetails.sessionEvaluation?.task1Completed ?? false,
+            task_2_completed: historyDetails.sessionEvaluation?.task2Completed ?? false,
+            task_3_completed: historyDetails.sessionEvaluation?.task3Completed ?? false
+          },
+          scenarioCompleted: false,
+          isReadOnly: true,
+          cumulativeGrammarFeedback: (historyDetails.sessionEvaluation?.grammarFeedback as string[]) ?? []
+        });
+      }, 0);
     }
   }, [historyDetails]);
 
@@ -125,7 +127,9 @@ export const useRolePlaySession = (
 
     if (isSilent) {
       if (silenceStartRef.current === null) {
+        // eslint-disable-next-line react-hooks/purity
         silenceStartRef.current = Date.now();
+      // eslint-disable-next-line react-hooks/purity
       } else if (Date.now() - silenceStartRef.current > 3000) {
         toast.info('Tự động dừng ghi âm do không có tiếng động.', { id: 'vad-toast' });
         stopRecording();
@@ -188,7 +192,7 @@ export const useRolePlaySession = (
         };
       };
 
-      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+      const AudioContext = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       const audioCtx = new AudioContext();
       audioContextRef.current = audioCtx;
       const analyser = audioCtx.createAnalyser();
@@ -205,9 +209,10 @@ export const useRolePlaySession = (
         animationFrameRef.current = requestAnimationFrame(monitorSilence);
       }, 100);
       
-    } catch (err: any) {
-      console.error('Microphone Access Error:', err);
-      toast.error(`Lỗi Microphone: ${err?.name || err?.message || 'Không rõ nguyên nhân'}`);
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error('Microphone Access Error:', error);
+      toast.error(`Lỗi Microphone: ${error?.name || error?.message || 'Không rõ nguyên nhân'}`);
     }
   };
 
@@ -261,7 +266,7 @@ export const useRolePlaySession = (
       if (response.scenario_completed) {
         toast.success(t('roleplay_completed_congrats', 'Chúc mừng! Bạn đã hoàn thành xuất sắc tất cả nhiệm vụ!'));
       }
-    } catch (error) {
+    } catch {
       toast.error('Lỗi nhận diện hoặc tổng hợp giọng nói. Vui lòng thử lại!');
     }
   };
@@ -306,7 +311,7 @@ export const useRolePlaySession = (
       if (response.audio?.url && response.audio.status === 'completed') {
         playAudioFromResponse(response.audio.url);
       }
-    } catch (error) {
+    } catch {
       // handled
     }
   };
@@ -372,7 +377,7 @@ export const useRolePlaySession = (
       if (response.scenario_completed) {
         toast.success(t('roleplay_completed_congrats', 'Chúc mừng! Bạn đã hoàn thành xuất sắc tất cả nhiệm vụ!'));
       }
-    } catch (error) {
+    } catch {
       // handled
     }
   };
@@ -397,7 +402,7 @@ export const useRolePlaySession = (
           messages: prev.messages.map(m => m.id === messageId ? { ...m, translation } : m)
         };
       });
-    } catch (e) {
+    } catch {
       // toast already handled in mutation
     }
   };
@@ -407,7 +412,7 @@ export const useRolePlaySession = (
     try {
       const { suggestions } = await suggestRepliesMutation.mutateAsync(activeSession.sessionId);
       return suggestions;
-    } catch (e) {
+    } catch {
       return [];
     }
   };

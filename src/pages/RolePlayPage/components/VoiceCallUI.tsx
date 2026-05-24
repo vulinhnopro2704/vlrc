@@ -1,8 +1,4 @@
-import { Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { Button } from '@/components/ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+
 import { Icons } from '@/components/Icons/Icons';
 import TutorAvatarRig from '../../Tutor3DPage/TutorAvatarRig';
 import SceneLoader from '../../Tutor3DPage/SceneLoader';

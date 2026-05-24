@@ -10,7 +10,7 @@ interface AppLayoutProps {
 
 export const AppLayout = ({ children }: AppLayoutProps) => {
   const pathname = useRouterState({ select: state => state.location.pathname });
-  const isImmersiveRoute = pathname === '/tutor-3d' || pathname === '/role-play';
+  const isImmersiveRoute = pathname === '/role-play';
 
   return (
     <div className='flex flex-col min-h-screen bg-background'>

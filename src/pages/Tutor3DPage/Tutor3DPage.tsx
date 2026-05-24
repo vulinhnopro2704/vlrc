@@ -19,7 +19,14 @@ const DEFAULT_TUTOR_SESSION_PAYLOAD: Tutor3DManagement.CreateTutorSessionPayload
 };
 
 
-const Tutor3DPage: FC = () => {
+import { Button } from '@/components/ui/button';
+import { Icons } from '@/components/Icons/Icons';
+
+interface Tutor3DPageProps {
+  onBack?: () => void;
+}
+
+const Tutor3DPage: FC<Tutor3DPageProps> = ({ onBack }) => {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const sessionPromiseRef = useRef<Promise<string> | null>(null);
   const [chatMessages, setChatMessages] = useState<Tutor3DManagement.ChatMessage[]>([
@@ -149,6 +156,17 @@ const Tutor3DPage: FC = () => {
 
   return (
     <section className='relative h-[calc(100vh-4rem)] w-full overflow-hidden bg-slate-950'>
+      {onBack && (
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={onBack} 
+          className="absolute top-4 left-4 z-50 gap-2 bg-slate-900/60 hover:bg-slate-800 text-slate-200 border border-slate-800 backdrop-blur-sm rounded-xl"
+        >
+          <Icons.ArrowLeft size={18} />
+          Trở lại
+        </Button>
+      )}
       <Tutor3DDebugControls />
       <div className='absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(56,189,248,0.22),transparent_35%),radial-gradient(circle_at_75%_10%,rgba(99,102,241,0.2),transparent_40%),radial-gradient(circle_at_50%_80%,rgba(15,23,42,0.9),rgba(2,6,23,1))]' />
       <section className='relative h-full w-full'>

@@ -34,7 +34,6 @@ export const Header = () => {
         { key: 'courses', label: t('learning_courses'), to: '/courses' as const },
         { key: 'notebook', label: t('header_notebook_dictionary'), to: '/notebook' as const },
         { key: 'practice', label: t('header_practice'), to: '/practice' as const },
-        { key: 'tutor_3d', label: t('header_tutor_3d'), to: '/tutor-3d' as const },
         { key: 'role_play', label: t('roleplay_title'), to: '/role-play' as const }
       ]
     : [];
@@ -215,7 +214,7 @@ export const Header = () => {
             {me ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant='ghost' className='ml-2 h-9 gap-2 px-2'>
+                  <Button variant='ghost' size='icon' className='ml-2 h-9 w-9 rounded-full'>
                     <div className='h-7 w-7 overflow-hidden rounded-full bg-primary/15 text-primary ring-1 ring-border flex items-center justify-center text-xs font-semibold'>
                       {avatarUrl && !avatarHasError ? (
                         <img
@@ -228,10 +227,6 @@ export const Header = () => {
                         <span>{avatarFallback}</span>
                       )}
                     </div>
-                    <span className='max-w-28 truncate text-sm font-medium'>
-                      {me.name || me.email}
-                    </span>
-                    <Icons.ChevronDown className='h-4 w-4 opacity-70' />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
@@ -244,6 +239,9 @@ export const Header = () => {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate({ to: '/profile' })}>
+                    Hồ sơ cá nhân
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate({ to: '/dashboard' })}>
                     {t('learning_dashboard')}
                   </DropdownMenuItem>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useGenerateScenarioMutation } from '@/api/roleplay-management';
-import { FormInput, FormSelect } from '@/components/Form';
+import { FormInput, FormSelect, FormCheckbox } from '@/components/Form';
 import { Modal } from '@/modals/Modal';
 
 const CEFR_OPTIONS = [
@@ -31,7 +31,8 @@ export const CreateScenarioModal = ({ open, onCancel }: App.ModalProps) => {
     generateMutation.mutate({
       topic: data.topic,
       level: data.level,
-      isPublic: true
+      isPublic: true,
+      generateImage: data.generateImage
     });
   });
 
@@ -68,6 +69,12 @@ export const CreateScenarioModal = ({ open, onCancel }: App.ModalProps) => {
           options={CEFR_OPTIONS}
           disabled={isFormLoading}
           rules={{ required: true }}
+        />
+        <FormCheckbox
+          control={control}
+          name='generateImage'
+          label='Tạo ảnh minh họa bằng AI (Sẽ mất thời gian hơn)'
+          disabled={isFormLoading}
         />
       </form>
     </Modal>

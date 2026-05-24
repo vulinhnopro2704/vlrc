@@ -10,6 +10,7 @@ declare namespace RoleplayManagement {
     level?: string;
     topic?: string;
     isPublic: boolean;
+    imageUrl?: string;
     createdAt?: string;
     updatedAt?: string;
   }
@@ -18,6 +19,7 @@ declare namespace RoleplayManagement {
     topic: string;
     level: string;
     isPublic?: boolean;
+    generateImage?: boolean;
   }
 
   export interface CreateScenarioPayload {
