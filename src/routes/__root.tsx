@@ -3,6 +3,7 @@ import { createRootRoute, Outlet, useNavigate, useRouter } from '@tanstack/react
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { Toaster } from 'sonner';
 import { useAuthSession } from '@hooks/useAuthSession';
+import { NotFoundFallback, PageErrorFallback, PagePendingFallback } from '@/components/router';
 
 const RootLayout = () => {
   useAuthSession();
@@ -35,4 +36,9 @@ const RootLayout = () => {
   );
 };
 
-export const Route = createRootRoute({ component: RootLayout });
+export const Route = createRootRoute({
+  component: RootLayout,
+  pendingComponent: PagePendingFallback,
+  errorComponent: PageErrorFallback,
+  notFoundComponent: NotFoundFallback,
+});
