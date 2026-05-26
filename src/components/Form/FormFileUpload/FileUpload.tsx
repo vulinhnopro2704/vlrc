@@ -10,7 +10,7 @@ import {
   FileUploadItemDelete,
   useFileUpload
 } from '@/components/ui/file-upload';
-import { CloudUploadIcon, Trash2Icon, CameraIcon, UserIcon } from 'lucide-react';
+import { CloudUploadIcon, Trash2Icon, CameraIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 import type { XOR } from '@/types/utils';
