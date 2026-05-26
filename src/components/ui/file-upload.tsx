@@ -429,25 +429,31 @@ function FileUploadRoot(props: FileUploadRootProps) {
 
       if (maxFiles) {
         const currentCount = store.getState().files.size;
-        const remainingSlotCount = Math.max(0, maxFiles - currentCount);
+        
+        if (maxFiles === 1 && currentCount > 0 && filesToProcess.length > 0) {
+          // If maxFiles is 1, choosing a new file should replace the old one
+          store.dispatch({ type: 'CLEAR' });
+        } else {
+          const remainingSlotCount = Math.max(0, maxFiles - currentCount);
 
-        if (remainingSlotCount < filesToProcess.length) {
-          const rejectedFiles = filesToProcess.slice(remainingSlotCount);
-          invalid = true;
+          if (remainingSlotCount < filesToProcess.length) {
+            const rejectedFiles = filesToProcess.slice(remainingSlotCount);
+            invalid = true;
 
-          filesToProcess = filesToProcess.slice(0, remainingSlotCount);
+            filesToProcess = filesToProcess.slice(0, remainingSlotCount);
 
-          for (const file of rejectedFiles) {
-            let rejectionMessage = `Maximum ${maxFiles} files allowed`;
+            for (const file of rejectedFiles) {
+              let rejectionMessage = `Maximum ${maxFiles} files allowed`;
 
-            if (onFileValidate) {
-              const validationMessage = onFileValidate(file);
-              if (validationMessage) {
-                rejectionMessage = validationMessage;
+              if (onFileValidate) {
+                const validationMessage = onFileValidate(file);
+                if (validationMessage) {
+                  rejectionMessage = validationMessage;
+                }
               }
-            }
 
-            onFileReject?.(file, rejectionMessage);
+              onFileReject?.(file, rejectionMessage);
+            }
           }
         }
       }
