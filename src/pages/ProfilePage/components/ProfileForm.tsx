@@ -85,6 +85,16 @@ export const ProfileForm: FC = () => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+              {/* Avatar — Hình tròn, đặt ở giữa phía trên cùng */}
+              <FormFileUpload
+                control={form.control}
+                name='avatar'
+                variant='avatar'
+                className='md:col-span-2 flex flex-col items-center'
+                accept='image/*'
+                maxSize={2 * 1024 * 1024}
+              />
+
               {/* Họ và Tên */}
               <FormInput
                 control={form.control}
@@ -136,17 +146,6 @@ export const ProfileForm: FC = () => {
                 name='funFact'
                 className='md:col-span-2'
                 label='Fun fact về bản thân'
-              />
-
-              {/* Avatar — FileUpload thay vì nhập URL thô */}
-              <FormFileUpload
-                control={form.control}
-                name='avatar'
-                label='Ảnh đại diện'
-                description='Chọn ảnh từ máy tính. Upload sẽ diễn ra khi bạn lưu.'
-                className='md:col-span-2'
-                accept='image/*'
-                maxSize={2 * 1024 * 1024}
               />
             </div>
 

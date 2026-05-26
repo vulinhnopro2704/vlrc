@@ -10,7 +10,8 @@ import {
   FileUploadItemDelete,
   useFileUpload
 } from '@/components/ui/file-upload';
-import { CloudUploadIcon } from 'lucide-react';
+import { CloudUploadIcon, Trash2Icon, CameraIcon, UserIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 import type { XOR } from '@/types/utils';
 
@@ -53,6 +54,8 @@ export type FileUploadBaseProps = {
   disabled?: boolean;
   /** Additional CSS classes applied to the root wrapper element. */
   className?: string;
+  /** Rendering variant. 'avatar' renders a circular dropzone without a list. */
+  variant?: 'default' | 'avatar';
 };
 
 /**
@@ -175,7 +178,7 @@ function FileUploadSync({
 type ExtendedFile = File & { isUploadedUrl?: boolean; uploadedUrl?: string };
 
 /** Converts a URL string to a stub File object so the ui component can display it. */
-function urlToStubFile(url: string): ExtendedFile {
+function urlToStubFile(url: string, accept: string = ''): ExtendedFile {
   const fileName = url.split('/').pop()?.split('?')[0] || 'file';
   const ext = fileName.split('.').pop()?.toLowerCase();
   const mimeTypes: Record<string, string> = {
@@ -185,7 +188,10 @@ function urlToStubFile(url: string): ExtendedFile {
     gif: 'image/gif',
     webp: 'image/webp'
   };
-  const type = (ext && mimeTypes[ext]) ?? 'application/octet-stream';
+  let type = (ext && mimeTypes[ext]);
+  if (!type) {
+    type = accept.includes('image') ? 'image/jpeg' : 'application/octet-stream';
+  }
   const file = new File([''], fileName, { type }) as ExtendedFile;
   file.isUploadedUrl = true;
   file.uploadedUrl = url;
@@ -201,12 +207,13 @@ export function FileUpload({
   maxSize = 1024 * 1024 * 5, // 5MB default
   accept = 'image/*',
   disabled,
-  className
+  className,
+  variant = 'default'
 }: FileUploadProps) {
   const valArray = Array.isArray(value) ? value : value ? [value] : [];
   const mappedFiles: ExtendedFile[] = valArray.map(item => {
     if (item instanceof File) return item as ExtendedFile;
-    if (typeof item === 'string') return urlToStubFile(item);
+    if (typeof item === 'string') return urlToStubFile(item, accept);
     return item as ExtendedFile;
   });
 
@@ -248,16 +255,40 @@ export function FileUpload({
     );
   };
 
-  return (
-    <FileUploadRoot
-      value={mappedFiles}
-      maxFiles={maxFiles}
-      maxSize={maxSize}
-      accept={accept}
-      disabled={disabled}
-      onUpload={handleUpload}
-      className={className}>
-      <FileUploadSync onChange={onChange} autoUpload={autoUpload} maxFiles={maxFiles} />
+  const renderAvatarVariant = () => (
+    <div className="flex flex-col items-center gap-2">
+      <FileUploadDropzone className="group relative size-32 cursor-pointer overflow-hidden rounded-full border-2 border-dashed border-border p-0 hover:border-primary">
+        {mappedFiles[0] ? (
+          <FileUploadItem value={mappedFiles[0]} className="relative flex size-full flex-col rounded-none border-none p-0">
+            <FileUploadItemPreview
+              className="size-full rounded-none border-none bg-transparent"
+              render={(previewFile) => {
+                const url = (previewFile as File & { uploadedUrl?: string }).uploadedUrl;
+                if (url) return <img src={url} alt="Avatar" className="size-full object-cover" />;
+                return <img src={URL.createObjectURL(previewFile)} alt="Avatar" className="size-full object-cover" />;
+              }}
+            />
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+              <CameraIcon className="size-6 text-white" />
+              <span className="text-[10px] text-white">Đổi ảnh</span>
+            </div>
+            <FileUploadItemProgress variant="fill" className="opacity-50" />
+          </FileUploadItem>
+        ) : (
+          <div className="flex size-full flex-col items-center justify-center gap-1 bg-accent text-muted-foreground transition-colors group-hover:bg-accent/80">
+            <CameraIcon className="size-6" />
+            <span className="text-[10px]">Tải lên</span>
+          </div>
+        )}
+      </FileUploadDropzone>
+      <div className="text-xs text-muted-foreground">
+        {maxSize ? `Max ${Math.round(maxSize / (1024 * 1024))}MB` : ''}
+      </div>
+    </div>
+  );
+
+  const renderDefaultVariant = () => (
+    <>
       <FileUploadDropzone>
         <CloudUploadIcon className='h-10 w-10 text-muted-foreground' />
         <p className='text-sm font-medium'>Drag & drop files here, or click to select</p>
@@ -281,11 +312,30 @@ export function FileUpload({
               }}
             />
             <FileUploadItemMetadata />
-            <FileUploadItemProgress />
-            <FileUploadItemDelete />
+            <FileUploadItemProgress className="absolute bottom-0 left-0 right-0 h-1 w-auto rounded-none" />
+            <FileUploadItemDelete asChild>
+              <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0 text-muted-foreground hover:text-destructive">
+                <Trash2Icon className="h-4 w-4" />
+              </Button>
+            </FileUploadItemDelete>
           </FileUploadItem>
         ))}
       </FileUploadList>
+    </>
+  );
+
+  return (
+    <FileUploadRoot
+      value={mappedFiles}
+      maxFiles={variant === 'avatar' ? 1 : maxFiles}
+      maxSize={maxSize}
+      accept={accept}
+      disabled={disabled}
+      onUpload={handleUpload}
+      className={className}>
+      <FileUploadSync onChange={onChange} autoUpload={autoUpload} maxFiles={variant === 'avatar' ? 1 : maxFiles} />
+      
+      {variant === 'avatar' ? renderAvatarVariant() : renderDefaultVariant()}
     </FileUploadRoot>
   );
 }
