@@ -39,49 +39,51 @@ export const PasswordForm: FC = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 max-w-md">
-          <FormInput
-            control={form.control}
-            name="oldPassword"
-            label="Mật khẩu hiện tại"
-            htmlType="password"
-            placeholder="••••••••"
-            rules={{ required: 'Vui lòng nhập mật khẩu cũ' }}
-          />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 max-w-md">
+            <FormInput
+              control={form.control}
+              name="oldPassword"
+              label="Mật khẩu hiện tại"
+              htmlType="password"
+              placeholder="••••••••"
+              rules={{ required: 'Vui lòng nhập mật khẩu cũ' }}
+            />
 
-          <FormInput
-            control={form.control}
-            name="newPassword"
-            label="Mật khẩu mới"
-            htmlType="password"
-            placeholder="••••••••"
-            rules={{ 
-              required: 'Vui lòng nhập mật khẩu mới',
-              minLength: { value: 6, message: 'Mật khẩu phải từ 6 ký tự trở lên' }
-            }}
-          />
+            <FormInput
+              control={form.control}
+              name="newPassword"
+              label="Mật khẩu mới"
+              htmlType="password"
+              placeholder="••••••••"
+              rules={{ 
+                required: 'Vui lòng nhập mật khẩu mới',
+                minLength: { value: 6, message: 'Mật khẩu phải từ 6 ký tự trở lên' }
+              }}
+            />
 
-          <FormInput
-            control={form.control}
-            name="confirmPassword"
-            label="Xác nhận mật khẩu mới"
-            htmlType="password"
-            placeholder="••••••••"
-            rules={{ 
-              required: 'Vui lòng xác nhận mật khẩu mới',
-              validate: (val, formValues) => {
-                if (val !== formValues.newPassword) {
-                  return 'Mật khẩu xác nhận không khớp';
+            <FormInput
+              control={form.control}
+              name="confirmPassword"
+              label="Xác nhận mật khẩu mới"
+              htmlType="password"
+              placeholder="••••••••"
+              rules={{ 
+                required: 'Vui lòng xác nhận mật khẩu mới',
+                validate: (val, formValues) => {
+                  if (val !== formValues.newPassword) {
+                    return 'Mật khẩu xác nhận không khớp';
+                  }
+                  return true;
                 }
-                return true;
-              }
-            }}
-          />
+              }}
+            />
 
-          <Button type="submit" disabled={mutation.isPending}>
-            {mutation.isPending ? 'Đang lưu...' : 'Lưu mật khẩu'}
-          </Button>
-        </form>
+            <Button type="submit" disabled={mutation.isPending}>
+              {mutation.isPending ? 'Đang lưu...' : 'Lưu mật khẩu'}
+            </Button>
+          </form>
+        </Form>
       </CardContent>
     </Card>
   );

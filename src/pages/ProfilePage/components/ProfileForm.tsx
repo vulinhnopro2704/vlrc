@@ -82,77 +82,79 @@ export const ProfileForm: FC = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-            {/* Họ và Tên */}
-            <FormInput
-              control={form.control}
-              name='name'
-              label='Họ và Tên'
-              placeholder='Nguyễn Văn A'
-              rules={{ required: true, minLength: { value: 2, message: 'Tên quá ngắn' } }}
-            />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+              {/* Họ và Tên */}
+              <FormInput
+                control={form.control}
+                name='name'
+                label='Họ và Tên'
+                placeholder='Nguyễn Văn A'
+                rules={{ required: true, minLength: { value: 2, message: 'Tên quá ngắn' } }}
+              />
 
-            {/* Số điện thoại — htmlType="tel" kích hoạt auto-validate pattern VN */}
-            <FormInput
-              control={form.control}
-              name='phoneNumber'
-              label='Số điện thoại'
-              placeholder='0987654321'
-              htmlType='tel'
-            />
+              {/* Số điện thoại — htmlType="tel" kích hoạt auto-validate pattern VN */}
+              <FormInput
+                control={form.control}
+                name='phoneNumber'
+                label='Số điện thoại'
+                placeholder='0987654321'
+                htmlType='tel'
+              />
 
-            {/* Ngày sinh — DatePicker thay vì input[type=date] thô */}
-            <FormDatePicker
-              control={form.control}
-              name='dateOfBirth'
-              label='Ngày sinh'
-              pickerType='date'
-              placeholder='Chọn ngày sinh'
-              allowClear
-            />
+              {/* Ngày sinh — DatePicker thay vì input[type=date] thô */}
+              <FormDatePicker
+                control={form.control}
+                name='dateOfBirth'
+                label='Ngày sinh'
+                pickerType='date'
+                placeholder='Chọn ngày sinh'
+                allowClear
+              />
 
-            {/* Giới tính */}
-            <FormSimpleSelect control={form.control} name='gender' label='Giới tính'>
-              <SelectItem value='MALE'>Nam</SelectItem>
-              <SelectItem value='FEMALE'>Nữ</SelectItem>
-              <SelectItem value='OTHER'>Khác</SelectItem>
-              <SelectItem value='PREFER_NOT_TO_SAY'>Không tiết lộ</SelectItem>
-            </FormSimpleSelect>
+              {/* Giới tính */}
+              <FormSimpleSelect control={form.control} name='gender' label='Giới tính'>
+                <SelectItem value='MALE'>Nam</SelectItem>
+                <SelectItem value='FEMALE'>Nữ</SelectItem>
+                <SelectItem value='OTHER'>Khác</SelectItem>
+                <SelectItem value='PREFER_NOT_TO_SAY'>Không tiết lộ</SelectItem>
+              </FormSimpleSelect>
 
-            {/* Sở thích — Textarea để nhập tự do, ngăn cách bằng dấu phẩy */}
-            <FormTextarea
-              control={form.control}
-              name='hobbies'
-              className='md:col-span-2'
-              label='Sở thích'
-              description='Nhập các sở thích, ngăn cách bằng dấu phẩy. VD: Đọc sách, Lập trình, Thể thao'
-            />
+              {/* Sở thích — Textarea để nhập tự do, ngăn cách bằng dấu phẩy */}
+              <FormTextarea
+                control={form.control}
+                name='hobbies'
+                className='md:col-span-2'
+                label='Sở thích'
+                description='Nhập các sở thích, ngăn cách bằng dấu phẩy. VD: Đọc sách, Lập trình, Thể thao'
+              />
 
-            {/* Fun fact */}
-            <FormTextarea
-              control={form.control}
-              name='funFact'
-              className='md:col-span-2'
-              label='Fun fact về bản thân'
-            />
+              {/* Fun fact */}
+              <FormTextarea
+                control={form.control}
+                name='funFact'
+                className='md:col-span-2'
+                label='Fun fact về bản thân'
+              />
 
-            {/* Avatar — FileUpload thay vì nhập URL thô */}
-            <FormFileUpload
-              control={form.control}
-              name='avatar'
-              label='Ảnh đại diện'
-              description='Chọn ảnh từ máy tính. Upload sẽ diễn ra khi bạn lưu.'
-              className='md:col-span-2'
-              accept='image/*'
-              maxSize={2 * 1024 * 1024}
-            />
-          </div>
+              {/* Avatar — FileUpload thay vì nhập URL thô */}
+              <FormFileUpload
+                control={form.control}
+                name='avatar'
+                label='Ảnh đại diện'
+                description='Chọn ảnh từ máy tính. Upload sẽ diễn ra khi bạn lưu.'
+                className='md:col-span-2'
+                accept='image/*'
+                maxSize={2 * 1024 * 1024}
+              />
+            </div>
 
-          <Button type='submit' disabled={mutation.isPending || isUploading}>
-            {mutation.isPending || isUploading ? 'Đang lưu...' : 'Lưu thay đổi'}
-          </Button>
-        </form>
+            <Button type='submit' disabled={mutation.isPending || isUploading}>
+              {mutation.isPending || isUploading ? 'Đang lưu...' : 'Lưu thay đổi'}
+            </Button>
+          </form>
+        </Form>
       </CardContent>
     </Card>
   );
