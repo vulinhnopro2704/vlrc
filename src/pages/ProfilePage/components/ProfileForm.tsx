@@ -1,4 +1,6 @@
 import { updateProfile } from '@/api/auth-management';
+import { uploadFile } from '@/api/storage-management';
+import { useState } from 'react';
 import { AUTH_ME_QUERY_KEY, useAuthSession } from '@/hooks/useAuthSession';
 import { FormInput, FormSimpleSelect, FormTextarea } from '@/components/Form/Form';
 import FormDatePicker from '@/components/Form/FormDatePicker';
@@ -11,9 +13,10 @@ export const ProfileForm: FC = () => {
 
   // dateOfBirth: Date (DatePicker) thay vì string (API)
   // hobbies: string comma-separated (Textarea) thay vì string[] (API)
-  type FormValues = Omit<Auth.UpdateProfilePayload, 'dateOfBirth' | 'hobbies'> & {
+  type FormValues = Omit<Auth.UpdateProfilePayload, 'dateOfBirth' | 'hobbies' | 'avatar'> & {
     dateOfBirth?: Date;
     hobbies?: string;
+    avatar?: File | string | null;
   };
 
   const form = useForm<FormValues>({
@@ -39,17 +42,35 @@ export const ProfileForm: FC = () => {
     }
   });
 
-  const onSubmit = ({ dateOfBirth, hobbies, ...values }: FormValues) => {
-    mutation.mutate({
-      ...values,
-      dateOfBirth: dateOfBirth?.toISOString().split('T')[0],
-      hobbies: hobbies?.trim()
-        ? hobbies
-            .split(',')
-            .map(h => h.trim())
-            .filter(Boolean)
-        : undefined
-    });
+  const [isUploading, setIsUploading] = useState(false);
+
+  const onSubmit = async ({ dateOfBirth, hobbies, avatar, ...values }: FormValues) => {
+    try {
+      let avatarUrl = avatar;
+
+      // Nếu người dùng chọn file mới, thực hiện upload trước
+      if (avatar instanceof File) {
+        setIsUploading(true);
+        const res = await uploadFile(avatar);
+        avatarUrl = res.url;
+      }
+
+      mutation.mutate({
+        ...values,
+        avatar: typeof avatarUrl === 'string' ? avatarUrl : undefined,
+        dateOfBirth: dateOfBirth?.toISOString().split('T')[0],
+        hobbies: hobbies?.trim()
+          ? hobbies
+              .split(',')
+              .map(h => h.trim())
+              .filter(Boolean)
+          : undefined
+      });
+    } catch {
+      toast.error(t('auth_profile_upload_failed', 'Failed to upload avatar. Please try again.'));
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -128,8 +149,8 @@ export const ProfileForm: FC = () => {
             />
           </div>
 
-          <Button type='submit' disabled={mutation.isPending}>
-            {mutation.isPending ? 'Đang lưu...' : 'Lưu thay đổi'}
+          <Button type='submit' disabled={mutation.isPending || isUploading}>
+            {mutation.isPending || isUploading ? 'Đang lưu...' : 'Lưu thay đổi'}
           </Button>
         </form>
       </CardContent>

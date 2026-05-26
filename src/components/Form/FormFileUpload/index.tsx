@@ -9,7 +9,7 @@ export const FormFileUpload: FormControlFunc<FormFileUploadExtraProps> = props =
     <FormBase {...props}>
       {({ onChange, value, disabled }) => (
         <FileUpload
-          {...props}
+          {...(props as unknown as FileUploadProps)}
           value={value}
           onChange={onChange}
           disabled={disabled || props.disabled}
