@@ -1,8 +1,6 @@
 'use client';
 
 import { useCourseQuery, useCourseMutation } from '@/api/course-management';
-import { FormInput, FormTextarea } from '@/components/Form';
-import { Modal } from './Modal';
 
 export const CreateCourseModal = ({ id, open, onCancel }: App.ModalProps) => {
   const { t } = useTranslation();

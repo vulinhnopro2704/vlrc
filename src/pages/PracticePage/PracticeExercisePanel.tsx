@@ -169,7 +169,7 @@ const PracticeExercisePanel: FC<{
       {/* Game Over Warning */}
       {isGameEnded && (
         <div className='flex items-start gap-3 rounded-lg border border-red-500 bg-red-500/10 p-3 sm:p-4'>
-          <AlertCircle className='w-5 h-5 text-red-600 shrink-0 mt-0.5' />
+          <Icons.AlertCircle className='w-5 h-5 text-red-600 shrink-0 mt-0.5' />
           <div>
             <p className='font-semibold text-red-700'>{t('practice_game_over')}</p>
             <p className='text-xs text-red-600 sm:text-sm'>{t('practice_no_lives_remaining')}</p>

@@ -4,8 +4,6 @@
  * Pure UI component showing game state summary
  */
 
-import Icons from '@/components/Icons';
-import { useTranslation } from 'react-i18next';
 
 interface PracticeReviewDetailItem {
   wordId: App.ID;

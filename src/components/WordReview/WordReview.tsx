@@ -1,4 +1,3 @@
-import Icons from '@/components/Icons';
 import useAudioSynthesis from '@/hooks/useAudioSynthesis';
 import { cn } from '@/lib/utils';
 import { createPortal } from 'react-dom';

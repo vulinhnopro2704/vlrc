@@ -2,16 +2,17 @@ import { useMyWordsQuery } from '@/api/progress-management';
 import { NotebookTabState } from './NotebookTabState';
 import { NotebookWordCard } from './NotebookWordCard';
 
-export const LearnedWordsTab: FC<{}> = () => {
+export const LearnedWordsTab: FC = () => {
   const { t } = useTranslation();
   const [search, setSearch] = useState('');
   const [level, setLevel] = useState('all');
   const [debouncedSearch, setDebouncedSearch] = useState('');
 
-  const debouncedSetSearch = useCallback(
-    debounce((value: string) => {
-      setDebouncedSearch(value);
-    }, 300),
+  const debouncedSetSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        setDebouncedSearch(value);
+      }, 300),
     []
   );
 
@@ -50,20 +51,22 @@ export const LearnedWordsTab: FC<{}> = () => {
           </div>
           <div className='space-y-2'>
             <label className='text-xs font-medium sm:text-sm'>{t('notebook_filter_level')}</label>
-            <Select value={level} onValueChange={setLevel}>
-              <SelectTrigger className='w-full text-sm md:w-40'>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value='all'>{t('notebook_filter_all')}</SelectItem>
-                <SelectItem value='A1'>A1</SelectItem>
-                <SelectItem value='A2'>A2</SelectItem>
-                <SelectItem value='B1'>B1</SelectItem>
-                <SelectItem value='B2'>B2</SelectItem>
-                <SelectItem value='C1'>C1</SelectItem>
-                <SelectItem value='C2'>C2</SelectItem>
-              </SelectContent>
-            </Select>
+            <Select
+              value={level}
+              onChange={val => val && setLevel(val)}
+              options={[
+                { value: 'all', label: t('notebook_filter_all') },
+                { value: 'A1', label: 'A1' },
+                { value: 'A2', label: 'A2' },
+                { value: 'B1', label: 'B1' },
+                { value: 'B2', label: 'B2' },
+                { value: 'C1', label: 'C1' },
+                { value: 'C2', label: 'C2' }
+              ]}
+              isClearable={false}
+              isSearchable={false}
+              className='w-full md:w-40'
+            />
           </div>
         </div>
       </div>

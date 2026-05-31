@@ -1,6 +1,5 @@
 'use client';
 
-import Icons from '@/components/Icons';
 
 export const CourseGrid = ({
   course,

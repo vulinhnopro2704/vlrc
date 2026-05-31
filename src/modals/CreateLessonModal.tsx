@@ -2,8 +2,6 @@
 
 import { useLessonMutation, useLessonQuery } from '@/api/lesson-management';
 import { useCoursesQuery } from '@/api/course-management';
-import { FormInput, FormSelect, FormTextarea } from '@/components/Form';
-import { Modal } from './Modal';
 
 export const CreateLessonModal = ({ id, open, onCancel }: App.ModalProps) => {
   const { t } = useTranslation();

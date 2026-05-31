@@ -1,4 +1,3 @@
-import Icons from '@/components/Icons';
 
 export const NotebookWordCard: FC<{
   word: Partial<LearningManagement.Word> | null | undefined;

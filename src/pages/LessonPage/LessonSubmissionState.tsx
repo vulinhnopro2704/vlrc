@@ -1,4 +1,3 @@
-import Icons from '@/components/Icons';
 
 const LessonSubmissionState = ({
   isSubmitting,

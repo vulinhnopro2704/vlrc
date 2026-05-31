@@ -5,6 +5,91 @@ import AutoImport from 'unplugin-auto-import/vite';
 import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { resolve } from 'path';
+import fs from 'fs';
+import path from 'path';
+
+function getExports(filePath: string): string[] {
+  const exportsSet = new Set<string>();
+
+  function resolvePath(basePath: string, relativePath: string): string | null {
+    const dir = path.dirname(basePath);
+    const absolute = path.resolve(dir, relativePath);
+    const extensions = ['.ts', '.tsx', '/index.ts', '/index.tsx'];
+    for (const ext of extensions) {
+      const p = absolute + ext;
+      if (fs.existsSync(p) && fs.statSync(p).isFile()) {
+        return p;
+      }
+    }
+    if (fs.existsSync(absolute) && fs.statSync(absolute).isFile()) {
+      return absolute;
+    }
+    return null;
+  }
+
+  function parseFile(currentPath: string) {
+    if (!fs.existsSync(currentPath)) return;
+    const content = fs.readFileSync(currentPath, 'utf-8');
+    const cleanContent = content.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
+
+    const exportStarRegex = /export\s+\*\s+from\s+['"]([^'"]+)['"]/g;
+    let match;
+    while ((match = exportStarRegex.exec(cleanContent)) !== null) {
+      const relPath = match[1];
+      const resolved = resolvePath(currentPath, relPath);
+      if (resolved) {
+        parseFile(resolved);
+      }
+    }
+
+    const exportFromRegex = /export\s+(?:type\s+)?\{\s*([^}]+)\s*\}\s+from\s+['"]([^'"]+)['"]/g;
+    while ((match = exportFromRegex.exec(cleanContent)) !== null) {
+      const namesStr = match[1];
+      namesStr.split(',').forEach(item => {
+        const trimmed = item.trim();
+        if (!trimmed) return;
+        const parts = trimmed.split(/\s+as\s+/);
+        let name = parts[parts.length - 1].trim();
+        if (name.startsWith('type ')) {
+          name = name.substring(5).trim();
+        }
+        if (name && name !== 'default') {
+          exportsSet.add(name);
+        }
+      });
+    }
+
+    const inlineExportRegex = /export\s+(?:async\s+)?(?:const|function\*?|class|let|var|type|interface)\s+([a-zA-Z0-9_$]+)/g;
+    while ((match = inlineExportRegex.exec(cleanContent)) !== null) {
+      const name = match[1];
+      if (name) exportsSet.add(name);
+    }
+
+    const exportCurlyRegex = /export\s+(?:type\s+)?\{\s*([^}]+)\s*\}(?!\s+from)/g;
+    while ((match = exportCurlyRegex.exec(cleanContent)) !== null) {
+      const namesStr = match[1];
+      namesStr.split(',').forEach(item => {
+        const trimmed = item.trim();
+        if (!trimmed) return;
+        const parts = trimmed.split(/\s+as\s+/);
+        let name = parts[parts.length - 1].trim();
+        if (name.startsWith('type ')) {
+          name = name.substring(5).trim();
+        }
+        if (name) {
+          exportsSet.add(name);
+        }
+      });
+    }
+  }
+
+  parseFile(filePath);
+  return Array.from(exportsSet);
+}
+
+const componentExports = getExports(resolve(__dirname, './packages/components/src/index.ts'));
+const hookExports = getExports(resolve(__dirname, './packages/hooks/src/index.ts'));
+
 
 export default defineConfig({
   optimizeDeps: { force: true },
@@ -25,10 +110,10 @@ export default defineConfig({
       imports: [
         'react',
         {
-          react: ['cloneElement', 'createContext', 'StrictMode', 'Suspense', 'isValidElement']
+          react: ['cloneElement', 'createContext', 'StrictMode', 'Suspense', 'isValidElement', 'use', 'useId']
         },
         {
-          'react-i18next': ['useTranslation', 'Trans']
+          'react-i18next': ['useTranslation', 'Trans', 'initReactI18next']
         },
         {
           '@gsap/react': ['useGSAP']
@@ -79,7 +164,10 @@ export default defineConfig({
             'useRouteLoaderData',
             'useIsPending',
             'useLink',
-            'Link'
+            'Link',
+            'createRouter',
+            'RouterProvider',
+            'useRouterState'
           ]
         },
         {
@@ -156,94 +244,12 @@ export default defineConfig({
           ]
         },
         {
-          'lucide-react': [
-            'Loader2',
-            'HistoryIcon',
-            'UserIcon',
-            'CalendarIcon',
-            'ZapIcon',
-            'TruckIcon',
-            'ArrowLeftIcon',
-            'PlusIcon',
-            'LogOutIcon',
-            'CreditCardIcon',
-            'SettingsIcon',
-            'BellIcon',
-            'CheckIcon',
-            'XIcon',
-            'ChevronDownIcon',
-            'ChevronUpIcon',
-            'ChevronLeftIcon',
-            'ChevronRightIcon',
-            'SearchIcon',
-            'Edit3Icon',
-            'Trash2Icon',
-            'AlertTriangleIcon',
-            'InfoIcon',
-            'DollarSignIcon',
-            'CarIcon',
-            'PackageIcon',
-            'MapPinIcon',
-            'SaveIcon',
-            'KeyIcon',
-            'PhoneIcon',
-            'MailIcon',
-            'EyeOffIcon',
-            'EyeIcon',
-            'LockIcon',
-            'HomeIcon',
-            'FileTextIcon',
-            'FilePlusIcon',
-            'FileMinusIcon',
-            'FileIcon',
-            'CopyIcon',
-            'DownloadIcon',
-            'UploadIcon',
-            'MoreHorizontalIcon',
-            'MoreVerticalIcon',
-            'XCircleIcon',
-            'CheckCircleIcon',
-            'AlertCircleIcon',
-            'StarIcon',
-            'StarHalfIcon',
-            'StarOffIcon',
-            'MessageCircleIcon',
-            'MessageSquareIcon',
-            'PaperclipIcon',
-            'CalendarCheckIcon',
-            'CalendarMinusIcon',
-            'CalendarPlusIcon',
-            'CalendarXIcon',
-            'ClockIcon',
-            'RepeatIcon',
-            'RefreshCcwIcon',
-            'RefreshCwIcon',
-            'PlaneIcon',
-            'BoxesIcon',
-            'UsersIcon',
-            'ShieldIcon',
-            'FacebookIcon',
-            'InstagramIcon',
-            'TwitterIcon',
-            'LinkedinIcon',
-            'TrendingUpIcon',
-            'TrendingDownIcon',
-            'MinusIcon',
-            'EditIcon',
-            'BarChart3Icon',
-            'FilterIcon',
-            'ArrowUpDownIcon',
-            'UserCheckIcon',
-            'UserXIcon',
-            'PlusCircleIcon',
-            'ArrowDownIcon',
-            'TrashIcon',
-            'CalculatorIcon',
-            'GiftIcon',
-            'NavigationIcon',
-            'CameraIcon'
-          ]
+          '@platform-core/hooks': hookExports
         },
+        {
+          '@platform-core/components': componentExports
+        },
+
         {
           zustand: ['create'],
           'zustand/middleware': ['persist', ['devtools', 'zustandDevtools'], 'immer']
@@ -261,7 +267,8 @@ export default defineConfig({
             'UseFormSetValue',
             'UseFormSetError',
             'UseFormHandleSubmit',
-            'Control'
+            'Control',
+            'FieldPath'
           ],
           type: true
         },
@@ -282,12 +289,18 @@ export default defineConfig({
             'RefObject',
             'Dispatch',
             'SetStateAction',
-            'CSSProperties'
+            'CSSProperties',
+            'HTMLAttributes'
           ],
+          type: true
+        },
+        {
+          from: 'zustand',
+          imports: ['StateCreator', 'StoreApi', 'UseBoundStore'],
           type: true
         }
       ],
-      dirs: ['src/components/ui', 'src/lib', 'src/shared'],
+      dirs: ['src/lib', 'src/shared'],
       dts: 'src/types/auto-imports.d.ts'
     })
   ],
@@ -302,7 +315,12 @@ export default defineConfig({
       '@types': resolve(__dirname, './src/types'),
       '@stores': resolve(__dirname, './src/stores'),
       '@api': resolve(__dirname, './src/api'),
-      '@shared': resolve(__dirname, './src/shared')
+      '@shared': resolve(__dirname, './src/shared'),
+      '@platform-core/components': resolve(__dirname, './packages/components/src'),
+      '@platform-core/components/ui': resolve(__dirname, './packages/components/src/ui'),
+      '@platform-core/components/DataTable': resolve(__dirname, './packages/components/src/DataTable'),
+      '@platform-core/components/Icons': resolve(__dirname, './packages/components/src/Icons'),
+      '@platform-core/hooks': resolve(__dirname, './packages/hooks/src')
     }
   }
 });

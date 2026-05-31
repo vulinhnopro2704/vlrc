@@ -16,10 +16,13 @@ export const UserCreatedWordsTab: FC<{
     take: 100
   });
 
-  const lessons = (get(lessonsQuery.data, 'data', []) as LearningManagement.Lesson[]) ?? [];
+  const lessons = useMemo(() => {
+    return (get(lessonsQuery.data, 'data', []) as LearningManagement.Lesson[]) ?? [];
+  }, [lessonsQuery.data]);
 
   useEffect(() => {
     if (!selectedLessonId && size(lessons) > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedLessonId(String(lessons[0]?.id ?? ''));
     }
   }, [lessons, selectedLessonId]);
@@ -47,18 +50,18 @@ export const UserCreatedWordsTab: FC<{
       <div className='rounded-2xl border bg-card/50 p-3.5 sm:p-5'>
         <div className='space-y-2'>
           <label className='text-xs font-medium sm:text-sm'>{t('notebook_filter_lesson')}</label>
-          <Select value={selectedLessonId} onValueChange={setSelectedLessonId}>
-            <SelectTrigger className='w-full text-sm md:w-72'>
-              <SelectValue placeholder={t('notebook_filter_lesson_placeholder')} />
-            </SelectTrigger>
-            <SelectContent>
-              {map(lessons, lesson => (
-                <SelectItem key={String(lesson.id)} value={String(lesson.id)}>
-                  {lesson.title}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <Select
+            value={selectedLessonId}
+            onChange={val => val && setSelectedLessonId(val)}
+            options={map(lessons, lesson => ({
+              value: String(lesson.id ?? ''),
+              label: lesson.title ?? ''
+            }))}
+            placeholder={t('notebook_filter_lesson_placeholder')}
+            isClearable={false}
+            isSearchable={true}
+            className='w-full md:w-72'
+          />
         </div>
       </div>
 

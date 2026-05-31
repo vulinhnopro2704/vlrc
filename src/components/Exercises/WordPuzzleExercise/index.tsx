@@ -4,14 +4,10 @@
  * All logic delegated to practice library helpers
  */
 
-import { useState, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { useAnimationTriggers } from '@/hooks/practice/useAnimationTriggers';
 import { useExerciseState } from '@/hooks/practice/useExerciseState';
 import { checkAnswer } from '@/lib/practice/exerciseHandlers';
-import { Lightbulb } from 'lucide-react';
+
 
 interface WordPuzzleExerciseProps extends LearningManagement.ActivityCardProps {
   exerciseData?: Practice.ExerciseVariant;
@@ -84,7 +80,7 @@ export const WordPuzzleExercise: React.FC<WordPuzzleExerciseProps> = ({
       {/* Hints Section */}
       <div className='space-y-3'>
         <div className='p-3 rounded-lg border flex items-start gap-3 bg-primary/10 border-primary'>
-          <Lightbulb className='w-5 h-5 mt-0.5 flex-shrink-0 text-yellow-500' />
+          <Icons.Lightbulb className='w-5 h-5 mt-0.5 flex-shrink-0 text-yellow-500' />
           <div>
             <p className='text-xs font-semibold uppercase tracking-wide text-muted-foreground'>
               Pronunciation Hint

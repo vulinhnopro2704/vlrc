@@ -4,10 +4,6 @@
  * All logic delegated to practice library helpers
  */
 
-import { useState, useRef, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { useAnimationTriggers } from '@/hooks/practice/useAnimationTriggers';
 import { useExerciseState } from '@/hooks/practice/useExerciseState';
 import { checkAnswer } from '@/lib/practice/exerciseHandlers';

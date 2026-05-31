@@ -1,7 +1,3 @@
-import { useRouter } from '@tanstack/react-router';
-import { AlertCircle, Home, RefreshCcw } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useTranslation } from 'react-i18next';
 
 export const PageErrorFallback = ({ error, reset }: { error: any; reset: () => void }) => {
   const router = useRouter();
@@ -10,7 +6,7 @@ export const PageErrorFallback = ({ error, reset }: { error: any; reset: () => v
   return (
     <div className="flex h-[70vh] w-full flex-col items-center justify-center gap-6 px-4 text-center">
       <div className="rounded-full bg-destructive/10 p-4">
-        <AlertCircle className="size-10 text-destructive" />
+        <Icons.AlertCircle className="size-10 text-destructive" />
       </div>
       <div className="flex max-w-md flex-col gap-2">
         <h2 className="text-2xl font-semibold tracking-tight">
@@ -28,11 +24,11 @@ export const PageErrorFallback = ({ error, reset }: { error: any; reset: () => v
             reset();
           }}
         >
-          <RefreshCcw className="mr-2 size-4" />
+          <Icons.RefreshCcw className="mr-2 size-4" />
           {t('try_again', 'Try again')}
         </Button>
         <Button onClick={() => router.navigate({ to: '/' })}>
-          <Home className="mr-2 size-4" />
+          <Icons.Home className="mr-2 size-4" />
           {t('go_home', 'Go to Home')}
         </Button>
       </div>

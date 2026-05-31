@@ -5,7 +5,6 @@ import { useCompleteLessonMutation } from '@/api/lesson-management';
 import { LESSON_QUERY_KEYS } from '@/api/lesson-management';
 import { useWordsQuery } from '@/api/word-management';
 import { COURSE_QUERY_KEYS } from '@/api/course-management';
-import Icons from '@/components/Icons';
 import LessonHeader from './LessonHeader';
 import LessonExercisePanel from './LessonExercisePanel';
 import LessonSubmissionState from './LessonSubmissionState';

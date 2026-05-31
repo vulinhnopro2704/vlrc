@@ -1,8 +1,6 @@
-import Icons from '@/components/Icons';
 import { logout } from '@/api/auth-management';
 import { AUTH_ME_QUERY_KEY, useAuthSession } from '@/hooks/useAuthSession';
 import { toast } from '@/shared';
-import { useRouterState } from '@tanstack/react-router';
 
 const getAvatarFallback = (name?: string) => {
   if (!name || !name.trim()) {

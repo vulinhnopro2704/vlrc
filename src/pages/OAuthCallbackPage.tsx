@@ -1,4 +1,3 @@
-import { Link } from '@tanstack/react-router';
 import { getMe, getGoogleOAuthStartUrl } from '@/api/auth-management';
 import { AUTH_ME_QUERY_KEY } from '@/hooks/useAuthSession';
 import AuthStatusCard from '@/components/AuthStatusCard';

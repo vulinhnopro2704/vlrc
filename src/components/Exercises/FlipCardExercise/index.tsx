@@ -1,7 +1,6 @@
 'use client';
 
 import { FlipCard } from '@/components/FlipCard';
-import Icons from '@/components/Icons';
 import useAudioSynthesis from '@/hooks/useAudioSynthesis';
 
 export default function FlipCardExercise({

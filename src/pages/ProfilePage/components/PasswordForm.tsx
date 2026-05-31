@@ -1,5 +1,4 @@
 import { changePassword } from '@/api/auth-management';
-import { FormInput } from '@/components/Form/Form';
 
 export const PasswordForm: FC = () => {
   const { t } = useTranslation();

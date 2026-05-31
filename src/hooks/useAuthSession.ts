@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import { getMe } from '@api/auth-management';
 
 export const AUTH_ME_QUERY_KEY = ['auth', 'me'] as const;

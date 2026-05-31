@@ -1,7 +1,6 @@
 'use client';
 
 import { useCoursesQuery } from '@/api/course-management';
-import Icons from '@/components/Icons';
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 

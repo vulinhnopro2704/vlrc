@@ -1,12 +1,9 @@
 'use client';
 
-import type { ReactNode } from 'react';
 import { FlipCard } from '@/components/FlipCard';
 import type { AnimationConfig, FlipCardSize, FlipDirection } from '@/components/FlipCard';
-import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import useAudioSynthesis from '@/hooks/useAudioSynthesis';
-import Icons from '@/components/Icons';
 
 type VocabCardLabels = {
   pronunciation: ReactNode;

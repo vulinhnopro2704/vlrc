@@ -1,13 +1,3 @@
-import { Button } from '@/components/ui/button';
-import Icons from '@/components/Icons';
-import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
 
 export const Header = () => {
   const { t, i18n } = useTranslation();

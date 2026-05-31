@@ -1,5 +1,4 @@
 import { useCoursesQuery } from '@/api/course-management';
-import Icons from '@/components/Icons';
 import { NotebookTabState } from './NotebookTabState';
 
 export const UserCreatedCoursesTab: FC<{

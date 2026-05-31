@@ -1,8 +1,5 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import Icons from '@/components/Icons';
 
 interface SidebarProps {
   courses: LearningManagement.Course[];

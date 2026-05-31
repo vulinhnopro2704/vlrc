@@ -4,7 +4,6 @@
  * Receives triggers, manages animation state, emits completion callbacks
  */
 
-import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import {
   createCorrectAnswerAnimation,

@@ -1,5 +1,4 @@
 import { useLessonsQuery } from '@/api/lesson-management';
-import Icons from '@/components/Icons';
 import { NotebookTabState } from './NotebookTabState';
 
 export const UserCreatedLessonsTab: FC<{

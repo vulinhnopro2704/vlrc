@@ -4,8 +4,6 @@
  * Pure UI component
  */
 
-import Icons from '@/components/Icons';
-import { Button } from '@/components/ui/button';
 
 interface PracticeHeaderProps {
   gameState: ReturnType<typeof import('@/hooks/practice/useGameState').useGameState>;

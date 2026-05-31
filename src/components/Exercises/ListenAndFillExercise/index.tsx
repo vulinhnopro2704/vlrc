@@ -1,8 +1,6 @@
 'use client';
 
-import { useMount } from 'ahooks';
 import useAudioSynthesis from '@/hooks/useAudioSynthesis';
-import Icons from '@/components/Icons';
 
 export default function ListenAndFillExercise({
   vocabulary,

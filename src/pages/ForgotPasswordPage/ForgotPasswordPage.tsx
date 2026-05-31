@@ -1,5 +1,3 @@
-import { FormInput } from '@/components/Form';
-import Icons from '@/components/Icons';
 import LiquidBackground from '@/components/LiquidBackground';
 import AuthCard from '@/components/AuthCard';
 import ThemeToggle from '@/components/ThemeToggle';

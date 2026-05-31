@@ -1,4 +1,3 @@
-import Icons from '@/components/Icons';
 
 export const NotebookTabState: FC<{
   isLoading?: boolean;

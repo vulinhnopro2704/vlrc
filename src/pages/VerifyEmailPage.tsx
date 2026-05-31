@@ -1,6 +1,4 @@
-import { Link } from '@tanstack/react-router';
 import AuthStatusCard from '@/components/AuthStatusCard';
-import Icons from '@/components/Icons';
 import { resendVerifyEmail, verifyEmail } from '@/api/auth-management';
 import { AuthStatusSkeleton } from '@/components/AuthSkeletons';
 

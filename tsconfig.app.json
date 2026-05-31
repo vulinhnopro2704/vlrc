@@ -35,8 +35,11 @@
       "@lib/*": ["./src/lib/*"],
       "@api/*": ["./src/api/*"],
       "@types/*": ["./src/types/*"],
-      "@shared/*": ["./src/shared/*"]
+      "@shared/*": ["./src/shared/*"],
+      "@platform-core/components": ["./packages/components/src/index.ts"],
+      "@platform-core/components/*": ["./packages/components/src/*"],
+      "@platform-core/hooks": ["./packages/hooks/src/index.ts"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "packages/components/src", "packages/hooks/src"]
 }

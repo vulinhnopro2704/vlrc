@@ -2,8 +2,6 @@
 
 import { useLessonsQuery } from '@/api/lesson-management';
 import { useWordMutation, useWordQuery } from '@/api/word-management';
-import { FormInput, FormSelect, FormTextarea } from '@/components/Form';
-import { Modal } from './Modal';
 
 export const CreateWordModal = ({ id, open, onCancel }: App.ModalProps) => {
   const { t } = useTranslation();

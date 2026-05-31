@@ -4,7 +4,6 @@
  * Does NOT manage game mechanics, animation, or exercise state
  */
 
-import { useEffect, useState } from 'react';
 
 interface UsePracticeSessionProps {
   words: LearningManagement.Word[];

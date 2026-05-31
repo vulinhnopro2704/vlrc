@@ -1,6 +1,5 @@
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
-import { useRef } from 'react';
 
 const LiquidBackground = () => {
   const containerRef = useRef<HTMLDivElement>(null);

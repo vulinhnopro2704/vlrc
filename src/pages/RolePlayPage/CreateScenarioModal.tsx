@@ -1,8 +1,6 @@
 'use client';
 
 import { useGenerateScenarioMutation } from '@/api/roleplay-management';
-import { FormInput, FormSelect, FormCheckbox } from '@/components/Form';
-import { Modal } from '@/modals/Modal';
 
 const CEFR_OPTIONS = [
   { label: 'A1 - Beginner', value: 'A1' },

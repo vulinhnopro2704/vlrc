@@ -1,5 +1,4 @@
 
-import { Icons } from '@/components/Icons/Icons';
 
 export const ScenarioSelection = ({
   scenarios,

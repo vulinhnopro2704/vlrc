@@ -1,6 +1,5 @@
 'use client';
 
-import { useModalState } from '@/hooks/use-modal-state';
 import { CreateWordModal } from '@/modals/CreateWordModal';
 import { CreateLessonModal } from '@/modals/CreateLessonModal';
 import { CreateCourseModal } from '@/modals/CreateCourseModal';
@@ -10,7 +9,6 @@ import { UserCreatedWordsTab } from './UserCreatedWordsTab';
 import { UserCreatedLessonsTab } from './UserCreatedLessonsTab';
 import { UserCreatedCoursesTab } from './UserCreatedCoursesTab';
 import { DictionaryLookupTab } from './DictionaryLookupTab';
-import Icons from '@/components/Icons';
 
 export const UserNotebookPage = () => {
   const { t } = useTranslation();

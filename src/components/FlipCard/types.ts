@@ -1,4 +1,3 @@
-import type { HTMLAttributes, ReactNode } from 'react';
 
 // Animation Types
 export type FlipDirection = 'horizontal' | 'vertical';

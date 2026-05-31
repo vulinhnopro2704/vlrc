@@ -1,8 +1,6 @@
 'use client';
 
 import { useWordsQuery } from '@/api/word-management';
-import { Modal } from './Modal';
-import Icons from '@/components/Icons';
 import { useLessonQuery } from '@/api/lesson-management';
 import useAudioSynthesis from '@/hooks/useAudioSynthesis';
 

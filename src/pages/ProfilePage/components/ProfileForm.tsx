@@ -1,10 +1,6 @@
 import { updateProfile } from '@/api/auth-management';
 import { uploadFile } from '@/api/storage-management';
-import { useState } from 'react';
 import { AUTH_ME_QUERY_KEY, useAuthSession } from '@/hooks/useAuthSession';
-import { FormInput, FormSimpleSelect, FormTextarea } from '@/components/Form/Form';
-import FormDatePicker from '@/components/Form/FormDatePicker';
-import FormFileUpload from '@/components/Form/FormFileUpload';
 
 export const ProfileForm: FC = () => {
   const { t } = useTranslation();

@@ -1,6 +1,5 @@
 'use client';
 
-import Icons from '@/components/Icons';
 import {
   DASHBOARD_QUERY_KEYS,
   useFsrsDailyReportQuery,
@@ -567,18 +566,19 @@ const DashboardPage = () => {
                 <span className='text-xs font-semibold uppercase tracking-wider text-muted-foreground'>
                   {t('dashboard_risk_show_count')}
                 </span>
-                <Select value={riskTake.toString()} onValueChange={val => setRiskTake(Number(val))}>
-                  <SelectTrigger className='h-8 w-20 bg-card/50'>
-                    <SelectValue placeholder='6' />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {[6, 12, 24, 48].map(val => (
-                      <SelectItem key={val} value={val.toString()}>
-                        {val}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Select
+                  value={riskTake.toString()}
+                  onChange={val => val && setRiskTake(Number(val))}
+                  options={[
+                    { value: '6', label: '6' },
+                    { value: '12', label: '12' },
+                    { value: '24', label: '24' },
+                    { value: '48', label: '48' }
+                  ]}
+                  isClearable={false}
+                  isSearchable={false}
+                  className='w-20'
+                />
               </div>
             </div>
 

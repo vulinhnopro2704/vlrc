@@ -1,4 +1,3 @@
-import Icons from '@/components/Icons';
 
 export const HeroSection = () => {
   const { t } = useTranslation();
@@ -157,7 +156,7 @@ const ProgressPreview = () => {
     <div className='rounded-xl bg-linear-to-br from-green-500/10 to-green-500/5 p-6 dark:from-green-500/20 dark:to-green-500/10 dark:backdrop-blur-sm'>
       <div className='mb-4 flex items-center justify-between'>
         <span className='text-sm font-medium text-muted-foreground'>{t('today_progress')}</span>
-        <TrendingUpIcon className='h-4 w-4 text-green-600 dark:text-green-400' />
+        <Icons.TrendingUp className='h-4 w-4 text-green-600 dark:text-green-400' />
       </div>
       <div className='space-y-3'>
         <ProgressBar label={t('vocabulary')} value='45/50' percent={90} color='bg-green-500' />

@@ -1,10 +1,6 @@
 'use client';
 
 import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Card } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import Icons from '@/components/Icons';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 

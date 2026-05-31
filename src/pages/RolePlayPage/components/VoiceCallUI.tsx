@@ -1,5 +1,4 @@
 
-import { Icons } from '@/components/Icons/Icons';
 import TutorAvatarRig from '../../Tutor3DPage/TutorAvatarRig';
 import SceneLoader from '../../Tutor3DPage/SceneLoader';
 import { useTutor3DStore } from '@/stores/tutor-3d';

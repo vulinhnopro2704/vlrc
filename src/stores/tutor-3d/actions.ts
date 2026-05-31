@@ -1,4 +1,3 @@
-import type { StateCreator } from 'zustand';
 import type { Tutor3DActions, Tutor3DStore } from './types';
 
 export const createActions: StateCreator<Tutor3DStore, [], [], { actions: Tutor3DActions }> = set => ({

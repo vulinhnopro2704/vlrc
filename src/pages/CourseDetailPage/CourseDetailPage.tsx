@@ -2,7 +2,6 @@
 
 import { useCourseQuery } from '@/api/course-management';
 import { useLessonsQuery } from '@/api/lesson-management';
-import Icons from '@/components/Icons';
 import LessonWordsModal from '@/modals/LessonWordsModal';
 
 gsap.registerPlugin(useGSAP);

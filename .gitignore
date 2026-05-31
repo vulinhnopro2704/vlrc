@@ -26,3 +26,8 @@ dist-ssr
 *.sln
 *.sw?
 .env
+.pnpm-store
+.eslintcache
+.eslint-global-variables.json
+routeAnalyses
+.gemini

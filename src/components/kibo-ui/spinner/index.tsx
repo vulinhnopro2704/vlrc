@@ -1,6 +1,9 @@
-import { Spinner as ShadcnSpinner } from '@/components/ui/spinner';
-import { LoaderCircleIcon, LoaderIcon, LoaderPinwheelIcon, type LucideProps } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Spinner as ShadcnSpinner, Icons } from '@platform-core/components';
+
+const LoaderIcon = Icons.LoaderIcon;
+const LoaderPinwheelIcon = Icons.LoaderPinwheelIcon;
+const LoaderCircleIcon = Icons.LoaderCircleIcon;
 
 type SpinnerVariantProps = Omit<SpinnerProps, 'variant'>;
 
@@ -205,7 +208,8 @@ const Infinite = ({ size = 24, ...props }: SpinnerVariantProps) => (
   </svg>
 );
 
-export type SpinnerProps = LucideProps & {
+export type SpinnerProps = React.ComponentProps<'svg'> & {
+  size?: string | number;
   variant?:
     | 'default'
     | 'throbber'

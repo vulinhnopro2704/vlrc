@@ -4,10 +4,6 @@
  * All logic delegated to practice library helpers
  */
 
-import { useMemo, useState, useRef } from 'react';
-import { useUpdateEffect } from 'ahooks';
-import { useTranslation } from 'react-i18next';
-import { Button } from '@/components/ui/button';
 import { useAnimationTriggers } from '@/hooks/practice/useAnimationTriggers';
 import { shuffleArray } from '@/lib/practice/exerciseCommon';
 

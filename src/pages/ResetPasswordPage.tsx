@@ -1,6 +1,3 @@
-import { Link } from '@tanstack/react-router';
-import { FormInput } from '@/components/Form';
-import Icons from '@/components/Icons';
 import AuthCard from '@/components/AuthCard';
 import LiquidBackground from '@/components/LiquidBackground';
 import ThemeToggle from '@/components/ThemeToggle';

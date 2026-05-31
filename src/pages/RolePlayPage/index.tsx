@@ -1,4 +1,3 @@
-import { Icons } from '@/components/Icons/Icons';
 import CreateScenarioModal from './CreateScenarioModal';
 
 import { useRolePlaySession } from './hooks/useRolePlaySession';

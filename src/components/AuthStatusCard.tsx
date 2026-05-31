@@ -1,5 +1,4 @@
 import AuthCard from '@/components/AuthCard';
-import Icons from '@/components/Icons';
 import LiquidBackground from '@/components/LiquidBackground';
 import ThemeToggle from '@/components/ThemeToggle';
 

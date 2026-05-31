@@ -1,6 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
 import { toast } from 'sonner';
-import { useTranslation } from 'react-i18next';
 import { 
   useScenariosQuery, 
   useStartRoleplayMutation, 

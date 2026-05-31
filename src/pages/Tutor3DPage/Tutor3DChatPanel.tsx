@@ -1,4 +1,3 @@
-import Icons from '@/components/Icons';
 
 export const Tutor3DChatPanel: FC<{
   chatMessages: Tutor3DManagement.ChatMessage[];

@@ -6,338 +6,191 @@
 // biome-ignore lint: disable
 export {}
 declare global {
-  const Accordion: typeof import('../components/ui/accordion').Accordion
-  const AccordionContent: typeof import('../components/ui/accordion').AccordionContent
-  const AccordionItem: typeof import('../components/ui/accordion').AccordionItem
-  const AccordionTrigger: typeof import('../components/ui/accordion').AccordionTrigger
+  const Accordion: typeof import('@platform-core/components').Accordion
+  const AccordionContent: typeof import('@platform-core/components').AccordionContent
+  const AccordionItem: typeof import('@platform-core/components').AccordionItem
+  const AccordionTrigger: typeof import('@platform-core/components').AccordionTrigger
   const Activity: typeof import('react').Activity
-  const AlertCircle: typeof import('lucide-react').AlertCircle
-  const AlertCircleIcon: typeof import('lucide-react').AlertCircleIcon
-  const AlertTriangle: typeof import('lucide-react').AlertTriangle
-  const AlertTriangleIcon: typeof import('lucide-react').AlertTriangleIcon
-  const AnimationClip: typeof import('three').AnimationClip
-  const ArrowDown: typeof import('lucide-react').ArrowDown
-  const ArrowDownIcon: typeof import('lucide-react').ArrowDownIcon
-  const ArrowLeft: typeof import('lucide-react').ArrowLeft
-  const ArrowLeftIcon: typeof import('lucide-react').ArrowLeftIcon
-  const ArrowUpDown: typeof import('lucide-react').ArrowUpDown
-  const ArrowUpDownIcon: typeof import('lucide-react').ArrowUpDownIcon
-  const Badge: typeof import('../components/ui/badge').Badge
-  const BarChart3: typeof import('lucide-react').BarChart3
-  const BarChart3Icon: typeof import('lucide-react').BarChart3Icon
-  const Bell: typeof import('lucide-react').Bell
-  const BellIcon: typeof import('lucide-react').BellIcon
-  const Boxes: typeof import('lucide-react').Boxes
-  const BoxesIcon: typeof import('lucide-react').BoxesIcon
-  const Button: typeof import('../components/ui/button').Button
-  const Calculator: typeof import('lucide-react').Calculator
-  const CalculatorIcon: typeof import('lucide-react').CalculatorIcon
-  const Calendar: typeof import('../components/ui/calendar').Calendar
-  const CalendarCheck: typeof import('lucide-react').CalendarCheck
-  const CalendarCheckIcon: typeof import('lucide-react').CalendarCheckIcon
-  const CalendarDayButton: typeof import('../components/ui/calendar').CalendarDayButton
-  const CalendarIcon: typeof import('lucide-react').CalendarIcon
-  const CalendarMinus: typeof import('lucide-react').CalendarMinus
-  const CalendarMinusIcon: typeof import('lucide-react').CalendarMinusIcon
-  const CalendarPlus: typeof import('lucide-react').CalendarPlus
-  const CalendarPlusIcon: typeof import('lucide-react').CalendarPlusIcon
-  const CalendarX: typeof import('lucide-react').CalendarX
-  const CalendarXIcon: typeof import('lucide-react').CalendarXIcon
-  const Camera: typeof import('lucide-react').Camera
-  const CameraIcon: typeof import('lucide-react').CameraIcon
+  const Badge: typeof import('@platform-core/components').Badge
+  const BaseSelectCommonProps: typeof import('@platform-core/components').BaseSelectCommonProps
+  const BaseSelectOption: typeof import('@platform-core/components').BaseSelectOption
+  const Button: typeof import('@platform-core/components').Button
+  const Calendar: typeof import('@platform-core/components').Calendar
+  const CalendarDayButton: typeof import('@platform-core/components').CalendarDayButton
   const Canvas: typeof import('@react-three/fiber').Canvas
-  const Car: typeof import('lucide-react').Car
-  const CarIcon: typeof import('lucide-react').CarIcon
-  const Card: typeof import('../components/ui/card').Card
-  const CardAction: typeof import('../components/ui/card').CardAction
-  const CardContent: typeof import('../components/ui/card').CardContent
-  const CardDescription: typeof import('../components/ui/card').CardDescription
-  const CardFooter: typeof import('../components/ui/card').CardFooter
-  const CardHeader: typeof import('../components/ui/card').CardHeader
-  const CardTitle: typeof import('../components/ui/card').CardTitle
-  const Check: typeof import('lucide-react').Check
-  const CheckCircle: typeof import('lucide-react').CheckCircle
-  const CheckCircleIcon: typeof import('lucide-react').CheckCircleIcon
-  const CheckIcon: typeof import('lucide-react').CheckIcon
-  const Checkbox: typeof import('../components/ui/checkbox').Checkbox
-  const ChevronDown: typeof import('lucide-react').ChevronDown
-  const ChevronDownIcon: typeof import('lucide-react').ChevronDownIcon
-  const ChevronLeft: typeof import('lucide-react').ChevronLeft
-  const ChevronLeftIcon: typeof import('lucide-react').ChevronLeftIcon
-  const ChevronRight: typeof import('lucide-react').ChevronRight
-  const ChevronRightIcon: typeof import('lucide-react').ChevronRightIcon
-  const ChevronUp: typeof import('lucide-react').ChevronUp
-  const ChevronUpIcon: typeof import('lucide-react').ChevronUpIcon
-  const Clear: typeof import('../components/ui/file-upload').Clear
-  const Clock: typeof import('lucide-react').Clock
-  const ClockIcon: typeof import('lucide-react').ClockIcon
-  const Command: typeof import('../components/ui/command').Command
-  const CommandDialog: typeof import('../components/ui/command').CommandDialog
-  const CommandEmpty: typeof import('../components/ui/command').CommandEmpty
-  const CommandGroup: typeof import('../components/ui/command').CommandGroup
-  const CommandInput: typeof import('../components/ui/command').CommandInput
-  const CommandItem: typeof import('../components/ui/command').CommandItem
-  const CommandList: typeof import('../components/ui/command').CommandList
-  const CommandSeparator: typeof import('../components/ui/command').CommandSeparator
-  const CommandShortcut: typeof import('../components/ui/command').CommandShortcut
-  const ConfirmModal: typeof import('../shared/ConfirmModal').default
-  const ConfirmationDialog: typeof import('../shared/index').ConfirmationDialog
-  const Copy: typeof import('lucide-react').Copy
-  const CopyIcon: typeof import('lucide-react').CopyIcon
-  const CreditCard: typeof import('lucide-react').CreditCard
-  const CreditCardIcon: typeof import('lucide-react').CreditCardIcon
-  const Dialog: typeof import('../components/ui/dialog').Dialog
-  const DialogClose: typeof import('../components/ui/dialog').DialogClose
-  const DialogContent: typeof import('../components/ui/dialog').DialogContent
-  const DialogDescription: typeof import('../components/ui/dialog').DialogDescription
-  const DialogFooter: typeof import('../components/ui/dialog').DialogFooter
-  const DialogHeader: typeof import('../components/ui/dialog').DialogHeader
-  const DialogOverlay: typeof import('../components/ui/dialog').DialogOverlay
-  const DialogPortal: typeof import('../components/ui/dialog').DialogPortal
-  const DialogTitle: typeof import('../components/ui/dialog').DialogTitle
-  const DialogTrigger: typeof import('../components/ui/dialog').DialogTrigger
-  const DollarSign: typeof import('lucide-react').DollarSign
-  const DollarSignIcon: typeof import('lucide-react').DollarSignIcon
-  const Download: typeof import('lucide-react').Download
-  const DownloadIcon: typeof import('lucide-react').DownloadIcon
-  const DropdownMenu: typeof import('../components/ui/dropdown-menu').DropdownMenu
-  const DropdownMenuCheckboxItem: typeof import('../components/ui/dropdown-menu').DropdownMenuCheckboxItem
-  const DropdownMenuContent: typeof import('../components/ui/dropdown-menu').DropdownMenuContent
-  const DropdownMenuGroup: typeof import('../components/ui/dropdown-menu').DropdownMenuGroup
-  const DropdownMenuItem: typeof import('../components/ui/dropdown-menu').DropdownMenuItem
-  const DropdownMenuLabel: typeof import('../components/ui/dropdown-menu').DropdownMenuLabel
-  const DropdownMenuPortal: typeof import('../components/ui/dropdown-menu').DropdownMenuPortal
-  const DropdownMenuRadioGroup: typeof import('../components/ui/dropdown-menu').DropdownMenuRadioGroup
-  const DropdownMenuRadioItem: typeof import('../components/ui/dropdown-menu').DropdownMenuRadioItem
-  const DropdownMenuSeparator: typeof import('../components/ui/dropdown-menu').DropdownMenuSeparator
-  const DropdownMenuShortcut: typeof import('../components/ui/dropdown-menu').DropdownMenuShortcut
-  const DropdownMenuSub: typeof import('../components/ui/dropdown-menu').DropdownMenuSub
-  const DropdownMenuSubContent: typeof import('../components/ui/dropdown-menu').DropdownMenuSubContent
-  const DropdownMenuSubTrigger: typeof import('../components/ui/dropdown-menu').DropdownMenuSubTrigger
-  const DropdownMenuTrigger: typeof import('../components/ui/dropdown-menu').DropdownMenuTrigger
-  const Dropzone: typeof import('../components/ui/file-upload').Dropzone
-  const Edit: typeof import('lucide-react').Edit
-  const Edit3: typeof import('lucide-react').Edit3
-  const Edit3Icon: typeof import('lucide-react').Edit3Icon
-  const EditIcon: typeof import('lucide-react').EditIcon
+  const Card: typeof import('@platform-core/components').Card
+  const CardAction: typeof import('@platform-core/components').CardAction
+  const CardContent: typeof import('@platform-core/components').CardContent
+  const CardDescription: typeof import('@platform-core/components').CardDescription
+  const CardFooter: typeof import('@platform-core/components').CardFooter
+  const CardHeader: typeof import('@platform-core/components').CardHeader
+  const CardTitle: typeof import('@platform-core/components').CardTitle
+  const Checkbox: typeof import('@platform-core/components').Checkbox
+  const Clear: typeof import('@platform-core/components').Clear
+  const Command: typeof import('@platform-core/components').Command
+  const CommandDialog: typeof import('@platform-core/components').CommandDialog
+  const CommandEmpty: typeof import('@platform-core/components').CommandEmpty
+  const CommandGroup: typeof import('@platform-core/components').CommandGroup
+  const CommandInput: typeof import('@platform-core/components').CommandInput
+  const CommandItem: typeof import('@platform-core/components').CommandItem
+  const CommandList: typeof import('@platform-core/components').CommandList
+  const CommandSeparator: typeof import('@platform-core/components').CommandSeparator
+  const CommandShortcut: typeof import('@platform-core/components').CommandShortcut
+  const ConfirmModal: typeof import('@platform-core/components').ConfirmModal
+  const ConfirmationDialog: typeof import('@platform-core/components').ConfirmationDialog
+  const ConfirmationDialogProps: typeof import('@platform-core/components').ConfirmationDialogProps
+  const DataTable: typeof import('@platform-core/components').DataTable
+  const DataTableQuery: typeof import('@platform-core/components').DataTableQuery
+  const Dialog: typeof import('@platform-core/components').Dialog
+  const DialogClose: typeof import('@platform-core/components').DialogClose
+  const DialogContent: typeof import('@platform-core/components').DialogContent
+  const DialogDescription: typeof import('@platform-core/components').DialogDescription
+  const DialogFooter: typeof import('@platform-core/components').DialogFooter
+  const DialogHeader: typeof import('@platform-core/components').DialogHeader
+  const DialogOverlay: typeof import('@platform-core/components').DialogOverlay
+  const DialogPortal: typeof import('@platform-core/components').DialogPortal
+  const DialogTitle: typeof import('@platform-core/components').DialogTitle
+  const DialogTrigger: typeof import('@platform-core/components').DialogTrigger
+  const DropdownMenu: typeof import('@platform-core/components').DropdownMenu
+  const DropdownMenuCheckboxItem: typeof import('@platform-core/components').DropdownMenuCheckboxItem
+  const DropdownMenuContent: typeof import('@platform-core/components').DropdownMenuContent
+  const DropdownMenuGroup: typeof import('@platform-core/components').DropdownMenuGroup
+  const DropdownMenuItem: typeof import('@platform-core/components').DropdownMenuItem
+  const DropdownMenuLabel: typeof import('@platform-core/components').DropdownMenuLabel
+  const DropdownMenuPortal: typeof import('@platform-core/components').DropdownMenuPortal
+  const DropdownMenuRadioGroup: typeof import('@platform-core/components').DropdownMenuRadioGroup
+  const DropdownMenuRadioItem: typeof import('@platform-core/components').DropdownMenuRadioItem
+  const DropdownMenuSeparator: typeof import('@platform-core/components').DropdownMenuSeparator
+  const DropdownMenuShortcut: typeof import('@platform-core/components').DropdownMenuShortcut
+  const DropdownMenuSub: typeof import('@platform-core/components').DropdownMenuSub
+  const DropdownMenuSubContent: typeof import('@platform-core/components').DropdownMenuSubContent
+  const DropdownMenuSubTrigger: typeof import('@platform-core/components').DropdownMenuSubTrigger
+  const DropdownMenuTrigger: typeof import('@platform-core/components').DropdownMenuTrigger
+  const Dropzone: typeof import('@platform-core/components').Dropzone
   const Environment: typeof import('@react-three/drei').Environment
-  const Eye: typeof import('lucide-react').Eye
-  const EyeIcon: typeof import('lucide-react').EyeIcon
-  const EyeOff: typeof import('lucide-react').EyeOff
-  const EyeOffIcon: typeof import('lucide-react').EyeOffIcon
-  const Facebook: typeof import('lucide-react').Facebook
-  const FacebookIcon: typeof import('lucide-react').FacebookIcon
-  const Field: typeof import('../components/ui/field').Field
-  const FieldContent: typeof import('../components/ui/field').FieldContent
-  const FieldDescription: typeof import('../components/ui/field').FieldDescription
-  const FieldError: typeof import('../components/ui/field').FieldError
-  const FieldGroup: typeof import('../components/ui/field').FieldGroup
-  const FieldLabel: typeof import('../components/ui/field').FieldLabel
-  const FieldLegend: typeof import('../components/ui/field').FieldLegend
-  const FieldSeparator: typeof import('../components/ui/field').FieldSeparator
-  const FieldSet: typeof import('../components/ui/field').FieldSet
-  const FieldTitle: typeof import('../components/ui/field').FieldTitle
-  const File: typeof import('lucide-react').File
-  const FileIcon: typeof import('lucide-react').FileIcon
-  const FileMinus: typeof import('lucide-react').FileMinus
-  const FileMinusIcon: typeof import('lucide-react').FileMinusIcon
-  const FilePlus: typeof import('lucide-react').FilePlus
-  const FilePlusIcon: typeof import('lucide-react').FilePlusIcon
-  const FileText: typeof import('lucide-react').FileText
-  const FileTextIcon: typeof import('lucide-react').FileTextIcon
-  const FileUpload: typeof import('../components/ui/file-upload').FileUpload
-  const FileUploadClear: typeof import('../components/ui/file-upload').FileUploadClear
-  const FileUploadDropzone: typeof import('../components/ui/file-upload').FileUploadDropzone
-  const FileUploadItem: typeof import('../components/ui/file-upload').FileUploadItem
-  const FileUploadItemDelete: typeof import('../components/ui/file-upload').FileUploadItemDelete
-  const FileUploadItemMetadata: typeof import('../components/ui/file-upload').FileUploadItemMetadata
-  const FileUploadItemPreview: typeof import('../components/ui/file-upload').FileUploadItemPreview
-  const FileUploadItemProgress: typeof import('../components/ui/file-upload').FileUploadItemProgress
-  const FileUploadList: typeof import('../components/ui/file-upload').FileUploadList
-  const FileUploadTrigger: typeof import('../components/ui/file-upload').FileUploadTrigger
-  const Filter: typeof import('lucide-react').Filter
-  const FilterIcon: typeof import('lucide-react').FilterIcon
-  const Form: typeof import('../components/ui/form').Form
-  const FormControl: typeof import('../components/ui/form').FormControl
-  const FormDescription: typeof import('../components/ui/form').FormDescription
-  const FormField: typeof import('../components/ui/form').FormField
-  const FormItem: typeof import('../components/ui/form').FormItem
-  const FormLabel: typeof import('../components/ui/form').FormLabel
-  const FormMessage: typeof import('../components/ui/form').FormMessage
+  const Field: typeof import('@platform-core/components').Field
+  const FieldContent: typeof import('@platform-core/components').FieldContent
+  const FieldDescription: typeof import('@platform-core/components').FieldDescription
+  const FieldError: typeof import('@platform-core/components').FieldError
+  const FieldGroup: typeof import('@platform-core/components').FieldGroup
+  const FieldLabel: typeof import('@platform-core/components').FieldLabel
+  const FieldLegend: typeof import('@platform-core/components').FieldLegend
+  const FieldSeparator: typeof import('@platform-core/components').FieldSeparator
+  const FieldSet: typeof import('@platform-core/components').FieldSet
+  const FieldTitle: typeof import('@platform-core/components').FieldTitle
+  const FileUpload: typeof import('@platform-core/components').FileUpload
+  const FileUploadClear: typeof import('@platform-core/components').FileUploadClear
+  const FileUploadDropzone: typeof import('@platform-core/components').FileUploadDropzone
+  const FileUploadItem: typeof import('@platform-core/components').FileUploadItem
+  const FileUploadItemDelete: typeof import('@platform-core/components').FileUploadItemDelete
+  const FileUploadItemMetadata: typeof import('@platform-core/components').FileUploadItemMetadata
+  const FileUploadItemPreview: typeof import('@platform-core/components').FileUploadItemPreview
+  const FileUploadItemProgress: typeof import('@platform-core/components').FileUploadItemProgress
+  const FileUploadList: typeof import('@platform-core/components').FileUploadList
+  const FileUploadProps: typeof import('@platform-core/components').FileUploadProps
+  const FileUploadTrigger: typeof import('@platform-core/components').FileUploadTrigger
+  const Form: typeof import('@platform-core/components').Form
+  const FormCheckbox: typeof import('@platform-core/components').FormCheckbox
+  const FormControl: typeof import('@platform-core/components').FormControl
+  const FormDatePicker: typeof import('@platform-core/components').FormDatePicker
+  const FormDescription: typeof import('@platform-core/components').FormDescription
+  const FormField: typeof import('@platform-core/components').FormField
+  const FormFileUpload: typeof import('@platform-core/components').FormFileUpload
+  const FormInput: typeof import('@platform-core/components').FormInput
+  const FormItem: typeof import('@platform-core/components').FormItem
+  const FormLabel: typeof import('@platform-core/components').FormLabel
+  const FormMessage: typeof import('@platform-core/components').FormMessage
+  const FormMultiSelect: typeof import('@platform-core/components').FormMultiSelect
+  const FormNumberInput: typeof import('@platform-core/components').FormNumberInput
   const FormProvider: typeof import('react-hook-form').FormProvider
+  const FormRadioGroup: typeof import('@platform-core/components').FormRadioGroup
+  const FormSelect: typeof import('@platform-core/components').FormSelect
+  const FormSimpleSelect: typeof import('@platform-core/components').FormSimpleSelect
+  const FormTextarea: typeof import('@platform-core/components').FormTextarea
   const Fragment: typeof import('react').Fragment
-  const Gift: typeof import('lucide-react').Gift
-  const GiftIcon: typeof import('lucide-react').GiftIcon
-  const Group: typeof import('three').Group
-  const History: typeof import('lucide-react').History
-  const HistoryIcon: typeof import('lucide-react').HistoryIcon
-  const Home: typeof import('lucide-react').Home
-  const HomeIcon: typeof import('lucide-react').HomeIcon
   const Html: typeof import('@react-three/drei').Html
   const Hydrate: typeof import('@tanstack/react-query').Hydrate
-  const Info: typeof import('lucide-react').Info
-  const InfoIcon: typeof import('lucide-react').InfoIcon
-  const Input: typeof import('../components/ui/input').Input
-  const Instagram: typeof import('lucide-react').Instagram
-  const InstagramIcon: typeof import('lucide-react').InstagramIcon
-  const Item: typeof import('../components/ui/item').Item
-  const ItemActions: typeof import('../components/ui/item').ItemActions
-  const ItemContent: typeof import('../components/ui/item').ItemContent
-  const ItemDelete: typeof import('../components/ui/file-upload').ItemDelete
-  const ItemDescription: typeof import('../components/ui/item').ItemDescription
-  const ItemFooter: typeof import('../components/ui/item').ItemFooter
-  const ItemGroup: typeof import('../components/ui/item').ItemGroup
-  const ItemHeader: typeof import('../components/ui/item').ItemHeader
-  const ItemMedia: typeof import('../components/ui/item').ItemMedia
-  const ItemMetadata: typeof import('../components/ui/file-upload').ItemMetadata
-  const ItemPreview: typeof import('../components/ui/file-upload').ItemPreview
-  const ItemProgress: typeof import('../components/ui/file-upload').ItemProgress
-  const ItemSeparator: typeof import('../components/ui/item').ItemSeparator
-  const ItemTitle: typeof import('../components/ui/item').ItemTitle
-  const KeyIcon: typeof import('lucide-react').KeyIcon
-  const LCalendar: typeof import('lucide-react').Calendar
-  const Label: typeof import('../components/ui/label').Label
-  const LazyLoad: typeof import('../shared/LazyLoad').default
+  const IconNames: typeof import('@platform-core/components').IconNames
+  const Icons: typeof import('@platform-core/components').Icons
+  const Input: typeof import('@platform-core/components').Input
+  const Item: typeof import('@platform-core/components').Item
+  const ItemActions: typeof import('@platform-core/components').ItemActions
+  const ItemContent: typeof import('@platform-core/components').ItemContent
+  const ItemDelete: typeof import('@platform-core/components').ItemDelete
+  const ItemDescription: typeof import('@platform-core/components').ItemDescription
+  const ItemFooter: typeof import('@platform-core/components').ItemFooter
+  const ItemGroup: typeof import('@platform-core/components').ItemGroup
+  const ItemHeader: typeof import('@platform-core/components').ItemHeader
+  const ItemMedia: typeof import('@platform-core/components').ItemMedia
+  const ItemMetadata: typeof import('@platform-core/components').ItemMetadata
+  const ItemPreview: typeof import('@platform-core/components').ItemPreview
+  const ItemProgress: typeof import('@platform-core/components').ItemProgress
+  const ItemSeparator: typeof import('@platform-core/components').ItemSeparator
+  const ItemTitle: typeof import('@platform-core/components').ItemTitle
+  const Label: typeof import('@platform-core/components').Label
   const Leva: typeof import('leva').Leva
   const Link: typeof import('@tanstack/react-router').Link
-  const Linkedin: typeof import('lucide-react').Linkedin
-  const LinkedinIcon: typeof import('lucide-react').LinkedinIcon
-  const List: typeof import('../components/ui/file-upload').List
-  const Loader2: typeof import('lucide-react').Loader2
-  const Lock: typeof import('lucide-react').Lock
-  const LockIcon: typeof import('lucide-react').LockIcon
-  const LogOut: typeof import('lucide-react').LogOut
-  const LogOutIcon: typeof import('lucide-react').LogOutIcon
-  const Mail: typeof import('lucide-react').Mail
-  const MailIcon: typeof import('lucide-react').MailIcon
-  const MapPin: typeof import('lucide-react').MapPin
-  const MapPinIcon: typeof import('lucide-react').MapPinIcon
+  const List: typeof import('@platform-core/components').List
   const MathUtils: typeof import('three').MathUtils
-  const MessageCircle: typeof import('lucide-react').MessageCircle
-  const MessageCircleIcon: typeof import('lucide-react').MessageCircleIcon
-  const MessageSquare: typeof import('lucide-react').MessageSquare
-  const MessageSquareIcon: typeof import('lucide-react').MessageSquareIcon
-  const Minus: typeof import('lucide-react').Minus
-  const MinusIcon: typeof import('lucide-react').MinusIcon
-  const MoreHorizontal: typeof import('lucide-react').MoreHorizontal
-  const MoreHorizontalIcon: typeof import('lucide-react').MoreHorizontalIcon
-  const MoreVertical: typeof import('lucide-react').MoreVertical
-  const MoreVerticalIcon: typeof import('lucide-react').MoreVerticalIcon
-  const Navigation: typeof import('lucide-react').Navigation
-  const NavigationIcon: typeof import('lucide-react').NavigationIcon
-  const Object3D: typeof import('three').Object3D
+  const Modal: typeof import('@platform-core/components').Modal
+  const ModalProps: typeof import('@platform-core/components').ModalProps
+  const ModalState: typeof import('@platform-core/hooks').ModalState
+  const MultiSelect: typeof import('@platform-core/components').MultiSelect
+  const MultiSelectProps: typeof import('@platform-core/components').MultiSelectProps
   const OrbitControls: typeof import('@react-three/drei').OrbitControls
-  const Package: typeof import('lucide-react').Package
-  const PackageIcon: typeof import('lucide-react').PackageIcon
-  const Paperclip: typeof import('lucide-react').Paperclip
-  const PaperclipIcon: typeof import('lucide-react').PaperclipIcon
-  const Phone: typeof import('lucide-react').Phone
-  const PhoneIcon: typeof import('lucide-react').PhoneIcon
-  const Plane: typeof import('lucide-react').Plane
-  const PlaneIcon: typeof import('lucide-react').PlaneIcon
-  const Plus: typeof import('lucide-react').Plus
-  const PlusCircle: typeof import('lucide-react').PlusCircle
-  const PlusCircleIcon: typeof import('lucide-react').PlusCircleIcon
-  const PlusIcon: typeof import('lucide-react').PlusIcon
-  const Popover: typeof import('../components/ui/popover').Popover
-  const PopoverAnchor: typeof import('../components/ui/popover').PopoverAnchor
-  const PopoverContent: typeof import('../components/ui/popover').PopoverContent
-  const PopoverTrigger: typeof import('../components/ui/popover').PopoverTrigger
-  const Progress: typeof import('../components/ui/progress').Progress
+  const Popover: typeof import('@platform-core/components').Popover
+  const PopoverAnchor: typeof import('@platform-core/components').PopoverAnchor
+  const PopoverContent: typeof import('@platform-core/components').PopoverContent
+  const PopoverTrigger: typeof import('@platform-core/components').PopoverTrigger
+  const Progress: typeof import('@platform-core/components').Progress
   const QueryClient: typeof import('@tanstack/react-query').QueryClient
   const QueryClientProvider: typeof import('@tanstack/react-query').QueryClientProvider
-  const RadioGroup: typeof import('../components/ui/radio-group').RadioGroup
-  const RadioGroupItem: typeof import('../components/ui/radio-group').RadioGroupItem
-  const RefreshCcw: typeof import('lucide-react').RefreshCcw
-  const RefreshCcwIcon: typeof import('lucide-react').RefreshCcwIcon
-  const RefreshCw: typeof import('lucide-react').RefreshCw
-  const RefreshCwIcon: typeof import('lucide-react').RefreshCwIcon
-  const Repeat: typeof import('lucide-react').Repeat
-  const RepeatIcon: typeof import('lucide-react').RepeatIcon
-  const Save: typeof import('lucide-react').Save
-  const SaveIcon: typeof import('lucide-react').SaveIcon
-  const ScrollArea: typeof import('../components/ui/scroll-area').ScrollArea
-  const ScrollBar: typeof import('../components/ui/scroll-area').ScrollBar
+  const RadioGroup: typeof import('@platform-core/components').RadioGroup
+  const RadioGroupItem: typeof import('@platform-core/components').RadioGroupItem
+  const Root: typeof import('@platform-core/components').Root
+  const RouterProvider: typeof import('@tanstack/react-router').RouterProvider
+  const ScrollArea: typeof import('@platform-core/components').ScrollArea
+  const ScrollBar: typeof import('@platform-core/components').ScrollBar
   const ScrollTrigger: typeof import('gsap/ScrollTrigger').ScrollTrigger
-  const Search: typeof import('lucide-react').Search
-  const SearchIcon: typeof import('lucide-react').SearchIcon
-  const Select: typeof import('../components/ui/select').Select
-  const SelectContent: typeof import('../components/ui/select').SelectContent
-  const SelectGroup: typeof import('../components/ui/select').SelectGroup
-  const SelectItem: typeof import('../components/ui/select').SelectItem
-  const SelectLabel: typeof import('../components/ui/select').SelectLabel
-  const SelectScrollDownButton: typeof import('../components/ui/select').SelectScrollDownButton
-  const SelectScrollUpButton: typeof import('../components/ui/select').SelectScrollUpButton
-  const SelectSeparator: typeof import('../components/ui/select').SelectSeparator
-  const SelectTrigger: typeof import('../components/ui/select').SelectTrigger
-  const SelectValue: typeof import('../components/ui/select').SelectValue
-  const Separator: typeof import('../components/ui/separator').Separator
-  const Settings: typeof import('lucide-react').Settings
-  const SettingsIcon: typeof import('lucide-react').SettingsIcon
-  const Shield: typeof import('lucide-react').Shield
-  const ShieldIcon: typeof import('lucide-react').ShieldIcon
+  const Select: typeof import('@platform-core/components').Select
+  const SelectContent: typeof import('@platform-core/components').SelectContent
+  const SelectGroup: typeof import('@platform-core/components').SelectGroup
+  const SelectItem: typeof import('@platform-core/components').SelectItem
+  const SelectLabel: typeof import('@platform-core/components').SelectLabel
+  const SelectScrollDownButton: typeof import('@platform-core/components').SelectScrollDownButton
+  const SelectScrollUpButton: typeof import('@platform-core/components').SelectScrollUpButton
+  const SelectSeparator: typeof import('@platform-core/components').SelectSeparator
+  const SelectTrigger: typeof import('@platform-core/components').SelectTrigger
+  const SelectValue: typeof import('@platform-core/components').SelectValue
+  const Separator: typeof import('@platform-core/components').Separator
   const SkeletonUtils: typeof import('three-stdlib').SkeletonUtils
-  const Spinner: typeof import('../components/ui/spinner').Spinner
-  const Star: typeof import('lucide-react').Star
-  const StarHalf: typeof import('lucide-react').StarHalf
-  const StarHalfIcon: typeof import('lucide-react').StarHalfIcon
-  const StarIcon: typeof import('lucide-react').StarIcon
-  const StarOff: typeof import('lucide-react').StarOff
-  const StarOffIcon: typeof import('lucide-react').StarOffIcon
+  const Spinner: typeof import('@platform-core/components').Spinner
   const StrictMode: typeof import('react').StrictMode
   const Suspense: typeof import('react').Suspense
-  const Table: typeof import('../components/ui/table').Table
-  const TableBody: typeof import('../components/ui/table').TableBody
-  const TableCaption: typeof import('../components/ui/table').TableCaption
-  const TableCell: typeof import('../components/ui/table').TableCell
-  const TableFooter: typeof import('../components/ui/table').TableFooter
-  const TableHead: typeof import('../components/ui/table').TableHead
-  const TableHeader: typeof import('../components/ui/table').TableHeader
-  const TableRow: typeof import('../components/ui/table').TableRow
-  const Textarea: typeof import('../components/ui/textarea').Textarea
+  const Table: typeof import('@platform-core/components').Table
+  const TableBody: typeof import('@platform-core/components').TableBody
+  const TableCaption: typeof import('@platform-core/components').TableCaption
+  const TableCell: typeof import('@platform-core/components').TableCell
+  const TableFooter: typeof import('@platform-core/components').TableFooter
+  const TableHead: typeof import('@platform-core/components').TableHead
+  const TableHeader: typeof import('@platform-core/components').TableHeader
+  const TableRow: typeof import('@platform-core/components').TableRow
+  const Textarea: typeof import('@platform-core/components').Textarea
   const Toast: typeof import('../shared/Toast').default
-  const Toaster: typeof import('../components/ui/sonner').Toaster
-  const Tooltip: typeof import('../components/ui/tooltip').Tooltip
-  const TooltipContent: typeof import('../components/ui/tooltip').TooltipContent
-  const TooltipProvider: typeof import('../components/ui/tooltip').TooltipProvider
-  const TooltipTrigger: typeof import('../components/ui/tooltip').TooltipTrigger
+  const Toaster: typeof import('@platform-core/components').Toaster
+  const Tooltip: typeof import('@platform-core/components').Tooltip
+  const TooltipContent: typeof import('@platform-core/components').TooltipContent
+  const TooltipProvider: typeof import('@platform-core/components').TooltipProvider
+  const TooltipTrigger: typeof import('@platform-core/components').TooltipTrigger
   const Trans: typeof import('react-i18next').Trans
-  const Trash: typeof import('lucide-react').Trash
-  const Trash2: typeof import('lucide-react').Trash2
-  const Trash2Icon: typeof import('lucide-react').Trash2Icon
-  const TrashIcon: typeof import('lucide-react').TrashIcon
-  const TrendingDown: typeof import('lucide-react').TrendingDown
-  const TrendingDownIcon: typeof import('lucide-react').TrendingDownIcon
-  const TrendingUp: typeof import('lucide-react').TrendingUp
-  const TrendingUpIcon: typeof import('lucide-react').TrendingUpIcon
-  const Trigger: typeof import('../components/ui/file-upload').Trigger
-  const Truck: typeof import('lucide-react').Truck
-  const TruckIcon: typeof import('lucide-react').TruckIcon
-  const Twitter: typeof import('lucide-react').Twitter
-  const TwitterIcon: typeof import('lucide-react').TwitterIcon
-  const Upload: typeof import('lucide-react').Upload
-  const UploadIcon: typeof import('lucide-react').UploadIcon
-  const User: typeof import('lucide-react').User
-  const UserCheck: typeof import('lucide-react').UserCheck
-  const UserCheckIcon: typeof import('lucide-react').UserCheckIcon
-  const UserIcon: typeof import('lucide-react').UserIcon
-  const UserX: typeof import('lucide-react').UserX
-  const UserXIcon: typeof import('lucide-react').UserXIcon
-  const Users: typeof import('lucide-react').Users
-  const UsersIcon: typeof import('lucide-react').UsersIcon
-  const VISEMES: typeof import('wawa-lipsync').VISEMES
+  const Trigger: typeof import('@platform-core/components').Trigger
+  const UseModalStateOptions: typeof import('@platform-core/hooks').UseModalStateOptions
   const Vector3: typeof import('three').Vector3
-  const X: typeof import('lucide-react').X
-  const XCircle: typeof import('lucide-react').XCircle
-  const XCircleIcon: typeof import('lucide-react').XCircleIcon
-  const XIcon: typeof import('lucide-react').XIcon
-  const Zap: typeof import('lucide-react').Zap
-  const ZapIcon: typeof import('lucide-react').ZapIcon
-  const badgeVariants: typeof import('../components/ui/badge').badgeVariants
-  const buttonVariants: typeof import('../components/ui/button').buttonVariants
+  const badgeVariants: typeof import('@platform-core/components').badgeVariants
+  const buttonVariants: typeof import('@platform-core/components').buttonVariants
   const cache: typeof import('react').cache
   const cacheSignal: typeof import('react').cacheSignal
-  const cardVariants: typeof import('../components/ui/card').cardVariants
+  const cardVariants: typeof import('@platform-core/components').cardVariants
   const chain: typeof import('lodash-es').chain
   const cloneElement: typeof import('react').cloneElement
   const cn: typeof import('../lib/utils').cn
@@ -346,7 +199,11 @@ declare global {
   const createContext: typeof import('react').createContext
   const createEmptyExpressionBindings: typeof import('../lib/avatar-utils').createEmptyExpressionBindings
   const createEmptyVisemeBindings: typeof import('../lib/avatar-utils').createEmptyVisemeBindings
+  const createExpanderColumn: typeof import('@platform-core/components').createExpanderColumn
   const createRef: typeof import('react').createRef
+  const createRouter: typeof import('@tanstack/react-router').createRouter
+  const createRowActionsColumn: typeof import('@platform-core/components').createRowActionsColumn
+  const createSelectionColumn: typeof import('@platform-core/components').createSelectionColumn
   const createSyncStoragePersister: typeof import('@tanstack/react-query').createSyncStoragePersister
   const debounce: typeof import('lodash-es').debounce
   const filter: typeof import('lodash-es').filter
@@ -364,6 +221,7 @@ declare global {
   const immer: typeof import('zustand/middleware').immer
   const includes: typeof import('lodash-es').includes
   const indexOf: typeof import('lodash-es').indexOf
+  const initReactI18next: typeof import('react-i18next').initReactI18next
   const isEmpty: typeof import('lodash-es').isEmpty
   const isMorphMesh: typeof import('../lib/avatar-utils').isMorphMesh
   const isNil: typeof import('lodash-es').isNil
@@ -372,7 +230,7 @@ declare global {
   const join: typeof import('lodash-es').join
   const last: typeof import('lodash-es').last
   const lazy: typeof import('react').lazy
-  const lazyLoad: typeof import('../shared/index').lazyLoad
+  const lazyLoad: typeof import('@platform-core/components').lazyLoad
   const map: typeof import('lodash-es').map
   const mapValues: typeof import('lodash-es').mapValues
   const mean: typeof import('lodash-es').mean
@@ -409,9 +267,10 @@ declare global {
   const useEffectEvent: typeof import('react').useEffectEvent
   const useFBX: typeof import('@react-three/drei').useFBX
   const useFieldArray: typeof import('react-hook-form').useFieldArray
+  const useFileUpload: typeof import('@platform-core/components').useFileUpload
   const useForm: typeof import('react-hook-form').useForm
   const useFormContext: typeof import('react-hook-form').useFormContext
-  const useFormField: typeof import('../components/ui/form').useFormField
+  const useFormField: typeof import('@platform-core/components').useFormField
   const useFormState: typeof import('react-hook-form').useFormState
   const useFrame: typeof import('@react-three/fiber').useFrame
   const useGLTF: typeof import('@react-three/drei').useGLTF
@@ -428,6 +287,7 @@ declare global {
   const useLink: typeof import('@tanstack/react-router').useLink
   const useMatch: typeof import('@tanstack/react-router').useMatch
   const useMemo: typeof import('react').useMemo
+  const useModalState: typeof import('@platform-core/hooks').useModalState
   const useMount: typeof import('ahooks').useMount
   const useMutation: typeof import('@tanstack/react-query').useMutation
   const useNavigate: typeof import('@tanstack/react-router').useNavigate
@@ -440,6 +300,7 @@ declare global {
   const useRef: typeof import('react').useRef
   const useRouteLoaderData: typeof import('@tanstack/react-router').useRouteLoaderData
   const useRouter: typeof import('@tanstack/react-router').useRouter
+  const useRouterState: typeof import('@tanstack/react-router').useRouterState
   const useSearch: typeof import('@tanstack/react-router').useSearch
   const useState: typeof import('react').useState
   const useSyncExternalStore: typeof import('react').useSyncExternalStore
@@ -464,12 +325,12 @@ declare global {
   export type { GLTF } from 'three-stdlib'
   import('three-stdlib')
   // @ts-ignore
-  export type { FieldErrors, Control, RegisterOptions, UseFormGetValues, UseFormReturn, FieldValues, FieldArrayWithId, UseFormSetValue, UseFormSetError, UseFormHandleSubmit } from 'react-hook-form'
+  export type { FieldErrors, Control, RegisterOptions, UseFormGetValues, UseFormReturn, FieldValues, FieldArrayWithId, UseFormSetValue, UseFormSetError, UseFormHandleSubmit, FieldPath } from 'react-hook-form'
   import('react-hook-form')
   // @ts-ignore
-  export type { FunctionComponent, FC, ReactNode, ReactElement, Key, MouseEvent as ReactMouseEvent, KeyboardEvent as ReactKeyboardEvent, ComponentType, ComponentProps, ChangeEvent, Ref, RefObject, Dispatch, SetStateAction, CSSProperties } from 'react'
+  export type { FunctionComponent, FC, ReactNode, ReactElement, Key, MouseEvent as ReactMouseEvent, KeyboardEvent as ReactKeyboardEvent, ComponentType, ComponentProps, ChangeEvent, Ref, RefObject, Dispatch, SetStateAction, CSSProperties, HTMLAttributes } from 'react'
   import('react')
   // @ts-ignore
-  export type { ConfirmationDialogProps } from '../shared/ConfirmModal'
-  import('../shared/ConfirmModal')
+  export type { StateCreator, StoreApi, UseBoundStore } from 'zustand'
+  import('zustand')
 }

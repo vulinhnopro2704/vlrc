@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import apiClient from './api-client';
 
 const DEFAULT_RISK_TAKE = 20;

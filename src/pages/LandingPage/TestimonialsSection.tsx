@@ -1,7 +1,3 @@
-import { Card, CardContent } from '@/components/ui/card';
-import Icons from '@/components/Icons';
-import { useTranslation } from 'react-i18next';
-import { useRef, type ComponentType } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';

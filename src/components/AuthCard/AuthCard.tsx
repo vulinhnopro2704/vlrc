@@ -1,4 +1,3 @@
-import { Card } from '@/components/ui/card';
 
 const AuthCard = ({
   children,

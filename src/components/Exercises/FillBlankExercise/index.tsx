@@ -1,6 +1,5 @@
 'use client';
 
-import Icons from '@/components/Icons';
 
 export default function FillBlankExercise({
   vocabulary: { id, example = '', word, pronunciation, meaning },

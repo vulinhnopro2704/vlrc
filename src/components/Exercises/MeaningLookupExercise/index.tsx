@@ -1,7 +1,5 @@
 'use client';
 
-import { useMount, useUpdateEffect } from 'ahooks';
-import Icons from '@/components/Icons';
 
 export default function MeaningLookupExercise({
   vocabulary,

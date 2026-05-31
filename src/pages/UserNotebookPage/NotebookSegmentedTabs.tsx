@@ -1,4 +1,3 @@
-import Icons from '@/components/Icons';
 
 const ICONS: Record<string, keyof typeof Icons> = {
   learned_words: 'BookOpen',

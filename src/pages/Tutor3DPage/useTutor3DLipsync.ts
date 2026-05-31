@@ -1,4 +1,3 @@
-import { useRef, useState, useEffect } from 'react';
 import { Lipsync, VISEMES } from 'wawa-lipsync';
 
 const useTutor3DLipsync = () => {

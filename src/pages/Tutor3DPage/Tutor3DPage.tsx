@@ -19,8 +19,6 @@ const DEFAULT_TUTOR_SESSION_PAYLOAD: Tutor3DManagement.CreateTutorSessionPayload
 };
 
 
-import { Button } from '@/components/ui/button';
-import { Icons } from '@/components/Icons/Icons';
 
 interface Tutor3DPageProps {
   onBack?: () => void;

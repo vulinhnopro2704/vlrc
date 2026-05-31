@@ -6,8 +6,6 @@
 
 'use client';
 
-import { useMount, useUnmount, useUpdateEffect } from 'ahooks';
-import { useNavigate } from '@tanstack/react-router';
 import { useFSRSDueWordsQuery, useSubmitFSRSMutation } from '@/api/practice-management';
 import { usePracticeSession } from '@/hooks/practice/usePracticeSession';
 import { useGameState } from '@/hooks/practice/useGameState';
