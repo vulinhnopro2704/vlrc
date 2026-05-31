@@ -13,9 +13,7 @@ ai_package_metadata:
       wrapper_preference: "Always prefer Select and MultiSelect wrapper components over Radix UI/Shadcn primitives."
 ---
 
-Reusable, optimized, and tree-shaken UI components for the VLRC project monorepo.
-
-## 🚀 AI & Developer Reference
+Reusable, optimized, and tree-shaken UI components built on top of **React 19**, **Tailwind CSS**, and **Radix UI/Shadcn** primitives for the VLRC project monorepo.
 
 > [!IMPORTANT]
 > **AUTO-IMPORT CONVENTION**: In the main web application (`src/`), **do not write explicit import statements** for any components in this package. They are dynamically parsed and registered by Vite into `src/types/auto-imports.d.ts`.
@@ -23,132 +21,162 @@ Reusable, optimized, and tree-shaken UI components for the VLRC project monorepo
 
 ---
 
-## 📦 Core Component Specs & API
+## 📚 Agent & Codex Skill Reference
 
-Here is the exact API documentation for the custom-wrapped components. AI assistants should strictly use these formats:
+This package is fully mapped and integrated with the custom **[platform-core-components Agent Skill](file:///Users/lvtruong/personal/vlrc/.agent/skills/platform-core-components/SKILL.md)**. When working inside this package or utilizing these components, refer to these segmented reference files:
+1. **[Shadcn + TanStack DataTable Composition Guide](file:///Users/lvtruong/personal/vlrc/.agent/skills/platform-core-components/references/datatable.md)**
+2. **[Form Containers & FormItem/FormBase Layouts Specification](file:///Users/lvtruong/personal/vlrc/.agent/skills/platform-core-components/references/forms.md)**
+3. **[Custom Form Fields & Inputs API Manual](file:///Users/lvtruong/personal/vlrc/.agent/skills/platform-core-components/references/form-fields.md)**
+4. **[Dialogs, ConfirmModal & useModalState Bindings](file:///Users/lvtruong/personal/vlrc/.agent/skills/platform-core-components/references/modals.md)**
+5. **[Unified Graphic Icons Registry Guidelines](file:///Users/lvtruong/personal/vlrc/.agent/skills/platform-core-components/references/icons.md)**
 
-### 1. `Select` (Props-driven Custom Wrapper)
-A beautiful, popover-based single-select wrapper supporting filtering, pagination, and customized rendering.
+---
 
+## 📝 1. Shadcn Form Item & RHF Integration (`FormBase` & `FormItem`)
+
+Form fields inside this repository inherit a highly structured validation wrapper component called `FormBase`. It bridges the standard **react-hook-form** controller with custom-wrapped **Shadcn UI Form Item** layouts.
+
+### 1.1 Structural Layout & Features
+When a field is rendered, `FormBase` automatically builds the following Shadcn structure:
+1. **`<FormItem>` Container**: The primary layout block handling spacing. Supports:
+   - **Vertical (Default)**: Normal form inputs stacked sequentially.
+   - **Horizontal (`horizontal={true}`)**: Arranges labels and inputs side-by-side using unified grid properties. Perfect for dense settings panels.
+   - **Control First (`controlFirst={true}`)**: Renders the input control widget *before* the text label (used automatically by `FormCheckbox` and `FormRadioGroup` options).
+2. **`<FieldLabel>`**: Displays the text label tied to the input via `htmlFor`.
+   - **Automatic required asterisk**: If the field rules specify `required: true` (or a string), `FormBase` automatically appends a red asterisk `<span className="text-red-500">*</span>` to the label.
+3. **`<FieldDescription>`**: Displays supplementary description nodes or helper text.
+4. **`<FieldError>`**: Listens to active RHF validation errors. If a field fails validation checks, the error message is instantly rendered below the input with appropriate red typography, omitting the need for developers to manually write error flags.
+
+### 1.2 Form Core API
+```tsx
+<Form
+  schema={courseSchema} // Optional Zod Schema for validation
+  onSubmit={handleSubmit}
+  defaultValues={{ title: '', isActive: false }}
+  className="space-y-4"
+>
+  {({ control, formState }) => (
+    <>
+      <FormInput control={control} name="title" label="Tiêu đề" rules={{ required: true }} />
+      <FormCheckbox control={control} name="isActive" label="Hoạt động" />
+    </>
+  )}
+</Form>
+```
+
+---
+
+## 📊 2. DataTable (Shadcn + TanStack Table v8)
+
+The `DataTable` component provides a rich, responsive, and performance-optimized data grid built on top of **Shadcn table structures** and **TanStack Table**.
+
+### 2.1 API Definition
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `options` | `BaseSelectOption<T>[]` | `[]` | Array of options to select from. |
-| `value` | `T` | `null` | Current selected value. |
-| `onChange` | `(val: T \| null) => void` | - | Callback when selection changes. |
-| `placeholder` | `string` | `'Chọn...'` | Placeholder text. |
-| `isClearable` | `boolean` | `true` | Show clear button if value is selected. |
-| `isSearchable` | `boolean` | `true` | Enable keyword searching. |
-| `isLoading` | `boolean` | `false` | Displays loading spinner. |
-| `disabled` | `boolean` | `false` | Disables interaction. |
-| `className` | `string` | `''` | Class override for the button trigger. |
+| `columns` | `ColumnDef<T>[]` | - | **(Required)** TanStack-compliant column definitions. |
+| `data` | `T[]` | - | **(Required)** Row data source array. |
+| `isLoading` | `boolean` | `false` | Renders a custom glass-effect loader spinner overlay. |
+| `pageSize` | `number` | `10` | Rows displayed per page. |
+| `searchPlaceholder` | `string` | `'Tìm kiếm...'` | Search input placeholder. |
+| `searchKey` | `string` | - | Accessor key for client-side search filtering. |
+
+### 2.2 Standard Column Creators
+To maintain UI consistency and eliminate copy-paste boilerplate, use the built-in column creators:
+- **Checkbox Row Selection**: `createSelectionColumn<T>()` - Automatically inserts checkbox controls in headers and rows to select records.
+- **Expandable Children Row caret**: `createExpanderColumn<T>()` - Inserts caret icons to toggle nested layouts.
+- **Actions Panel Column**: `createRowActionsColumn<T>({ renderActions })` - Standardizes spacing for edit, view, and delete row action buttons.
 
 ```tsx
-// Example Usage
-<Select
-  value={level}
-  onChange={val => val && setLevel(val)}
+const columns = useMemo(() => [
+  createSelectionColumn<CourseRow>(),
+  {
+    accessorKey: 'name',
+    header: 'Tên bài học',
+    cell: ({ row }) => <span className="font-medium">{row.original.name}</span>
+  },
+  createRowActionsColumn<CourseRow>({
+    renderActions: ({ row }) => <Button onClick={() => handleEdit(row.original)}>Sửa</Button>
+  })
+], []);
+```
+
+---
+
+## 📦 3. Specialized Custom Form Widgets
+
+These pre-wrapped components are fully integrated with `FormBase` and automatically wire up under a `<Form>` container:
+
+### 3.1 `FormSelect` (Single & Multi Mode)
+Popover-based select box featuring real-time searchable keyword filters and custom item templates.
+```tsx
+<FormSelect
+  control={control}
+  name="level"
+  label="Trình độ"
   options={[
-    { value: 'all', label: 'All Levels' },
-    { value: 'A1', label: 'A1 - Beginner' },
-    { value: 'B2', label: 'B2 - Upper Intermediate' }
+    { value: 'A1', label: 'Cơ bản (A1)' },
+    { value: 'B2', label: 'Nâng cao (B2)' }
   ]}
-  isClearable={false}
-  isSearchable={false}
-  className="w-40"
+/>
+```
+
+### 3.2 `FormMultiSelect`
+A checkbox popover panel that renders selected elements as removable tag pills inside the trigger button.
+```tsx
+<FormMultiSelect
+  control={control}
+  name="topics"
+  label="Chủ đề chính"
+  options={[{ value: 'grammar', label: 'Ngữ pháp' }]}
+  showSelectAll
+/>
+```
+
+### 3.3 `FormDatePicker`
+Calendar selector supporting single date picking, time picking (`showTime`), month selection, and full date range queries (`isRangePicker: true`).
+```tsx
+<FormDatePicker
+  control={control}
+  name="schedule"
+  label="Lịch khai giảng"
+  isRangePicker={true}
+/>
+```
+
+### 3.4 `FormNumberInput`
+Renders currency and number masks using `react-number-format`. Features increment/decrement steppers.
+```tsx
+<FormNumberInput
+  control={control}
+  name="price"
+  label="Học phí"
+  thousandSeparator=","
+  suffix=" VND"
+/>
+```
+
+### 3.5 `FormFileUpload`
+Advanced file dropzone and uploader supporting avatar rendering (`variant="avatar"`) and S3-based immediate uploading with progress bars.
+```tsx
+<FormFileUpload
+  control={control}
+  name="avatar"
+  label="Ảnh đại diện"
+  variant="avatar"
+  autoUpload
+  uploadFile={async (file) => uploadToS3(file)}
 />
 ```
 
 ---
 
-### 2. `MultiSelect`
-A gorgeous multiselect popover supporting tag rendering, search filtering, and select-all actions.
+## 🎨 4. Direct Wrappers & Design Tokens
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `options` | `BaseSelectOption<T>[]` | `[]` | Options to display. |
-| `value` | `T[]` | `[]` | Selected values array. |
-| `onChange` | `(val: T[]) => void` | - | Callback when array changes. |
-| `placeholder` | `string` | `'Chọn...'` | Placeholder text. |
-| `showSelectAll` | `boolean` | `false` | Show "Select All" toggle button. |
-| `maxTagCount` | `number \| 'responsive'` | `'responsive'` | Maximum visible tags before displaying '+N'. |
-
-```tsx
-// Example Usage
-<MultiSelect
-  value={selectedLevels}
-  onChange={setSelectedLevels}
-  options={[
-    { value: 'A1', label: 'A1' },
-    { value: 'A2', label: 'A2' },
-    { value: 'B1', label: 'B1' }
-  ]}
-  showSelectAll={true}
-  placeholder="Select levels..."
-/>
-```
-
----
-
-### 3. `ConfirmModal` & `ConfirmationDialog`
-A customizable confirmation alert dialog that prompts the user for action.
-
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `open` | `boolean` | `false` | Visibility state. |
-| `title` | `ReactNode` | - | Dialog title. |
-| `description` | `ReactNode` | - | Dialog message body. |
-| `cancelText` | `string` | `'Hủy'` | Cancel button text. |
-| `confirmText` | `string` | `'Xác nhận'` | Confirm button text. |
-| `onCancel` | `() => void` | - | Fired when canceled. |
-| `onConfirm` | `() => void` | - | Fired when confirmed (can be async). |
-| `variant` | `'default' \| 'destructive'` | `'default'` | Theme of the confirm button. |
-
-```tsx
-// Example Usage
-<ConfirmModal
-  open={isOpen}
-  title="Xóa bài học?"
-  description="Hành động này không thể hoàn tác. Bài học sẽ bị xóa vĩnh viễn."
-  confirmText="Xóa"
-  variant="destructive"
-  onCancel={() => setIsOpen(false)}
-  onConfirm={handleDelete}
-/>
-```
-
----
-
-### 4. `Icons` (Lucide Icons Registry)
-A centralized registry wrapper exporting all common icons under a single object.
-**Usage Rule**: Always use `Icons.<IconName>` instead of importing from `lucide-react` directly in the web app source.
-
-```tsx
-// Example Usage
-<Icons.Sparkles className="h-4 w-4 text-yellow-500" />
-<Icons.ArrowLeft className="mr-2 h-4 w-4" />
-<Icons.Trash className="h-5 w-5 text-destructive" />
-```
-*Supported Icons include: Sparkles, ArrowLeft, Trash, Save, Edit, Home, Search, Loader2, Calendar, Shield, Phone, Mail, Clock, ChevronDown, ChevronUp, FileQuestion, RefreshCcw, and many more.*
-
----
-
-### 5. `lazyLoad` (Dynamic Component Loader)
-A lazy-loading helper with built-in suspense fallback and prefetching support.
-
-```tsx
-// Example Usage
-const UserNotebookPage = lazyLoad(() => import('@/pages/UserNotebookPage/UserNotebookPage'));
-```
-
----
-
-## 🎨 Design Tokens & System
-
-This package wraps all shadcn-based primitives styled with Tailwind CSS under the hood:
-- **Buttons (`Button` / `buttonVariants`)**: Supports standard `variant` options (`default`, `destructive`, `outline`, `secondary`, `ghost`, `link`, `accent-cta`).
-- **Cards (`Card`)**: Includes semantic helper layouts: `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, `CardFooter`.
-- **Badges (`Badge`)**: Layout badges with `variant` (`default`, `secondary`, `destructive`, `outline`).
-- **Spinner (`Spinner`)**: Customizable size and spinner states.
+Outside of active form contexts, you can directly import these components:
+- **`Select` & `MultiSelect`**: Standard dropdown triggers.
+- **`ConfirmModal` & `Modal`**: Dialog boxes.
+- **`Icons`**: High-performance graphic library wrapper (Lucide React registry). Banned from importing directly in `src/` to prevent weight overheads.
+- **`Button` / `Card` / `Badge`**: Semantic shadcn styling elements under standard Tailwind tokens.
 
 ---
 

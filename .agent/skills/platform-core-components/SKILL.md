@@ -27,6 +27,18 @@ Safely compose, build, or refactor layouts using `@platform-core/components` and
 2. **Inline Props Convention**: Declare all props inline in the component signature for local-only components.
 3. **No Duplicate Components**: Never download or download shadcn primitives locally to `src/components/ui`. Everything must come from the platform packages.
 
-## Few-Shot Examples
+## 📚 Reference Documentation & Segmented Examples
 
-- `references/examples.md`
+To keep instructions concise and prevent context bloat, the platform-core design guidelines and copy-pasteable examples have been segmented into focused relative markdown files. Load and read the specific file depending on your active task:
+
+1. **[Shadcn + TanStack DataTable Composition](file:///Users/lvtruong/personal/vlrc/.agent/skills/platform-core-components/references/datatable.md)**
+   - *Use when*: Building or refactoring lists, data grids, column structures, selection rows, expanders, or paginated lists.
+2. **[Form Containers & FormItem/FormBase Layouts](file:///Users/lvtruong/personal/vlrc/.agent/skills/platform-core-components/references/forms.md)**
+   - *Use when*: Constructing RHF form states, Zod schema validations, handling vertical/horizontal alignments, or understanding the internal Shadcn `FormItem` controller bindings.
+3. **[Custom Form Fields & Inputs API Manual](file:///Users/lvtruong/personal/vlrc/.agent/skills/platform-core-components/references/form-fields.md)**
+   - *Use when*: Implementing individual form widgets (like `FormInput`, `FormTextarea`, `FormCheckbox`, `FormSimpleSelect`, `FormSelect`, `FormMultiSelect`, `FormDatePicker`, `FormNumberInput`, `FormRadioGroup`, or `FormFileUpload`).
+4. **[Dialogs, ConfirmModal & useModalState Bindings](file:///Users/lvtruong/personal/vlrc/.agent/skills/platform-core-components/references/modals.md)**
+   - *Use when*: Handling modal open/close lifecycles, binding dynamic contextual data to modals, or writing destructive confirm dialog alerts.
+5. **[Unified Graphic Icons Registry Guidelines](file:///Users/lvtruong/personal/vlrc/.agent/skills/platform-core-components/references/icons.md)**
+   - *Use when*: Displaying SVG icons or adding missing graphic items to the public components package.
+
