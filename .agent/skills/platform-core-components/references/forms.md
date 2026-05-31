@@ -1,116 +1,150 @@
 # Form Primitives & Shadcn Form Item Wrappers
 
-The `@platform-core/components` package provides a highly optimized, schema-driven `<Form>` container that bridges **react-hook-form** with **Shadcn UI** layout elements. It handles form state, layout orientation, automatic error rendering, accessibility attributes (`aria-invalid`), and Zod validation rules with minimal boilerplate.
+The `@platform-core/components` package provides form integration built on top of **Shadcn UI Form** (which is just `react-hook-form`'s `FormProvider`) combined with custom-wrapped field components. No Zod schema validation is used — all validation runs through RHF's `rules` prop on each field.
 
 ---
 
-## 🏗 1. The Core Form Container (`<Form>`)
+## 🏗 1. The `<Form>` Component = `FormProvider`
 
-The `<Form>` component initializes the React Hook Form context and wraps standard HTML `<form>` tags.
+The `<Form>` component exported from this package is literally **`FormProvider`** from `react-hook-form`. It provides form context to all child components.
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `schema` | `z.ZodSchema<any>` | - | **(Optional)** Zod schema used to perform automatic client-side schema validation. |
-| `onSubmit` | `(values: T) => void \| Promise<void>` | - | Callback fired on successful validation check during submit. |
-| `defaultValues` | `Partial<T>` | `{}` | Initial state structure for form fields. |
-| `className` | `string` | `''` | Class names for the native `<form>` wrapper element. |
-| `children` | `(helpers: { control: Control<T>; formState: FormState<T>; ... }) => ReactNode` | - | Render prop containing RHF helpers to display field inputs. |
-
----
-
-## 📝 2. Inner Workings of the `FormItem` & `FormBase` Wrapper
-
-Every form input field in `@platform-core/components` is wired up internally via `FormBase` which wraps the Shadcn-style **`FormItem`** structure. Here is how it operates:
-
-1. **State Connection (`Controller`)**: Utilizes `react-hook-form`'s `<Controller>` to wire custom inputs to the context.
-2. **Accessible Labels (`FieldLabel`)**: Automatically renders the `<FieldLabel>` tied directly to the input `id`. If a field has validation rules indicating it is `required`, a red asterisk `<span className="text-red-500">*</span>` is automatically appended to the label.
-3. **Descriptions (`FieldDescription`)**: Binds an optional description string or node directly below/above the field.
-4. **Error Handling (`FieldError`)**: Automatically hooks into the controller's `fieldState.error`. If `fieldState.invalid` is active, it renders the `<FieldError>` component with localized text without manual developer checks.
-5. **Flexible Orientations**:
-   - **Vertical (Default)**: Stacked label -> input -> error.
-   - **Horizontal (`horizontal={true}`)**: Arranges the label and control element side-by-side using CSS grid/flex values.
-   - **Control First (`controlFirst={true}`)**: Renders the input control *before* the label (perfect for checkboxes and radio options).
-
----
-
-## 🛠 3. Zod & RHF Composition Example
-
-This clean, copy-pasteable example demonstrates how to compose a customized form with custom validation constraints using a Zod schema.
-
+### Usage Pattern
 ```tsx
-import { z } from 'zod';
-
-// 1. Zod Schema Declaration (Strongly Typed Validation Rules)
-const userProfileSchema = z.object({
-  fullName: z.string().min(3, 'Tên phải chứa ít nhất 3 ký tự'),
-  email: z.string().email('Địa chỉ email không hợp lệ'),
-  bio: z.string().max(200, 'Giới thiệu bản thân tối đa 200 ký tự').optional()
+// 1. Call useForm() to get the form object
+const form = useForm<MyFormType>({
+  defaultValues: { name: '', email: '' }
 });
 
-type UserProfileValues = z.infer<typeof userProfileSchema>;
+// 2. Spread the form object into <Form>
+// 3. Wrap a native <form> with handleSubmit
+<Form {...form}>
+  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+    <FormInput control={form.control} name="name" label="Họ tên" rules={{ required: true }} />
+    <FormInput control={form.control} name="email" label="Email" htmlType="email" />
+    <Button type="submit">Lưu</Button>
+  </form>
+</Form>
+```
 
-const UserProfileForm = () => {
+> [!IMPORTANT]
+> - **`Form` = `FormProvider`**. You spread the `useForm()` return value into it: `<Form {...form}>`.
+> - **No Zod validation**. All validation is done via `rules` prop on each field (standard RHF `RegisterOptions`).
+> - **`control` comes from `useForm()`** or `useFormContext()` when splitting into child components.
+
+---
+
+## 📝 2. Shadcn Form Item Internals
+
+Shadcn provides these standard layout components that some of the custom wrappers use internally:
+
+| Component | Role |
+| :--- | :--- |
+| `FormField` | RHF `<Controller>` + context provider for the field name. |
+| `FormItem` | Layout container with `grid gap-2`. Generates a unique `id` for accessibility. |
+| `FormLabel` | Auto-linked `<Label>` that turns red on validation errors via `data-error`. |
+| `FormControl` | `<Slot>` that injects `id`, `aria-describedby`, and `aria-invalid` into the child input. |
+| `FormDescription` | Gray helper text below the field. |
+| `FormMessage` | Red error text that reads from the RHF field error state automatically. |
+
+### When You Use Shadcn Primitives Directly
+Some complex wrappers like `FormDatePicker` and `FormRadioGroup` use these Shadcn primitives directly:
+
+```tsx
+<FormField
+  control={control}
+  name={name}
+  rules={rules}
+  render={({ field }) => (
+    <FormItem>
+      <FormLabel>{label}</FormLabel>
+      <FormControl>
+        {/* your custom input here */}
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  )}
+/>
+```
+
+### When You Use `FormBase` Instead
+The simpler wrappers (`FormInput`, `FormTextarea`, `FormCheckbox`, `FormSimpleSelect`) use a custom `FormBase` component that wraps `<Controller>` with the `Field`/`FieldLabel`/`FieldError` layout system. It provides the same functionality but with extra features:
+- Automatic `required` asterisk on labels
+- Auto-validation patterns for `email` and `tel` input types
+- Flexible `horizontal` and `controlFirst` layout options
+
+---
+
+## 🛠 3. Real-World Form Pattern (from the codebase)
+
+This is the actual pattern used throughout the VLRC project:
+
+```tsx
+const CreateCourseModal = ({ id, open, onCancel }: App.ModalProps) => {
   const { t } = useTranslation();
 
-  const handleSave = async (values: UserProfileValues) => {
-    // API request mutation triggered here
-    await saveProfileMutation.mutateAsync(values);
-  };
+  // 1. useForm — no Zod, just RHF with type
+  const { control, handleSubmit, reset } = useForm<LearningManagement.Course>();
+
+  const courseMutation = useCourseMutation({
+    onSuccess: () => { reset(); onCancel(); }
+  });
+
+  const onSubmit = handleSubmit(data => {
+    courseMutation.mutate({ id, payload: data });
+  });
 
   return (
-    <Form
-      schema={userProfileSchema}
-      onSubmit={handleSave}
-      defaultValues={{
-        fullName: '',
-        email: '',
-        bio: ''
-      }}
-      className="space-y-4 bg-card p-6 rounded-xl border border-border"
-    >
-      {({ control, formState }) => (
-        <>
-          {/* 1. FormInput (Leverages FormBase / FormItem under the hood) */}
-          <FormInput
-            control={control}
-            name="fullName"
-            label="Họ và tên"
-            placeholder="Nhập đầy đủ họ tên..."
-            leftIcon={<Icons.User className="h-4 w-4" />}
-          />
+    <Modal open={open} onCancel={onCancel} onConfirm={onSubmit}>
+      <form className="space-y-5">
+        <FormInput
+          control={control}
+          name="title"
+          label={t('create_course_title_label')}
+          placeholder={t('create_course_title_placeholder')}
+          rules={{ required: true }}
+        />
+        <FormInput
+          control={control}
+          name="enTitle"
+          label={t('create_course_en_title_label')}
+        />
+        <FormTextarea
+          control={control}
+          name="description"
+          label={t('create_course_description_label')}
+        />
+      </form>
+    </Modal>
+  );
+};
+```
 
-          {/* 2. FormInput with automatic email validation checks */}
-          <FormInput
-            control={control}
-            name="email"
-            label="Email liên hệ"
-            htmlType="email"
-            placeholder="name@company.com"
-            leftIcon={<Icons.Mail className="h-4 w-4" />}
-          />
+### Splitting Into Child Components
 
-          {/* 3. FormTextarea for multiline details */}
-          <FormTextarea
-            control={control}
-            name="bio"
-            label="Giới thiệu bản thân"
-            placeholder="Viết một vài dòng mô tả ngắn..."
-          />
+When a form is large, split fields into child components. Use `useFormContext()` to access `control` without prop drilling:
 
-          {/* Action buttons with loading states */}
-          <Button type="submit" disabled={formState.isSubmitting} className="w-full">
-            {formState.isSubmitting ? (
-              <>
-                <Icons.Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Đang lưu...
-              </>
-            ) : (
-              'Lưu hồ sơ'
-            )}
-          </Button>
-        </>
-      )}
-    </Form>
+```tsx
+// Parent
+const form = useForm<FormValues>({ defaultValues: { ... } });
+
+return (
+  <Form {...form}>
+    <form onSubmit={form.handleSubmit(onSubmit)}>
+      <PersonalInfoFields />
+      <AddressFields />
+      <Button type="submit">Lưu</Button>
+    </form>
+  </Form>
+);
+
+// Child component (no need for control prop)
+const PersonalInfoFields = () => {
+  const { control } = useFormContext<FormValues>();
+  return (
+    <>
+      <FormInput control={control} name="name" label="Họ tên" rules={{ required: true }} />
+      <FormInput control={control} name="phone" label="SĐT" htmlType="tel" />
+    </>
   );
 };
 ```

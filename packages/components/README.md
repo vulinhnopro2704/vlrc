@@ -47,22 +47,27 @@ When a field is rendered, `FormBase` automatically builds the following Shadcn s
 3. **`<FieldDescription>`**: Displays supplementary description nodes or helper text.
 4. **`<FieldError>`**: Listens to active RHF validation errors. If a field fails validation checks, the error message is instantly rendered below the input with appropriate red typography, omitting the need for developers to manually write error flags.
 
-### 1.2 Form Core API
+### 1.2 How `<Form>` Works
+
+`<Form>` is literally `FormProvider` from `react-hook-form`. It provides form context so child components can use `useFormContext()`.
+
+**Pattern**: Call `useForm()` → spread into `<Form {...form}>` → wrap a native `<form>` → fields receive `form.control`.
+
+**Validation**: Done exclusively via `rules` prop on each field (standard RHF `RegisterOptions`). No Zod schemas.
+
 ```tsx
-<Form
-  schema={courseSchema} // Optional Zod Schema for validation
-  onSubmit={handleSubmit}
-  defaultValues={{ title: '', isActive: false }}
-  className="space-y-4"
->
-  {({ control, formState }) => (
-    <>
-      <FormInput control={control} name="title" label="Tiêu đề" rules={{ required: true }} />
-      <FormCheckbox control={control} name="isActive" label="Hoạt động" />
-    </>
-  )}
-</Form>
+const { control, handleSubmit, reset } = useForm<LearningManagement.Course>();
+
+return (
+  <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <FormInput control={control} name="title" label="Tiêu đề" rules={{ required: true }} />
+    <FormCheckbox control={control} name="isActive" label="Hoạt động" />
+    <Button type="submit">Lưu</Button>
+  </form>
+);
 ```
+
+When splitting into child components, wrap with `<Form {...form}>` and use `useFormContext()` inside children to access `control` without prop drilling.
 
 ---
 
