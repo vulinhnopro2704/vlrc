@@ -143,5 +143,7 @@ skills:
   load: ".agent/skills/i18n-flat-key-management/SKILL.md"
 - task: "Route/page separation and module placement governance"
   load: ".agent/skills/route-page-structure-governance/SKILL.md"
+- task: "Use or compose DataTable, Form wrappers, Select, MultiSelect, ConfirmModal, or Icons from platform-core"
+  load: ".agent/skills/platform-core-components/SKILL.md"
 
 <!-- intent-skills:end -->
