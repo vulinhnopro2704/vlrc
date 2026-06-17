@@ -35,17 +35,20 @@ declare namespace RoleplayManagement {
 
   export interface StartRoleplayPayload {
     scenarioId: string;
+    skipTts?: boolean;
   }
 
   export interface ChatRoleplayPayload {
     sessionId: string;
     userMessage: string;
+    skipTts?: boolean;
   }
 
   export interface ChatVoiceRoleplayPayload {
     sessionId: string;
     audioBase64: string;
     mimeType: string;
+    skipTts?: boolean;
   }
 
   export interface SummarizeRoleplayPayload {

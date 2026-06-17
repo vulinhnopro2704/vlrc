@@ -223,7 +223,8 @@ export const useRolePlaySession = (
       const response = await chatVoiceMutation.mutateAsync({
         sessionId: activeSession.sessionId,
         audioBase64,
-        mimeType
+        mimeType,
+        skipTts: true
       });
 
       setActiveSession(prev => {
@@ -258,9 +259,8 @@ export const useRolePlaySession = (
         };
       });
 
-      if (response.audio?.url && response.audio.status === 'completed') {
-        playAudioFromResponse(response.audio.url);
-      }
+      const ttsUrl = `${import.meta.env.VITE_BACKEND_API_URL}/roleplay/tts?text=${encodeURIComponent(response.ai_spoken_response)}`;
+      playAudioFromResponse(ttsUrl);
       if (response.scenario_completed) {
         toast.success(t('roleplay_completed_congrats', 'Chúc mừng! Bạn đã hoàn thành xuất sắc tất cả nhiệm vụ!'));
       }
@@ -272,7 +272,10 @@ export const useRolePlaySession = (
   const handleStartScenario = async (scenario: RoleplayManagement.Scenario) => {
     try {
       stopPlayback();
-      const response = await startMutation.mutateAsync({ scenarioId: scenario.id });
+      const response = await startMutation.mutateAsync({
+        scenarioId: scenario.id,
+        skipTts: true
+      });
       
       setActiveSession({
         sessionId: response.sessionId,
@@ -306,9 +309,8 @@ export const useRolePlaySession = (
       setIsVoiceMode(true);
       toast.success(t('roleplay_started', 'Bắt đầu cuộc trò chuyện nhập vai!'));
 
-      if (response.audio?.url && response.audio.status === 'completed') {
-        playAudioFromResponse(response.audio.url);
-      }
+      const ttsUrl = `${import.meta.env.VITE_BACKEND_API_URL}/roleplay/tts?text=${encodeURIComponent(response.ai_first_message)}`;
+      playAudioFromResponse(ttsUrl);
     } catch {
       // handled
     }
@@ -337,7 +339,8 @@ export const useRolePlaySession = (
       stopPlayback();
       const response = await chatMutation.mutateAsync({
         sessionId: activeSession.sessionId,
-        userMessage: userMsg
+        userMessage: userMsg,
+        skipTts: true
       });
 
       setActiveSession(prev => {
@@ -369,9 +372,8 @@ export const useRolePlaySession = (
         };
       });
 
-      if (response.audio?.url && response.audio.status === 'completed') {
-        playAudioFromResponse(response.audio.url);
-      }
+      const ttsUrl = `${import.meta.env.VITE_BACKEND_API_URL}/roleplay/tts?text=${encodeURIComponent(response.ai_spoken_response)}`;
+      playAudioFromResponse(ttsUrl);
       if (response.scenario_completed) {
         toast.success(t('roleplay_completed_congrats', 'Chúc mừng! Bạn đã hoàn thành xuất sắc tất cả nhiệm vụ!'));
       }
