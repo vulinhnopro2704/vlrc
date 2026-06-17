@@ -2,7 +2,7 @@ import apiClient from './api-client';
 
 // ── Users (admin) ──
 
-const USER_BASE_PATH = 'auth/user';
+const USER_BASE_PATH = 'users';
 
 const buildSearchParams = (params?: Auth.UserQueryParams) =>
   params
@@ -14,7 +14,7 @@ const buildSearchParams = (params?: Auth.UserQueryParams) =>
 export const getUsers = (params?: Auth.UserQueryParams) =>
   apiClient
     .get(USER_BASE_PATH, { searchParams: buildSearchParams(params) })
-    .json<App.CursorPaginationResponse<Auth.UserProfile>>();
+    .json<Auth.UserPaginationResponse>();
 
 export const getUser = (id: string) =>
   apiClient.get(`${USER_BASE_PATH}/${id}`).json<Auth.UserProfile>();

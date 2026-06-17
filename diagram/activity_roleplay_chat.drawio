@@ -1,0 +1,126 @@
+<mxfile host="65bd71144e">
+    <diagram id="roleplay_chat_activity" name="Activity Luồng Luyện Nói AI qua Chat">
+        <mxGraphModel dx="1091" dy="928" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="800" pageHeight="1600" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="lane_0" value="Người học" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;startSize=30;fontStyle=1;fontColor=#000000;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="50" y="50" width="260" height="920" as="geometry"/>
+                </mxCell>
+                <mxCell id="SelectScenario" value="Chọn kịch bản nhập vai trong sảnh chờ" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" parent="lane_0" vertex="1">
+                    <mxGeometry x="50" y="130" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="SendText" value="Nhập và gửi tin nhắn tiếng Anh" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" parent="lane_0" vertex="1">
+                    <mxGeometry x="30" y="340" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="Start" value="" style="ellipse;html=1;fillColor=#000000;strokeColor=#000000;" parent="lane_0" vertex="1">
+                    <mxGeometry x="115" y="60" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" parent="lane_0" source="Start" target="SelectScenario" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="Bắt đầu" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="lane_0">
+                    <mxGeometry x="100" y="30" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="Kết thúc" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="lane_0">
+                    <mxGeometry x="95" y="838" width="70" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="lane_1" value="Trợ lý AI" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;startSize=30;fontStyle=1;fontColor=#000000;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="310" y="50" width="270" height="920" as="geometry"/>
+                </mxCell>
+                <mxCell id="SessionLoop" value="Phiên chat còn&lt;br&gt;&amp;nbsp;tiếp tục?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;" parent="lane_1" vertex="1">
+                    <mxGeometry x="70" y="200" width="100" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="AIAnalyze" value="Phân tích ngữ cảnh &amp; đánh giá nhiệm vụ" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" parent="lane_1" vertex="1">
+                    <mxGeometry x="40" y="330" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="AIResponse" value="Gửi tin nhắn phản hồi hội thoại" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" parent="lane_1" vertex="1">
+                    <mxGeometry x="40" y="410" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" parent="lane_1" source="AIAnalyze" target="AIResponse" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ShowFeedback" value="Hiển thị sửa lỗi ngữ pháp &amp; gợi ý từ vựng" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" parent="lane_1" vertex="1">
+                    <mxGeometry x="40" y="490" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" parent="lane_1" source="AIResponse" target="ShowFeedback" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ShowReport" value="Hiển thị kết quả" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" parent="lane_1" vertex="1">
+                    <mxGeometry x="40" y="800" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="e12" value="Không" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" parent="lane_1" source="SessionLoop" target="ShowReport" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="160.0000000000001" y="300" as="sourcePoint"/>
+                        <mxPoint x="160.0000000000001" y="800" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="120" y="320"/>
+                            <mxPoint x="250" y="320"/>
+                            <mxPoint x="250" y="780"/>
+                            <mxPoint x="120" y="780"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="DecDone" value="Đạt 3 nhiệm &lt;br&gt;vụ hoặc người học gác máy?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;" parent="lane_1" vertex="1">
+                    <mxGeometry x="70" y="580" width="100" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" parent="lane_1" source="ShowFeedback" target="DecDone" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e11" value="Không" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=1;entryY=0.5;strokeColor=#000000;fontColor=#000000;fontSize=10;" parent="lane_1" source="DecDone" target="SessionLoop" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="220" y="630"/>
+                            <mxPoint x="220" y="250"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="CloseSession" value="Đóng phiên hội thoại" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" parent="lane_1" vertex="1">
+                    <mxGeometry x="40" y="710" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="e9" value="Có" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" parent="lane_1" source="DecDone" target="CloseSession" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#000000;fontColor=#000000;fontSize=10;exitDx=0;exitDy=0;" parent="lane_1" source="CloseSession" target="SessionLoop" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="10" y="738"/>
+                            <mxPoint x="10" y="250"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="InitChat" value="Khởi tạo phòng chat và 3 nhiệm vụ kịch bản" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" parent="1" vertex="1">
+                    <mxGeometry x="350" y="180" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="End" value="" style="ellipse;html=1;shape=endState;fillColor=none;strokeColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="165" y="932" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#000000;fontColor=#000000;fontSize=10;entryDx=0;entryDy=0;exitDx=0;exitDy=0;" parent="1" source="SelectScenario" target="InitChat" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="280" y="208"/>
+                            <mxPoint x="280" y="208"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" parent="1" source="InitChat" target="SessionLoop" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4" value="Có" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" parent="1" source="SessionLoop" target="SendText" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="430" y="370"/>
+                            <mxPoint x="160" y="370"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=-0.022;entryY=0.688;strokeColor=#000000;fontColor=#000000;fontSize=10;exitDx=0;exitDy=0;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="SendText" target="AIAnalyze" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e13" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" parent="1" source="ShowReport" target="End" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

@@ -240,6 +240,11 @@ export const Header = () => {
                   <DropdownMenuItem onClick={() => navigate({ to: '/profile' })}>
                     Hồ sơ cá nhân
                   </DropdownMenuItem>
+                  {me.role === 'ADMIN' && (
+                    <DropdownMenuItem onClick={() => navigate({ to: '/admin' })}>
+                      Quản trị hệ thống
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem onClick={() => navigate({ to: '/dashboard' })}>
                     {t('learning_dashboard')}
                   </DropdownMenuItem>

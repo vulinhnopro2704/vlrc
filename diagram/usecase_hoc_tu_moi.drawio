@@ -1,0 +1,118 @@
+<mxfile host="65bd71144e">
+    <diagram id="hoc_tu_moi_usecase" name="Use Case Học Từ Mới">
+        <mxGraphModel dx="1019" dy="603" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1500" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="System" value="Usecase học từ vựng" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=none;strokeColor=#000000;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="220" y="30" width="830" height="810" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_HocTuMoi" value="Học từ mới&lt;br&gt;(Học bài học từ danh sách bài học theo chủ đề)" style="ellipse;whiteSpace=wrap;html=1;fontStyle=1;fontSize=13;" parent="System" vertex="1">
+                    <mxGeometry x="20" y="490" width="200" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_FlipCard" value="① Lật thẻ" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;" parent="System" vertex="1">
+                    <mxGeometry x="100" y="130" width="190" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_ListenFill" value="② Nghe &amp;amp; Điền" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;" parent="System" vertex="1">
+                    <mxGeometry x="160" y="270" width="190" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_MeaningLookup" value="④ Chọn nghĩa của từ đúng" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;" parent="System" vertex="1">
+                    <mxGeometry x="190" y="620" width="190" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_WordReview" value="Xem kết quả từ" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;" parent="System" vertex="1">
+                    <mxGeometry x="580" y="360" width="200" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_DanhDau" value="Đánh dấu Đúng/Sai" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;" parent="System" vertex="1">
+                    <mxGeometry x="580" y="500" width="190" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_HoanThanhBaiHoc" value="Hoàn thành bài học" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;" parent="System" vertex="1">
+                    <mxGeometry x="420" y="590" width="200" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_NghePhaiAm" value="Nghe phát âm&#xa;(TTS / Audio)" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" parent="System" vertex="1">
+                    <mxGeometry x="370" y="200" width="170" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_XemViDu" value="Xem ví dụ câu&#xa;(EN + VI)" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" parent="System" vertex="1">
+                    <mxGeometry x="310" y="40" width="170" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_XemHinhAnh" value="Xem hình ảnh&#xa;minh họa" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" parent="System" vertex="1">
+                    <mxGeometry x="370" y="120" width="170" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_XemPhienAm" value="Xem phiên âm" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" parent="System" vertex="1">
+                    <mxGeometry x="250" y="510" width="170" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_LapLich" value="Lập lịch ôn tập&#xa;(FSRS)" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" parent="System" vertex="1">
+                    <mxGeometry x="650" y="680" width="170" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_LuuLog" value="Lưu nhật ký học" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" parent="System" vertex="1">
+                    <mxGeometry x="530" y="740" width="170" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_CapNhatTienDo" value="Cập nhật tiến độ&#xa;học tập" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" parent="System" vertex="1">
+                    <mxGeometry x="360" y="690" width="170" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="Note_Sequence" value="Thứ tự bài tập trong 1 lesson:&lt;br&gt;Với mỗi từ → chạy lần lượt:&lt;br&gt;① Lật thẻ (giới thiệu từ)&lt;br&gt;② Nghe và điền từ&lt;br&gt;③ Điền chỗ trống&lt;br&gt;④ Chọn đáp án đúng&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;&lt;br&gt;&lt;/font&gt;Sau từ cuối → Hoàn thành bài học&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;size=18;fontSize=11;align=left;spacingLeft=10;spacingTop=4;" parent="System" vertex="1">
+                    <mxGeometry x="550" y="50" width="200" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Inc_Flip" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=10;" parent="System" source="UC_HocTuMoi" target="UC_FlipCard" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Inc_Listen" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=10;" parent="System" source="UC_HocTuMoi" target="UC_ListenFill" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Inc_Meaning" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=10;" parent="System" source="UC_HocTuMoi" target="UC_MeaningLookup" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Inc_Review1" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=9;" parent="System" source="UC_ListenFill" target="UC_WordReview" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Inc_Review3" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=9;" parent="System" source="UC_MeaningLookup" target="UC_WordReview" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Inc_DanhDau" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=10;" parent="System" source="UC_WordReview" target="UC_DanhDau" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Inc_HoanThanh" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=10;" parent="System" source="UC_DanhDau" target="UC_HoanThanhBaiHoc" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Inc_LapLich" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=10;" parent="System" source="UC_HoanThanhBaiHoc" target="UC_LapLich" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Inc_LuuLog" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=10;" parent="System" source="UC_HoanThanhBaiHoc" target="UC_LuuLog" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Inc_TienDo" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=10;" parent="System" source="UC_HoanThanhBaiHoc" target="UC_CapNhatTienDo" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Ext_Audio1" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=9;" parent="System" source="UC_NghePhaiAm" target="UC_FlipCard" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Ext_Audio2" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=9;" parent="System" source="UC_NghePhaiAm" target="UC_ListenFill" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Ext_ViDu1" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=9;" parent="System" source="UC_XemViDu" target="UC_FlipCard" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Ext_HinhAnh" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=9;" parent="System" source="UC_XemHinhAnh" target="UC_FlipCard" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_FillBlank" value="③ Điền từ vào chỗ trống" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;" parent="System" vertex="1">
+                    <mxGeometry x="235" y="380" width="200" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Inc_Fill" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=10;" parent="System" source="UC_HocTuMoi" target="UC_FillBlank" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Inc_Review2" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=9;" parent="System" source="UC_FillBlank" target="UC_WordReview" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Ext_PhienAm" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=9;" parent="System" source="UC_XemPhienAm" target="UC_FillBlank" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Actor_Learner" value="Người học" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="130" y="450" width="50" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_L_1" parent="1" source="Actor_Learner" target="UC_HocTuMoi" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

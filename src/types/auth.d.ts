@@ -40,9 +40,20 @@ declare namespace Auth {
   
   type UpdateProfilePayload = Partial<Pick<UserProfile, 'name' | 'phoneNumber' | 'dateOfBirth' | 'gender' | 'hobbies' | 'funFact' | 'avatar'>>;
 
-  interface UserQueryParams extends App.CursorPaginationParams {
+  interface UserQueryParams {
+    cursor?: string;
+    take?: number;
     search?: string;
     role?: Role;
+  }
+
+  interface UserPaginationResponse {
+    data: UserProfile[];
+    pagination: {
+      nextCursor: string | null;
+      hasMore: boolean;
+      total: number;
+    };
   }
 
   interface LoginFormData {

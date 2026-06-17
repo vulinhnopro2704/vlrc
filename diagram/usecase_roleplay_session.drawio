@@ -1,0 +1,91 @@
+<mxfile host="65bd71144e">
+    <diagram id="roleplay_session_usecase" name="Use Case Trò Chuyện Nhập Vai">
+        <mxGraphModel dx="1086" dy="861" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="900" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="System" value="Use case Trò chuyện nhập vai" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=none;strokeColor=#000000;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="240" y="30" width="780" height="540" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_Session" value="Thực hiện cuộc trò chuyện" style="ellipse;whiteSpace=wrap;html=1;fontStyle=1;fontSize=12;" parent="System" vertex="1">
+                    <mxGeometry x="45" y="260" width="200" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_VoiceMode" value="Trò chuyện bằng Giọng nói&lt;br&gt;(Voice Call UI)" style="ellipse;whiteSpace=wrap;html=1;fontStyle=1;fontSize=11;" parent="System" vertex="1">
+                    <mxGeometry x="45" y="160" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_TextMode" value="Trò chuyện bằng Văn bản&amp;nbsp;" style="ellipse;whiteSpace=wrap;html=1;fontStyle=1;fontSize=11;" parent="System" vertex="1">
+                    <mxGeometry x="305" y="260" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_XemTasks" value="Xem danh sách nhiệm vụ cần đạt" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" parent="System" vertex="1">
+                    <mxGeometry x="345" y="340" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_DichTin" value="Dịch nội dung tin nhắn thoại/văn bản" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" parent="System" vertex="1">
+                    <mxGeometry x="315" y="420" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_GoiY" value="Nhận gợi ý câu trả lời mẫu" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" parent="System" vertex="1">
+                    <mxGeometry x="185" y="470" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_Grammar" value="Xem phản hồi sửa lỗi ngữ pháp" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" parent="System" vertex="1">
+                    <mxGeometry x="5" y="420" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_Record" value="Ghi âm giọng nói người học&lt;br&gt;(Tự động dừng sau 3s im lặng)" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" parent="System" vertex="1">
+                    <mxGeometry x="15" y="40" width="210" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_SendVoice" value="Gửi âm thanh &amp;amp; nhận diện chữ viết" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" parent="System" vertex="1">
+                    <mxGeometry x="225" y="80" width="210" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_PlayLipsync" value="Phát âm thanh phản hồi AI&lt;br&gt;(Tập tin audio + 3D Lip-sync)" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" parent="System" vertex="1">
+                    <mxGeometry x="325" y="180" width="210" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_InputText" value="Nhập nội dung văn bản" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" parent="System" vertex="1">
+                    <mxGeometry x="545" y="220" width="210" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="UC_SendText" value="Gửi tin nhắn văn bản đi" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" parent="System" vertex="1">
+                    <mxGeometry x="560" y="300" width="210" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="Note_Session" value="Tương tác trong Cuộc gọi/Chat:&#xa;• Hỗ trợ chuyển đổi qua lại giữa&#xa;  độ trực quan cao (Voice Call với&#xa;  mô hình 3D lipsync) và văn bản&#xa;  nhanh (Text Chat).&#xa;• Có tính năng gợi ý phản hồi để&#xa;  tránh người học bị &quot;bí từ&quot;.&#xa;• Phân tích ngữ pháp Real-time:&#xa;  Khi người học nói/nhắn sai, hệ&#xa;  thống đánh dấu và gợi ý sửa ngay." style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;size=18;fontSize=11;align=left;spacingLeft=10;spacingTop=6;" parent="System" vertex="1">
+                    <mxGeometry x="560" y="370" width="197.5" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Inc_Voice" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=9;" parent="System" source="UC_Session" target="UC_VoiceMode" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Inc_Text" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=9;" parent="System" source="UC_Session" target="UC_TextMode" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Inc_Tasks" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=9;" parent="System" source="UC_Session" target="UC_XemTasks" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Ext_Dich" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=9;" parent="System" source="UC_DichTin" target="UC_Session" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Ext_GoiY" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=9;" parent="System" source="UC_GoiY" target="UC_Session" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Ext_Grammar" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=9;" parent="System" source="UC_Grammar" target="UC_Session" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Inc_Record" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=8;" parent="System" source="UC_VoiceMode" target="UC_Record" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Inc_SendVoice" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=8;" parent="System" source="UC_VoiceMode" target="UC_SendVoice" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Inc_PlayLipsync" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=8;" parent="System" source="UC_VoiceMode" target="UC_PlayLipsync" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Inc_Input" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=8;" parent="System" source="UC_TextMode" target="UC_InputText" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Inc_SendText" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;html=1;endArrow=open;endSize=12;endFill=0;labelBackgroundColor=#ffffff;fontSize=8;" parent="System" source="UC_TextMode" target="UC_SendText" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="Actor_Learner" value="Người học" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="290" width="50" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rel_Actor_Session" style="endArrow=none;html=1;fontSize=12;" parent="1" source="Actor_Learner" target="UC_Session" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

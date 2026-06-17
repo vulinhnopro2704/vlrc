@@ -1,0 +1,160 @@
+<mxfile host="65bd71144e">
+    <diagram id="learn_new_words_activity" name="Activity Luồng Học Từ Mới">
+        <mxGraphModel dx="834" dy="709" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="800" pageHeight="1600" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="lane_0" value="Người học" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;startSize=30;fontStyle=1;fontColor=#000000;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="50" y="50" width="260" height="900" as="geometry"/>
+                </mxCell>
+                <mxCell id="End" value="" style="ellipse;html=1;shape=endState;fillColor=none;strokeColor=#000000;" parent="lane_0" vertex="1">
+                    <mxGeometry x="95" y="862.5" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="DoEx" value="Thực hiện bài tập tương tác" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" parent="lane_0" vertex="1">
+                    <mxGeometry x="50" y="420" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="ClickSubmit" value="Bấm nút Nộp bài hoàn thành" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" parent="lane_0" vertex="1">
+                    <mxGeometry x="60" y="710" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="Start" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="lane_0">
+                    <mxGeometry x="105" y="28" width="50" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="End" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="lane_0">
+                    <mxGeometry x="95" y="790" width="40" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="lane_1" value="Hệ thống" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;startSize=30;fontStyle=1;fontColor=#000000;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="310" y="50" width="400" height="900" as="geometry"/>
+                </mxCell>
+                <mxCell id="RenderEx" value="Hiển thị bài tập (Lật thẻ/Gõ từ/Chọn nghĩa)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" parent="lane_1" vertex="1">
+                    <mxGeometry x="130" y="340" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="VerifyAnswer" value="Kiểm tra đáp án của người học" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" parent="lane_1" vertex="1">
+                    <mxGeometry x="120" y="420" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="lane_1" source="WordLoop" target="9">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="Không" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="10">
+                    <mxGeometry x="-0.2" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="WordLoop" value="Còn từ chưa học?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;" parent="lane_1" vertex="1">
+                    <mxGeometry x="200" y="210" width="100" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4" value="Có" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" parent="lane_1" source="WordLoop" target="RenderEx" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ShowHint" value="Báo sai và đưa ra gợi ý (Hint)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" parent="lane_1" vertex="1">
+                    <mxGeometry x="30" y="640" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="DecCorrect" value="Đúng?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;" parent="lane_1" vertex="1">
+                    <mxGeometry x="60" y="500" width="100" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" parent="lane_1" source="VerifyAnswer" target="DecCorrect" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8" value="Không" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" parent="lane_1" source="DecCorrect" target="ShowHint" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" edge="1" parent="lane_1" source="VerifyAnswer" target="DecCorrect">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="185" y="515" as="sourcePoint"/>
+                        <mxPoint x="-130" y="910" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="SuccessScreen" value="Hiển thị kết quả &amp; điểm thưởng" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" parent="lane_1" vertex="1">
+                    <mxGeometry x="40" y="810" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="SaveProgress" value="Lưu tiến độ, cộng điểm XP &amp; Streak" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" parent="lane_1" vertex="1">
+                    <mxGeometry x="40" y="723" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="e14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" parent="lane_1" source="SaveProgress" target="SuccessScreen" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="MarkWordDone" value="Ghi nhận hoàn thành từ vựng" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" parent="lane_1" vertex="1">
+                    <mxGeometry x="210" y="522.5" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="e10" value="Có" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#000000;fontColor=#000000;fontSize=10;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" parent="lane_1" source="DecCorrect" target="MarkWordDone" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=1;entryY=0.5;strokeColor=#000000;fontColor=#000000;fontSize=10;" parent="lane_1" source="MarkWordDone" target="WordLoop" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="380" y="550"/>
+                            <mxPoint x="380" y="260"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="GetWords" value="Hiển thị danh sách từ vựng của bài" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" parent="lane_1" vertex="1">
+                    <mxGeometry x="130" y="130" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" parent="lane_1" source="GetWords" target="WordLoop" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="Hiển thị tổng kết từ vựng đã học" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" vertex="1" parent="lane_1">
+                    <mxGeometry x="10" y="270" width="120" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="Start" value="" style="ellipse;html=1;fillColor=#000000;strokeColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="165" y="100" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="OpenLesson" value="Chọn bài học trong khóa học" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="180" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" parent="1" source="Start" target="OpenLesson" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" parent="1" source="OpenLesson" target="GetWords" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" parent="1" source="RenderEx" target="DoEx" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#000000;fontColor=#000000;fontSize=10;entryDx=0;entryDy=0;exitDx=0;exitDy=0;" parent="1" source="DoEx" target="VerifyAnswer" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="270" y="498"/>
+                            <mxPoint x="305" y="498"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0;exitY=0.5;entryX=0.5;entryY=1;strokeColor=#000000;fontColor=#000000;fontSize=10;entryDx=0;entryDy=0;" parent="1" source="ShowHint" target="DoEx" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="180" y="718"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e13" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#000000;fontColor=#000000;fontSize=10;entryDx=0;entryDy=0;exitDx=0;exitDy=0;" parent="1" source="ClickSubmit" target="SaveProgress" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="310" y="788"/>
+                            <mxPoint x="310" y="801"/>
+                            <mxPoint x="340" y="801"/>
+                            <mxPoint x="350" y="800"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e15" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0;exitY=0.5;strokeColor=#000000;fontColor=#000000;fontSize=10;exitDx=0;exitDy=0;entryX=1.039;entryY=0.469;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="SuccessScreen" target="End" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="220" y="1097" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="196" y="928"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="12" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=-0.001;entryY=0.38;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="9" target="ClickSubmit">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="80" y="387"/>
+                            <mxPoint x="80" y="780"/>
+                            <mxPoint x="110" y="780"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

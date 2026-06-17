@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="65bd71144e">
+    <diagram id="gateway_auth_activity" name="Activity Luồng Đăng nhập &amp; Đăng ký">
+        <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="800" pageHeight="1600" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="lane_0" value="Người dùng" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;startSize=30;fontStyle=1;fontColor=#000000;fontSize=12;" vertex="1" parent="1">
+                    <mxGeometry x="50" y="50" width="260" height="900" as="geometry"/>
+                </mxCell>
+                <mxCell id="lane_1" value="Hệ thống" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;startSize=30;fontStyle=1;fontColor=#000000;fontSize=12;" vertex="1" parent="1">
+                    <mxGeometry x="310" y="50" width="260" height="900" as="geometry"/>
+                </mxCell>
+                <mxCell id="Start" value="" style="ellipse;html=1;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="165" y="100" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="ChooseMethod" value="Chọn phương thức đăng nhập" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="100" y="180" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="DecMethod" value="Phương thức?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;" vertex="1" parent="1">
+                    <mxGeometry x="130" y="280" width="100" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="RedirectOAuth" value="Chuyển hướng đến Google/Microsoft" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="100" y="420" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="ApproveAuth" value="Xác nhận ủy quyền và trả về token" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="100" y="520" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="EnterCredentials" value="Nhập email và mật khẩu" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="350" y="420" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="ValidateCredentials" value="Kiểm tra thông tin tài khoản" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="350" y="520" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="DecCredentials" value="Hợp lệ?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;" vertex="1" parent="1">
+                    <mxGeometry x="380" y="620" width="100" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="ShowError" value="Hiển thị thông báo sai thông tin" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="350" y="750" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="RedirectDashboard" value="Đăng nhập thành công, mở Dashboard" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontSize=11;arcSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="350" y="820" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="End" value="" style="ellipse;html=1;shape=endState;fillColor=none;strokeColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="165" y="832" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" edge="1" parent="1" source="Start" target="ChooseMethod">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" edge="1" parent="1" source="ChooseMethod" target="DecMethod">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3" value="Mạng xã hội (OAuth)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" edge="1" parent="1" source="DecMethod" target="RedirectOAuth">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" edge="1" parent="1" source="RedirectOAuth" target="ApproveAuth">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#000000;fontColor=#000000;fontSize=10;" edge="1" parent="1" source="ApproveAuth" target="RedirectDashboard">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="180" y="847"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e6" value="Tài khoản thường" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" edge="1" parent="1" source="DecMethod" target="EnterCredentials">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" edge="1" parent="1" source="EnterCredentials" target="ValidateCredentials">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" edge="1" parent="1" source="ValidateCredentials" target="DecCredentials">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e9" value="Không" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" edge="1" parent="1" source="DecCredentials" target="ShowError">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=1;entryY=0.5;strokeColor=#000000;fontColor=#000000;fontSize=10;" edge="1" parent="1" source="ShowError" target="EnterCredentials">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="540" y="777"/>
+                            <mxPoint x="540" y="447"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e11" value="Có" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" edge="1" parent="1" source="DecCredentials" target="RedirectDashboard">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;fontColor=#000000;fontSize=10;" edge="1" parent="1" source="RedirectDashboard" target="End">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
