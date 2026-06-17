@@ -13,6 +13,12 @@ export const createScenario = (payload: RoleplayManagement.CreateScenarioPayload
 export const generateScenario = (payload: RoleplayManagement.GenerateScenarioPayload) =>
   apiClient.post(`${ROLEPLAY_BASE_PATH}/scenarios/generate`, { json: payload }).json<RoleplayManagement.Scenario>();
 
+export const updateScenario = (id: string, payload: Partial<RoleplayManagement.CreateScenarioPayload>) =>
+  apiClient.patch(`${ROLEPLAY_BASE_PATH}/scenarios/${id}`, { json: payload }).json<RoleplayManagement.Scenario>();
+
+export const deleteScenario = (id: string) =>
+  apiClient.delete(`${ROLEPLAY_BASE_PATH}/scenarios/${id}`).json<void>();
+
 export const startRoleplaySession = (payload: RoleplayManagement.StartRoleplayPayload) =>
   apiClient.post(`${ROLEPLAY_BASE_PATH}/start`, { json: payload }).json<RoleplayManagement.StartRoleplayResponse>();
 
@@ -84,6 +90,58 @@ export const useGenerateScenarioMutation = (options?: {
     }
   });
 };
+
+export const useScenarioMutation = (options?: {
+  onSuccess?: (
+    data: RoleplayManagement.Scenario,
+    variables: { id?: string; payload: RoleplayManagement.CreateScenarioPayload }
+  ) => void;
+  onError?: (error: Error, variables: { id?: string; payload: RoleplayManagement.CreateScenarioPayload }) => void;
+}) => {
+  const { t } = useTranslation();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, payload }: { id?: string; payload: RoleplayManagement.CreateScenarioPayload }) =>
+      id != null ? updateScenario(id, payload) : createScenario(payload),
+    onSuccess: (scenario, variables) => {
+      queryClient.invalidateQueries({ queryKey: ROLEPLAY_QUERY_KEYS.scenarios() });
+      toast.success(
+        t(variables.id != null ? 'scenario_update_success' : 'scenario_create_success', 
+          variables.id != null ? 'Cập nhật kịch bản thành công!' : 'Tạo kịch bản mới thành công!'
+        )
+      );
+      options?.onSuccess?.(scenario, variables);
+    },
+    onError: (error, variables) => {
+      toast.error(
+        `${t(variables.id != null ? 'scenario_update_error' : 'scenario_create_error', 
+           variables.id != null ? 'Không thể cập nhật kịch bản' : 'Không thể tạo kịch bản'
+         )}: ${(error as Error).message}`
+      );
+      options?.onError?.(error as Error, variables);
+    }
+  });
+};
+
+export const useDeleteScenarioMutation = () => {
+  const { t } = useTranslation();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteScenario,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ROLEPLAY_QUERY_KEYS.scenarios() });
+      toast.success(t('scenario_delete_success', 'Xoá kịch bản thành công!'));
+    },
+    onError: (error) => {
+      toast.error(
+        `${t('scenario_delete_error', 'Không thể xoá kịch bản')}: ${(error as Error).message}`
+      );
+    }
+  });
+};
+
 
 export const useStartRoleplayMutation = (options?: {
   onSuccess?: (data: RoleplayManagement.StartRoleplayResponse) => void;

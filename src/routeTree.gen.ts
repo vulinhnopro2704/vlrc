@@ -21,12 +21,15 @@ import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
+import { Route as AdminRoleplayRouteImport } from './routes/admin/roleplay'
+import { Route as AdminCoursesRouteImport } from './routes/admin/courses'
 import { Route as AppRolePlayRouteImport } from './routes/_app/role-play'
 import { Route as AppProfileRouteImport } from './routes/_app/profile'
 import { Route as AppPracticeRouteImport } from './routes/_app/practice'
 import { Route as AppNotebookRouteImport } from './routes/_app/notebook'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
 import { Route as AppCoursesIndexRouteImport } from './routes/_app/courses/index'
+import { Route as AdminCoursesCourseIdRouteImport } from './routes/admin/courses.$courseId'
 import { Route as AppLessonsLessonIdRouteImport } from './routes/_app/lessons/$lessonId'
 import { Route as AppCoursesCourseIdRouteImport } from './routes/_app/courses/$courseId'
 
@@ -89,6 +92,16 @@ const AdminUsersRoute = AdminUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminRoleplayRoute = AdminRoleplayRouteImport.update({
+  id: '/roleplay',
+  path: '/roleplay',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCoursesRoute = AdminCoursesRouteImport.update({
+  id: '/courses',
+  path: '/courses',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AppRolePlayRoute = AppRolePlayRouteImport.update({
   id: '/role-play',
   path: '/role-play',
@@ -119,6 +132,11 @@ const AppCoursesIndexRoute = AppCoursesIndexRouteImport.update({
   path: '/courses/',
   getParentRoute: () => AppRoute,
 } as any)
+const AdminCoursesCourseIdRoute = AdminCoursesCourseIdRouteImport.update({
+  id: '/$courseId',
+  path: '/$courseId',
+  getParentRoute: () => AdminCoursesRoute,
+} as any)
 const AppLessonsLessonIdRoute = AppLessonsLessonIdRouteImport.update({
   id: '/lessons/$lessonId',
   path: '/lessons/$lessonId',
@@ -144,11 +162,14 @@ export interface FileRoutesByFullPath {
   '/practice': typeof AppPracticeRoute
   '/profile': typeof AppProfileRoute
   '/role-play': typeof AppRolePlayRoute
+  '/admin/courses': typeof AdminCoursesRouteWithChildren
+  '/admin/roleplay': typeof AdminRoleplayRoute
   '/admin/users': typeof AdminUsersRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/admin/': typeof AdminIndexRoute
   '/courses/$courseId': typeof AppCoursesCourseIdRoute
   '/lessons/$lessonId': typeof AppLessonsLessonIdRoute
+  '/admin/courses/$courseId': typeof AdminCoursesCourseIdRoute
   '/courses/': typeof AppCoursesIndexRoute
 }
 export interface FileRoutesByTo {
@@ -163,12 +184,15 @@ export interface FileRoutesByTo {
   '/practice': typeof AppPracticeRoute
   '/profile': typeof AppProfileRoute
   '/role-play': typeof AppRolePlayRoute
+  '/admin/courses': typeof AdminCoursesRouteWithChildren
+  '/admin/roleplay': typeof AdminRoleplayRoute
   '/admin/users': typeof AdminUsersRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/': typeof AppIndexRoute
   '/admin': typeof AdminIndexRoute
   '/courses/$courseId': typeof AppCoursesCourseIdRoute
   '/lessons/$lessonId': typeof AppLessonsLessonIdRoute
+  '/admin/courses/$courseId': typeof AdminCoursesCourseIdRoute
   '/courses': typeof AppCoursesIndexRoute
 }
 export interface FileRoutesById {
@@ -186,12 +210,15 @@ export interface FileRoutesById {
   '/_app/practice': typeof AppPracticeRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/role-play': typeof AppRolePlayRoute
+  '/admin/courses': typeof AdminCoursesRouteWithChildren
+  '/admin/roleplay': typeof AdminRoleplayRoute
   '/admin/users': typeof AdminUsersRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/_app/': typeof AppIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/_app/courses/$courseId': typeof AppCoursesCourseIdRoute
   '/_app/lessons/$lessonId': typeof AppLessonsLessonIdRoute
+  '/admin/courses/$courseId': typeof AdminCoursesCourseIdRoute
   '/_app/courses/': typeof AppCoursesIndexRoute
 }
 export interface FileRouteTypes {
@@ -210,11 +237,14 @@ export interface FileRouteTypes {
     | '/practice'
     | '/profile'
     | '/role-play'
+    | '/admin/courses'
+    | '/admin/roleplay'
     | '/admin/users'
     | '/auth/callback'
     | '/admin/'
     | '/courses/$courseId'
     | '/lessons/$lessonId'
+    | '/admin/courses/$courseId'
     | '/courses/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -229,12 +259,15 @@ export interface FileRouteTypes {
     | '/practice'
     | '/profile'
     | '/role-play'
+    | '/admin/courses'
+    | '/admin/roleplay'
     | '/admin/users'
     | '/auth/callback'
     | '/'
     | '/admin'
     | '/courses/$courseId'
     | '/lessons/$lessonId'
+    | '/admin/courses/$courseId'
     | '/courses'
   id:
     | '__root__'
@@ -251,12 +284,15 @@ export interface FileRouteTypes {
     | '/_app/practice'
     | '/_app/profile'
     | '/_app/role-play'
+    | '/admin/courses'
+    | '/admin/roleplay'
     | '/admin/users'
     | '/auth/callback'
     | '/_app/'
     | '/admin/'
     | '/_app/courses/$courseId'
     | '/_app/lessons/$lessonId'
+    | '/admin/courses/$courseId'
     | '/_app/courses/'
   fileRoutesById: FileRoutesById
 }
@@ -358,6 +394,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/roleplay': {
+      id: '/admin/roleplay'
+      path: '/roleplay'
+      fullPath: '/admin/roleplay'
+      preLoaderRoute: typeof AdminRoleplayRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/courses': {
+      id: '/admin/courses'
+      path: '/courses'
+      fullPath: '/admin/courses'
+      preLoaderRoute: typeof AdminCoursesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/_app/role-play': {
       id: '/_app/role-play'
       path: '/role-play'
@@ -399,6 +449,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/courses/'
       preLoaderRoute: typeof AppCoursesIndexRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/admin/courses/$courseId': {
+      id: '/admin/courses/$courseId'
+      path: '/$courseId'
+      fullPath: '/admin/courses/$courseId'
+      preLoaderRoute: typeof AdminCoursesCourseIdRouteImport
+      parentRoute: typeof AdminCoursesRoute
     }
     '/_app/lessons/$lessonId': {
       id: '/_app/lessons/$lessonId'
@@ -443,12 +500,28 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
+interface AdminCoursesRouteChildren {
+  AdminCoursesCourseIdRoute: typeof AdminCoursesCourseIdRoute
+}
+
+const AdminCoursesRouteChildren: AdminCoursesRouteChildren = {
+  AdminCoursesCourseIdRoute: AdminCoursesCourseIdRoute,
+}
+
+const AdminCoursesRouteWithChildren = AdminCoursesRoute._addFileChildren(
+  AdminCoursesRouteChildren,
+)
+
 interface AdminRouteChildren {
+  AdminCoursesRoute: typeof AdminCoursesRouteWithChildren
+  AdminRoleplayRoute: typeof AdminRoleplayRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminCoursesRoute: AdminCoursesRouteWithChildren,
+  AdminRoleplayRoute: AdminRoleplayRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
 }

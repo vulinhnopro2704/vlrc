@@ -52,26 +52,30 @@ const AdminLayout = () => {
     );
   }
 
-  const menuItems = [
+  const menuItems: {
+    key: string;
+    label: string;
+    to: any;
+    icon: React.ReactNode;
+    disabled?: boolean;
+  }[] = [
     {
       key: 'users',
       label: 'Quản lý người dùng',
-      to: '/admin/users' as const,
+      to: '/admin/users',
       icon: <Icons.Users className="h-4 w-4" />
     },
     {
       key: 'courses',
       label: 'Quản lý khoá học',
-      to: '/admin/courses' as any,
-      icon: <Icons.BookOpen className="h-4 w-4" />,
-      disabled: true // Will be implemented in the future
+      to: '/admin/courses',
+      icon: <Icons.BookOpen className="h-4 w-4" />
     },
     {
       key: 'roleplays',
       label: 'Kịch bản Role-play',
-      to: '/admin/roleplay' as any,
-      icon: <Icons.MessageSquare className="h-4 w-4" />,
-      disabled: true // Will be implemented in the future
+      to: '/admin/roleplay',
+      icon: <Icons.MessageSquare className="h-4 w-4" />
     }
   ];
 
