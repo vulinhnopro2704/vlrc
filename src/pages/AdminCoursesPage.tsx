@@ -80,7 +80,7 @@ export const AdminCoursesPage = () => {
   const queryParams = {
     search: debouncedSearch.trim() || undefined,
     isPublished: statusFilter === 'ALL' ? undefined : statusFilter === 'PUBLISHED',
-    cursor: cursors[pageIndex] as any,
+    cursor: (cursors[pageIndex] || undefined) as number | undefined,
     take: pageSize
   };
 
