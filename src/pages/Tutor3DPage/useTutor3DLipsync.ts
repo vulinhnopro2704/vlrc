@@ -79,6 +79,7 @@ const useTutor3DLipsync = () => {
   useEffect(() => {
     const audio = new Audio();
     audio.preload = 'auto';
+    audio.crossOrigin = 'use-credentials';
 
     audioRef.current = audio;
     lipsyncRef.current = new Lipsync();
