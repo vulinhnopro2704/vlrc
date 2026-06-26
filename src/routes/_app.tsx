@@ -1,4 +1,5 @@
-import { Outlet, createFileRoute } from '@tanstack/react-router';
+import { useEffect } from 'react';
+import { Outlet, createFileRoute, useNavigate, useRouterState } from '@tanstack/react-router';
 import { AppLayout } from '@/components/shared';
 import { useAuthSession } from '@hooks/useAuthSession';
 import { PagePendingFallback } from '@/components/router';
