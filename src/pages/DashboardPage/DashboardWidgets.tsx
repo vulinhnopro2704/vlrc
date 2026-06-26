@@ -51,7 +51,7 @@ export const DailyReportItem = ({
       <div className='h-2 rounded-full bg-muted'>
         <div
           className='h-2 rounded-full bg-primary'
-          style={{ width: `${Math.max(6, barWidth)}%` }}
+          style={{ width: `${point.reviews > 0 ? Math.max(6, barWidth) : 0}%` }}
         />
       </div>
       <div className='mt-1.5 text-[11px] text-muted-foreground'>
@@ -68,92 +68,92 @@ export const RiskCardItem = ({ item }: { item: Dashboard.RiskItem }) => {
   const word = item.word;
 
   return (
-    <div className='group relative overflow-hidden rounded-lg border bg-card/50 p-3 transition-all hover:bg-card hover:shadow-md sm:p-4'>
+    <div className='group relative overflow-hidden rounded-lg border bg-card/50 p-2.5 transition-all hover:bg-card hover:shadow-md sm:p-3'>
       {/* Background decoration */}
-      <div className='absolute -right-6 -top-6 h-16 w-16 rounded-full bg-primary/5 transition-transform group-hover:scale-150' />
+      <div className='absolute -right-6 -top-6 h-12 w-12 rounded-full bg-primary/5 transition-transform group-hover:scale-150' />
 
-      <div className='relative flex h-full flex-col space-y-2.5'>
+      <div className='relative flex h-full flex-col space-y-2'>
         <div className='flex items-start justify-between gap-2'>
-          <div className='space-y-1'>
-            <div className='flex flex-wrap items-center gap-2'>
-              <h4 className='text-lg font-bold tracking-tight text-foreground'>
+          <div className='space-y-0.5'>
+            <div className='flex flex-wrap items-center gap-1.5'>
+              <h4 className='text-[15px] font-bold tracking-tight text-foreground sm:text-base'>
                 {word?.word ?? `#${item.wordId}`}
               </h4>
               {word?.pos && (
-                <span className='text-xs font-medium text-muted-foreground uppercase'>
+                <span className='text-[10px] font-medium text-muted-foreground uppercase'>
                   {word.pos}
                 </span>
               )}
               {word?.cefr && (
-                <Badge variant='outline' className='h-5 px-1.5 text-[10px] uppercase font-bold'>
+                <Badge variant='outline' className='h-4.5 px-1.5 text-[9px] uppercase font-bold'>
                   {word.cefr}
                 </Badge>
               )}
             </div>
             {word?.pronunciation && (
-              <p className='text-sm font-medium text-primary/80 italic'>/{word.pronunciation}/</p>
+              <p className='text-xs font-medium text-primary/80 italic'>/{word.pronunciation}/</p>
             )}
           </div>
 
           <div className='text-right'>
-            <div className='mb-1 text-[10px] font-bold uppercase tracking-wider text-destructive'>
+            <div className='mb-0.5 text-[9px] font-bold uppercase tracking-wider text-destructive'>
               {t('dashboard_risk_score')}
             </div>
-            <div className='text-lg font-black text-destructive'>{percent(item.riskScore)}</div>
+            <div className='text-base font-black text-destructive'>{percent(item.riskScore)}</div>
           </div>
         </div>
 
-        <div className='flex-1 border-t border-dashed pt-2.5'>
-          <p className='line-clamp-2 text-sm font-semibold text-foreground/90 sm:text-base'>
+        <div className='flex-1 border-t border-dashed pt-2'>
+          <p className='line-clamp-2 text-xs font-semibold text-foreground/90 sm:text-sm'>
             {word?.meaningVi ?? word?.meaning ?? t('dashboard_risk_empty')}
           </p>
           {word?.example && (
-            <p className='mt-1.5 line-clamp-2 text-xs italic text-muted-foreground sm:text-sm'>
+            <p className='mt-1 line-clamp-2 text-[11px] italic text-muted-foreground sm:text-xs'>
               "{word.example}"
             </p>
           )}
         </div>
 
         <TooltipProvider>
-          <div className='grid grid-cols-2 gap-2.5 border-t pt-2.5'>
+          <div className='grid grid-cols-2 gap-2 border-t pt-2'>
             <div>
-              <div className='mb-1 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground'>
+              <div className='mb-0.5 flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-muted-foreground'>
                 <span>{t('dashboard_retrievability')}</span>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Icons.Info className='h-3 w-3 cursor-help opacity-60 hover:opacity-100 transition-opacity' />
+                    <Icons.Info className='h-2.5 w-2.5 cursor-help opacity-60 hover:opacity-100 transition-opacity' />
                   </TooltipTrigger>
                   <TooltipContent className='max-w-70 p-3 text-xs leading-relaxed'>
                     {t('dashboard_retrievability_info')}
                   </TooltipContent>
                 </Tooltip>
               </div>
-              <div className='text-xs font-bold text-foreground sm:text-sm'>
+              <div className='text-xs font-bold text-foreground'>
                 {percent(item.retrievability)}
               </div>
             </div>
 
             <div>
-              <div className='mb-1 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground'>
+              <div className='mb-0.5 flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-muted-foreground'>
                 <span>{t('dashboard_stability')}</span>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Icons.Info className='h-3 w-3 cursor-help opacity-60 hover:opacity-100 transition-opacity' />
+                    <Icons.Info className='h-2.5 w-2.5 cursor-help opacity-60 hover:opacity-100 transition-opacity' />
                   </TooltipTrigger>
                   <TooltipContent className='max-w-70 p-3 text-xs leading-relaxed'>
                     {t('dashboard_stability_info')}
                   </TooltipContent>
                 </Tooltip>
               </div>
-              <div className='text-xs font-bold text-foreground sm:text-sm'>
+              <div className='text-xs font-bold text-foreground'>
                 {item.stability} {t('days')}
               </div>
             </div>
           </div>
         </TooltipProvider>
 
-        <div className='flex items-center gap-2 pt-1.5 text-[10px] italic text-muted-foreground opacity-70'>
-          <Icons.Clock className='h-3 w-3' />
+        <div className='flex items-center gap-1.5 pt-1 text-[9px] italic text-muted-foreground opacity-70'>
+          <Icons.Clock className='h-2.5 w-2.5' />
           <span>
             {t('dashboard_days_overdue')}: {item.daysOverdue} {t('days')}
           </span>

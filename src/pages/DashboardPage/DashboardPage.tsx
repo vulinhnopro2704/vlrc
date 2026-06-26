@@ -10,7 +10,6 @@ import {
 import { useCourseQuery, useCoursesQuery } from '@/api/course-management';
 import { CourseGrid } from './CourseGrid';
 import { LessonWordsModal } from '@/modals/LessonWordsModal';
-import { Leaderboard } from './Leaderboard';
 import {
   DailyReportItem,
   RiskCardItem,
@@ -21,14 +20,6 @@ import {
 import { useLessonsQuery } from '@/api/lesson-management';
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
-
-const mockLeaderboard = [
-  { rank: 1, name: 'Nguyen Linh', points: 2850, streak: 45, avatar: '👑' },
-  { rank: 2, name: 'Tran Minh', points: 2720, streak: 38, avatar: '🥈' },
-  { rank: 3, name: 'Hoang Nam', points: 2650, streak: 42, avatar: '🥉' },
-  { rank: 4, name: 'You', points: 1890, streak: 12, avatar: '😊' },
-  { rank: 5, name: 'Lan Phuong', points: 1750, streak: 25, avatar: '📚' }
-];
 
 const toYmd = (value: Date) => {
   const year = value.getFullYear();
@@ -48,7 +39,6 @@ const defaultDisplaySettings = {
   showOverview: true,
   showDailyReport: true,
   showRecommendations: true,
-  showLeaderboard: true,
   showRiskCards: true
 };
 
@@ -87,7 +77,6 @@ const DashboardPage = () => {
     showOverview: boolean;
     showDailyReport: boolean;
     showRecommendations: boolean;
-    showLeaderboard: boolean;
     showRiskCards: boolean;
   }>(() => {
     try {
@@ -191,7 +180,6 @@ const DashboardPage = () => {
     { key: 'showOverview', label: t('dashboard_show_overview') },
     { key: 'showDailyReport', label: t('dashboard_show_daily_report') },
     { key: 'showRecommendations', label: t('dashboard_show_recommendations') },
-    { key: 'showLeaderboard', label: t('dashboard_show_leaderboard') },
     { key: 'showRiskCards', label: t('dashboard_show_risk_cards') }
   ];
 
@@ -214,6 +202,13 @@ const DashboardPage = () => {
     setDisplaySettings(prev => ({
       ...prev,
       [key]: !prev[key]
+    }));
+  };
+
+  const handleCloseRecommendations = () => {
+    setDisplaySettings(prev => ({
+      ...prev,
+      showRecommendations: false
     }));
   };
 
@@ -462,8 +457,8 @@ const DashboardPage = () => {
           />
         </Card>
 
-        <div className='content-section grid grid-cols-1 gap-3 lg:grid-cols-2'>
-          {displaySettings.showDailyReport ? (
+        {displaySettings.showDailyReport ? (
+          <div className='content-section'>
             <Card className='glass-card border-border/60 p-4'>
               <h3 className='mb-3 flex items-center gap-2 font-semibold'>
                 <Icons.BarChart3 className='h-4 w-4 text-primary' />
@@ -482,7 +477,7 @@ const DashboardPage = () => {
               ) : null}
 
               {!dailyQuery.isLoading && (daily?.metrics.days?.length ?? 0) > 0 ? (
-                <div className='space-y-2'>
+                <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
                   {daily?.metrics.days.map(point => (
                     <DailyReportItem
                       key={point.date}
@@ -493,44 +488,6 @@ const DashboardPage = () => {
                 </div>
               ) : null}
             </Card>
-          ) : null}
-
-          {displaySettings.showRecommendations ? (
-            <Card className='glass-card border-border/60 p-4'>
-              <h3 className='mb-3 flex items-center gap-2 font-semibold'>
-                <Icons.WandSparkles className='h-4 w-4 text-primary' />
-                {t('dashboard_recommendations')}
-              </h3>
-
-              {(recommendationLines.length ?? 0) === 0 ? (
-                <p className='text-sm text-muted-foreground'>
-                  {t('dashboard_recommendations_empty')}
-                </p>
-              ) : (
-                <div className='space-y-2'>
-                  {recommendationLines.slice(0, 5).map((line, index) => (
-                    <p
-                      key={`${line}-${index}`}
-                      className='wrap-break-word text-xs text-foreground/90 sm:text-sm'>
-                      {line}
-                    </p>
-                  ))}
-                </div>
-              )}
-
-              <Button
-                className='mt-3 h-9 w-full gap-2 text-xs sm:text-sm'
-                onClick={() => navigate({ to: '/practice' })}>
-                <Icons.Play className='h-4 w-4' />
-                {t('dashboard_start_practice')}
-              </Button>
-            </Card>
-          ) : null}
-        </div>
-
-        {displaySettings.showLeaderboard ? (
-          <div className='content-section'>
-            <Leaderboard users={mockLeaderboard} currentUserRank={4} />
           </div>
         ) : null}
 
@@ -607,6 +564,45 @@ const DashboardPage = () => {
           </Card>
         ) : null}
       </div>
+
+      {displaySettings.showRecommendations && recommendationLines.length > 0 ? (
+        <div className='fixed bottom-6 right-6 z-45 w-80 sm:w-96 rounded-2xl border border-border/80 bg-card/95 p-4 shadow-2xl backdrop-blur-md transition-all duration-300 animate-in fade-in slide-in-from-bottom-5'>
+          {/* Header */}
+          <div className='mb-2.5 flex items-center justify-between'>
+            <div className='flex items-center gap-2 font-semibold text-sm'>
+              <Icons.WandSparkles className='h-4 w-4 text-primary animate-pulse' />
+              <span>{t('dashboard_recommendations')}</span>
+            </div>
+            <Button
+              variant='ghost'
+              size='icon'
+              className='h-7 w-7 rounded-full text-muted-foreground hover:text-foreground'
+              onClick={handleCloseRecommendations}>
+              <Icons.X className='h-3.5 w-3.5' />
+            </Button>
+          </div>
+
+          {/* Content */}
+          <div className='space-y-1.5 max-h-48 overflow-y-auto pr-1'>
+            {recommendationLines.slice(0, 5).map((line, index) => (
+              <div key={`${line}-${index}`} className='flex items-start gap-1.5'>
+                <span className='mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary/80' />
+                <p className='wrap-break-word text-xs text-foreground/90 leading-relaxed'>
+                  {line}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Action */}
+          <Button
+            className='mt-3.5 h-8 w-full gap-1.5 text-xs font-semibold'
+            onClick={() => navigate({ to: '/practice' })}>
+            <Icons.Play className='h-3 w-3 fill-current' />
+            {t('dashboard_start_practice')}
+          </Button>
+        </div>
+      ) : null}
 
       {reviewLessonId ? (
         <LessonWordsModal
