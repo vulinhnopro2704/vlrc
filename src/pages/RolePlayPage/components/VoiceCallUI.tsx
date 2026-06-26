@@ -243,38 +243,77 @@ export const VoiceCallUI = ({
     const conversationMsgs = activeSession.messages.filter(
       m => !m.id.startsWith('ai-intro-title-') && !m.id.startsWith('ai-intro-context-')
     );
-    const recentMsgs = conversationMsgs.slice(-3);
+    const recentMsgs = conversationMsgs.slice(-2);
     if (recentMsgs.length === 0) return null;
 
     return (
-      <button
-        type='button'
-        onClick={() => setShowChatPopup(true)}
-        className='absolute bottom-28 sm:bottom-6 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-[340px] z-10 bg-slate-950/60 backdrop-blur-xl border border-slate-700/40 rounded-2xl p-3 space-y-2 hover:bg-slate-900/70 transition-all cursor-pointer group'>
-        <div className='flex items-center justify-between mb-1'>
-          <span className='text-[10px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1'>
-            <Icons.MessageCircle size={10} /> Cuộc hội thoại
+      <div className='absolute bottom-24 sm:bottom-8 left-4 right-4 sm:right-auto sm:left-6 sm:max-w-[400px] z-10 bg-gradient-to-b from-slate-950/60 via-slate-950/50 to-slate-950/70 backdrop-blur-xl border border-slate-700/40 rounded-2xl p-3.5 space-y-3 opacity-60 hover:opacity-100 hover:bg-slate-950/80 shadow-2xl transition-all duration-300'>
+        <div className='flex items-center justify-between border-b border-slate-800/40 pb-1.5'>
+          <span className='text-[10px] font-bold text-indigo-400 uppercase tracking-widest flex items-center gap-1.5'>
+            <Icons.MessageCircle size={12} /> Cuộc hội thoại
           </span>
-          <Icons.ChevronUp
-            size={12}
-            className='text-slate-500 group-hover:text-slate-300 transition-colors'
-          />
+          <Button
+            variant='ghost'
+            size='sm'
+            onClick={() => setShowChatPopup(true)}
+            className='h-6 px-2 text-[10px] rounded-lg bg-slate-900/50 border border-slate-800/80 text-slate-300 hover:text-white hover:bg-indigo-600/20'>
+            <Icons.ChevronUp size={10} className='mr-0.5' /> Mở rộng
+          </Button>
         </div>
-        {recentMsgs.map(msg => (
-          <div
-            key={msg.id}
-            className={`flex items-start gap-2 ${msg.role === 'You' ? 'flex-row-reverse' : ''}`}>
-            <div
-              className={`w-5 h-5 rounded-full flex items-center justify-center text-[8px] font-bold shrink-0 ${msg.role === 'You' ? 'bg-indigo-600/80 text-white' : 'bg-slate-700/80 text-indigo-300 border border-slate-600/50'}`}>
-              {msg.role === 'You' ? 'ME' : 'AI'}
+        <div className='space-y-3.5 max-h-[300px] overflow-y-auto pr-1'>
+          {recentMsgs.map(msg => (
+            <div key={msg.id} className='space-y-1.5'>
+              <div className={`flex items-start gap-2.5 ${msg.role === 'You' ? 'flex-row-reverse' : ''}`}>
+                <div
+                  className={`w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0 ${msg.role === 'You' ? 'bg-indigo-600/90 text-white' : 'bg-slate-800 border border-slate-700 text-indigo-300'}`}>
+                  {msg.role === 'You' ? 'ME' : 'AI'}
+                </div>
+                <div className='flex-1 min-w-0'>
+                  <div
+                    className={`text-xs leading-relaxed p-2 rounded-xl ${msg.role === 'You' ? 'bg-indigo-600/20 text-indigo-100 text-right rounded-tr-none' : 'bg-slate-800/40 text-slate-200 rounded-tl-none'}`}>
+                    {msg.text}
+                  </div>
+                </div>
+                {handleTranslateMessage && !msg.translation && (
+                  <Button
+                    variant='ghost'
+                    size='icon'
+                    disabled={isTranslatePending}
+                    onClick={() => handleTranslateMessage(msg.id)}
+                    className='w-6 h-6 rounded-full text-slate-400 hover:text-indigo-400 hover:bg-slate-800/80 shrink-0 self-center'
+                    title='Dịch tin nhắn'>
+                    <Icons.Languages size={11} />
+                  </Button>
+                )}
+              </div>
+
+              {msg.grammarCorrection && (
+                <div className='ml-8 bg-amber-500/10 border border-amber-500/20 p-2 rounded-xl text-[11px] text-amber-200 leading-relaxed flex items-start gap-1.5'>
+                  <Icons.Sparkles size={11} className='text-amber-400 shrink-0 mt-0.5 animate-pulse' />
+                  <div>
+                    <span className='font-bold text-amber-300 text-[9px] uppercase tracking-wider block mb-0.5'>
+                      AI nhận xét lỗi:
+                    </span>
+                    {msg.grammarCorrection}
+                  </div>
+                </div>
+              )}
+
+              {msg.translation && (
+                <div className='ml-8 bg-indigo-500/10 border border-indigo-500/20 p-2 rounded-xl text-[11px] text-indigo-200 leading-relaxed flex items-start gap-1.5'>
+                  <Icons.Languages size={11} className='text-indigo-400 shrink-0 mt-0.5' />
+                  <div>
+                    <span className='font-bold text-indigo-300 text-[9px] uppercase tracking-wider block mb-0.5'>
+                      Bản dịch:
+                    </span>
+                    {msg.translation}
+                  </div>
+                </div>
+              )}
             </div>
-            <div
-              className={`text-[11px] leading-snug line-clamp-2 ${msg.role === 'You' ? 'text-right text-indigo-200/80' : 'text-slate-300/80'}`}>
-              {msg.text}
-            </div>
-          </div>
-        ))}
-      </button>
+          ))}
+        </div>
+      </div>
     );
   };
 
