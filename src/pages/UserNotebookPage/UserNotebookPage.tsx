@@ -12,7 +12,6 @@ import { DictionaryLookupTab } from './DictionaryLookupTab';
 
 export const UserNotebookPage = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('learned_words');
   const [editingWordId, setEditingWordId] = useState<App.ID | undefined>(undefined);
   const [editingLessonId, setEditingLessonId] = useState<App.ID | undefined>(undefined);
@@ -77,19 +76,7 @@ export const UserNotebookPage = () => {
     <main className='w-full bg-background px-3 py-4 sm:px-6 sm:py-6 lg:px-8'>
       <div className='space-y-4 sm:space-y-6'>
         <div className='glass-card rounded-2xl border bg-card/50 p-3.5 sm:p-5'>
-          <div className='flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground sm:text-sm'>
-            <Button
-              variant='ghost'
-              size='sm'
-              onClick={() => navigate({ to: '/dashboard' })}
-              className='h-auto p-0 text-xs text-primary hover:bg-transparent sm:text-sm'>
-              <Icons.ChevronLeft className='h-4 w-4 mr-1' />
-              {t('learning_dashboard')}
-            </Button>
-            <span>/</span>
-            <span className='font-medium text-foreground'>{t('notebook_title')}</span>
-          </div>
-          <h1 className='mt-2 text-2xl font-bold sm:mt-3 sm:text-3xl'>{t('notebook_title')}</h1>
+          <h1 className='text-2xl font-bold sm:text-3xl'>{t('notebook_title')}</h1>
           <p className='text-sm text-muted-foreground sm:text-base'>{t('notebook_description')}</p>
         </div>
 

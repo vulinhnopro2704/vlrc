@@ -29,18 +29,14 @@ export const Header = () => {
   const currentFlag = currentLanguage === 'vi' ? '🇻🇳' : '🇺🇸';
   const appNavItems = me
     ? [
+        { key: 'dashboard', label: t('learning_dashboard'), to: '/dashboard' as const },
         { key: 'courses', label: t('learning_courses'), to: '/courses' as const },
         { key: 'notebook', label: t('header_notebook_dictionary'), to: '/notebook' as const },
         { key: 'practice', label: t('header_practice'), to: '/practice' as const },
         { key: 'role_play', label: t('roleplay_title'), to: '/role-play' as const }
       ]
     : [];
-  const mobileNavItems = me
-    ? [
-        { key: 'dashboard', label: t('learning_dashboard'), to: '/dashboard' as const },
-        ...appNavItems
-      ]
-    : [];
+  const mobileNavItems = appNavItems;
 
   const avatarUrl = me?.avatar?.trim() ? me.avatar : null;
   const avatarFallback = getAvatarFallback(me?.name);
