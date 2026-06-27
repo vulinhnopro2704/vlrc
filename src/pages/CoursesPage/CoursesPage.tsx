@@ -61,19 +61,7 @@ const CoursesPage = () => {
     <main ref={pageRef} className='w-full bg-background px-4 py-6 sm:px-6 lg:px-8'>
       <div className='space-y-6'>
         <div className='rounded-2xl border bg-card/50 p-4 sm:p-5'>
-          <div className='flex flex-wrap items-center gap-2 text-sm text-muted-foreground'>
-            <Button
-              variant='ghost'
-              size='sm'
-              onClick={() => navigate({ to: '/dashboard' })}
-              className='h-auto p-0 text-primary hover:bg-transparent'>
-              <Icons.ChevronLeft className='h-4 w-4 mr-1' />
-              {t('learning_dashboard')}
-            </Button>
-            <span>/</span>
-            <span className='font-medium text-foreground'>{t('learning_courses')}</span>
-          </div>
-          <h1 className='mt-3 text-3xl font-bold'>{t('learning_courses')}</h1>
+          <h1 className='text-3xl font-bold'>{t('learning_courses')}</h1>
           <p className='text-muted-foreground'>{t('learning_select_course')}</p>
         </div>
 

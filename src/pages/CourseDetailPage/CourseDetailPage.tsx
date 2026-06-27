@@ -140,20 +140,7 @@ const CourseDetailPage = () => {
     <main ref={pageRef} className='w-full bg-background px-4 py-6 sm:px-6 lg:px-8'>
       <div className='space-y-6'>
         <div className='rounded-2xl border bg-card/50 p-4 sm:p-5'>
-          <div className='flex flex-wrap items-center gap-2 text-sm text-muted-foreground'>
-            <Button
-              variant='ghost'
-              size='sm'
-              className='h-auto p-0 text-primary hover:bg-transparent'
-              onClick={() => navigate({ to: '/courses' })}>
-              <Icons.ChevronLeft className='h-4 w-4 mr-1' />
-              {t('learning_courses')}
-            </Button>
-            <span>/</span>
-            <span className='font-medium text-foreground'>{course.title}</span>
-          </div>
-
-          <div className='mt-4'>
+          <div className='space-y-4'>
             <div className='flex items-start gap-4 mb-4'>
               <span className='text-5xl'>{course.icon}</span>
               <div>
