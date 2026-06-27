@@ -4,7 +4,7 @@ import {
 } from '@/api/dictionary-management';
 import { NotebookTabState } from './NotebookTabState';
 
-const MOCHI_AUDIO_BASE_URL = 'https://mochien-server.mochidemy.com/audios/question/';
+const DICT_AUDIO_BASE_URL = 'https://mochien-server.mochidemy.com/audios/question/';
 
 export const DictionaryLookupTab: FC = () => {
   const { t } = useTranslation();
@@ -95,7 +95,7 @@ export const DictionaryLookupTab: FC = () => {
 
     const normalizedPath = value.startsWith('/') ? value.slice(1) : value;
 
-    return `${MOCHI_AUDIO_BASE_URL}/${normalizedPath}`;
+    return `${DICT_AUDIO_BASE_URL}/${normalizedPath}`;
   }, []);
 
   const handlePlayAudio = useCallback((audioUrl: string) => {
@@ -152,7 +152,7 @@ export const DictionaryLookupTab: FC = () => {
           exampleAudio: buildAudioUrl(item.audio) || undefined,
           order: index
         })),
-        sourceProvider: 'mochi',
+        sourceProvider: 'dictionary',
         externalDictionaryId: detail.id || entry.id,
         sourceMetadata: {
           dictionaryEntryId: entry.id,

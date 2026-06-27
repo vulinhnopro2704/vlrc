@@ -3,7 +3,7 @@ import {
   useSaveWordFromDictionaryMutation
 } from '@/api/dictionary-management';
 
-const MOCHI_AUDIO_BASE_URL = 'https://mochien-server.mochidemy.com/audios/question/';
+const DICT_AUDIO_BASE_URL = 'https://mochien-server.mochidemy.com/audios/question/';
 const MAX_SELECTION_LENGTH = 80;
 const DESKTOP_MEDIA_QUERY = '(hover: hover) and (pointer: fine)';
 const TRIGGER_SIZE = 36;
@@ -24,7 +24,7 @@ const buildAudioUrl = (audioPath?: string | null) => {
   }
 
   const normalizedPath = value.startsWith('/') ? value.slice(1) : value;
-  return `${MOCHI_AUDIO_BASE_URL}/${normalizedPath}`;
+  return `${DICT_AUDIO_BASE_URL}/${normalizedPath}`;
 };
 
 const getSelectionElement = (selection: Selection) => {
