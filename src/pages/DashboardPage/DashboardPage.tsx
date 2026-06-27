@@ -125,7 +125,9 @@ const DashboardPage = () => {
   ).length;
 
   const maxDailyReviews = useMemo(() => {
-    const values = (daily?.metrics.days ?? []).map(point => point.reviews);
+    const values = (daily?.metrics.days ?? [])
+      .map(point => Number(point.reviews))
+      .filter(val => !isNaN(val));
     return Math.max(1, ...values);
   }, [daily?.metrics.days]);
 

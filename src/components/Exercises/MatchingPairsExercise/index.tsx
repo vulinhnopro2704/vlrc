@@ -26,7 +26,7 @@ const createPairs = (
   const correctPair = {
     id: String(vocabulary.id),
     word: vocabulary.word,
-    meaning: vocabulary.meaning
+    meaning: vocabulary.meaningVi || vocabulary.meaning
   };
 
   const distractors = words
@@ -35,7 +35,7 @@ const createPairs = (
     .map(w => ({
       id: String(w.id),
       word: w.word,
-      meaning: w.meaning
+      meaning: w.meaningVi || w.meaning
     }));
 
   return shuffleArray([correctPair, ...distractors]);
@@ -54,18 +54,30 @@ export const MatchingPairsExercise: React.FC<MatchingPairsExerciseProps> = ({
   const [matches, setMatches] = useState<Map<string, string>>(new Map());
   const [selectedWordId, setSelectedWordId] = useState<string | null>(null);
   const wordsSignature = useMemo(() => words.map(word => String(word.id)).join('|'), [words]);
-  const [pairs, setPairs] = useState<PairMatch[]>(() => createPairs(vocabulary, words));
+
+  const [state, setState] = useState(() => {
+    const initialPairs = createPairs(vocabulary, words);
+    return {
+      pairs: initialPairs,
+      shuffledWords: shuffleArray(initialPairs.map(p => ({ id: p.id, word: p.word }))),
+      shuffledMeanings: shuffleArray(initialPairs.map(p => ({ id: p.id, meaning: p.meaning })))
+    };
+  });
+
+  const { pairs, shuffledWords, shuffledMeanings } = state;
 
   useUpdateEffect(() => {
-    setPairs(createPairs(vocabulary, words));
+    const newPairs = createPairs(vocabulary, words);
+    setState({
+      pairs: newPairs,
+      shuffledWords: shuffleArray(newPairs.map(p => ({ id: p.id, word: p.word }))),
+      shuffledMeanings: shuffleArray(newPairs.map(p => ({ id: p.id, meaning: p.meaning })))
+    });
     setMatches(new Map());
     setSelectedWordId(null);
     setAttempts(0);
     startTimeRef.current = Date.now();
   }, [vocabulary.id, wordsSignature]);
-
-  const wordsList = pairs.map(p => ({ id: p.id, word: p.word }));
-  const meaningsList = pairs.map(p => ({ id: p.id, meaning: p.meaning }));
 
   const handleWordSelect = (wordId: string) => {
     setSelectedWordId(prev => (prev === wordId ? null : wordId));
@@ -126,7 +138,7 @@ export const MatchingPairsExercise: React.FC<MatchingPairsExerciseProps> = ({
         {/* Words Column */}
         <div className='space-y-2'>
           <p className='text-sm font-semibold text-foreground mb-3'>{t('exercise_words')}</p>
-          {wordsList.map(item => {
+          {shuffledWords.map(item => {
             const isSelected = selectedWordId === item.id;
             const isMatched = matches.has(item.id);
             return (
@@ -154,7 +166,7 @@ export const MatchingPairsExercise: React.FC<MatchingPairsExerciseProps> = ({
         {/* Meanings Column */}
         <div className='space-y-2'>
           <p className='text-sm font-semibold text-foreground mb-3'>{t('exercise_meanings')}</p>
-          {meaningsList.map(item => {
+          {shuffledMeanings.map(item => {
             const matchedWord = Array.from(matches.entries()).find(([, meaningId]) => meaningId === item.id)?.[0];
             const isSelectable = selectedWordId !== null;
             return (
@@ -163,7 +175,7 @@ export const MatchingPairsExercise: React.FC<MatchingPairsExerciseProps> = ({
                 onClick={() => handleMeaningSelect(item.id)}
                 disabled={disabled || !!matchedWord || !isSelectable}
                 className={`
-                  w-full p-3 rounded-lg text-sm text-left transition-all line-clamp-2
+                  w-full p-3 rounded-lg text-sm text-left transition-all
                   ${
                     matchedWord
                       ? 'bg-green-500/20 text-green-700 border border-green-500'

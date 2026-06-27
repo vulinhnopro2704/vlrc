@@ -39,6 +39,29 @@ export const useSubmitFSRSMutation = () => {
       payload: Practice.SubmitFSRSPayload;
       options?: { keepalive?: boolean };
     }) => submitFSRSPractice(variables.payload, variables.options),
+    retry: (failureCount, error) => {
+      // Limit to 3 retries (4 total attempts)
+      if (failureCount >= 3) return false;
+
+      // Only retry on network errors, timeouts, or 5xx server errors
+      if (error instanceof Error) {
+        const isTimeout =
+          error.name === 'TimeoutError' ||
+          error.message?.toLowerCase().includes('timeout') ||
+          error.message?.toLowerCase().includes('timed out');
+        const isNetwork =
+          error.message?.toLowerCase().includes('network') ||
+          error.message?.toLowerCase().includes('failed to fetch') ||
+          error.message?.toLowerCase().includes('load failed');
+        
+        const statusCode = (error as any).statusCode;
+        const isServerError = typeof statusCode === 'number' && statusCode >= 500;
+
+        return isTimeout || isNetwork || isServerError;
+      }
+      return false;
+    },
+    retryDelay: attempt => Math.min(attempt * 1000, 5000),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: PRACTICE_QUERY_KEYS.all });
       toast.success(t('practice_submit_success'));

@@ -29,7 +29,10 @@ export const DailyReportItem = ({
   maxDailyReviews: number;
 }) => {
   const { t } = useTranslation();
-  const barWidth = (point.reviews / maxDailyReviews) * 100;
+  const reviews = Number(point.reviews) || 0;
+  const maxReviews = Number(maxDailyReviews) || 1;
+  const barWidth = (reviews / maxReviews) * 100;
+  const safeBarWidth = isNaN(barWidth) ? 0 : Math.min(100, Math.max(0, barWidth));
 
   return (
     <div className='rounded-md border bg-card/20 p-2.5 transition-colors hover:bg-card/40'>
@@ -41,7 +44,7 @@ export const DailyReportItem = ({
           })}
         </span>
         <span className='text-muted-foreground'>
-          {point.reviews} {t('dashboard_reviews')}
+          {reviews} {t('dashboard_reviews')}
           {' · '}
           {percent(point.accuracy)} {t('dashboard_accuracy')}
           {' · '}
@@ -51,7 +54,7 @@ export const DailyReportItem = ({
       <div className='h-2 rounded-full bg-muted'>
         <div
           className='h-2 rounded-full bg-primary'
-          style={{ width: `${point.reviews > 0 ? Math.max(6, barWidth) : 0}%` }}
+          style={{ width: `${reviews > 0 ? Math.max(6, safeBarWidth) : 0}%` }}
         />
       </div>
       <div className='mt-1.5 text-[11px] text-muted-foreground'>

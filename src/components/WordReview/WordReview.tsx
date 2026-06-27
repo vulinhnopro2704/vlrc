@@ -105,16 +105,42 @@ const WordReview: FC<{
             <div className='space-y-1'>
               <p
                 className={cn(
-                  'text-xs uppercase tracking-wider',
+                  'text-xs uppercase tracking-wider font-semibold',
                   isCorrect
                     ? 'text-emerald-700 dark:text-emerald-300'
                     : 'text-rose-700 dark:text-rose-300'
                 )}>
                 {isCorrect ? t('exercise_correct') : t('exercise_wrong')}
               </p>
-              <p className='text-3xl font-bold leading-tight'>{word.word}</p>
-              {word.pronunciation ? (
-                <p className='text-lg text-foreground/80'>/{word.pronunciation}/</p>
+              <div className='flex flex-wrap items-baseline gap-2'>
+                <p className='text-3xl font-bold leading-tight'>{word.word}</p>
+                {word.cefr && (
+                  <Badge variant='outline' className='h-5 px-1.5 text-[10px] font-bold uppercase border-foreground/20 text-foreground/80'>
+                    {word.cefr}
+                  </Badge>
+                )}
+              </div>
+              {word.pronunciation || word.pos || word.partOfSpeech ? (
+                <div className='flex flex-wrap items-center gap-2 text-foreground/80'>
+                  {word.pronunciation && (
+                    <span className='text-lg text-foreground/80'>
+                      {(() => {
+                        let clean = word.pronunciation.trim();
+                        if (clean.startsWith('/')) clean = clean.slice(1);
+                        if (clean.endsWith('/')) clean = clean.slice(0, -1);
+                        return `/${clean}/`;
+                      })()}
+                    </span>
+                  )}
+                  {word.pronunciation && (word.pos || word.partOfSpeech) && (
+                    <span className='text-foreground/30'>•</span>
+                  )}
+                  {(word.pos || word.partOfSpeech) && (
+                    <span className='text-xs font-semibold uppercase tracking-wider text-muted-foreground bg-muted/65 dark:bg-muted/30 px-1.5 py-0.5 rounded'>
+                      {word.pos || word.partOfSpeech}
+                    </span>
+                  )}
+                </div>
               ) : null}
             </div>
 
