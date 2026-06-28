@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.vlrc.app",
+      "sha256_cert_fingerprints": [
+        "0D:56:AF:CC:B5:47:7B:36:22:74:01:47:77:E6:5D:88:AE:00:29:AA:55:87:1C:CE:F7:89:05:BB:7B:3B:AA:15"
+      ]
+    }
+  }
+]

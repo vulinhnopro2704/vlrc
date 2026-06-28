@@ -1,12 +1,26 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import react, { reactCompilerPreset } from '@vitejs/plugin-react';
 import babel from '@rolldown/plugin-babel';
 import AutoImport from 'unplugin-auto-import/vite';
 import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import tailwindcss from '@tailwindcss/vite';
+import { VitePWA } from 'vite-plugin-pwa';
 import { resolve } from 'path';
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
+
+function getLocalIP() {
+  const interfaces = os.networkInterfaces();
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name] || []) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        return iface.address;
+      }
+    }
+  }
+  return 'localhost';
+}
 
 function getExports(filePath: string): string[] {
   const exportsSet = new Set<string>();
@@ -91,9 +105,20 @@ const componentExports = getExports(resolve(__dirname, './packages/components/sr
 const hookExports = getExports(resolve(__dirname, './packages/hooks/src/index.ts'));
 
 
-export default defineConfig({
-  optimizeDeps: { force: true },
-  plugins: [
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+  return {
+    optimizeDeps: { force: true },
+    server: {
+      host: true,
+      port: 5173
+    },
+    define: {
+      'import.meta.env.VITE_BACKEND_API_URL': JSON.stringify(
+        env.VITE_BACKEND_API_URL || `http://${getLocalIP()}:3001`
+      )
+    },
+    plugins: [
     tanstackRouter({
       target: 'react',
       autoCodeSplitting: true
@@ -302,6 +327,36 @@ export default defineConfig({
       ],
       dirs: ['src/lib', 'src/shared'],
       dts: 'src/types/auto-imports.d.ts'
+    }),
+    VitePWA({
+      registerType: 'autoUpdate',
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+      manifest: {
+        name: 'vlrc Language Learning',
+        short_name: 'vlrc',
+        description: 'Learn languages with interactive 3D and FSRS-AI spaced repetition',
+        theme_color: '#000000',
+        icons: [
+          {
+            src: 'vite.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
+            purpose: 'any'
+          },
+          {
+            src: 'vite.svg',
+            sizes: '192x192',
+            type: 'image/svg+xml',
+            purpose: 'any'
+          },
+          {
+            src: 'vite.svg',
+            sizes: '512x512',
+            type: 'image/svg+xml',
+            purpose: 'any'
+          }
+        ]
+      }
     })
   ],
   resolve: {
@@ -323,4 +378,5 @@ export default defineConfig({
       '@platform-core/hooks': resolve(__dirname, './packages/hooks/src')
     }
   }
+};
 });

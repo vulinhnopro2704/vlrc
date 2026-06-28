@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">vlrc</string>
+    <string name="title_activity_main">vlrc</string>
+    <string name="package_name">com.vlrc.app</string>
+    <string name="custom_url_scheme">com.vlrc.app</string>
+</resources>
