@@ -5,6 +5,7 @@ import ThemeToggle from '@/components/ThemeToggle';
 import AnimatedLogo from '@/components/AnimatedLogo';
 import { login, getGoogleOAuthStartUrl } from '@/api/auth-management';
 import { AUTH_ME_QUERY_KEY } from '@/hooks/useAuthSession';
+import { Capacitor } from '@capacitor/core';
 import { AuthFormSkeleton } from '@/components/AuthSkeletons';
 
 const LoginPage = () => {
@@ -170,9 +171,16 @@ const LoginPage = () => {
               variant='outline'
               size='xl'
               disabled={isGoogleLoading}
-              onClick={() => {
+              onClick={async () => {
                 setIsGoogleLoading(true);
-                window.location.href = getGoogleOAuthStartUrl();
+                const url = getGoogleOAuthStartUrl();
+                if (Capacitor.isNativePlatform()) {
+                  const { Browser } = await import('@capacitor/browser');
+                  await Browser.open({ url });
+                  setIsGoogleLoading(false);
+                } else {
+                  window.location.href = url;
+                }
               }}
               className='border-border/70 hover:bg-secondary/60'>
               {isGoogleLoading ? (

@@ -43,6 +43,8 @@ function cleanPathname(urlString: string) {
 }
 
 export const getGoogleOAuthStartUrl = () => {
-  const url = `${import.meta.env.VITE_BACKEND_API_URL}/auth/google`;
+  const isCapacitor = typeof window !== 'undefined' && !!(window as any).Capacitor;
+  const baseUrl = `${import.meta.env.VITE_BACKEND_API_URL}/auth/google`;
+  const url = isCapacitor ? `${baseUrl}?platform=mobile` : baseUrl;
   return cleanPathname(url);
 };
