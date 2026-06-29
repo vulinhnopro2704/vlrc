@@ -50,7 +50,10 @@ const PracticeExercisePanel: FC<{
   const { t } = useTranslation();
   const [isProcessing, setIsProcessing] = useState(false);
   const [pendingReview, setPendingReview] = useState<PendingReviewState | null>(null);
-  const startTimeRef = useRef(Date.now());
+  const startTimeRef = useRef(0);
+  useMount(() => {
+    startTimeRef.current = Date.now();
+  });
   const [currentExerciseType, setCurrentExerciseType] = useState<
     (typeof EXERCISE_SEQUENCE)[number]
   >(() => EXERCISE_SEQUENCE[Math.floor(Math.random() * EXERCISE_SEQUENCE.length)]);

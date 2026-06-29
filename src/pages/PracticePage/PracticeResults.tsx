@@ -16,10 +16,12 @@ interface PracticeReviewDetailItem {
 
 const PracticeResults = ({
   session,
-  reviewItems
+  reviewItems,
+  onBack
 }: {
   session: ReturnType<typeof import('@/hooks/practice/useGameState').useGameState>;
   reviewItems: PracticeReviewDetailItem[];
+  onBack?: () => void;
 }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -188,7 +190,13 @@ const PracticeResults = ({
         <div className='flex justify-center flex-shrink-0'>
           <Button
             variant='outline'
-            onClick={() => navigate({ to: '/dashboard' })}
+            onClick={() => {
+              if (onBack) {
+                onBack();
+              } else {
+                navigate({ to: '/dashboard' });
+              }
+            }}
             className='h-9 w-full max-w-xs text-xs font-semibold'>
             {t('action_back')}
           </Button>
