@@ -139,10 +139,10 @@ const PracticePage = () => {
         <div className='flex flex-wrap items-center justify-between gap-4 border-b pb-4 border-border/40'>
           <div>
             <h1 className='text-2xl font-black tracking-tight text-foreground sm:text-3xl'>
-              {t('nav_practice') || 'Ôn tập từ vựng'}
+              {t('nav_practice')}
             </h1>
             <p className='text-sm text-muted-foreground mt-1'>
-              Ôn luyện Spaced Repetition tối ưu theo thuật toán FSRS
+              {t('practice_page_description')}
             </p>
           </div>
 

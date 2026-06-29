@@ -285,6 +285,8 @@
   "correct_word_and_meaning": "Correct! {{word}} means {{meaning}}",
   "try_again": "Try again!",
   "correct_answer_is": "The correct answer is: {{word}}",
+  "nav_practice": "Vocabulary Practice",
+  "practice_page_description": "Optimize Spaced Repetition practice using the FSRS algorithm",
   "practice_error_title": "Unable to Start Practice",
   "practice_error_message": "Unable to load review words right now.",
   "practice_no_words": "No words are due for review right now.",

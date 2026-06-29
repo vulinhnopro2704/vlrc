@@ -315,6 +315,8 @@
   "correct_word_and_meaning": "Chính xác! {{word}} có nghĩa là {{meaning}}",
   "try_again": "Hãy thử lại!",
   "correct_answer_is": "Câu trả lời đúng là: {{word}}",
+  "nav_practice": "Ôn tập từ vựng",
+  "practice_page_description": "Ôn luyện Spaced Repetition tối ưu theo thuật toán FSRS",
   "practice_error_title": "Không thể bắt đầu ôn tập",
   "practice_error_message": "Không thể tải danh sách từ ôn tập lúc này.",
   "practice_no_words": "Hiện chưa có từ nào đến lịch ôn tập.",
