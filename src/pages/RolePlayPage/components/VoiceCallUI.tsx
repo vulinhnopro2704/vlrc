@@ -72,7 +72,7 @@ export const VoiceCallUI = ({
         <Icons.ArrowLeft size={18} />
       </Button>
 
-      <div className='bg-slate-900/70 backdrop-blur-md border border-slate-700/50 rounded-2xl px-4 py-2.5 flex items-center gap-2.5'>
+      <div className='hidden sm:flex bg-slate-900/70 backdrop-blur-md border border-slate-700/50 rounded-2xl px-4 py-2.5 items-center gap-2.5'>
         {isRecording ? (
           <>
             <span className='w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]' />
@@ -248,17 +248,33 @@ export const VoiceCallUI = ({
 
     return (
       <div className='absolute bottom-24 sm:bottom-8 left-4 right-4 sm:right-auto sm:left-6 sm:max-w-[400px] z-10 bg-gradient-to-b from-slate-950/60 via-slate-950/50 to-slate-950/70 backdrop-blur-xl border border-slate-700/40 rounded-2xl p-3.5 space-y-3 opacity-60 hover:opacity-100 hover:bg-slate-950/80 shadow-2xl transition-all duration-300'>
-        <div className='flex items-center justify-between border-b border-slate-800/40 pb-1.5'>
-          <span className='text-[10px] font-bold text-indigo-400 uppercase tracking-widest flex items-center gap-1.5'>
+        <div className='flex items-center justify-between border-b border-slate-800/40 pb-1.5 gap-2'>
+          <span className='text-[10px] font-bold text-indigo-400 uppercase tracking-widest flex items-center gap-1.5 shrink-0'>
             <Icons.MessageCircle size={12} /> Cuộc hội thoại
           </span>
-          <Button
-            variant='ghost'
-            size='sm'
-            onClick={() => setShowChatPopup(true)}
-            className='h-6 px-2 text-[10px] rounded-lg bg-slate-900/50 border border-slate-800/80 text-slate-300 hover:text-white hover:bg-indigo-600/20'>
-            <Icons.ChevronUp size={10} className='mr-0.5' /> Mở rộng
-          </Button>
+          <div className='flex items-center gap-1.5'>
+            {handleSuggestReplies && (
+              <Button
+                variant='ghost'
+                size='sm'
+                onClick={onSuggestReplies}
+                disabled={isSuggestRepliesPending || activeSession.scenarioCompleted}
+                className='h-6 px-2 text-[10px] rounded-lg bg-indigo-600/15 border border-indigo-500/20 text-indigo-300 hover:text-indigo-100 hover:bg-indigo-600/30 transition-all'>
+                <Icons.Lightbulb
+                  size={10}
+                  className={isSuggestRepliesPending ? 'animate-pulse text-amber-400' : 'mr-0.5'}
+                />
+                Gợi ý
+              </Button>
+            )}
+            <Button
+              variant='ghost'
+              size='sm'
+              onClick={() => setShowChatPopup(true)}
+              className='h-6 px-2 text-[10px] rounded-lg bg-slate-900/50 border border-slate-800/80 text-slate-300 hover:text-white hover:bg-indigo-600/20'>
+              <Icons.ChevronUp size={10} className='mr-0.5' /> Mở rộng
+            </Button>
+          </div>
         </div>
         <div className='space-y-3.5 max-h-[300px] overflow-y-auto pr-1'>
           {recentMsgs.map(msg => (
@@ -313,6 +329,23 @@ export const VoiceCallUI = ({
             </div>
           ))}
         </div>
+
+        {suggestions.length > 0 && (
+          <div className='pt-2.5 border-t border-slate-800/60 space-y-1.5 animate-fade-in'>
+            <div className='text-[9px] font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-1'>
+              <Icons.Lightbulb size={10} className='text-amber-400' /> Gợi ý trả lời
+            </div>
+            <div className='flex flex-wrap gap-1.5'>
+              {suggestions.map((sug, idx) => (
+                <div
+                  key={idx}
+                  className='text-[10px] px-2.5 py-1 rounded-full border border-indigo-500/20 bg-indigo-500/10 text-indigo-300 leading-normal'>
+                  {sug}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     );
   };
