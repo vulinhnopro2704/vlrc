@@ -1,4 +1,5 @@
 import ky from 'ky';
+import type { Options } from 'ky';
 import { AppApiError, normalizeApiErrorResponse } from './api-error';
 
 const API_BASE_URL = import.meta.env.VITE_BACKEND_API_URL;
@@ -14,16 +15,16 @@ const isAuthEndpoint = (url: URL) =>
 
 let isRefreshing = false;
 let failedQueue: Array<{
-  resolve: (value: any) => void;
-  reject: (error: any) => void;
+  resolve: (options: Options) => void;
+  reject: (error: unknown) => void;
 }> = [];
 
-const processQueue = (error: any) => {
+const processQueue = (error: unknown, options?: Options) => {
   failedQueue.forEach(prom => {
     if (error) {
       prom.reject(error);
-    } else {
-      prom.resolve(null);
+    } else if (options) {
+      prom.resolve(options);
     }
   });
   failedQueue = [];
@@ -62,7 +63,9 @@ const apiClient = ky.create({
 
         const url = new URL(request.url);
 
-        if (normalizedError.statusCode === 401 && !isAuthEndpoint(url)) {
+        const hasRetryHeader = request.headers.get('x-retry') === 'true';
+
+        if (normalizedError.statusCode === 401 && !isAuthEndpoint(url) && !hasRetryHeader) {
           if (!isRefreshing) {
             isRefreshing = true;
 
@@ -79,9 +82,17 @@ const apiClient = ky.create({
               }
 
               isRefreshing = false;
-              processQueue(null);
 
-              return ky(request.url, _options);
+              const retryHeaders = new Headers(_options.headers);
+              retryHeaders.set('x-retry', 'true');
+              const retryOptions = {
+                ..._options,
+                headers: retryHeaders
+              };
+
+              processQueue(null, retryOptions);
+
+              return apiClient(request.url, retryOptions);
             } catch (err) {
               isRefreshing = false;
               processQueue(err);
@@ -95,7 +106,7 @@ const apiClient = ky.create({
           } else {
             return new Promise((resolve, reject) => {
               failedQueue.push({
-                resolve: () => resolve(ky(request.url, _options)),
+                resolve: (options) => resolve(apiClient(request.url, options)),
                 reject: err => reject(err)
               });
             });

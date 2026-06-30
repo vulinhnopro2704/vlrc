@@ -22,8 +22,7 @@ export const TrendStat = ({ label, value }: { label: string; value: ReactNode })
 );
 
 export const DailyReportItem = ({
-  point,
-  maxDailyReviews
+  point
 }: {
   point: Dashboard.DailyPoint;
   maxDailyReviews?: number;
