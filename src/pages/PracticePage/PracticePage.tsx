@@ -184,15 +184,15 @@ const PracticePage = () => {
                   <Badge variant='secondary' className='bg-primary/10 text-primary hover:bg-primary/20 border-none font-bold text-xs uppercase tracking-wider px-2.5 py-0.5'>
                     {t('dashboard_recommendations') || 'Khuyến nghị'}
                   </Badge>
-                  {words.length > 0 && (
+                  {(reviewWords?.total ?? 0) > 0 && (
                     <span className='flex h-2 w-2 rounded-full bg-destructive animate-ping' />
                   )}
                 </div>
 
                 <h2 className='text-xl sm:text-2xl font-bold tracking-tight text-foreground'>
-                  {words.length > 0 ? (
+                  {(reviewWords?.total ?? 0) > 0 ? (
                     <>
-                      Bạn có <span className='text-primary font-extrabold'>{words.length}</span> từ vựng đang chờ ôn tập
+                      Bạn có <span className='text-primary font-extrabold'>{reviewWords?.total}</span> từ vựng đang chờ ôn tập
                     </>
                   ) : (
                     'Thật tuyệt vời! Chưa có từ nào đến lịch ôn tập'
@@ -200,14 +200,14 @@ const PracticePage = () => {
                 </h2>
 
                 <p className='text-sm text-muted-foreground leading-relaxed'>
-                  {words.length > 0
+                  {(reviewWords?.total ?? 0) > 0
                     ? 'Việc ôn tập đều đặn hàng ngày giúp kích hoạt vùng nhớ dài hạn, củng cố và tăng cường đáng kể tỷ lệ lưu giữ từ vựng mới học.'
                     : 'Bạn đã hoàn thành xuất sắc các từ vựng đến hạn ôn tập ngày hôm nay. Hãy tiếp tục học thêm các bài mới để duy trì tần suất học nhé!'}
                 </p>
               </div>
 
               <div className='flex shrink-0 items-center justify-start md:justify-end'>
-                {words.length > 0 ? (
+                {(reviewWords?.total ?? 0) > 0 ? (
                   <Button
                     size='lg'
                     className='h-12 px-6 font-bold shadow-md hover:shadow-lg transition-all rounded-xl gap-2 bg-gradient-to-r from-primary to-primary/95 text-primary-foreground hover:scale-102 duration-200'
