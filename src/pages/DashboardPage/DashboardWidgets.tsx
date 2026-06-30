@@ -26,13 +26,12 @@ export const DailyReportItem = ({
   maxDailyReviews
 }: {
   point: Dashboard.DailyPoint;
-  maxDailyReviews: number;
+  maxDailyReviews?: number;
 }) => {
   const { t } = useTranslation();
   const reviews = Number(point.reviews) || 0;
-  const maxReviews = Number(maxDailyReviews) || 1;
-  const barWidth = (reviews / maxReviews) * 100;
-  const safeBarWidth = isNaN(barWidth) ? 0 : Math.min(100, Math.max(0, barWidth));
+  const accuracyPct = (Number(point.accuracy) || 0) * 100;
+  const safeBarWidth = isNaN(accuracyPct) ? 0 : Math.min(100, Math.max(0, accuracyPct));
 
   return (
     <div className='rounded-md border bg-card/20 p-2.5 transition-colors hover:bg-card/40'>
